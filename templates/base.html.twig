@@ -6,7 +6,17 @@
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <nav>
+        <a href="{{ path('home') }}">[home]</a>
+        <a href="">[sharables]</a>
+        <a href="">[users]</a>
+        <a href="">[user classes]</a>
+        <a href="">[account]</a>
+
+        </nav>
+        <main>
+        {% block main %}{% endblock %}
+        </main>
         {% block javascripts %}{% endblock %}
     </body>
 </html>
