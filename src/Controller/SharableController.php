@@ -14,7 +14,6 @@ class SharableController extends AbstractController
     public function index(): Response
     {
         return $this->render('sharable/index.html.twig', [
-            'controller_name' => 'SharableController',
         ]);
     }
 }

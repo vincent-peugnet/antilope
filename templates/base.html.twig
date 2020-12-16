@@ -8,14 +8,15 @@
     <body>
         <nav>
         <a href="{{ path('home') }}">[home]</a>
-        <a href="">[sharables]</a>
+        <a href="{{ path('sharable') }}">[sharables]</a>
         <a href="">[users]</a>
         <a href="">[user classes]</a>
         <a href="">[account]</a>
 
         </nav>
+        <hr>
         <main>
-        {% block main %}{% endblock %}
+        {% block content %}{% endblock %}
         </main>
         {% block javascripts %}{% endblock %}
     </body>
