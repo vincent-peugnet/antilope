@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -51,6 +53,21 @@ class User implements UserInterface
      * @ORM\JoinColumn(nullable=false)
      */
     private $userClass;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $shareScore;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Sharable::class, mappedBy="managedBy")
+     */
+    private $sharables;
+
+    public function __construct()
+    {
+        $this->sharables = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -158,6 +175,45 @@ class User implements UserInterface
     public function setUserClass(?UserClass $userClass): self
     {
         $this->userClass = $userClass;
+
+        return $this;
+    }
+
+    public function getShareScore(): ?int
+    {
+        return $this->shareScore;
+    }
+
+    public function setShareScore(int $shareScore): self
+    {
+        $this->shareScore = $shareScore;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Sharable[]
+     */
+    public function getSharables(): Collection
+    {
+        return $this->sharables;
+    }
+
+    public function addSharable(Sharable $sharable): self
+    {
+        if (!$this->sharables->contains($sharable)) {
+            $this->sharables[] = $sharable;
+            $sharable->addManagedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSharable(Sharable $sharable): self
+    {
+        if ($this->sharables->removeElement($sharable)) {
+            $sharable->removeManagedBy($this);
+        }
 
         return $this;
     }
