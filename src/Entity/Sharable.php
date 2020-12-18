@@ -56,6 +56,11 @@ class Sharable
      */
     private $description;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=UserClass::class)
+     */
+    private $visibleBy;
+
     public function __construct()
     {
         $this->managedBy = new ArrayCollection();
@@ -160,6 +165,18 @@ class Sharable
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getVisibleBy(): ?UserClass
+    {
+        return $this->visibleBy;
+    }
+
+    public function setVisibleBy(?UserClass $visibleBy): self
+    {
+        $this->visibleBy = $visibleBy;
 
         return $this;
     }

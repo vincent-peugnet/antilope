@@ -3,17 +3,12 @@
 
 {% block title %}{{ sharable.name }}{% endblock %}
 
-
-
 {% block section %}
 
-<h1>{{ sharable.name }}</h1>
+<a href="{{ path('sharable_show', {id: sharable.id}) }}">[back]</a>
 
-<p>
-{{ sharable.description }}
-</p>
 
-<a href="{{ path('sharable_edit', {id: sharable.id}) }}">[edit]</a>
+{{ form(form) }}
 
 
 {% endblock %}

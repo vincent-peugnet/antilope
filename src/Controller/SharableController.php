@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Sharable;
+use App\Form\Type\SharableType;
 use App\Repository\SharableRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,4 +36,36 @@ class SharableController extends AbstractController
             'sharable' => $sharable,
         ]);
     }
+
+
+
+    /**
+     * @Route("/sharable/{id}/edit", name="sharable_edit", requirements={"id"="\d+"})
+     */
+    public function edit(Sharable $sharable, Request $request): Response
+    {
+        // $this->denyAccessUnlessGranted('edit', $sharable);
+
+        $form = $this->createForm(SharableType::class, $sharable);
+
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $sharable = $form->getData();
+            
+            //$sharable->addManagedBy($this->getUser());
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($sharable);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('sharable_show', ['id' => $sharable->getId()]);
+        }
+
+        return $this->render('sharable/edit.html.twig', [
+            'sharable' => $sharable,
+            'form' => $form->createView(),
+        ]);
+    }
+
 }
