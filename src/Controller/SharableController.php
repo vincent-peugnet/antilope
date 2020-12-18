@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Sharable;
-use App\Form\Type\SharableType;
+use App\Form\SharableType;
 use App\Repository\SharableRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
