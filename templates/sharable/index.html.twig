@@ -1,9 +1,34 @@
-{% extends 'base.html.twig' %}
+{% extends 'sharable/layout.html.twig' %}
 
 {% block title %}Sharables{% endblock %}
 
-{% block content %}
+{% block section %}
 
-<h1>Sharables</h1>
+
+<ul>
+{% for sharable in sharables %}
+
+<li>
+
+<h2>{{ sharable.name }}</h2>
+<p>{{ sharable.description }}</p>
+<a href="{{ path('sharable_show', {id: sharable.id}) }}">[details]</a>
+
+<a href="">[edit]</a>
+
+</li>
+
+{% endfor %}
+</ul>
+
+
+{% if previous >= 0 %}
+    <a href="{{ path('sharable', { offset: previous }) }}">[previous]</a>
+{% endif %}
+{% if next < sharables|length %}
+    <a href="{{ path('sharable', { offset: next }) }}">[next]</a>
+{% endif %}
+
+
 
 {% endblock %}

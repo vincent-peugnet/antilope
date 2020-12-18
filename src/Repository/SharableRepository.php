@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Sharable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -14,10 +15,32 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class SharableRepository extends ServiceEntityRepository
 {
+
+    public const PAGINATOR_PER_PAGE = 5;
+
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Sharable::class);
     }
+
+
+    /**
+     * @param int $offset
+     */
+    public function getSharablePaginator(int $offset): Paginator
+    {
+        $query = $this->createQueryBuilder('s')
+            ->orderBy('s.id', 'DESC')
+            ->setMaxResults(self::PAGINATOR_PER_PAGE)
+            ->setFirstResult($offset)
+            ->getQuery()
+        ;
+
+        return new Paginator($query);
+    }
+
+
 
     // /**
     //  * @return Sharable[] Returns an array of Sharable objects
