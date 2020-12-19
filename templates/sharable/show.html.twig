@@ -33,7 +33,7 @@ Validations : {{ sharable.validations|length }}
 <li>
 
 
-<a href="">{{ user.username }}</a>
+<a href="{{ path('user_show', {id: user.id} ) }}">{{ user.username }}</a>
 
 
 </li>
@@ -50,7 +50,7 @@ Validations : {{ sharable.validations|length }}
 
 <li>
 
-<a href="">{{ validation.user.username }}</a> : {{ validation.message }}
+<a href="{{ path('user_show', {id: validation.user.id} ) }}">{{ validation.user.username }}</a> : {{ validation.message }}
 
 </li>
 

@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+
+{% block content %}
+
+
+<h1>{{ user.username }}</h1>
+
+<h3>Stats</h3>
+
+<ul>
+    <li>User class : <a href="">{{ user.userclass }}</a></li>
+    <li>managed sharables : {{ user.sharables|length }}</li>
+</ul>
+
+<h3>Description</h3>
+
+<p>{{ user.description }}</p>
+
+<h3>Sharables</h3>
+
+
+<ul>
+{% for sharable in user.sharables %}
+
+<li>
+
+
+<a href="{{ path('sharable_show', {id: sharable.id}) }}">{{ sharable.name }}</a>
+{% if is_granted('edit', sharable) %}
+<a href="{{ path('sharable_edit', {id: sharable.id}) }}">[edit]</a>
+{% endif %}
+
+</li>
+
+{% endfor %}
+</ul>
+
+
+{% endblock %}

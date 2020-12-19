@@ -11,8 +11,9 @@
 
         <a href="{{ path('app_homepage') }}">[home]</a>
         <a href="{{ path('sharable') }}">[sharables]</a>
-        <a href="">[users]</a>
+        <a href="{{ path('user') }}">[users]</a>
         <a href="">[user classes]</a>
+        <a href="{{ path('user_show', {id: app.user.id} ) }}">[profile]</a>
         <a href="">[account]</a>
         <a href="{{ path('app_logout') }}">[logout]</a>
 
