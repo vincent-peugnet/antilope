@@ -7,11 +7,20 @@
     </head>
     <body>
         <nav>
-        <a href="{{ path('home') }}">[home]</a>
+        {% if app.user %}
+
+        <a href="{{ path('app_homepage') }}">[home]</a>
         <a href="{{ path('sharable') }}">[sharables]</a>
         <a href="">[users]</a>
         <a href="">[user classes]</a>
         <a href="">[account]</a>
+        <a href="{{ path('app_logout') }}">[logout]</a>
+
+        {% else %}
+
+        <a href="{{ path('app_login') }}">[login]</a>
+
+        {% endif %}
 
         </nav>
         <hr>

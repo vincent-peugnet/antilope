@@ -9,11 +9,54 @@
 
 <h1>{{ sharable.name }}</h1>
 
+Validations : {{ sharable.validations|length }}
+
 <p>
 {{ sharable.description }}
 </p>
 
+
+{% if is_granted('validate', sharable) %}
+<a href="{{ path('sharable_validate', {id: sharable.id}) }}">[validate]</a>
+{% endif %}
+
+{% if is_granted('edit', sharable) %}
 <a href="{{ path('sharable_edit', {id: sharable.id}) }}">[edit]</a>
+{% endif %}
+
+
+<h3>Managed by :</h3>
+
+<ul>
+{% for user in sharable.managedby %}
+
+<li>
+
+
+<a href="">{{ user.username }}</a>
+
+
+</li>
+
+{% endfor %}
+</ul>
+
+
+
+<h3>Validations :</h3>
+
+<ul>
+{% for validation in sharable.validations %}
+
+<li>
+
+<a href="">{{ validation.user.username }}</a> : {{ validation.message }}
+
+</li>
+
+{% endfor %}
+</ul>
+
 
 
 {% endblock %}

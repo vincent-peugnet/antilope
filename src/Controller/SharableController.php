@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Sharable;
+use App\Entity\Validation;
 use App\Form\SharableType;
+use App\Form\ValidationType;
 use App\Repository\SharableRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,6 +34,8 @@ class SharableController extends AbstractController
      */
     public function show(Sharable $sharable)
     {
+        $this->denyAccessUnlessGranted('view', $sharable);
+
         return $this->render('sharable/show.html.twig', [
             'sharable' => $sharable,
         ]);
@@ -44,7 +48,7 @@ class SharableController extends AbstractController
      */
     public function edit(Sharable $sharable, Request $request): Response
     {
-        // $this->denyAccessUnlessGranted('edit', $sharable);
+        $this->denyAccessUnlessGranted('edit', $sharable);
 
         $form = $this->createForm(SharableType::class, $sharable);
 
@@ -67,5 +71,38 @@ class SharableController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+
+    /**
+     * @Route("/sharable/{id}/validate", name="sharable_validate", requirements={"id"="\d+"})
+     */
+    public function validate(Sharable $sharable, Request $request): Response
+    {
+        $this->denyAccessUnlessGranted('validate', $sharable);
+
+        $validation = new Validation();
+        $form =$this->createForm(ValidationType::class);
+
+        
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $validation = $form->getData();
+
+            $validation->setUser($this->getUser());
+            $validation->setSharable($sharable);
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($validation);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('sharable_show', ['id' => $sharable->getId()]);
+        }
+
+        return $this->render('sharable/validate.html.twig', [
+            'sharable' => $sharable,
+            'form' => $form->createView(),
+        ]);
+    }
+
 
 }

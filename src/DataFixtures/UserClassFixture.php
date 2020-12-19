@@ -13,18 +13,27 @@ class UserClassFixture extends Fixture
         $userClass= new UserClass();
         $userClass
             ->setRank(10)
+            ->setAccess(false)
+            ->setShare(true)
+            ->setCanInvite(false)
             ->setName('basic_user');
         $manager->persist($userClass);
 
         $userClass= new UserClass();
         $userClass
             ->setRank(20)
+            ->setAccess(true)
+            ->setShare(true)
+            ->setCanInvite(false)
             ->setName('member');
         $manager->persist($userClass);
 
         $userClass= new UserClass();
         $userClass
             ->setRank(30)
+            ->setAccess(true)
+            ->setShare(true)
+            ->setCanInvite(true)
             ->setName('power_user');
         $manager->persist($userClass);
 

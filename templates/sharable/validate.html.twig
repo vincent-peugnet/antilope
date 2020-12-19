@@ -1,0 +1,18 @@
+{% extends 'sharable/layout.html.twig' %}
+
+
+{% block title %}{{ sharable.name }}{% endblock %}
+
+
+
+{% block section %}
+
+<h1>{{ sharable.name }}</h1>
+
+<h2>Validation</h2>
+
+{{ form(form) }}
+
+
+
+{% endblock %}

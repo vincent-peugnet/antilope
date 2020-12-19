@@ -34,6 +34,21 @@ class UserClass
      */
     private $users;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $share;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $access;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $canInvite;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -99,6 +114,42 @@ class UserClass
                 $user->setUserClass(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getShare(): ?bool
+    {
+        return $this->share;
+    }
+
+    public function setShare(bool $share): self
+    {
+        $this->share = $share;
+
+        return $this;
+    }
+
+    public function getAccess(): ?bool
+    {
+        return $this->access;
+    }
+
+    public function setAccess(bool $access): self
+    {
+        $this->access = $access;
+
+        return $this;
+    }
+
+    public function getCanInvite(): ?bool
+    {
+        return $this->canInvite;
+    }
+
+    public function setCanInvite(bool $canInvite): self
+    {
+        $this->canInvite = $canInvite;
 
         return $this;
     }

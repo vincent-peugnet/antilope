@@ -41,6 +41,14 @@ class UserFixture extends Fixture implements DependentFixtureInterface
             ->setShareScore(0);
         $manager->persist($userGuillaume);
 
+        $userLea = new User();
+        $userLea
+            ->setUsername('leatine')
+            ->setPassword($this->passwordEncoder->encodePassword($userLea, 'leatine'))
+            ->setUserClass($member)
+            ->setShareScore(0);
+        $manager->persist($userLea);
+
         $userNicolas = new User();
         $userNicolas
             ->setUsername('nicolas')
