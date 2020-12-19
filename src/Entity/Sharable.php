@@ -7,6 +7,8 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ORM\Entity(repositoryClass=SharableRepository::class)
@@ -22,7 +24,14 @@ class Sharable
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=64)
+     * @Assert\Length(
+     *     min = 2,
+     *     max = 64,
+     *     minMessage = "name at least {{ limit }} characters long",
+     *     maxMessage = "name cannot be longer than {{ limit }} characters",
+     *     allowEmptyString = false
+     * )
      */
     private $name;
 
@@ -38,6 +47,10 @@ class Sharable
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Assert\GreaterThan(
+     *      propertyPath = "beginDateTime",
+     *      message = "End date must be after begin date {{ compared_value }}"
+     * )
      */
     private $endAt;
 
@@ -52,7 +65,14 @@ class Sharable
     private $disabled;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="string", length=255)
+     * @Assert\Length(
+     *     min = 30,
+     *     max = 255,
+     *     minMessage = "description should be at least {{ limit }} characters long",
+     *     maxMessage = "description cannot be longer than {{ limit }} characters",
+     *     allowEmptyString = false
+     * )
      */
     private $description;
 
@@ -65,6 +85,11 @@ class Sharable
      * @ORM\OneToMany(targetEntity=Validation::class, mappedBy="sharable")
      */
     private $validations;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $details;
 
     public function __construct()
     {
@@ -213,6 +238,18 @@ class Sharable
                 $validation->setSharable(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDetails(): ?string
+    {
+        return $this->details;
+    }
+
+    public function setDetails(string $details): self
+    {
+        $this->details = $details;
 
         return $this;
     }

@@ -105,4 +105,32 @@ class SharableController extends AbstractController
     }
 
 
+
+    /**
+     * @Route("/sharable/new", name="sharable_new")
+     */
+    public function new(Request $request): Response
+    {
+        $sharable = new Sharable();
+        $form = $this->createForm(SharableType::class, $sharable);
+        
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $sharable = $form->getData();
+            
+            $sharable->addManagedBy($this->getUser());
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($sharable);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('sharable');
+        }
+
+
+        return $this->render('sharable/new.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
 }

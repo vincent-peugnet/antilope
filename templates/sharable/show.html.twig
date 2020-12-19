@@ -9,6 +9,8 @@
 
 <h1>{{ sharable.name }}</h1>
 
+<p>{{ sharable.description }}</p>
+
 Validations : {{ sharable.validations|length }}
 </br>
 Created : {{ sharable.createdAt|format_datetime('short', 'short', locale='fr') }}
@@ -26,9 +28,9 @@ End : {{ sharable.endAt|format_datetime('short', 'short', locale='fr') }}
 <strong>This Sharable is DISABLED for now</strong>
 {% endif %}
 
-<p>
-{{ sharable.description }}
-</p>
+<div id="description">
+{{ sharable.details|markdown_to_html }}
+</div>
 
 
 {% if is_granted('validate', sharable) %}

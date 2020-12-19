@@ -96,6 +96,9 @@
     "egulias/email-validator": {
         "version": "2.1.24"
     },
+    "erusev/parsedown": {
+        "version": "1.7.4"
+    },
     "monolog/monolog": {
         "version": "2.2.0"
     },
@@ -515,6 +518,9 @@
         "version": "v3.1.1"
     },
     "twig/intl-extra": {
+        "version": "v3.1.1"
+    },
+    "twig/markdown-extra": {
         "version": "v3.1.1"
     },
     "twig/twig": {

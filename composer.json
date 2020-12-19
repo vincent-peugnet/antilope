@@ -12,6 +12,7 @@
         "doctrine/doctrine-bundle": "^2.2",
         "doctrine/doctrine-migrations-bundle": "^3.0",
         "doctrine/orm": "^2.8",
+        "erusev/parsedown": "^1.7",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^5.6",
         "symfony/asset": "5.2.*",
@@ -40,6 +41,7 @@
         "symfony/yaml": "5.2.*",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/intl-extra": "^3.1",
+        "twig/markdown-extra": "^3.1",
         "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {

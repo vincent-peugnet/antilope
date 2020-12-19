@@ -7,6 +7,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SharableType extends AbstractType
@@ -16,6 +18,10 @@ class SharableType extends AbstractType
         $builder
             ->add('name')
             ->add('description')
+            ->add('details', null, [
+                'required' => true,
+                'help' => 'Long description, where you can use Markdown'
+            ])
             ->add('beginAt', DateTimeType::class, [
                 'widget' => 'single_text',
                 'required'   => false,
@@ -32,10 +38,19 @@ class SharableType extends AbstractType
             ->add('visibleBy', null, [
                 'placeholder' => '',
                 'help' => 'If you want to set a specific class',
-            ])
-            ->add('edit', SubmitType::class)
-
+            ])        
         ;
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            $sharable = $event->getData();
+            $form = $event->getForm();
+
+            if (!$sharable || $sharable->getId() === null) {
+                $form->add('create', SubmitType::class);
+            } else {
+                $form->add('edit', SubmitType::class);
+            }
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver)
