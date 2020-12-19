@@ -9,7 +9,7 @@
 <h3>Stats</h3>
 
 <ul>
-    <li>User class : <a href="">{{ user.userclass }}</a></li>
+    <li>User class : <a href="{{ path('userclass_show', {id: user.userclass.id}) }}">{{ user.userclass }}</a></li>
     <li>managed sharables : {{ user.sharables|length }}</li>
 </ul>
 

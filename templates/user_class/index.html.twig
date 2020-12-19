@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+
+{% block content %}
+
+
+
+<ul>
+{% for userClass in userClasses %}
+
+<li>
+
+<h3>{{ userClass.name }}</h3>
+
+<ul>
+{% if userClass.share %}
+<li>can create sharables</li>
+{% endif %}
+{% if userClass.access %}
+<li>can access the sharables with no specific access settings</li>
+{% endif %}
+{% if userClass.canInvite %}
+<li>can invite other people</li>
+{% endif %}
+</ul>
+
+<a href="{{ path('userclass_show', {id: userClass.id}) }}">[see users]</a>
+
+
+</li>
+
+{% endfor %}
+</ul>
+
+
+{% endblock %}
