@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Entity\Validation;
 use App\Repository\UserClassRepository;
 use App\Repository\ValidationRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -84,9 +85,27 @@ class SharableVoter extends Voter
 
     private function canValidate(Sharable $sharable, User $user): bool
     {
+        // if users can edit, this mean they manage the sharable
         if ($this->canEdit($sharable, $user)) {
             return false;
-        } elseif ($this->canView($sharable, $user) && !$sharable->getDisabled()) {
+        }
+
+        // Check if the begin date is already passed
+        if (!empty($sharable->getBeginAt())) {
+            if ($sharable->getBeginAt() < new DateTime()) {
+                $passed = true;
+            } else {
+                $passed = false;
+            }
+        } else {
+            $passed = true;
+        }
+
+
+        if ($this->canView($sharable, $user)
+            && !$sharable->getDisabled()
+            && $passed
+            ) {
             /**
              * @todo Check if the user already validated this sharable
              */
