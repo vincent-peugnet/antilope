@@ -3,6 +3,9 @@
 
 {% block content %}
 
+<a href="{{ path('user') }}">Users</a> > {{ user.username }}
+
+<hr>
 
 <h1>{{ user.username }}</h1>
 
@@ -15,7 +18,13 @@
 
 <h3>Description</h3>
 
-<p>{{ user.description }}</p>
+{% if user.description %}
+<p>{{ user.description|markdown_to_html }}</p>
+{% endif %}
+
+{% if is_granted('edit', user) %}
+<a href="{{ path('user_edit', {id: user.id}) }}">edit</a>
+{% endif %}
 
 <h3>Sharables</h3>
 

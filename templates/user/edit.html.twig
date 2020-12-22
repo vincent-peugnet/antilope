@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+
+{% block content %}
+
+
+<a href="{{ path('user') }}">Users</a> > <a href="{{ path('user_show', {id: user.id}) }}">{{ user.username }}</a> > edit
+
+<hr>
+
+<h1>Profile edit</h1>
+
+{{ form(form) }}
+
+{% endblock %}
