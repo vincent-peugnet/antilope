@@ -32,6 +32,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
         $basicUser = $userClassRepo->findOneBy(['name' => 'basic_user']);
         $member = $userClassRepo->findOneBy(['name' => 'member']);
         $powerUser = $userClassRepo->findOneBy(['name' => 'power_user']);
+        $elite = $userClassRepo->findOneBy(['name' => 'elite']);
 
         $userGuillaume = new User();
         $userGuillaume
@@ -64,6 +65,14 @@ class UserFixture extends Fixture implements DependentFixtureInterface
             ->setUserClass($powerUser)
             ->setShareScore(0);
         $manager->persist($userAudrey);
+
+        $userGuilhem = new User();
+        $userGuilhem
+            ->setUsername('guilhem')
+            ->setPassword($this->passwordEncoder->encodePassword($userGuilhem, 'guilhem'))
+            ->setUserClass($elite)
+            ->setShareScore(0);
+        $manager->persist($userGuilhem);
 
 
         $manager->flush();

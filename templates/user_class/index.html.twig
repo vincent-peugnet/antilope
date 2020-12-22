@@ -22,6 +22,7 @@
 {% if userClass.canInvite %}
 <li>can invite other people</li>
 {% endif %}
+<li>maximum paranoïa level : {{ userClass.maxParanoia }}</li>
 </ul>
 
 <a href="{{ path('userclass_show', {id: userClass.id}) }}">[see users]</a>

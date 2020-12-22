@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\UserClassRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Validator\Constraints as Assert;
+use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -48,6 +50,12 @@ class UserClass
      * @ORM\Column(type="boolean")
      */
     private $canInvite;
+
+    /**
+     * @ORM\Column(type="smallint")
+     * @Assert\Choice(callback={"App\Security\Voter\UserVoter", "getParanoiaLevels"})
+     */
+    private $maxParanoia;
 
     public function __construct()
     {
@@ -150,6 +158,18 @@ class UserClass
     public function setCanInvite(bool $canInvite): self
     {
         $this->canInvite = $canInvite;
+
+        return $this;
+    }
+
+    public function getMaxParanoia(): ?int
+    {
+        return $this->maxParanoia;
+    }
+
+    public function setMaxParanoia(int $maxParanoia): self
+    {
+        $this->maxParanoia = $maxParanoia;
 
         return $this;
     }

@@ -9,9 +9,27 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserVoter extends Voter
 {
+    const PARANOIA = [
+        0 => [],
+        1 => [self::VIEW_VALIDATIONS],
+        2 => [self::VIEW_VALIDATIONS, self::VIEW_SHARABLES],
+        3 => [self::VIEW_VALIDATIONS, self::VIEW_SHARABLES, self::VIEW_STATS],
+        4 => [self::VIEW],
+    ];
 
+    const VIEW_STATS = 'view_stats';
+    const VIEW_VALIDATIONS = 'view_validations';
+    const VIEW_SHARABLES = 'view_sharables';
     const VIEW     = 'view';
     const EDIT     = 'edit';
+
+    /**
+     * Return all the paranoïa levels listed in the PARANOIA constant
+     */
+    static function getParanoiaLevels(): array
+    {
+        return array_keys(self::PARANOIA);
+    }
 
     protected function supports($attribute, $subject)
     {
