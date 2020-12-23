@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Sharable;
 use App\Entity\Validation;
+use App\Form\ManagerType;
 use App\Form\SharableType;
 use App\Form\ValidationType;
 use App\Repository\SharableRepository;
@@ -26,6 +27,7 @@ class SharableController extends AbstractController
             'sharables' => $paginatedSharables,
             'previous' => $offset - $sharableRepository::PAGINATOR_PER_PAGE,
             'next' => min(count($paginatedSharables), $offset + SharableRepository::PAGINATOR_PER_PAGE),
+            'sharable' => new Sharable(),
         ]);
     }
 
@@ -57,7 +59,6 @@ class SharableController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $sharable = $form->getData();
             
-            //$sharable->addManagedBy($this->getUser());
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($sharable);
@@ -70,6 +71,39 @@ class SharableController extends AbstractController
             'sharable' => $sharable,
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/sharable/{id}/managers", name="sharable_managers", requirements={"id"="\d+"})
+     */
+    public function managers(Sharable $sharable, Request $request): Response
+    {
+        $this->denyAccessUnlessGranted('edit', $sharable);
+
+        $form = $this->createForm(ManagerType::class, null, ['managedBy' => $sharable->getManagedBy()]);
+
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+            $user = $form->getData()['managedBy'];
+
+            $sharable->addManagedBy($user);
+
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($sharable);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('sharable_managers', ['id' => $sharable->getId()]);
+
+        }
+
+        return $this->render('sharable/managers.html.twig', [
+            'sharable' => $sharable,
+            'form' => $form->createView(),
+        ]);
+
     }
 
 
@@ -112,6 +146,9 @@ class SharableController extends AbstractController
     public function new(Request $request): Response
     {
         $sharable = new Sharable();
+
+        $this->denyAccessUnlessGranted('create', $sharable);
+
         $form = $this->createForm(SharableType::class, $sharable);
         
         $form->handleRequest($request);

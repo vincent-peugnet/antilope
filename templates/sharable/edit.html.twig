@@ -1,12 +1,13 @@
-{% extends 'sharable/layout.html.twig' %}
+{% extends 'base.html.twig' %}
 
 
 {% block title %}{{ sharable.name }}{% endblock %}
 
-{% block section %}
+{% block content %}
 
-<a href="{{ path('sharable_show', {id: sharable.id}) }}">[back]</a>
+<a href="{{ path('sharable') }}">sharables</a> > <a href="{{ path('sharable_show', {id: sharable.id}) }}">{{ sharable.name }}</a> > edit
 
+<hr>
 
 {{ form(form) }}
 

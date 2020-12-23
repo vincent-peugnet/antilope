@@ -1,11 +1,15 @@
-{% extends 'sharable/layout.html.twig' %}
+{% extends 'base.html.twig' %}
 
 
 {% block title %}{{ sharable.name }}{% endblock %}
 
 
 
-{% block section %}
+{% block content %}
+
+<a href="{{ path('sharable') }}">sharables</a> > {{ sharable.name }}
+
+<hr>
 
 <h1>{{ sharable.name }}</h1>
 
@@ -28,6 +32,10 @@ End : {{ sharable.endAt|format_datetime('short', 'short', locale='fr') }}
 <strong>This Sharable is DISABLED for now</strong>
 {% endif %}
 
+
+
+<h3>Details :</h3>
+
 <div id="description">
 {{ sharable.details|markdown_to_html }}
 </div>
@@ -39,6 +47,7 @@ End : {{ sharable.endAt|format_datetime('short', 'short', locale='fr') }}
 
 {% if is_granted('edit', sharable) %}
 <a href="{{ path('sharable_edit', {id: sharable.id}) }}">[edit]</a>
+<a href="{{ path('sharable_managers', {id: sharable.id}) }}">[managers]</a>
 {% endif %}
 
 

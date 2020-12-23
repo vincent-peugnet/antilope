@@ -29,10 +29,20 @@ class UserFixture extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager)
     {
         $userClassRepo = $manager->getRepository(UserClass::class);
+        $visitor = $userClassRepo->findOneBy(['name' => 'visitor']);
         $basicUser = $userClassRepo->findOneBy(['name' => 'basic_user']);
         $member = $userClassRepo->findOneBy(['name' => 'member']);
         $powerUser = $userClassRepo->findOneBy(['name' => 'power_user']);
         $elite = $userClassRepo->findOneBy(['name' => 'elite']);
+
+        $userBolos = new User();
+        $userBolos
+            ->setUsername('bolos')
+            ->setPassword($this->passwordEncoder->encodePassword($userBolos, 'bolos'))
+            ->setUserClass($visitor)
+            ->setParanoia(0)
+            ->setShareScore(0);
+        $manager->persist($userBolos);
 
         $userGuillaume = new User();
         $userGuillaume

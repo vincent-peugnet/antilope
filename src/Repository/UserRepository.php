@@ -4,10 +4,12 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Traversable;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -36,22 +38,22 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->flush();
     }
 
-    // /**
-    //  * @return User[] Returns an array of User objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @param Collection|User[] $users collection of User objects
+     * @return User[] Returns a collection of User objects
+     */
+    public function findAllExcept(Collection $users)
     {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
+        $ids = $users->map(function (User $user) {
+            return $user->getId();
+        });
+
+        $qb = $this->createQueryBuilder('u');
+        return $qb->where($qb->expr()->notIn('u.id', $ids))
             ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?User

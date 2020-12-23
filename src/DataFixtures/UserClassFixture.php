@@ -12,6 +12,16 @@ class UserClassFixture extends Fixture
     {
         $userClass= new UserClass();
         $userClass
+            ->setRank(5)
+            ->setAccess(false)
+            ->setShare(false)
+            ->setCanInvite(false)
+            ->setMaxParanoia(0)
+            ->setName('visitor');
+        $manager->persist($userClass);
+
+        $userClass= new UserClass();
+        $userClass
             ->setRank(10)
             ->setAccess(false)
             ->setShare(true)

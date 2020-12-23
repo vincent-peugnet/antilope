@@ -1,9 +1,12 @@
-{% extends 'sharable/layout.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}Sharables{% endblock %}
 
-{% block section %}
+{% block content %}
 
+sharables {% if is_granted('create', sharable) %} > <a href="{{ path('sharable_new') }}">new</a> {% endif %}
+
+<hr>
 
 <ul>
 {% for sharable in sharables %}

@@ -1,9 +1,15 @@
-{% extends 'sharable/layout.html.twig' %}
+{% extends 'base.html.twig' %}
 
 
 {% block title %}new sharable{% endblock %}
 
-{% block section %}
+{% block content %}
+
+
+<a href="{{ path('sharable') }}">sharables</a> > new
+
+<hr>
+
 
 {{ form(form) }}
 

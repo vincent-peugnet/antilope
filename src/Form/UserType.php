@@ -28,7 +28,8 @@ class UserType extends AbstractType
                     function() use ($user) {
                         return array_slice(UserVoter::getParanoiaLevels(), 0, $user->getUserClass()->getMaxParanoia() + 1);
                     }
-                )
+                ),
+                'help' => '0 : all users can see your profile, 1 : hide validations, 2 : hide validations, sharables, 3 : hide validations, sharables, stats',
             ])
             ->add('edit', SubmitType::class)
         ;

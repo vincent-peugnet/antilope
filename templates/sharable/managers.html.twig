@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}{{ sharable.name }}{% endblock %}
+
+{% block content %}
+
+<a href="{{ path('sharable') }}">sharables</a> > <a href="{{ path('sharable_show', {id: sharable.id}) }}">{{ sharable.name }}</a> > managers
+
+
+<hr>
+
+<ul>
+{% for user in sharable.managedBy %}
+<li>
+{{ user.username }}
+</li>
+{% endfor %}
+</ul>
+
+{{ form(form) }}
+
+
+{% endblock %}

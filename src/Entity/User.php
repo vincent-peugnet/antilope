@@ -82,6 +82,11 @@ class User implements UserInterface
         $this->validations = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->username;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

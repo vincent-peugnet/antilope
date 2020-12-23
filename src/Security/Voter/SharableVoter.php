@@ -20,6 +20,7 @@ class SharableVoter extends Voter
     const VIEW     = 'view';
     const EDIT     = 'edit';
     const VALIDATE = 'validate';
+    const CREATE   = 'create';
 
     public function __construct(EntityManagerInterface $em) {
         $this->em = $em;
@@ -29,7 +30,7 @@ class SharableVoter extends Voter
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, [self::VIEW, self::EDIT, self::VALIDATE])
+        return in_array($attribute, [self::VIEW, self::EDIT, self::VALIDATE, self::CREATE])
             && $subject instanceof \App\Entity\Sharable;
     }
 
@@ -54,6 +55,9 @@ class SharableVoter extends Voter
                 break;
             case self::VALIDATE:
                 return $this->canValidate($sharable, $user);
+                break;
+            case self::CREATE:
+                return $this->canCreate($user);
                 break;
         }
 
@@ -125,5 +129,10 @@ class SharableVoter extends Voter
         } else {
             return false;
         }
+    }
+
+    private function canCreate(User $user): bool
+    {
+        return $user->getUserClass()->getShare();
     }
 }
