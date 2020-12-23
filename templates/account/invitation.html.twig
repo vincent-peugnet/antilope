@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Invitations{% endblock %}
+
+{% block content %}
+
+<a href="{{ path('account') }}">account</a> > invitations
+
+<hr>
+
+<h1>Invitations</h1>
+
+<h2>Used Invitations</h2>
+
+<ul>
+{% for invitation in usedInvitations %}
+<li>
+{{ invitation.createdAt|format_datetime('short', 'short', locale='fr') }}
+<a href="{{ path('user_show', {id: invitation.child}) }}">{{ invitation.child }}</a>
+</li>
+{% endfor %}
+</ul>
+
+<h2>Actives Invitations</h2>
+
+<ul>
+{% for invitation in activeInvitations %}
+<li>
+{{ invitation.createdAt|format_datetime('short', 'short', locale='fr') }}
+code : <code>{{ invitation.code }}</code>
+<i>expire in {{ invitation.createdAt|date_modify(invitationDuration|date("+ %h hours")).diff(date("now"))|date("%d days %Hh %Imin %Ss") }}</i>
+</li>
+{% endfor %}
+</ul>
+
+<a href="{{ path('account_invitation_new') }}">[new invitation]</a>
+
+
+{% endblock %}

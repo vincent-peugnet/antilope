@@ -76,10 +76,21 @@ class User implements UserInterface
      */
     private $paranoia;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Invitation::class, mappedBy="parent")
+     */
+    private $invitations;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Invitation::class, mappedBy="child", cascade={"persist", "remove"})
+     */
+    private $invitation;
+
     public function __construct()
     {
         $this->sharables = new ArrayCollection();
         $this->validations = new ArrayCollection();
+        $this->invitations = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -274,6 +285,58 @@ class User implements UserInterface
     public function setParanoia(int $paranoia): self
     {
         $this->paranoia = $paranoia;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Invitation[]
+     */
+    public function getInvitations(): Collection
+    {
+        return $this->invitations;
+    }
+
+    public function addInvitation(Invitation $invitation): self
+    {
+        if (!$this->invitations->contains($invitation)) {
+            $this->invitations[] = $invitation;
+            $invitation->setParent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInvitation(Invitation $invitation): self
+    {
+        if ($this->invitations->removeElement($invitation)) {
+            // set the owning side to null (unless already changed)
+            if ($invitation->getParent() === $this) {
+                $invitation->setParent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getInvitation(): ?Invitation
+    {
+        return $this->invitation;
+    }
+
+    public function setInvitation(?Invitation $invitation): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($invitation === null && $this->invitation !== null) {
+            $this->invitation->setChild(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($invitation !== null && $invitation->getChild() !== $this) {
+            $invitation->setChild($this);
+        }
+
+        $this->invitation = $invitation;
 
         return $this;
     }

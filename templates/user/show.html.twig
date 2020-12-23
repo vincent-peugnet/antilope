@@ -18,6 +18,7 @@
     <li>User class : <a href="{{ path('userclass_show', {id: user.userclass.id}) }}">{{ user.userclass }}</a></li>
     <li>managed sharables : {{ user.sharables|length }}</li>
     <li>paranoïa level : {{ user.paranoia }}</li>
+    <li>invited by : {{ user.getInvite.getParent.username }}</li>
 </ul>
 
 {% endif %}

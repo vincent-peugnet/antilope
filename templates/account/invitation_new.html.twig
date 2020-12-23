@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Invitation{% endblock %}
+
+{% block content %}
+
+<a href="{{ path('account') }}">account</a> > <a href="{{ path('account_invitation') }}">invitations</a> > new
+
+<hr>
+
+<h1>New invitation</h1>
+
+<p>Invitations are valid for a {{ invitationDuration|date("%h") }} hours period.</p>
+
+{{ form(form) }}
+
+
+{% endblock %}
