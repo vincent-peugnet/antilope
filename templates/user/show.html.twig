@@ -9,12 +9,20 @@
 
 <h1>{{ user.username }}</h1>
 
+
+{% if is_granted('view_stats', user) %}
+
 <h3>Stats</h3>
 
 <ul>
     <li>User class : <a href="{{ path('userclass_show', {id: user.userclass.id}) }}">{{ user.userclass }}</a></li>
     <li>managed sharables : {{ user.sharables|length }}</li>
+    <li>paranoïa level : {{ user.paranoia }}</li>
 </ul>
+
+{% endif %}
+
+
 
 <h3>Description</h3>
 
@@ -25,6 +33,9 @@
 {% if is_granted('edit', user) %}
 <a href="{{ path('user_edit', {id: user.id}) }}">edit</a>
 {% endif %}
+
+
+{% if is_granted('view_sharables', user) %}
 
 <h3>Sharables</h3>
 
@@ -44,6 +55,30 @@
 
 {% endfor %}
 </ul>
+
+{% endif %}
+
+
+
+{% if is_granted('view_validations', user) %}
+
+<h3>Validations given</h3>
+
+
+<ul>
+{% for validation in user.Validations %}
+
+<li>
+<a href="{{ path('sharable_show', {id: validation.sharable.id}) }}">{{ validation.sharable.name }}</a>
+{{ validation.message }}
+</li>
+
+{% endfor %}
+</ul>
+
+{% endif %}
+
+
 
 
 {% endblock %}

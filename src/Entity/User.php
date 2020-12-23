@@ -6,6 +6,7 @@ use App\Repository\UserRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -68,6 +69,12 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity=Validation::class, mappedBy="user")
      */
     private $validations;
+
+    /**
+     * @ORM\Column(type="smallint")
+     * @Assert\Choice(callback={"App\Security\Voter\UserVoter", "getParanoiaLevels"})
+     */
+    private $paranoia;
 
     public function __construct()
     {
@@ -250,6 +257,18 @@ class User implements UserInterface
                 $validation->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getParanoia(): ?int
+    {
+        return $this->paranoia;
+    }
+
+    public function setParanoia(int $paranoia): self
+    {
+        $this->paranoia = $paranoia;
 
         return $this;
     }

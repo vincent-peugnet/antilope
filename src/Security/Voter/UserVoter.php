@@ -14,7 +14,6 @@ class UserVoter extends Voter
         1 => [self::VIEW_VALIDATIONS],
         2 => [self::VIEW_VALIDATIONS, self::VIEW_SHARABLES],
         3 => [self::VIEW_VALIDATIONS, self::VIEW_SHARABLES, self::VIEW_STATS],
-        4 => [self::VIEW],
     ];
 
     const VIEW_STATS = 'view_stats';
@@ -35,7 +34,7 @@ class UserVoter extends Voter
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, [self::EDIT, self::VIEW])
+        return in_array($attribute, [self::EDIT, self::VIEW, self::VIEW_VALIDATIONS, self::VIEW_SHARABLES, self::VIEW_STATS])
             && $subject instanceof \App\Entity\User;
     }
 
@@ -58,6 +57,15 @@ class UserVoter extends Voter
             case self::VIEW:
                 return true;
                 break;
+            case self::VIEW_VALIDATIONS:
+                return $this->canView($user, $userProfile, self::VIEW_VALIDATIONS);
+                break;
+            case self::VIEW_SHARABLES:
+                return $this->canView($user, $userProfile, self::VIEW_SHARABLES);
+                break;
+            case self::VIEW_STATS:
+                return $this->canView($user, $userProfile, self::VIEW_STATS);
+                break;
         }
 
         return false;
@@ -66,5 +74,16 @@ class UserVoter extends Voter
     private function canEdit(User $user, User $userProfile): bool
     {
         return ($user === $userProfile);
+    }
+
+    private function canView(User $user, User $userProfile, string $view): bool
+    {
+        if ($this->canEdit($user, $userProfile)) {
+            return true;
+        } elseif (in_array($view, self::PARANOIA[$userProfile->getParanoia()])) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }

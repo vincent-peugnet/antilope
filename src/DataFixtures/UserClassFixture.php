@@ -26,7 +26,7 @@ class UserClassFixture extends Fixture
             ->setAccess(true)
             ->setShare(true)
             ->setCanInvite(false)
-            ->setMaxParanoia(2)
+            ->setMaxParanoia(1)
             ->setName('member');
         $manager->persist($userClass);
 
@@ -36,7 +36,7 @@ class UserClassFixture extends Fixture
             ->setAccess(true)
             ->setShare(true)
             ->setCanInvite(true)
-            ->setMaxParanoia(4)
+            ->setMaxParanoia(2)
             ->setName('power_user');
         $manager->persist($userClass);
 
@@ -46,7 +46,7 @@ class UserClassFixture extends Fixture
             ->setAccess(true)
             ->setShare(true)
             ->setCanInvite(true)
-            ->setMaxParanoia(5)
+            ->setMaxParanoia(3)
             ->setName('elite');
         $manager->persist($userClass);
 

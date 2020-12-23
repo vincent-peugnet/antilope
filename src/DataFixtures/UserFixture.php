@@ -39,6 +39,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
             ->setUsername('guillaume')
             ->setPassword($this->passwordEncoder->encodePassword($userGuillaume, 'gp231299'))
             ->setUserClass($basicUser)
+            ->setParanoia(0)
             ->setShareScore(0);
         $manager->persist($userGuillaume);
 
@@ -47,6 +48,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
             ->setUsername('leatine')
             ->setPassword($this->passwordEncoder->encodePassword($userLea, 'leatine'))
             ->setUserClass($member)
+            ->setParanoia(0)
             ->setShareScore(0);
         $manager->persist($userLea);
 
@@ -55,6 +57,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
             ->setUsername('nicolas')
             ->setPassword($this->passwordEncoder->encodePassword($userNicolas, 'espace'))
             ->setUserClass($member)
+            ->setParanoia(1)
             ->setShareScore(0);
         $manager->persist($userNicolas);
 
@@ -63,6 +66,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
             ->setUsername('audrey')
             ->setPassword($this->passwordEncoder->encodePassword($userAudrey, 'missmogwai'))
             ->setUserClass($powerUser)
+            ->setParanoia(0)
             ->setShareScore(0);
         $manager->persist($userAudrey);
 
@@ -71,6 +75,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
             ->setUsername('guilhem')
             ->setPassword($this->passwordEncoder->encodePassword($userGuilhem, 'guilhem'))
             ->setUserClass($elite)
+            ->setParanoia(2)
             ->setShareScore(0);
         $manager->persist($userGuilhem);
 
