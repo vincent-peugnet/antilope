@@ -16,9 +16,14 @@
 
 <ul>
     <li>User class : <a href="{{ path('userclass_show', {id: user.userclass.id}) }}">{{ user.userclass }}</a></li>
-    <li>managed sharables : {{ user.sharables|length }}</li>
-    <li>paranoïa level : {{ user.paranoia }}</li>
-    <li>invited by : {{ user.getInvite.getParent.username }}</li>
+    <li>Managed sharables : {{ user.sharables|length }}</li>
+    <li>Validations given : {{ user.validations|length }}</li>
+    <li>Paranoïa level : {{ user.paranoia }}</li>
+    <li>Share Score : {{ user.shareScore }}</li>
+    {% if user.getInvitation %}
+    <li>Invited by : <a href="{{ path('user_show', {id: user.getInvitation.getParent.id}) }}">{{ user.getInvitation.getParent.username }}</a></li>
+    {% endif %}
+    <li>Account creation : {{ user.getCreatedAt|format_date('short', locale='fr') }}</li>
 </ul>
 
 {% endif %}

@@ -3,11 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\ValidationRepository;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=ValidationRepository::class)
- * @ORM\HasLifecycleCallbacks()
  */
 class Validation
 {
@@ -39,6 +39,10 @@ class Validation
      * @ORM\Column(type="string", length=1024, nullable=true)
      */
     private $message;
+
+    public function __construct() {
+        $this->sendAt = new DateTime();
+    }
 
     public function getId(): ?int
     {
@@ -74,12 +78,11 @@ class Validation
         return $this->sendAt;
     }
 
-    /**
-     * @ORM\PrePersist
-     */
-    public function setSendAt()
+    public function setSendAt(?\DateTimeInterface $sendAt): self
     {
-        $this->sendAt = new \DateTime();
+        $this->sendAt = $sendAt;
+
+        return $this;
     }
 
     public function getMessage(): ?string

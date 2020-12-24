@@ -12,7 +12,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=SharableRepository::class)
- * @ORM\HasLifecycleCallbacks()
  */
 class Sharable
 {
@@ -42,14 +41,18 @@ class Sharable
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Assert\GreaterThan(
+     *      "today UTC",
+     *      message = "Begin date must be after today"
+     * )
      */
     private $beginAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Assert\GreaterThan(
-     *      propertyPath = "beginDateTime",
-     *      message = "End date must be after begin date {{ compared_value }}"
+     *      propertyPath = "beginAt",
+     *      message = "End date must be after begin date"
      * )
      */
     private $endAt;
@@ -67,7 +70,7 @@ class Sharable
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(
-     *     min = 30,
+     *     min = 5,
      *     max = 255,
      *     minMessage = "description should be at least {{ limit }} characters long",
      *     maxMessage = "description cannot be longer than {{ limit }} characters",
@@ -95,6 +98,7 @@ class Sharable
     {
         $this->managedBy = new ArrayCollection();
         $this->validations = new ArrayCollection();
+        $this->createdAt = new DateTime();
     }
 
     public function getId(): ?int
@@ -119,13 +123,11 @@ class Sharable
         return $this->createdAt;
     }
 
-
-    /**
-     * @ORM\PrePersist
-     */
-    public function setCreatedAt()
+    public function setCreatedAt(?\DateTimeInterface $createdAt): self
     {
-        $this->createdAt = new DateTime();
+        $this->createdAt = $createdAt;
+
+        return $this;
     }
 
     public function getBeginAt(): ?\DateTimeInterface

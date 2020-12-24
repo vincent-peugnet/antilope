@@ -35,6 +35,7 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
         $sharable = new Sharable();
         $sharable->addManagedBy($nicolas)
             ->setDisabled(false)
+            ->setCreatedAt(new DateTime('2020-01-02'))
             ->setName('Aide sur les Thinkpads')
             ->setVisibleBy($basicUser)
             ->setDescription('Je peux vous aider à trouver ou réparer des Thinkpads')
@@ -46,6 +47,7 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
         $sharable = new Sharable();
         $sharable->addManagedBy($guillaume)
             ->setDisabled(false)
+            ->setCreatedAt(new DateTime('2019-11-11'))
             ->setName('Un microscope')
             ->setDescription('Je peux voir des trucs avec mon microscope.')
             ->setDetails('Un *petit* microsope, qui saura donner des résultats intéressants.');
@@ -55,6 +57,7 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
         $sharable = new Sharable();
         $sharable->addManagedBy($audrey)
             ->setDisabled(false)
+            ->setCreatedAt(new DateTime('2019-12-11'))
             ->setName('Grotte scrète')
             ->setDescription('Cachette secrète sous la maison familiale.')
             ->setDetails('![](https://www.grottes-musee-de-saulges.com/sites/www.grottes-musee-de-saulges.com/files/styles/edito_paragraphe_1/public/thumbnails/image/margot_salle_des_troglodythes.jpg?itok=DWnszGyz)');
@@ -65,6 +68,7 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
         $sharable->addManagedBy($nicolas)
             ->addManagedBy($guillaume)
             ->setDisabled(false)
+            ->setCreatedAt(new DateTime('2020-08-08'))
             ->setName('Maison de mers')
             ->setDescription('La bonne vielle maison familiale')
             ->setDetails('- Nombreux couchages
@@ -76,6 +80,7 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
         $sharable = new Sharable();
         $sharable->addManagedBy($leatine)
             ->setDisabled(false)
+            ->setCreatedAt(new DateTime('2020-07-07'))
             ->setName('Concert de Tendre Ael')
             ->setVisibleBy($elite)
             ->setDescription('Un concert très privé !')

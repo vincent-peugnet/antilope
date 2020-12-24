@@ -12,7 +12,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @ORM\HasLifecycleCallbacks()
  */
 class User implements UserInterface
 {
@@ -91,6 +90,7 @@ class User implements UserInterface
         $this->sharables = new ArrayCollection();
         $this->validations = new ArrayCollection();
         $this->invitations = new ArrayCollection();
+        $this->createdAt = new DateTime();
     }
 
     public function __toString(): string
@@ -176,12 +176,11 @@ class User implements UserInterface
         return $this->createdAt;
     }
 
-    /**
-     * @ORM\PrePersist
-     */
-    public function setCreatedAt()
+    public function setCreatedAt(?\DateTimeInterface $createdAt): self
     {
-        $this->createdAt = new DateTime();
+        $this->createdAt = $createdAt;
+
+        return $this;
     }
 
     public function getDescription(): ?string

@@ -16,7 +16,7 @@
 {% for invitation in usedInvitations %}
 <li>
 {{ invitation.createdAt|format_datetime('short', 'short', locale='fr') }}
-<a href="{{ path('user_show', {id: invitation.child}) }}">{{ invitation.child }}</a>
+<a href="{{ path('user_show', {id: invitation.child.id}) }}">{{ invitation.child.username }}</a>
 </li>
 {% endfor %}
 </ul>

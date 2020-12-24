@@ -8,7 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=InvitationRepository::class)
- * @ORM\HasLifecycleCallbacks()
  */
 class Invitation
 {
@@ -40,6 +39,11 @@ class Invitation
      */
     private $code;
 
+    public function __construct() {
+        $this->createdAt = new DateTime();
+    }
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -50,12 +54,11 @@ class Invitation
         return $this->createdAt;
     }
 
-    /**
-     * @ORM\PrePersist
-     */
-    public function setCreatedAt()
+    public function setCreatedAt(?\DateTimeInterface $createdAt): self
     {
-        $this->createdAt = new DateTime();
+        $this->createdAt = $createdAt;
+
+        return $this;
     }
 
     public function getParent(): ?User
