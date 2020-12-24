@@ -29,13 +29,7 @@ class SharableType extends AbstractType
             ->add('visibleBy', null, [
                 'placeholder' => '',
                 'help' => 'Your sharable will be accessible from this user class',
-            ])    
-            ->add('endAt', DateTimeType::class, [
-                'widget' => 'single_text',
-                'required'   => false,
-                'help' => 'If what you\'re sharing have an end, indicate it'
-            ])
-    
+            ])   
         ;
 
 
@@ -44,16 +38,24 @@ class SharableType extends AbstractType
             $sharable = $event->getData();
             $form = $event->getForm();
 
+            if (empty($sharable->getBeginAt()) || $sharable->getBeginAt() > new DateTime()) {
+                $form->add('beginAt', DateTimeType::class, [
+                    'widget' => 'single_text',
+                    'required'   => false,
+                    'help' => 'If what you\'re sharing have a begin date, indicate it',
+                ]);
+            }
+            if (empty($sharable->getEndAt()) || $sharable->getEndAt() > new DateTime()) {
+                $form->add('endAt', DateTimeType::class, [
+                    'widget' => 'single_text',
+                    'required'   => false,
+                    'help' => 'If what you\'re sharing have a end date, indicate it',
+                ]);
+            }
+            
             if (!$sharable || $sharable->getId() === null) {
                 $form->add('create', SubmitType::class);
             } else {
-                if (empty($sharable->getBeginAt()) || $sharable->getBeginAt() > new DateTime()) {
-                    $form->add('beginAt', DateTimeType::class, [
-                        'widget' => 'single_text',
-                        'required'   => false,
-                        'help' => 'If what you\'re sharing have a begin date, indicate it',
-                    ]);
-                }
                 $form->add('edit', SubmitType::class);
             }
         });

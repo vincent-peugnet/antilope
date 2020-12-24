@@ -54,6 +54,10 @@ class Sharable
      *      propertyPath = "beginAt",
      *      message = "End date must be after begin date"
      * )
+     * @Assert\GreaterThan(
+     *      "today UTC",
+     *      message = "End date must be after today"
+     * )
      */
     private $endAt;
 
