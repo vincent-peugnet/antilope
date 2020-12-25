@@ -88,7 +88,7 @@ class User implements UserInterface
     private $invitation;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=180, unique=true)
      */
     private $email;
 

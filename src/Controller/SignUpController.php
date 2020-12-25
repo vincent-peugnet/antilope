@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\SignUpType;
+use App\Repository\InvitationRepository;
 use App\Repository\UserClassRepository;
 use App\Security\LoginFormAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,7 +24,8 @@ class SignUpController extends AbstractController
         UserClassRepository $userClassRepository,
         GuardAuthenticatorHandler $guardHandler,
         LoginFormAuthenticator $authenticator,
-        UserPasswordEncoderInterface $passwordEncoder
+        UserPasswordEncoderInterface $passwordEncoder,
+        InvitationRepository $invitationRepository
     ): Response
     {
         $user = new User();
@@ -46,10 +48,17 @@ class SignUpController extends AbstractController
             $userClass = $userClassRepository->findOneBy([], ['rank' => 'ASC']);
             $user->setUserClass($userClass);
 
-
-            
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
+
+
+            if ($needCode) {
+                $code = $form->get('code')->getData();
+                $invitation = $invitationRepository->findOneBy(['code' => $code]);
+                $invitation->setChild($user);
+                $entityManager->persist($invitation);
+            }
+
             $entityManager->flush();
 
             return $guardHandler->authenticateUserAndHandleSuccess(

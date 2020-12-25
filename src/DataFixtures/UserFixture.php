@@ -39,6 +39,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
         $userBolos = new User();
         $userBolos
             ->setUsername('bolos')
+            ->setEmail('bolos@coucou.fr')
             ->setPassword($this->passwordEncoder->encodePassword($userBolos, 'bolos'))
             ->setUserClass($visitor)
             ->setCreatedAt(new DateTime('2020-02-02'))
@@ -49,6 +50,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
         $userGuillaume = new User();
         $userGuillaume
             ->setUsername('guillaume')
+            ->setEmail('guillaume.peugnet@free.fr')
             ->setPassword($this->passwordEncoder->encodePassword($userGuillaume, 'gp231299'))
             ->setUserClass($basicUser)
             ->setCreatedAt(new DateTime('2020-04-04'))
@@ -59,6 +61,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
         $userLea = new User();
         $userLea
             ->setUsername('leatine')
+            ->setEmail('paintendre.lea@ensapc.fr')
             ->setPassword($this->passwordEncoder->encodePassword($userLea, 'leatine'))
             ->setUserClass($member)
             ->setCreatedAt(new DateTime('2019-06-06'))
@@ -69,6 +72,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
         $userNicolas = new User();
         $userNicolas
             ->setUsername('nicolas')
+            ->setEmail('n.peugnet@free.fr')
             ->setPassword($this->passwordEncoder->encodePassword($userNicolas, 'espace'))
             ->setUserClass($member)
             ->setCreatedAt(new DateTime('2018-01-01'))
@@ -79,6 +83,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
         $userAudrey = new User();
         $userAudrey
             ->setUsername('audrey')
+            ->setEmail('deluc.audrey@ensapc.fr')
             ->setPassword($this->passwordEncoder->encodePassword($userAudrey, 'missmogwai'))
             ->setUserClass($powerUser)
             ->setCreatedAt(new DateTime('2018-03-03'))
@@ -89,6 +94,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
         $userGuilhem = new User();
         $userGuilhem
             ->setUsername('guilhem')
+            ->setEmail('prevostleygonie.guilhem@ensapc.fr')
             ->setPassword($this->passwordEncoder->encodePassword($userGuilhem, 'guilhem'))
             ->setUserClass($elite)
             ->setCreatedAt(new DateTime('2017-09-09'))
