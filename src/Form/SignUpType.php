@@ -3,9 +3,9 @@
 namespace App\Form;
 
 use App\Entity\User;
+use App\Validator\Code;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class RegistrationFormType extends AbstractType
+class SignUpType extends AbstractType
 {
     /** @var UserpasswordEncoderInterface */
     private $passwordEncoder;
@@ -31,17 +31,26 @@ class RegistrationFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var bool */
+        $needCode = $options['needCode'];
+
         $builder
-            ->add('username')
-            ->add('agreeTerms', CheckboxType::class, [
+            ->add('username');
+
+        if ($needCode) {
+            $builder->add('code', TextType::class, [
                 'mapped' => false,
+                'required' => true,
+                'label' => 'Invitation code',
+                'help' => 'You need an invitation code to create an account on this website',
                 'constraints' => [
-                    new IsTrue([
-                        'message' => 'You should agree to our terms.',
-                    ]),
+                    new NotBlank(),
+                    new Code(),
                 ],
-            ])
-            ->add('email')
+            ]);
+        }
+
+        $builder->add('email')
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'The password fields must match.',
@@ -65,23 +74,16 @@ class RegistrationFormType extends AbstractType
             ->add('signUp', SubmitType::class)
         ;
 
-        $builder->get('plainPassword')
-            ->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
-                $form = $event->getForm();
-                $user = $form->getParent()->getData();
-                $plainPassword = $form->getData();
-                if (!empty($plainPassword)) {    
-                    $form->getParent()->add('password', TextType::class, [
-                        'empty_data' => $this->passwordEncoder->encodePassword($user, $plainPassword),
-                    ]);
-                }
-        });
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'needCode' => true,
         ]);
+
+        $resolver->setAllowedTypes('needCode', 'bool');
+
     }
 }
