@@ -7,6 +7,12 @@
 
 <h1>Sign Up</h1>
 
+
+{% if userLimitReached %}
+<div class="alert alert-warning">User limit reached, impossible to sign up.</div>
+{% endif %}
+
+
 {{ form(form) }}
 
 {% endblock %}

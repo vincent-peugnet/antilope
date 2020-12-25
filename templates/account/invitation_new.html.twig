@@ -6,9 +6,17 @@
 
 <a href="{{ path('account') }}">account</a> > <a href="{{ path('account_invitation') }}">invitations</a> > new
 
+
 <hr>
 
 <h1>New invitation</h1>
+
+
+{% if userLimitReached %}
+<div class="alert alert-warning">User limit reached, impossible to invite new users.</div>
+{% endif %}
+
+
 
 <p>Invitations are valid for a {{ invitationDuration|date("%h") }} hours period.</p>
 

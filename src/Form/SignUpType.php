@@ -33,6 +33,8 @@ class SignUpType extends AbstractType
     {
         /** @var bool */
         $needCode = $options['needCode'];
+        /** @var bool */
+        $userLimitReached = $options['userLimitReached'];
 
         $builder
             ->add('username');
@@ -74,6 +76,10 @@ class SignUpType extends AbstractType
             ->add('signUp', SubmitType::class)
         ;
 
+        if ($userLimitReached) {
+            $builder->get('signUp')->setDisabled(true);
+        }
+
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -81,9 +87,11 @@ class SignUpType extends AbstractType
         $resolver->setDefaults([
             'data_class' => User::class,
             'needCode' => true,
+            'userLimitReached' => false,
         ]);
 
         $resolver->setAllowedTypes('needCode', 'bool');
+        $resolver->setAllowedTypes('userLimitReached', 'bool');
 
     }
 }

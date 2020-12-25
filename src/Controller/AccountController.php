@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Invitation;
 use App\Form\InvitationCreateType;
 use App\Repository\InvitationRepository;
+use App\Repository\UserRepository;
 use DateInterval;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidV4Generator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,6 +17,8 @@ use Symfony\Component\Uid\Uuid;
 
 class AccountController extends AbstractController
 {
+    private $userLimitReached = false;
+
     /**
      * @Route("/account", name="account")
      */
@@ -53,7 +56,7 @@ class AccountController extends AbstractController
     /**
      * @Route("/account/invitation/new", name="account_invitation_new")
      */
-    public function newInvitation(InvitationRepository $invitationRepository, Request $request): Response
+    public function newInvitation(InvitationRepository $invitationRepository, Request $request, UserRepository $userRepository): Response
     {
         /** @var User */
         $user = $this->getUser();
@@ -62,9 +65,16 @@ class AccountController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
+        $userLimit = $this->getParameter('app.userLimit');
+        if (!empty($userLimit)) {
+            $userCount = $userRepository->count([]);
+            if ($userCount >= $userLimit) {
+                $this->userLimitReached = true;
+            }
+        }
 
         $invitation = new Invitation();
-        $form =$this->createForm(InvitationCreateType::class);
+        $form = $this->createForm(InvitationCreateType::class, null, ['userLimitReached' => $this->userLimitReached]);
 
         
         $form->handleRequest($request);
@@ -95,6 +105,7 @@ class AccountController extends AbstractController
         return $this->render('account/invitation_new.html.twig', [
             'form' => $form->createView(),
             'invitationDuration' => $invitationDuration,
+            'userLimitReached' => $this->userLimitReached,
         ]);
     }
 
