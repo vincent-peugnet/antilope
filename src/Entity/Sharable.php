@@ -98,11 +98,17 @@ class Sharable
      */
     private $details;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $responsibility;
+
     public function __construct()
     {
         $this->managedBy = new ArrayCollection();
         $this->validations = new ArrayCollection();
         $this->createdAt = new DateTime();
+        $this->responsibility = true;
     }
 
     public function getId(): ?int
@@ -256,6 +262,18 @@ class Sharable
     public function setDetails(string $details): self
     {
         $this->details = $details;
+
+        return $this;
+    }
+
+    public function getResponsibility(): ?bool
+    {
+        return $this->responsibility;
+    }
+
+    public function setResponsibility(bool $responsibility): self
+    {
+        $this->responsibility = $responsibility;
 
         return $this;
     }

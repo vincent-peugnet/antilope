@@ -38,6 +38,7 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
             ->setCreatedAt(new DateTime('2020-01-02'))
             ->setName('Aide sur les Thinkpads')
             ->setVisibleBy($basicUser)
+            ->setResponsibility(true)
             ->setDescription('Je peux vous aider à trouver ou réparer des Thinkpads')
             ->setDetails('Les thinkpads sont des appareils souvent utilisés par les entreprises,
                 donc intéressants à trouver sur __le bon coin__.');
@@ -49,6 +50,7 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
             ->setDisabled(false)
             ->setCreatedAt(new DateTime('2019-11-11'))
             ->setName('Un microscope')
+            ->setResponsibility(true)
             ->setDescription('Je peux voir des trucs avec mon microscope.')
             ->setDetails('Un *petit* microsope, qui saura donner des résultats intéressants.');
         $manager->persist($sharable);
@@ -59,6 +61,7 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
             ->setDisabled(false)
             ->setCreatedAt(new DateTime('2019-12-11'))
             ->setName('Grotte scrète')
+            ->setResponsibility(true)
             ->setDescription('Cachette secrète sous la maison familiale.')
             ->setDetails('![](https://www.grottes-musee-de-saulges.com/sites/www.grottes-musee-de-saulges.com/files/styles/edito_paragraphe_1/public/thumbnails/image/margot_salle_des_troglodythes.jpg?itok=DWnszGyz)');
         $manager->persist($sharable);
@@ -70,6 +73,7 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
             ->setDisabled(false)
             ->setCreatedAt(new DateTime('2020-08-08'))
             ->setName('Maison de mers')
+            ->setResponsibility(true)
             ->setDescription('La bonne vielle maison familiale')
             ->setDetails('- Nombreux couchages
 - ping pong
@@ -82,9 +86,21 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
             ->setDisabled(false)
             ->setCreatedAt(new DateTime('2020-07-07'))
             ->setName('Concert de Tendre Ael')
+            ->setResponsibility(true)
             ->setVisibleBy($elite)
             ->setDescription('Un concert très privé !')
             ->setDetails('__OHH YEAHH BABY__ que du *bon* son');
+        $manager->persist($sharable);
+        $manager->flush();
+
+        $sharable = new Sharable();
+        $sharable->addManagedBy($leatine)
+            ->addManagedBy($guillaume)
+            ->setDisabled(false)
+            ->setName('Un coin à champignon')
+            ->setResponsibility(false)
+            ->setDescription('Dans la forêt de Bernouille')
+            ->setDetails('Ils sont miam miam');
         $manager->persist($sharable);
         $manager->flush();
     }

@@ -26,6 +26,9 @@ class SharableType extends AbstractType
             ->add('disabled', null, [
                 'help' => 'check this if the thing you\'re sharing is not available anymore (but can be available in the future)',
             ])
+            ->add('responsibility', null, [
+                'help' => 'check this if you feel responsible for the sharable',
+            ])
             ->add('visibleBy', null, [
                 'placeholder' => '',
                 'help' => 'Your sharable will be accessible from this user class',
