@@ -3,11 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Sharable;
+use App\Entity\User;
+use App\Entity\UserClass;
 use App\Entity\Validation;
 use App\Form\ManagerType;
 use App\Form\SharableType;
 use App\Form\ValidationType;
 use App\Repository\SharableRepository;
+use App\Repository\UserClassRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,16 +21,21 @@ class SharableController extends AbstractController
     /**
      * @Route("/sharable", name="sharable")
      */
-    public function index(Request $request, SharableRepository $sharableRepository): Response
+    public function index(Request $request, SharableRepository $sharableRepository, UserClassRepository $userClassRepository): Response
     {
+        /** @var User $user */
+        $user = $this->getUser();
+        $visibleBy = $userClassRepository->findLowerthan($user->getUserClass());
+
         $offset = max(0, $request->query->getInt('offset', 0));
-        $paginatedSharables = $sharableRepository->getSharablePaginator($offset);
-        
+        $paginatedSharables = $sharableRepository->getSharablePaginator($offset, $visibleBy, $user);
+
         return $this->render('sharable/index.html.twig', [
             'sharables' => $paginatedSharables,
             'previous' => $offset - $sharableRepository::PAGINATOR_PER_PAGE,
             'next' => min(count($paginatedSharables), $offset + SharableRepository::PAGINATOR_PER_PAGE),
             'sharable' => new Sharable(),
+            'total' => count($paginatedSharables),
         ]);
     }
 

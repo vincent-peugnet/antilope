@@ -3,7 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Sharable;
+use App\Entity\User;
+use App\Entity\UserClass;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -26,16 +29,42 @@ class SharableRepository extends ServiceEntityRepository
 
 
     /**
+     * List all sharable based on user Class and visibleBy setting on the sharables
+     * 
      * @param int $offset
+     * @param UserClass[] $visibleBy Collection of UserClass
+     * @param User the actual user
      */
-    public function getSharablePaginator(int $offset): Paginator
+    public function getSharablePaginator(int $offset, $visibleBy, User $user): Paginator
     {
-        $query = $this->createQueryBuilder('s')
-            ->orderBy('s.id', 'DESC')
-            ->setMaxResults(self::PAGINATOR_PER_PAGE)
-            ->setFirstResult($offset)
-            ->getQuery()
-        ;
+        $visibleByIds = array_map(function (UserClass $userClass)
+        {
+            return $userClass->getId();
+        }, $visibleBy);
+
+        $query = $this->createQueryBuilder('s');
+
+        if ($user->getUserClass()->getAccess()) {
+            $query->where(
+                $query->expr()->In('s.visibleBy', $visibleByIds)
+            )
+            ->orWhere(
+                $query->expr()->isNull('s.visibleBy')
+            );
+        } else {
+            $query->where(
+                $query->expr()->in('s.visibleBy', $visibleByIds)
+            );
+        }
+
+        $query->orderBy('s.id', 'DESC')
+        ->setMaxResults(self::PAGINATOR_PER_PAGE)
+        ->setFirstResult($offset)
+        ->getQuery()
+    ;
+
+
+
 
         return new Paginator($query);
     }

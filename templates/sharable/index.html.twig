@@ -8,6 +8,10 @@ sharables {% if is_granted('create', sharable) %} > <a href="{{ path('sharable_n
 
 <hr>
 
+<div class="alert alert-info">
+You can access {{ total }} sharables
+</div>
+
 <ul>
 {% for sharable in sharables %}
 

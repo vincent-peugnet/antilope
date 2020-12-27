@@ -19,22 +19,24 @@ class UserClassRepository extends ServiceEntityRepository
         parent::__construct($registry, UserClass::class);
     }
 
-    // /**
-    //  * @return UserClass[] Returns an array of UserClass objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * Get all UserClass that are at lower or equal rank.
+     * 
+     * @param UserClass $userClass the user class as reference
+     * 
+     * @return UserClass[] Returns an array of UserClass objects
+     */
+    public function findLowerthan(UserClass $userClass)
     {
+
         return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
+            ->andWhere('u.rank <= :rank')
+            ->setParameter('rank', $userClass->getRank())
+            ->orderBy('u.rank', 'ASC')
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?UserClass

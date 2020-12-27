@@ -16,16 +16,11 @@ class HomeController extends AbstractController
      */
     public function index(SharableRepository $sharableRepository, UserRepository $userRepository, ValidationRepository $validationRepository): Response
     {
-        $userCount = $userRepository->count([]);
-        $sharableCount = $userRepository->count([]);
-        $validationCount = $validationRepository->count([]);
-        $userLimit = $this->getParameter('app.userLimit');
-
         return $this->render('home/index.html.twig', [
-            'userCount' => $userCount,
-            'sharableCount' => $sharableCount,
-            'validationCount' => $validationCount,
-            'userLimit' => $userLimit,
+            'userCount' => $userRepository->count([]),
+            'sharableCount' => $sharableRepository->count([]),
+            'validationCount' => $validationRepository->count([]),
+            'userLimit' => $this->getParameter('app.userLimit'),
         ]);
     }
 }
