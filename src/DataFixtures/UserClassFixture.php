@@ -16,6 +16,7 @@ class UserClassFixture extends Fixture
             ->setAccess(false)
             ->setShare(false)
             ->setCanInvite(false)
+            ->setInviteFrequency(0)
             ->setMaxParanoia(0)
             ->setName('visitor');
         $manager->persist($userClass);
@@ -26,6 +27,7 @@ class UserClassFixture extends Fixture
             ->setAccess(false)
             ->setShare(true)
             ->setCanInvite(false)
+            ->setInviteFrequency(0)
             ->setMaxParanoia(0)
             ->setName('basic_user');
         $manager->persist($userClass);
@@ -36,6 +38,7 @@ class UserClassFixture extends Fixture
             ->setAccess(true)
             ->setShare(true)
             ->setCanInvite(false)
+            ->setInviteFrequency(0)
             ->setMaxParanoia(1)
             ->setName('member');
         $manager->persist($userClass);
@@ -46,6 +49,7 @@ class UserClassFixture extends Fixture
             ->setAccess(true)
             ->setShare(true)
             ->setCanInvite(true)
+            ->setInviteFrequency(30)
             ->setMaxParanoia(2)
             ->setName('power_user');
         $manager->persist($userClass);
@@ -56,6 +60,7 @@ class UserClassFixture extends Fixture
             ->setAccess(true)
             ->setShare(true)
             ->setCanInvite(true)
+            ->setInviteFrequency(14)
             ->setMaxParanoia(3)
             ->setName('elite');
         $manager->persist($userClass);

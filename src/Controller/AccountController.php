@@ -7,6 +7,7 @@ use App\Form\InvitationCreateType;
 use App\Repository\InvitationRepository;
 use App\Repository\UserRepository;
 use DateInterval;
+use DateTime;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidV4Generator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,6 +19,7 @@ use Symfony\Component\Uid\Uuid;
 class AccountController extends AbstractController
 {
     private $userLimitReached = false;
+    private $needToWait = false;
 
     /**
      * @Route("/account", name="account")
@@ -58,13 +60,15 @@ class AccountController extends AbstractController
      */
     public function newInvitation(InvitationRepository $invitationRepository, Request $request, UserRepository $userRepository): Response
     {
-        /** @var User */
+        /** @var User $user */
         $user = $this->getUser();
         $canInvite = $user->getUserClass()->getCanInvite();
         if (!$canInvite) {
             throw $this->createAccessDeniedException();
         }
 
+
+        // Check user limit
         $userLimit = $this->getParameter('app.userLimit');
         if (!empty($userLimit)) {
             $userCount = $userRepository->count([]);
@@ -73,8 +77,23 @@ class AccountController extends AbstractController
             }
         }
 
+        // Check invite frequency
+        if ($user->getUserClass()->getInviteFrequency() !== 0) {
+            $inviteFrequency = new DateInterval('P' .$user->getUserClass()->getInviteFrequency(). 'D');
+            $lastInvitation = $invitationRepository->findOneBy(['parent' => $user->getId()], ['createdAt' => 'DESC']);
+            if (!empty($lastInvitation)) {
+                $minInviteDate = $lastInvitation->getCreatedAt()->add($inviteFrequency);
+                if ($minInviteDate >= new DateTime()) {
+                    $this->needToWait = true;
+                }
+            }
+        }
+
         $invitation = new Invitation();
-        $form = $this->createForm(InvitationCreateType::class, null, ['userLimitReached' => $this->userLimitReached]);
+        $form = $this->createForm(InvitationCreateType::class, null, [
+            'userLimitReached' => $this->userLimitReached,
+            'needToWait' => $this->needToWait,
+        ]);
 
         
         $form->handleRequest($request);
@@ -106,6 +125,7 @@ class AccountController extends AbstractController
             'form' => $form->createView(),
             'invitationDuration' => $invitationDuration,
             'userLimitReached' => $this->userLimitReached,
+            'needToWait' => $this->needToWait,
         ]);
     }
 

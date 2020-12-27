@@ -17,8 +17,17 @@
 {% endif %}
 
 
+{% if needToWait %}
+<div class="alert alert-warning">Last invitation send too recently, impossible to invite new users.</div>
+{% endif %}
+
+
 
 <p>Invitations are valid for a {{ invitationDuration|date("%h") }} hours period.</p>
+
+{% if app.user.userClass.inviteFrequency %}
+<p>You can send an invitation every {{ app.user.userClass.inviteFrequency }} days</p>
+{% endif %}
 
 {{ form(form) }}
 

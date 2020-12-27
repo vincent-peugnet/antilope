@@ -57,6 +57,11 @@ class UserClass
      */
     private $maxParanoia;
 
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $inviteFrequency;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -170,6 +175,18 @@ class UserClass
     public function setMaxParanoia(int $maxParanoia): self
     {
         $this->maxParanoia = $maxParanoia;
+
+        return $this;
+    }
+
+    public function getInviteFrequency(): ?int
+    {
+        return $this->inviteFrequency;
+    }
+
+    public function setInviteFrequency(int $inviteFrequency): self
+    {
+        $this->inviteFrequency = $inviteFrequency;
 
         return $this;
     }

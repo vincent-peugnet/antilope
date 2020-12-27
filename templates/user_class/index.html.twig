@@ -20,7 +20,11 @@
 <li>can access the sharables with no specific access settings</li>
 {% endif %}
 {% if userClass.canInvite %}
-<li>can invite other people</li>
+{% if userClass.inviteFrequency == 0 %}
+<li>can invite people without limitation</li>
+{% else %}
+<li>can invite one user every {{ userClass.inviteFrequency }} days</li>
+{% endif %}
 {% endif %}
 <li>maximum paranoïa level : {{ userClass.maxParanoia }}</li>
 </ul>
