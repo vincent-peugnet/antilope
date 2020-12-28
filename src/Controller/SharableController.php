@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Search;
 use App\Entity\Sharable;
 use App\Entity\User;
 use App\Entity\UserClass;
 use App\Entity\Validation;
 use App\Form\ManagerType;
+use App\Form\SearchType;
 use App\Form\SharableType;
 use App\Form\ValidationType;
 use App\Repository\SharableRepository;
@@ -15,7 +17,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
 class SharableController extends AbstractController
 {
     /**
@@ -27,15 +28,21 @@ class SharableController extends AbstractController
         $user = $this->getUser();
         $visibleBy = $userClassRepository->findLowerthan($user->getUserClass());
 
-        $offset = max(0, $request->query->getInt('offset', 0));
-        $paginatedSharables = $sharableRepository->getSharablePaginator($offset, $visibleBy, $user);
+        $search = new Search();
+
+        $form = $this->createForm(SearchType::class, $search);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $search = $form->getData();
+        }
+
+        $sharables = $sharableRepository->getFilteredSharables($search, $visibleBy, $user);
 
         return $this->render('sharable/index.html.twig', [
-            'sharables' => $paginatedSharables,
-            'previous' => $offset - $sharableRepository::PAGINATOR_PER_PAGE,
-            'next' => min(count($paginatedSharables), $offset + SharableRepository::PAGINATOR_PER_PAGE),
+            'sharables' => $sharables,
             'sharable' => new Sharable(),
-            'total' => count($paginatedSharables),
+            'total' => count($sharables),
+            'form' => $form->createView(),
         ]);
     }
 

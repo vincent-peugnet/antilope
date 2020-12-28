@@ -2,14 +2,24 @@
 
 {% block title %}Sharables{% endblock %}
 
+{% block stylesheets %}
+<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="/assets/css/search.css">
+{% endblock %}
+
 {% block content %}
 
-sharables {% if is_granted('create', sharable) %} > <a href="{{ path('sharable_new') }}">new</a> {% endif %}
+
+
+
+{% if is_granted('create', sharable) %}<a class="btn btn-success btn-lg btn-block" href="{{ path('sharable_new') }}">create new sharable</a> {% endif %}
 
 <hr>
 
+{{ form(form) }}
+
 <div class="alert alert-info">
-You can access {{ total }} sharables
+{{ total }} sharables founded
 </div>
 
 <ul>
@@ -19,7 +29,7 @@ You can access {{ total }} sharables
 
 <h2>{{ sharable.name }}</h2>
 <p>{{ sharable.description }}</p>
-<a href="{{ path('sharable_show', {id: sharable.id}) }}">[details]</a>
+<a class="btn btn-light" href="{{ path('sharable_show', {id: sharable.id}) }}">details</a>
 
 </li>
 
@@ -27,12 +37,6 @@ You can access {{ total }} sharables
 </ul>
 
 
-{% if previous >= 0 %}
-    <a href="{{ path('sharable', { offset: previous }) }}">[previous]</a>
-{% endif %}
-{% if next < sharables|length %}
-    <a href="{{ path('sharable', { offset: next }) }}">[next]</a>
-{% endif %}
 
 
 

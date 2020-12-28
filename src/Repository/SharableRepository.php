@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Search;
 use App\Entity\Sharable;
 use App\Entity\User;
 use App\Entity\UserClass;
@@ -35,7 +36,7 @@ class SharableRepository extends ServiceEntityRepository
      * @param UserClass[] $visibleBy Collection of UserClass
      * @param User the actual user
      */
-    public function getSharablePaginator(int $offset, $visibleBy, User $user): Paginator
+    public function getFilteredSharables(Search $search, $visibleBy, User $user)
     {
         $visibleByIds = array_map(function (UserClass $userClass)
         {
@@ -57,10 +58,23 @@ class SharableRepository extends ServiceEntityRepository
             );
         }
 
-        $query->orderBy('s.id', 'DESC')
-        ->setMaxResults(self::PAGINATOR_PER_PAGE)
-        ->setFirstResult($offset)
+        if (!empty($search->q)) {
+            $query = $query
+                ->andWhere('s.name LIKE :q')
+                ->setParameter('q', "%{$search->q}%");
+        }
+
+        if ($search->disabled !== -1) {
+            $query = $query
+                ->andWhere('s.disabled = :d')
+                ->setParameter('d', $search->disabled);
+        }
+
+        $result = $query->orderBy('s.' .$search->sortBy, $search->order)
         ->getQuery()
+        ->getResult();
+
+        return $result;
     ;
 
 
