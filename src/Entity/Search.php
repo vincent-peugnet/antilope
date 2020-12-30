@@ -6,7 +6,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class Search
 {
-    const SORT_BY = ['id', 'createdAt', 'name'];
+    const SORT_BY = ['id', 'createdAt', 'lastEditedAt', 'name'];
 
     /**
      * @var string

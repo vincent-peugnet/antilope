@@ -103,11 +103,17 @@ class Sharable
      */
     private $responsibility;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $lastEditedAt;
+
     public function __construct()
     {
         $this->managedBy = new ArrayCollection();
         $this->validations = new ArrayCollection();
         $this->createdAt = new DateTime();
+        $this->lastEditedAt = new DateTime();
         $this->responsibility = true;
     }
 
@@ -274,6 +280,18 @@ class Sharable
     public function setResponsibility(bool $responsibility): self
     {
         $this->responsibility = $responsibility;
+
+        return $this;
+    }
+
+    public function getLastEditedAt(): ?\DateTimeInterface
+    {
+        return $this->lastEditedAt;
+    }
+
+    public function setLastEditedAt(\DateTimeInterface $lastEditedAt): self
+    {
+        $this->lastEditedAt = $lastEditedAt;
 
         return $this;
     }

@@ -13,6 +13,7 @@ use App\Form\SharableType;
 use App\Form\ValidationType;
 use App\Repository\SharableRepository;
 use App\Repository\UserClassRepository;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -73,7 +74,7 @@ class SharableController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $sharable = $form->getData();
-            
+            $sharable->setLastEditedAt(new DateTime());
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($sharable);

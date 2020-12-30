@@ -15,22 +15,32 @@
 
 <p>{{ sharable.description }}</p>
 
-Validations : {{ sharable.validations|length }}
-</br>
-Created : {{ sharable.createdAt|format_datetime('short', 'short', locale='fr') }}
-</br>
-{% if sharable.beginAt %}
-</br>
-Begin : {{ sharable.beginAt|format_datetime('short', 'short', locale='fr') }}
-{% endif %}
-{% if sharable.endAt %}
-</br>
-End : {{ sharable.endAt|format_datetime('short', 'short', locale='fr') }}
-{% endif %}
-{% if sharable.disabled %}
-</br>
-<strong>This Sharable is DISABLED for now</strong>
-{% endif %}
+<ul>
+    <li>
+        Validations : {{ sharable.validations|length }}
+    </li>
+    <li>
+        Created : {{ sharable.createdAt|format_datetime('short', 'short', locale='fr') }}
+    </li>
+    <li>
+        Last Edited : {{ sharable.lastEditedAt|format_datetime('short', 'short', locale='fr') }}
+    </li>
+    {% if sharable.beginAt %}
+    <li>
+        Begin : {{ sharable.beginAt|format_datetime('short', 'short', locale='fr') }}
+    </li>
+    {% endif %}
+    {% if sharable.endAt %}
+    <li>
+        End : {{ sharable.endAt|format_datetime('short', 'short', locale='fr') }}
+    <li>
+    {% endif %}
+    {% if sharable.disabled %}
+    <li>
+        This Sharable is <strong>disabled</strong> for now
+    </li>
+    {% endif %}
+</ul>
 
 
 

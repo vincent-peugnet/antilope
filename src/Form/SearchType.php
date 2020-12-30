@@ -27,13 +27,13 @@ class SearchType extends AbstractType
                     'hide disabled' => 0,
                     'show all' => -1,
                 ],
-                'help' => 'display disabled sharables'
             ])
             ->add('sortBy', ChoiceType::class, [
                 'choices' => [
                     'id' => 'id',
                     'createdAt' => 'createdAt',
                     'name' => 'name',
+                    'lastEditedAt' => 'lastEditedAt',
                 ]
             ])
             ->add('order', ChoiceType::class, [
