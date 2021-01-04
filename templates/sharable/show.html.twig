@@ -35,6 +35,14 @@
         End : {{ sharable.endAt|format_datetime('short', 'short', locale='fr') }}
     <li>
     {% endif %}
+    <li>
+    {% if sharable.responsibility %}
+        Managers are responsable of this
+    {% else %}
+        Managers does not take responsibility for this
+    {% endif %}
+    </li>
+
     {% if sharable.disabled %}
     <li>
         This Sharable is <strong>disabled</strong> for now
@@ -52,12 +60,12 @@
 
 
 {% if is_granted('validate', sharable) %}
-<a href="{{ path('sharable_validate', {id: sharable.id}) }}">[validate]</a>
+<a class="btn btn-success" href="{{ path('sharable_validate', {id: sharable.id}) }}">validate</a>
 {% endif %}
 
 {% if is_granted('edit', sharable) %}
-<a href="{{ path('sharable_edit', {id: sharable.id}) }}">[edit]</a>
-<a href="{{ path('sharable_managers', {id: sharable.id}) }}">[managers]</a>
+<a class="btn btn-primary" href="{{ path('sharable_edit', {id: sharable.id}) }}">edit</a>
+<a class="btn btn-primary" href="{{ path('sharable_managers', {id: sharable.id}) }}">managers</a>
 {% endif %}
 
 

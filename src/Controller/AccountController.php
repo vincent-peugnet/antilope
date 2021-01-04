@@ -22,15 +22,6 @@ class AccountController extends AbstractController
     private $needToWait = false;
 
     /**
-     * @Route("/account", name="account")
-     */
-    public function index(): Response
-    {
-        return $this->render('account/index.html.twig', [
-        ]);
-    }
-
-    /**
      * @Route("/account/invitation", name="account_invitation")
      */
     public function invitation(InvitationRepository $invitationRepository): Response

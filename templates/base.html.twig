@@ -4,27 +4,67 @@
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}
-        <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         {% endblock %}
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous" async></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous" async></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous" async></script>
     </head>
     <body>
-        <nav>
-        {% if app.user %}
+        <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
 
-        <a href="{{ path('app_homepage') }}">[home]</a>
-        <a href="{{ path('sharable') }}">[sharables]</a>
-        <a href="{{ path('user') }}">[users]</a>
-        <a href="{{ path('userclass') }}">[user classes]</a>
-        <a href="{{ path('user_show', {id: app.user.id} ) }}">[profile]</a>
-        <a href="{{ path('account') }}">[account]</a>
-        <a href="{{ path('app_logout') }}">[logout]</a>
+        <a class="navbar-brand" href="{{ path('app_homepage') }}">Antilope</a>
 
-        {% else %}
 
-        <a href="{{ path('app_login') }}">[login]</a>
-        <a href="{{ path('sign_up') }}">[sign_up]</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-        {% endif %}
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+                <ul class="navbar-nav mr-auto">
+
+                    {% if app.user %}
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('sharable') }}">sharables</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('user') }}">users</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('userclass') }}">user classes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('user_show', {id: app.user.id} ) }}">profile</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        account
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ path('account_invitation') }}">invitation</a>
+                            <a class="dropdown-item disabled">settings</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_logout') }}">logout</a>
+                    </li>
+
+                    {% else %}
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_login') }}">login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('sign_up') }}">sign up</a>
+                    </li>
+
+                    {% endif %}
+                    
+                </ul>
+
+        </div>
 
         </nav>
         <hr>

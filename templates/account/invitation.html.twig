@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<a href="{{ path('account') }}">account</a> > invitations
+account > invitations
 
 <hr>
 
@@ -33,7 +33,7 @@ code : <code>{{ invitation.code }}</code>
 {% endfor %}
 </ul>
 
-<a href="{{ path('account_invitation_new') }}">[new invitation]</a>
+<a class="btn btn-success" href="{{ path('account_invitation_new') }}">new invitation</a>
 
 
 {% endblock %}

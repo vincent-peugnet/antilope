@@ -10,6 +10,10 @@
 <h1>{{ user.username }}</h1>
 
 
+{% if is_granted('edit', user) %}
+<a class="btn btn-primary" href="{{ path('user_edit', {id: user.id}) }}">edit</a>
+{% endif %}
+
 {% if is_granted('view_stats', user) %}
 
 <h3>Stats</h3>
@@ -36,10 +40,6 @@
 <p>{{ user.description|markdown_to_html }}</p>
 {% endif %}
 
-{% if is_granted('edit', user) %}
-<a href="{{ path('user_edit', {id: user.id}) }}">edit</a>
-{% endif %}
-
 
 {% if is_granted('view_sharables', user) %}
 
@@ -54,7 +54,7 @@
 
 <a href="{{ path('sharable_show', {id: sharable.id}) }}">{{ sharable.name }}</a>
 {% if is_granted('edit', sharable) %}
-<a href="{{ path('sharable_edit', {id: sharable.id}) }}">[edit]</a>
+<a class="btn btn-light" href="{{ path('sharable_edit', {id: sharable.id}) }}">edit</a>
 {% endif %}
 
 </li>
