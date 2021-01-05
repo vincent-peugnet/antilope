@@ -156,14 +156,17 @@ class SharableController extends AbstractController
                 }
                 $entityManager->persist($checkedManager);
             }
+            
+            $entityManager->persist($validation);
 
-            $user = $levelUp->check($this->getUser(), ['validated' => 1]);
+            $user = $levelUp->check($this->getUser());
             if ($user !== $this->getUser()) {
                 $entityManager->persist($user);
             }
 
-            $entityManager->persist($validation);
             $entityManager->flush();
+            
+
 
             return $this->redirectToRoute('sharable_show', ['id' => $sharable->getId()]);
         }

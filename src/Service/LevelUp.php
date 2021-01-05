@@ -22,18 +22,15 @@ class LevelUp
      * @return User the updated or not user
      * @todo find a way to indicate that the user as been promoted
      */
-    public function check(User $user, $offsets = ['shareScore' => 0, 'accountAge' => 0, 'validated' => 0]): User
+    public function check(User $user): User
     {
-        $shareScoreOffset = $offsets['shareScore'] ?? 0;
-        $accountAgeOffset = $offsets['accountAge'] ?? 0;
-        $validatedOffset = $offsets['validated'] ?? 0;
-
         $userClass = $this->userClassRepository->findNext($user->getUserClass());
         if ($userClass) {
             if (
-                $this->shareScore($user, $userClass, $shareScoreOffset) &&
-                $this->accountAge($user, $userClass, $accountAgeOffset) &&
-                $this->validated($user, $userClass, $validatedOffset)
+                $this->shareScore($user, $userClass) &&
+                $this->accountAge($user, $userClass) &&
+                $this->validated($user, $userClass) &&
+                $this->verified($user, $userClass)
             ) {
                 $user->setUserClass($userClass);
             }
@@ -41,21 +38,25 @@ class LevelUp
         return $user;
     }
 
-    private function shareScore(User $user, UserClass $userClass, int $offset = 0)
+    private function shareScore(User $user, UserClass $userClass)
     {
-        return ($user->getShareScore() +$offset >= $userClass->getShareScoreReq());
+        return ($user->getShareScore()>= $userClass->getShareScoreReq());
     }
 
-    private function accountAge(User $user, UserClass $userClass, int $offset = 0)
+    private function accountAge(User $user, UserClass $userClass)
     {
-        $accountAgeReq = $userClass->getAccountAgeReq() + $offset;
-        $interval = new DateInterval('P' .$accountAgeReq. 'D');
+        $interval = new DateInterval('P' .$userClass->getAccountAgeReq(). 'D');
         $ageReq = $user->getCreatedAt()->add($interval);
         return ($ageReq < new DateTime());
     }
 
-    private function validated(User $user, UserClass $userClass, int $offset = 0)
+    private function validated(User $user, UserClass $userClass)
     {
-        return (count($user->getValidations()) + $offset >= $userClass->getValidatedReq());
+        return (count($user->getValidations()) >= $userClass->getValidatedReq());
+    }
+
+    private function verified(User $user, UserClass $userClass)
+    {
+        return ($userClass->getVerifiedReq() && $user->isVerified() || !$userClass->getVerifiedReq());
     }
 }

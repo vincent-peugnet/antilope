@@ -47,6 +47,11 @@
     Validations given : {{ userClass.validatedReq }}
     </li>
     {% endif %}
+    {% if userClass.verifiedReq %}
+    <li>
+    The user need to be verified
+    </li>
+    {% endif %}
 </ul>
 
 <a class="btn btn-light" href="{{ path('userclass_show', {id: userClass.id}) }}">see users</a>

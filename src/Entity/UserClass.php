@@ -82,12 +82,18 @@ class UserClass
      */
     private $validatedReq;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $verifiedReq;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->shareScoreReq = 0;
         $this->accountAgeReq = 0;
         $this->validatedReq = 0;
+        $this->verifiedReq = false;
     }
 
     public function __toString(): string
@@ -246,6 +252,18 @@ class UserClass
     public function setValidatedReq(int $validatedReq): self
     {
         $this->validatedReq = $validatedReq;
+
+        return $this;
+    }
+
+    public function getVerifiedReq(): ?bool
+    {
+        return $this->verifiedReq;
+    }
+
+    public function setVerifiedReq(bool $verifiedReq): self
+    {
+        $this->verifiedReq = $verifiedReq;
 
         return $this;
     }
