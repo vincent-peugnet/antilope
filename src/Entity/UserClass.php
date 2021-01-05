@@ -62,9 +62,27 @@ class UserClass
      */
     private $inviteFrequency;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $shareScoreReq;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $accountAgeReq;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $validatedReq;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->shareScoreReq = 0;
+        $this->accountAgeReq = 0;
+        $this->validatedReq = 0;
     }
 
     public function __toString(): string
@@ -187,6 +205,42 @@ class UserClass
     public function setInviteFrequency(int $inviteFrequency): self
     {
         $this->inviteFrequency = $inviteFrequency;
+
+        return $this;
+    }
+
+    public function getShareScoreReq(): ?int
+    {
+        return $this->shareScoreReq;
+    }
+
+    public function setShareScoreReq(int $shareScoreReq): self
+    {
+        $this->shareScoreReq = $shareScoreReq;
+
+        return $this;
+    }
+
+    public function getAccountAgeReq(): ?int
+    {
+        return $this->accountAgeReq;
+    }
+
+    public function setAccountAgeReq(int $accountAgeReq): self
+    {
+        $this->accountAgeReq = $accountAgeReq;
+
+        return $this;
+    }
+
+    public function getValidatedReq(): ?int
+    {
+        return $this->validatedReq;
+    }
+
+    public function setValidatedReq(int $validatedReq): self
+    {
+        $this->validatedReq = $validatedReq;
 
         return $this;
     }

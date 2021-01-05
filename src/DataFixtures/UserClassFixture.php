@@ -12,17 +12,6 @@ class UserClassFixture extends Fixture
     {
         $userClass= new UserClass();
         $userClass
-            ->setRank(5)
-            ->setAccess(false)
-            ->setShare(false)
-            ->setCanInvite(false)
-            ->setInviteFrequency(0)
-            ->setMaxParanoia(0)
-            ->setName('visitor');
-        $manager->persist($userClass);
-
-        $userClass= new UserClass();
-        $userClass
             ->setRank(10)
             ->setAccess(false)
             ->setShare(true)
@@ -40,6 +29,9 @@ class UserClassFixture extends Fixture
             ->setCanInvite(false)
             ->setInviteFrequency(0)
             ->setMaxParanoia(1)
+            ->setShareScoreReq(300)
+            ->setAccountAgeReq(7)
+            ->setValidatedReq(0)
             ->setName('member');
         $manager->persist($userClass);
 
@@ -51,6 +43,9 @@ class UserClassFixture extends Fixture
             ->setCanInvite(true)
             ->setInviteFrequency(30)
             ->setMaxParanoia(2)
+            ->setShareScoreReq(1000)
+            ->setAccountAgeReq(21)
+            ->setValidatedReq(1)
             ->setName('power_user');
         $manager->persist($userClass);
 
@@ -62,6 +57,9 @@ class UserClassFixture extends Fixture
             ->setCanInvite(true)
             ->setInviteFrequency(14)
             ->setMaxParanoia(3)
+            ->setShareScoreReq(5000)
+            ->setAccountAgeReq(42)
+            ->setValidatedReq(5)
             ->setName('elite');
         $manager->persist($userClass);
 
