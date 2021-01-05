@@ -2,3 +2,4 @@ parameters:
     app.openRegistration: false
     app.userLimit: 1000
     app.invitationDuration: 24
+    app.siteName: 'Antilope'

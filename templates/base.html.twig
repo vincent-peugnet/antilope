@@ -11,9 +11,12 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous" async></script>
     </head>
     <body>
+        {% set route_name = app.request.attributes.get('_route') %}
+        {% set route_param = app.request.attributes.get('_route_params')|join %}
+
         <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
 
-        <a class="navbar-brand" href="{{ path('app_homepage') }}">Antilope</a>
+        <a class="navbar-brand" href="{{ path('app_homepage') }}">{{ siteName }}</a>
 
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,23 +30,23 @@
                     {% if app.user %}
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('sharable') }}">sharables</a>
+                        <a class="nav-link{{ route_name == 'sharable' ? ' active' }}" href="{{ path('sharable') }}">sharables</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('user') }}">users</a>
+                        <a class="nav-link{{ route_name == 'user' ? ' active' }}" href="{{ path('user') }}">users</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('userclass') }}">user classes</a>
+                        <a class="nav-link{{ route_name == 'userclass' ? ' active' }}" href="{{ path('userclass') }}">user classes</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('user_show', {id: app.user.id} ) }}">{{ app.user.username }}</a>
+                        <a class="nav-link{% if route_name == 'user_show' and route_param == app.user.id %} active{% endif %}" href="{{ path('user_show', {id: app.user.id} ) }}">{{ app.user.username }}</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle{{ route_name == 'account_invitation' ? ' active' }}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         account
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ path('account_invitation') }}">invitation</a>
+                            <a class="dropdown-item{{ route_name == 'account_invitation' ? ' active' }}" href="{{ path('account_invitation') }}">invitation</a>
                             <a class="dropdown-item disabled">settings</a>
                         </div>
                     </li>
