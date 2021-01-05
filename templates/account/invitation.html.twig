@@ -4,11 +4,11 @@
 
 {% block content %}
 
-account > invitations
-
-<hr>
 
 <h1>Invitations</h1>
+
+
+{% if app.user.userClass.canInvite %}
 
 <h2>Used Invitations</h2>
 
@@ -34,6 +34,9 @@ code : <code>{{ invitation.code }}</code>
 </ul>
 
 <a class="btn btn-success" href="{{ path('account_invitation_new') }}">new invitation</a>
+{% else %}
+<div class="alert alert-warning">You cannot invite people yet. Checkout <a href="{{ path('userclass') }}">User Classes permissions</a></div>
+{% endif %}
 
 
 {% endblock %}

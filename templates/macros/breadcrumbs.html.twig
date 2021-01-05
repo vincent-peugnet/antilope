@@ -1,0 +1,58 @@
+
+{#
+Copyright 2020 Michał Żukowski
+Permission is hereby granted, free of charge, to any person obtaining a 
+copy of this software and associated documentation files (the "Software"),
+to deal in the Software without restriction, including without limitation 
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom 
+the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR 
+OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+#}
+
+{% macro render(items) %}
+    {% set metadata = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        'itemListElement': [],
+    } %}
+
+    <nav aria-label="Breadcrumbs">
+        <ol class="breadcrumb">
+            {%- for item in items -%}
+                {%- set ld_item = {
+                    '@type': 'ListItem',
+                    'position': loop.index,
+                    'name': item.text|e('html_attr')
+                } -%}
+                
+                {%- set active = loop.last -%}
+                {%- set active_class = active ? ' active' -%}
+
+                <li class="breadcrumb-item {{- active_class }}" {%- if active %} aria-current="page" {%- endif %}>
+                    {%- if item.url is defined -%}
+                        <a href="{{ item.url }}">{{ item.text }}</a>
+                        {%- set ld_item = ld_item|merge({'item': item.url}) -%}
+                    {%- else -%}
+                        {{- item.text -}}
+                    {%- endif -%}
+                </li>
+
+                {%- set metadata = metadata|merge({
+                    'itemListElement': metadata.itemListElement|merge([ld_item]),
+                }) %}
+            {%- endfor -%}
+        </ol>
+    </nav>
+
+    <script type="application/ld+json">{{ metadata|json_encode|raw }}</script>
+{% endmacro %}
+view rawmedium-twig-breadcrumbs.html.twig hosted with ❤ by GitHub

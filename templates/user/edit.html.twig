@@ -4,9 +4,15 @@
 {% block content %}
 
 
-<a href="{{ path('user') }}">Users</a> > <a href="{{ path('user_show', {id: user.id}) }}">{{ user.username }}</a> > edit
 
-<hr>
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
+
+{{ breadcrumbs.render([
+    {'url': url('user'), 'text': 'Users'},
+    {'url': url('user_show', {id: user.id}), 'text': user.username},
+    {'text': 'Edit'},
+]) }}
+
 
 <h1>Profile edit</h1>
 

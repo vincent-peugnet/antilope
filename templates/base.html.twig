@@ -2,9 +2,11 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}{{ siteName }}{% endblock %}</title>
+        <meta name="description" content="{% block description %}{{ siteDescription }}{% endblock %}">
+        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/darkly/bootstrap.min.css">
         {% block stylesheets %}
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         {% endblock %}
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous" async></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous" async></script>
@@ -14,71 +16,81 @@
         {% set route_name = app.request.attributes.get('_route') %}
         {% set route_param = app.request.attributes.get('_route_params')|join %}
 
-        <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
-
-        <a class="navbar-brand" href="{{ path('app_homepage') }}">{{ siteName }}</a>
+        <div class="container">
 
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+            <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <a class="navbar-brand" href="{{ path('app_homepage') }}">{{ siteName }}</a>
 
-                <ul class="navbar-nav mr-auto">
 
-                    {% if app.user %}
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                    <li class="nav-item">
-                        <a class="nav-link{{ route_name == 'sharable' ? ' active' }}" href="{{ path('sharable') }}">sharables</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link{{ route_name == 'user' ? ' active' }}" href="{{ path('user') }}">users</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link{{ route_name == 'userclass' ? ' active' }}" href="{{ path('userclass') }}">user classes</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link{% if route_name == 'user_show' and route_param == app.user.id %} active{% endif %}" href="{{ path('user_show', {id: app.user.id} ) }}">{{ app.user.username }}</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle{{ route_name == 'account_invitation' ? ' active' }}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        account
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item{{ route_name == 'account_invitation' ? ' active' }}" href="{{ path('account_invitation') }}">invitation</a>
-                            <a class="dropdown-item disabled">settings</a>
-                        </div>
-                    </li>
-                    {% if is_granted('ROLE_ADMIN') %}
-                    <li>
-                        <a class="nav-link" href="{{ path('easyadmin') }}">admin</a>
-                    </li>
-                    {% endif %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_logout') }}">logout</a>
-                    </li>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-                    {% else %}
+                    <ul class="navbar-nav mr-auto">
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_login') }}">login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('sign_up') }}">sign up</a>
-                    </li>
+                        {% if app.user %}
 
-                    {% endif %}
-                    
-                </ul>
+                        <li class="nav-item">
+                            <a class="nav-link{{ route_name == 'sharable' ? ' active' }}" href="{{ path('sharable') }}">sharables</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link{{ route_name == 'user' ? ' active' }}" href="{{ path('user') }}">users</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link{{ route_name == 'userclass' ? ' active' }}" href="{{ path('userclass') }}">user classes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link{% if route_name == 'user_show' and route_param == app.user.id %} active{% endif %}" href="{{ path('user_show', {id: app.user.id} ) }}">{{ app.user.username }}</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle{{ route_name == 'account_invitation' ? ' active' }}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            account
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item{{ route_name == 'account_invitation' ? ' active' }}" href="{{ path('account_invitation') }}">invitation</a>
+                                <a class="dropdown-item disabled">settings</a>
+                            </div>
+                        </li>
 
+                    </ul>
+                    <ul class="navbar-nav ml-auto">
+
+
+                        {% if is_granted('ROLE_ADMIN') %}
+                        <li>
+                            <a class="nav-link" href="{{ path('easyadmin') }}">admin</a>
+                        </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link d-flex" href="{{ path('app_logout') }}">logout</a>
+                        </li>
+
+                        {% else %}
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_login') }}">login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('sign_up') }}">sign up</a>
+                        </li>
+
+                        {% endif %}
+                        
+                    </ul>
+
+            </div>
+
+            </nav>
+
+            <main class="container-fluid p-0 mt-3">
+                {% block content %}{% endblock %}
+            </main>
         </div>
 
-        </nav>
-        <hr>
-        <main>
-        {% block content %}{% endblock %}
-        </main>
         {% block javascripts %}{% endblock %}
     </body>
 </html>

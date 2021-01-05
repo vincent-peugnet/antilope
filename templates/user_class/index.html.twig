@@ -3,64 +3,74 @@
 
 {% block content %}
 
+<h1>User Classes</h1>
 
 
-<ul>
 {% for userClass in userClasses %}
 
-<li>
 
-<h3>{{ userClass.name }}</h3>
+<div class="card mb-3">
 
-<ul>
-{% if userClass.share %}
-<li>can create sharables</li>
-{% endif %}
-{% if userClass.access %}
-<li>can access the sharables with no specific access settings</li>
-{% endif %}
-{% if userClass.canInvite %}
-{% if userClass.inviteFrequency == 0 %}
-<li>can invite people without limitation</li>
-{% else %}
-<li>can invite one user every {{ userClass.inviteFrequency }} days</li>
-{% endif %}
-{% endif %}
-<li>maximum paranoïa level : {{ userClass.maxParanoia }}</li>
-</ul>
+    <div class="card-header">
 
-<h5>Requirements</h5>
+        <div class="card-title">
+        <h3>{{ userClass.name }}</h3>
+        </div>
+    </div>
 
-<ul>
-    {% if userClass.shareScoreReq %}
-    <li>
-    Share Score : {{ userClass.shareScoreReq }}
-    </li>
-    {% endif %}
-    {% if userClass.accountAgeReq %}
-    <li>
-    Account Age : {{ userClass.accountAgeReq }} days
-    </li>
-    {% endif %}
-    {% if userClass.validatedReq %}
-    <li>
-    Validations given : {{ userClass.validatedReq }}
-    </li>
-    {% endif %}
-    {% if userClass.verifiedReq %}
-    <li>
-    The user need to be verified
-    </li>
-    {% endif %}
-</ul>
+    <div class="card-body">
+    
+        <ul>
+        {% if userClass.share %}
+        <li>can create sharables</li>
+        {% endif %}
+        {% if userClass.access %}
+        <li>can access the sharables with no specific access settings</li>
+        {% endif %}
+        {% if userClass.canInvite %}
+        {% if userClass.inviteFrequency == 0 %}
+        <li>can invite people without limitation</li>
+        {% else %}
+        <li>can invite one user every {{ userClass.inviteFrequency }} days</li>
+        {% endif %}
+        {% endif %}
+        <li>maximum paranoïa level : {{ userClass.maxParanoia }}</li>
+        </ul>
 
-<a class="btn btn-light" href="{{ path('userclass_show', {id: userClass.id}) }}">see users</a>
+        <h5>Requirements</h5>
+
+        <ul>
+            {% if userClass.shareScoreReq %}
+            <li>
+            Share Score : {{ userClass.shareScoreReq }}
+            </li>
+            {% endif %}
+            {% if userClass.accountAgeReq %}
+            <li>
+            Account Age : {{ userClass.accountAgeReq }} days
+            </li>
+            {% endif %}
+            {% if userClass.validatedReq %}
+            <li>
+            Validations given : {{ userClass.validatedReq }}
+            </li>
+            {% endif %}
+            {% if userClass.verifiedReq %}
+            <li>
+            The user need to be verified
+            </li>
+            {% endif %}
+        </ul>
+
+        <a class="btn btn-light" href="{{ path('userclass_show', {id: userClass.id}) }}">see users</a>
 
 
-</li>
+    </div>
+
+</div>
 
 {% endfor %}
-</ul>
+
 
 
 {% endblock %}

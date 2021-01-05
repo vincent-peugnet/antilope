@@ -7,99 +7,180 @@
 
 {% block content %}
 
-<a href="{{ path('sharable') }}">sharables</a> > {{ sharable.name }}
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 
-<hr>
+{{ breadcrumbs.render([
+    {'url': url('sharable'), 'text': 'Sharables'},
+    {'text': sharable.name},
+]) }}
 
-<h1>{{ sharable.name }}</h1>
+<div class="container-fluid p-0">
 
-<p>{{ sharable.description }}</p>
+    <h1>
+    {{ sharable.name }}
+        {% if is_granted('edit', sharable) %}
+        <a class="btn btn-primary" href="{{ path('sharable_edit', {id: sharable.id}) }}">edit</a>
+        {% endif %}
+        {% if is_granted('validate', sharable) %}
+        <a class="btn btn-success" href="{{ path('sharable_validate', {id: sharable.id}) }}">validate</a>
+        {% endif %}
+    </h1>
 
-<ul>
-    <li>
-        Validations : {{ sharable.validations|length }}
-    </li>
-    <li>
-        Created : {{ sharable.createdAt|format_datetime('short', 'short', locale='fr') }}
-    </li>
-    <li>
-        Last Edited : {{ sharable.lastEditedAt|format_datetime('short', 'short', locale='fr') }}
-    </li>
-    {% if sharable.beginAt %}
-    <li>
-        Begin : {{ sharable.beginAt|format_datetime('short', 'short', locale='fr') }}
-    </li>
-    {% endif %}
-    {% if sharable.endAt %}
-    <li>
-        End : {{ sharable.endAt|format_datetime('short', 'short', locale='fr') }}
-    <li>
-    {% endif %}
-    <li>
-    {% if sharable.responsibility %}
-        Managers are responsable of this
-    {% else %}
-        Managers does not take responsibility for this
-    {% endif %}
-    </li>
+    <p>{{ sharable.description }}</p>
 
-    {% if sharable.disabled %}
-    <li>
-        This Sharable is <strong>disabled</strong> for now
-    </li>
-    {% endif %}
-</ul>
+    <div class="btn-group">
+            
 
 
 
-<h3>Details :</h3>
+    </div>
 
-<div id="description">
-{{ sharable.details|markdown_to_html }}
 </div>
 
+<div class="row">
 
-{% if is_granted('validate', sharable) %}
-<a class="btn btn-success" href="{{ path('sharable_validate', {id: sharable.id}) }}">validate</a>
-{% endif %}
+    <div class="col-lg-8">
 
-{% if is_granted('edit', sharable) %}
-<a class="btn btn-primary" href="{{ path('sharable_edit', {id: sharable.id}) }}">edit</a>
-<a class="btn btn-primary" href="{{ path('sharable_managers', {id: sharable.id}) }}">managers</a>
-{% endif %}
+        <div class="card mb-3">
+
+            <div class="card-header">
+
+                <div class="card-title">
+                    <h4>
+                    Details
+                    {% if is_granted('edit', sharable) %}
+                    <a class="btn btn-primary" href="{{ path('sharable_edit', {id: sharable.id}) }}">edit details</a>
+                    </h4>
+        {% endif %}
+                </div>
+            </div>
+
+            <div class="card-body">
+
+                <div id="description">
+                {{ sharable.details|markdown_to_html }}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-lg-4">
+
+        <div class="card mb-3">
+
+            <div class="card-header">
+
+                <div class="card-title">
+                    <h4>Infos</h4>
+                </div>
+            </div>
+
+            <div class="card-body">
+
+                <ul>
+                    <li>
+                        Validations : {{ sharable.validations|length }}
+                    </li>
+                    <li>
+                        Created : {{ sharable.createdAt|format_datetime('short', 'short', locale='fr') }}
+                    </li>
+                    <li>
+                        Last Edited : {{ sharable.lastEditedAt|format_datetime('short', 'short', locale='fr') }}
+                    </li>
+                    {% if sharable.beginAt %}
+                    <li>
+                        Begin : {{ sharable.beginAt|format_datetime('short', 'short', locale='fr') }}
+                    </li>
+                    {% endif %}
+                    {% if sharable.endAt %}
+                    <li>
+                        End : {{ sharable.endAt|format_datetime('short', 'short', locale='fr') }}
+                    </li>
+                    {% endif %}
+                    <li>
+                    {% if sharable.responsibility %}
+                        Managers are responsable of this
+                    {% else %}
+                        Managers does not take responsibility for this
+                    {% endif %}
+                    </li>
+
+                    {% if sharable.disabled %}
+                    <li>
+                        This Sharable is <strong>disabled</strong> for now
+                    </li>
+                    {% endif %}
+                </ul>
+
+            </div>
+        </div>
 
 
-<h3>Managed by :</h3>
-
-<ul>
-{% for user in sharable.managedby %}
-
-<li>
 
 
-<a href="{{ path('user_show', {id: user.id} ) }}">{{ user.username }}</a>
+        <div class="card mb-3">
+
+            <div class="card-header">
+
+                <div class="card-title">
+                    <h4>Managed by :</h4>
+                </div>
+            </div>
+
+            <div class="card-body">
+
+                <ul>
+                {% for user in sharable.managedby %}
+
+                <li>
 
 
-</li>
-
-{% endfor %}
-</ul>
+                <a href="{{ path('user_show', {id: user.id} ) }}">{{ user.username }}</a>
 
 
+                </li>
 
-<h3>Validations :</h3>
+                {% endfor %}
+                </ul>
 
-<ul>
-{% for validation in sharable.validations %}
 
-<li>
+                {% if is_granted('edit', sharable) %}
+                <a class="btn btn-primary" href="{{ path('sharable_managers', {id: sharable.id}) }}">add managers</a>
+                {% endif %}
 
-<a href="{{ path('user_show', {id: validation.user.id} ) }}">{{ validation.user.username }}</a> : {{ validation.message }}
+            </div>
+        </div>
 
-</li>
 
-{% endfor %}
-</ul>
+
+        <div class="card mb-3">
+
+            <div class="card-header">
+
+                <div class="card-title">
+                    <h4>Validations :</h4>
+                </div>
+            </div>
+
+            <div class="card-body">
+
+                <ul>
+                {% for validation in sharable.validations %}
+
+                <li>
+
+                <a href="{{ path('user_show', {id: validation.user.id} ) }}">{{ validation.user.username }}</a> : {{ validation.message }}
+
+                </li>
+
+                {% endfor %}
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</div>
 
 
 

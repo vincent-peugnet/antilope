@@ -4,26 +4,91 @@
 
 {% block content %}
 
-<h1>Home</h1>
+<div class="jumbotron">
 
-<p>Home sweet home</p>
+    <h1 class="display-4">{{ siteName }}</h1>
+
+    <p class="lead">{{ siteDescription }}</p>
+
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+    <p>
+        Discover <a href="{{ path('sharable') }}">sharables</a>, or <a href="{{ path('user_edit', {id: app.user.id}) }}">edit your profile</a>.
+    </p>
+    {% endif %}
 
 
-<h3>Stats</h3>
 
-<ul>
-<li>
-Sharables : {{ sharableCount }}
-</li>
-<li>
-Validations : {{ validationCount }}
-</li>
-</li>
-<li>
-Users : {{ userCount }}
-</li>
-<li>
-Users limit : {{ userLimit }}
-</ul>
+</div>
+
+{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+
+
+{% if siteAlert %}
+
+<div class="alert alert-danger">{{ siteAlert }}</div>
+
+{% endif %}
+
+<div class="card mb-3">
+
+    <div class="card-header">
+
+        <div class="card-title">
+        <h3>News</h3>
+        </div>
+    </div>
+
+    <div class="card-body">
+
+        <p class="card-subtitle mb-2">
+            Some news...
+        </p>
+
+    </div>
+
+</div>
+
+
+{% endif %}
+
+
+
+{% if is_granted('IS_AUTHENTICATED_FULLY') or showHomeStats %}
+
+<div class="card mb-3">
+
+    <div class="card-header">
+
+        <div class="card-title">
+        <h3>Stats</h3>
+        </div>
+    </div>
+
+    <div class="card-body">
+
+        <ul>
+            <li>
+                Sharables : {{ sharableCount }}
+            </li>
+            <li>
+                Validations : {{ validationCount }}
+            </li>
+            <li>
+                Users : {{ userCount }}
+            </li>
+            <li>
+                Users limit : {{ userLimit }}
+            </li>
+            <li>
+                Registrations : {{ openRegistration ? 'open' : 'invite only' }}
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+{% endif %}
+
+
 
 {% endblock %}

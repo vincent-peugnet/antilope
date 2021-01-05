@@ -3,7 +3,6 @@
 {% block title %}Sharables{% endblock %}
 
 {% block stylesheets %}
-<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
 <link rel="stylesheet" href="/assets/css/search.css">
 {% endblock %}
 
@@ -12,29 +11,58 @@
 
 
 
-{% if is_granted('create', sharable) %}<a class="btn btn-success btn-lg btn-block" href="{{ path('sharable_new') }}">create new sharable</a> {% endif %}
+{% if is_granted('create', sharable) %}<a class="btn btn-success btn-lg btn-block mb-3" href="{{ path('sharable_new') }}">create new sharable</a> {% endif %}
 
-<hr>
 
 {{ form(form) }}
+
 
 <div class="alert alert-info">
 {{ total }} sharables founded
 </div>
 
-<ul>
+
+
 {% for sharable in sharables %}
 
-<li>
 
-<h2>{{ sharable.name }}</h2>
-<p>{{ sharable.description }}</p>
-<a class="btn btn-light" href="{{ path('sharable_show', {id: sharable.id}) }}">details</a>
 
-</li>
+    <div class="card mb-3">
+        <div class="card-header">
+        <h5 class="card-title">
+        {{ sharable.name }}
+        {% if sharable.validations|length > 0 %}
+        <span title="" class="badge badge-success">{{ sharable.validations|length }} validations</span>
+        {% endif %}
+        {% if sharable.visibleBy %}
+        <span title="accessible by {{ sharable.visibleBy.name }}" class="badge badge-warning">{{ sharable.visibleBy.name }}</span>
+        {% endif %}
+        {% if app.user in sharable.managedBy %}
+        <span title="you manage this sharable" class="badge badge-info">managed</span>
+        {% endif %}
+        {% if sharable.disabled %}
+        <span title="this sharable is disabled" class="badge badge-dark">disabled</span>
+        {% endif %}
+        </h5>
+        
+        </div>
+
+
+        <div class="card-body">
+
+
+        
+        <p class="card-subtitle mb-2 text-muted">{{ sharable.description }}</p>
+        <a class="btn btn-primary" href="{{ path('sharable_show', {id: sharable.id}) }}">details</a>
+
+        </div>
+
+    </div>
+
+
 
 {% endfor %}
-</ul>
+
 
 
 

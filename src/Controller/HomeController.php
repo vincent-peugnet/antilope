@@ -21,6 +21,8 @@ class HomeController extends AbstractController
             'sharableCount' => $sharableRepository->count([]),
             'validationCount' => $validationRepository->count([]),
             'userLimit' => $this->getParameter('app.userLimit'),
+            'openRegistration' => $this->getParameter('app.openRegistration'),
+            'showHomeStats' => $this->getParameter('app.showHomeStats'),
         ]);
     }
 }

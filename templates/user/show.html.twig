@@ -3,9 +3,14 @@
 
 {% block content %}
 
-<a href="{{ path('user') }}">Users</a> > {{ user.username }}
 
-<hr>
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
+
+{{ breadcrumbs.render([
+    {'url': url('user'), 'text': 'Users'},
+    {'text': user.username},
+]) }}
+
 
 <h1>{{ user.username }}</h1>
 
@@ -14,75 +19,138 @@
 <a class="btn btn-primary" href="{{ path('user_edit', {id: user.id}) }}">edit</a>
 {% endif %}
 
-{% if is_granted('view_stats', user) %}
-
-<h3>Stats</h3>
-
-<ul>
-    <li>User class : <a href="{{ path('userclass_show', {id: user.userclass.id}) }}">{{ user.userclass }}</a></li>
-    <li>Managed sharables : {{ user.sharables|length }}</li>
-    <li>Validations given : {{ user.validations|length }}</li>
-    <li>Paranoïa level : {{ user.paranoia }}</li>
-    <li>Share Score : {{ user.shareScore }}</li>
-    {% if user.getInvitation %}
-    <li>Invited by : <a href="{{ path('user_show', {id: user.getInvitation.getParent.id}) }}">{{ user.getInvitation.getParent.username }}</a></li>
-    {% endif %}
-    <li>Account creation : {{ user.getCreatedAt|format_date('short', locale='fr') }}</li>
-</ul>
-
-{% endif %}
+<div class="row">
 
 
+    <div class="col-lg-8">
+    
 
-<h3>Description</h3>
+        <div class="card mb-3">
 
-{% if user.description %}
-<p>{{ user.description|markdown_to_html }}</p>
-{% endif %}
+            <div class="card-header">
 
+                <div class="card-title">
+                    <h3>Description</h3>
+                </div>
+            </div>
 
-{% if is_granted('view_sharables', user) %}
+            <div class="card-body">
 
-<h3>Sharables</h3>
+                {% if user.description %}
+                <div>{{ user.description|markdown_to_html }}</div>
+                {% endif %}
 
+            </div>
 
-<ul>
-{% for sharable in user.sharables %}
-
-<li>
-
-
-<a href="{{ path('sharable_show', {id: sharable.id}) }}">{{ sharable.name }}</a>
-{% if is_granted('edit', sharable) %}
-<a class="btn btn-light" href="{{ path('sharable_edit', {id: sharable.id}) }}">edit</a>
-{% endif %}
-
-</li>
-
-{% endfor %}
-</ul>
-
-{% endif %}
+        </div>
+    </div>
 
 
+    <div class="col-lg-4">
 
-{% if is_granted('view_validations', user) %}
+        {% if is_granted('view_stats', user) %}
 
-<h3>Validations given</h3>
+        <div class="card mb-3">
+
+            <div class="card-header">
+
+                <div class="card-title">
+                    <h3>Stats</h3>
+                </div>
+            </div>
+
+            <div class="card-body">
+
+                <ul>
+                    <li>User class : <a href="{{ path('userclass_show', {id: user.userclass.id}) }}">{{ user.userclass }}</a></li>
+                    <li>Managed sharables : {{ user.sharables|length }}</li>
+                    <li>Validations given : {{ user.validations|length }}</li>
+                    <li>Paranoïa level : {{ user.paranoia }}</li>
+                    <li>Share Score : {{ user.shareScore }}</li>
+                    {% if user.getInvitation %}
+                    <li>Invited by : <a href="{{ path('user_show', {id: user.getInvitation.getParent.id}) }}">{{ user.getInvitation.getParent.username }}</a></li>
+                    {% endif %}
+                    <li>Account creation : {{ user.getCreatedAt|format_date('short', locale='fr') }}</li>
+                </ul>
+
+            </div>
+        </div>
+
+        {% endif %}
 
 
-<ul>
-{% for validation in user.Validations %}
+        {% if is_granted('view_sharables', user) %}
 
-<li>
-<a href="{{ path('sharable_show', {id: validation.sharable.id}) }}">{{ validation.sharable.name }}</a>
-{{ validation.message }}
-</li>
+        <div class="card mb-3">
 
-{% endfor %}
-</ul>
+            <div class="card-header">
 
-{% endif %}
+                <div class="card-title">
+                    <h3>Sharables</h3>
+                </div>
+            </div>
+
+            <div class="card-body">
+
+                <ul class="list-group list-group-flush">
+                {% for sharable in user.sharables %}
+
+                <li class="list-group-item">
+
+
+                <a href="{{ path('sharable_show', {id: sharable.id}) }}">{{ sharable.name }}</a>
+                {% if is_granted('edit', sharable) %}
+                <a class="btn btn-light" href="{{ path('sharable_edit', {id: sharable.id}) }}">edit</a>
+                {% endif %}
+
+                </li>
+
+                {% endfor %}
+                </ul>
+
+            </div>
+        </div>
+
+        {% endif %}
+
+
+
+        {% if is_granted('view_validations', user) %}
+
+        <div class="card mb-3">
+
+            <div class="card-header">
+
+                <div class="card-title">
+                    <h3>Validations given</h3>
+                </div>
+            </div>
+
+            <div class="card-body">
+
+
+                <ul>
+                {% for validation in user.Validations %}
+
+                <li>
+                <a href="{{ path('sharable_show', {id: validation.sharable.id}) }}">{{ validation.sharable.name }}</a>
+                {{ validation.message }}
+                </li>
+
+                {% endfor %}
+                </ul>
+
+            </div>
+        </div>
+
+        {% endif %}
+
+
+
+    </div>
+</div>
+
+
 
 
 

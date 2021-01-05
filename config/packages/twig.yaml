@@ -3,4 +3,6 @@ twig:
     form_themes: ['bootstrap_4_layout.html.twig']
     globals:
         siteName: '%app.siteName%'
+        siteDescription: '%app.siteDescription%'
+        siteAlert: '%app.siteAlert%'
 

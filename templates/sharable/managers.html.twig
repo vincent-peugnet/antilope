@@ -5,10 +5,14 @@
 
 {% block content %}
 
-<a href="{{ path('sharable') }}">sharables</a> > <a href="{{ path('sharable_show', {id: sharable.id}) }}">{{ sharable.name }}</a> > managers
 
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 
-<hr>
+{{ breadcrumbs.render([
+    {'url': url('sharable'), 'text': 'Sharables'},
+    {'url': url('sharable_show', {id: sharable.id}), 'text': sharable.name},
+    {'text': 'set Managers'},
+]) }}
 
 <ul>
 {% for user in sharable.managedBy %}
