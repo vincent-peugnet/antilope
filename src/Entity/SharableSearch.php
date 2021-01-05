@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class Search
+class SharableSearch
 {
     const SORT_BY = ['id', 'createdAt', 'lastEditedAt', 'name'];
 
@@ -21,7 +21,7 @@ class Search
 
     /**
      * @var string
-     * @Assert\Choice(choices=Search::SORT_BY, message="choose a propriety to sort by")
+     * @Assert\Choice(choices=SharableSearch::SORT_BY, message="choose a propriety to sort by")
      * @Assert\NotBlank
      */
     public $sortBy = 'id';

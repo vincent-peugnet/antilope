@@ -2,13 +2,13 @@
 
 namespace App\Controller;
 
-use App\Entity\Search;
+use App\Entity\SharableSearch;
 use App\Entity\Sharable;
 use App\Entity\User;
 use App\Entity\UserClass;
 use App\Entity\Validation;
 use App\Form\ManagerType;
-use App\Form\SearchType;
+use App\Form\SharableSearchType;
 use App\Form\SharableType;
 use App\Form\ValidationType;
 use App\Repository\SharableRepository;
@@ -31,9 +31,9 @@ class SharableController extends AbstractController
         $user = $this->getUser();
         $visibleBy = $userClassRepository->findLowerthan($user->getUserClass());
 
-        $search = new Search();
+        $search = new SharableSearch();
 
-        $form = $this->createForm(SearchType::class, $search);
+        $form = $this->createForm(SharableSearchType::class, $search);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $search = $form->getData();

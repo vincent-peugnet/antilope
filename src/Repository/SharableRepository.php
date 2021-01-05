@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Search;
+use App\Entity\SharableSearch;
 use App\Entity\Sharable;
 use App\Entity\User;
 use App\Entity\UserClass;
@@ -36,7 +36,7 @@ class SharableRepository extends ServiceEntityRepository
      * @param UserClass[] $visibleBy Collection of UserClass
      * @param User the actual user
      */
-    public function getFilteredSharables(Search $search, $visibleBy, User $user)
+    public function getFilteredSharables(SharableSearch $search, $visibleBy, User $user)
     {
         $visibleByIds = array_map(function (UserClass $userClass)
         {
