@@ -43,6 +43,11 @@ class Invitation
         $this->createdAt = new DateTime();
     }
 
+    public function __toString(): string
+    {
+        return (string) $this->code;
+    }
+
 
     public function getId(): ?int
     {

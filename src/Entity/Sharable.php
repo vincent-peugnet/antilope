@@ -117,6 +117,11 @@ class Sharable
         $this->responsibility = true;
     }
 
+    public function __toString(): string
+    {
+        return (string) $this->name;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

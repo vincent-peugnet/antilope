@@ -1,0 +1,27 @@
+easy_admin:
+    design:
+        menu:
+            - { route: 'app_homepage', label: 'Back to the website', icon: 'home' }
+            - { entity: 'UserClass', label: 'User Class', icon: 'users' }
+            - { entity: 'User', label: 'Users', icon: 'users' }
+    entities:
+        UserClass:
+            class: App\Entity\UserClass
+        User:
+            class: App\Entity\User
+            form:
+                fields: 
+                    - 'id'
+                    - 'username'
+                    - { property: 'roles', type: 'choice', type_options: {
+                        expanded: true, multiple: true, choices: {
+                            'ROLE_USER': 'ROLE_USER',
+                            'ROLE_MODERATOR': 'ROLE_MODERATOR',
+                            'ROLE_ADMIN': 'ROLE_ADMIN',
+                            }
+                        }
+                    }
+                    - 'createdAt'
+                    - 'paranoia'
+            list:
+                fields: ['id', 'username', 'roles', 'createdAt']

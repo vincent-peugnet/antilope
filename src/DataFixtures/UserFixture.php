@@ -46,6 +46,18 @@ class UserFixture extends Fixture implements DependentFixtureInterface
             ->setShareScore(0);
         $manager->persist($userBolos);
 
+        $userVincent = new User();
+        $userVincent
+            ->setUsername('vincent')
+            ->setEmail('vincent-peugnet@riseup.net')
+            ->setPassword($this->passwordEncoder->encodePassword($userVincent, 'vincent'))
+            ->setUserClass($member)
+            ->setCreatedAt(new DateTime('2020-06-02'))
+            ->setParanoia(0)
+            ->setRoles([User::ROLE_ADMIN])
+            ->setShareScore(182);
+        $manager->persist($userVincent);
+
         $userGuillaume = new User();
         $userGuillaume
             ->setUsername('guillaume')

@@ -23,6 +23,11 @@ class UserClass
 
     /**
      * @ORM\Column(type="smallint")
+     * @Assert\Range(
+     *      min = 0,
+     *      max = 100,
+     *      notInRangeMessage = "Rank must be beetwen {{ min }} and {{ max }}.",
+     * )
      */
     private $rank;
 
