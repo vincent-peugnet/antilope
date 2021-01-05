@@ -38,6 +38,26 @@ class UserClassRepository extends ServiceEntityRepository
         ;
     }
 
+    /**
+     * Find next UserClass after the one given
+     * 
+     * @param UserClass $userClass the user class as reference
+     * 
+     * @return UserClass[] Returns an array of UserClass objects
+     */
+    public function findNext(UserClass $userClass): ?UserClass
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.rank > :rank')
+            ->setParameter('rank', $userClass->getRank())
+            ->orderBy('u.rank', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+
     /*
     public function findOneBySomeField($value): ?UserClass
     {

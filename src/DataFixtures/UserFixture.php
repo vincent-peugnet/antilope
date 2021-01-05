@@ -54,7 +54,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
             ->setUserClass($basicUser)
             ->setCreatedAt(new DateTime('2020-04-04'))
             ->setParanoia(0)
-            ->setShareScore(0);
+            ->setShareScore(288);
         $manager->persist($userGuillaume);
 
         $userLea = new User();
@@ -65,7 +65,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
             ->setUserClass($member)
             ->setCreatedAt(new DateTime('2019-06-06'))
             ->setParanoia(0)
-            ->setShareScore(0);
+            ->setShareScore(1293);
         $manager->persist($userLea);
 
         $userNicolas = new User();
@@ -76,7 +76,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
             ->setUserClass($member)
             ->setCreatedAt(new DateTime('2018-01-01'))
             ->setParanoia(1)
-            ->setShareScore(0);
+            ->setShareScore(745);
         $manager->persist($userNicolas);
 
         $userAudrey = new User();
@@ -87,7 +87,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
             ->setUserClass($powerUser)
             ->setCreatedAt(new DateTime('2018-03-03'))
             ->setParanoia(0)
-            ->setShareScore(0);
+            ->setShareScore(2410);
         $manager->persist($userAudrey);
 
         $userGuilhem = new User();
@@ -98,7 +98,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
             ->setUserClass($elite)
             ->setCreatedAt(new DateTime('2017-09-09'))
             ->setParanoia(2)
-            ->setShareScore(0);
+            ->setShareScore(6852);
         $manager->persist($userGuilhem);
 
 

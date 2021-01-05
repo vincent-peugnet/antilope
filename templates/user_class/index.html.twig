@@ -29,6 +29,26 @@
 <li>maximum paranoïa level : {{ userClass.maxParanoia }}</li>
 </ul>
 
+<h5>Requirements</h5>
+
+<ul>
+    {% if userClass.shareScoreReq %}
+    <li>
+    Share Score : {{ userClass.shareScoreReq }}
+    </li>
+    {% endif %}
+    {% if userClass.accountAgeReq %}
+    <li>
+    Account Age : {{ userClass.accountAgeReq }} days
+    </li>
+    {% endif %}
+    {% if userClass.validatedReq %}
+    <li>
+    Validations given : {{ userClass.validatedReq }}
+    </li>
+    {% endif %}
+</ul>
+
 <a class="btn btn-light" href="{{ path('userclass_show', {id: userClass.id}) }}">see users</a>
 
 

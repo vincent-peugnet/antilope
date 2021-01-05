@@ -13,6 +13,7 @@ use App\Form\SharableType;
 use App\Form\ValidationType;
 use App\Repository\SharableRepository;
 use App\Repository\UserClassRepository;
+use App\Service\LevelUp;
 use App\Service\SharePoints;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -126,8 +127,9 @@ class SharableController extends AbstractController
 
     /**
      * @Route("/sharable/{id}/validate", name="sharable_validate", requirements={"id"="\d+"})
+     * @todo send Email to each managers managing validated sharable and when user is promoted
      */
-    public function validate(Sharable $sharable, Request $request): Response
+    public function validate(Sharable $sharable, Request $request, LevelUp $levelUp, SharePoints $sharePointAlgo): Response
     {
         $this->denyAccessUnlessGranted('validate', $sharable);
 
@@ -142,18 +144,23 @@ class SharableController extends AbstractController
             $validation->setUser($this->getUser());
             $validation->setSharable($sharable);
 
-            $sharePointAlgo = new SharePoints($this->getUser(), $sharable);
-            $sharePoints = $sharePointAlgo->calculate();
-
-            dump($sharePoints);
+            $sharePoints = $sharePointAlgo->calculate($this->getUser(), $sharable);
 
             $entityManager = $this->getDoctrine()->getManager();
 
             foreach ($sharable->getManagedBy() as $manager) {
                 $manager->addShareScore($sharePoints);
-                $entityManager->persist($manager);
+                $checkedManager = $levelUp->check($manager);
+                if ($checkedManager !== $manager) {
+                    // User has been promoted
+                }
+                $entityManager->persist($checkedManager);
             }
 
+            $user = $levelUp->check($this->getUser(), ['validated' => 1]);
+            if ($user !== $this->getUser()) {
+                $entityManager->persist($user);
+            }
 
             $entityManager->persist($validation);
             $entityManager->flush();
