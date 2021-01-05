@@ -233,6 +233,13 @@ class User implements UserInterface
         return $this;
     }
 
+    public function addShareScore(int $shareScore): self
+    {
+        $this->shareScore += $shareScore;
+
+        return $this;
+    }
+
     /**
      * @return Collection|Sharable[]
      */

@@ -13,6 +13,7 @@ use App\Form\SharableType;
 use App\Form\ValidationType;
 use App\Repository\SharableRepository;
 use App\Repository\UserClassRepository;
+use App\Service\SharePoints;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -141,7 +142,19 @@ class SharableController extends AbstractController
             $validation->setUser($this->getUser());
             $validation->setSharable($sharable);
 
+            $sharePointAlgo = new SharePoints($this->getUser(), $sharable);
+            $sharePoints = $sharePointAlgo->calculate();
+
+            dump($sharePoints);
+
             $entityManager = $this->getDoctrine()->getManager();
+
+            foreach ($sharable->getManagedBy() as $manager) {
+                $manager->addShareScore($sharePoints);
+                $entityManager->persist($manager);
+            }
+
+
             $entityManager->persist($validation);
             $entityManager->flush();
 
