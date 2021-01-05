@@ -6,13 +6,31 @@ use App\Entity\UserClass;
 use App\Repository\UserClassRepository;
 use DateInterval;
 use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 
 class LevelUp
 {
     private $userClassRepository;
+    private $em;
 
-    public function __construct(UserClassRepository $userClassRepository) {
+    public function __construct(UserClassRepository $userClassRepository, EntityManagerInterface $em) {
         $this->userClassRepository = $userClassRepository;
+        $this->em = $em;
+    }
+
+    /**
+     * Call the Check method and persist User in case of promotion
+     */
+    public function checkUpdate(User $user): User
+    {
+        $originalUserClass = $user->getUserClass();
+        $user = $this->check($user);
+        if ($user->getUserClass() !== $originalUserClass) {
+            // User is promoted !
+            $this->em->persist($user);
+            $this->em->flush();
+        }
+        return $user;
     }
 
     /**
@@ -33,6 +51,7 @@ class LevelUp
                 $this->verified($user, $userClass)
             ) {
                 $user->setUserClass($userClass);
+                $this->check($user);
             }
         }
         return $user;

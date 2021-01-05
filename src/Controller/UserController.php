@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Service\LevelUp;
+use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,7 +34,7 @@ class UserController extends AbstractController
     public function show(User $user, LevelUp $levelUp): Response
     {
         if ($user === $this->getUser()) {
-            $user = $levelUp->check($user);
+            $user = $levelUp->checkUpdate($user);
         }
 
         return $this->render('user/show.html.twig', [

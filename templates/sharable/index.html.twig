@@ -26,8 +26,7 @@
 {% for sharable in sharables %}
 
 
-
-    <div class="card mb-3">
+    <div class="card{{ sharable in validatedSharables ? ' border-success' }} mb-3">
         <div class="card-header">
         <h5 class="card-title">
         {{ sharable.name }}
@@ -38,7 +37,7 @@
         <span title="accessible by {{ sharable.visibleBy.name }}" class="badge badge-warning">{{ sharable.visibleBy.name }}</span>
         {% endif %}
         {% if app.user in sharable.managedBy %}
-        <span title="you manage this sharable" class="badge badge-info">managed</span>
+        <span title="you manage this sharable" class="badge badge-info">managed by you</span>
         {% endif %}
         {% if sharable.disabled %}
         <span title="this sharable is disabled" class="badge badge-dark">disabled</span>

@@ -39,6 +39,11 @@ class SharableController extends AbstractController
             $search = $form->getData();
         }
 
+        $validatedSharables = $user->getValidations()->map(function (Validation $validation)
+        {
+            return $validation->getSharable();
+        });
+
         $sharables = $sharableRepository->getFilteredSharables($search, $visibleBy, $user);
 
         return $this->render('sharable/index.html.twig', [
@@ -46,6 +51,7 @@ class SharableController extends AbstractController
             'sharable' => new Sharable(),
             'total' => count($sharables),
             'form' => $form->createView(),
+            'validatedSharables' => $validatedSharables,
         ]);
     }
 
@@ -151,9 +157,6 @@ class SharableController extends AbstractController
             foreach ($sharable->getManagedBy() as $manager) {
                 $manager->addShareScore($sharePoints);
                 $checkedManager = $levelUp->check($manager);
-                if ($checkedManager !== $manager) {
-                    // User has been promoted
-                }
                 $entityManager->persist($checkedManager);
             }
             
