@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\SharableSearch;
 use App\Entity\Sharable;
 use App\Entity\User;
-use App\Entity\UserClass;
 use App\Entity\Validation;
 use App\Form\ManagerType;
 use App\Form\SharableSearchType;
@@ -27,8 +26,6 @@ class SharableController extends AbstractController
      */
     public function index(Request $request, SharableRepository $sharableRepository, UserClassRepository $userClassRepository): Response
     {
-        $validatedSharables = [];
-        $sharables = [];
         /** @var User $user */
         $user = $this->getUser();
         $visibleBy = $userClassRepository->findLowerthan($user->getUserClass());
@@ -37,17 +34,13 @@ class SharableController extends AbstractController
 
         $form = $this->createForm(SharableSearchType::class, $search);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $search = $form->getData();
+        $search = $form->getData();
 
+        $validatedSharables = $user->getValidations()->map(function (Validation $validation) {
+            return $validation->getSharable();
+        });
 
-            $validatedSharables = $user->getValidations()->map(function (Validation $validation)
-            {
-                return $validation->getSharable();
-            });
-
-            $sharables = $sharableRepository->getFilteredSharables($search, $visibleBy, $validatedSharables, $user);
-        }
+        $sharables = $sharableRepository->getFilteredSharables($search, $visibleBy, $user);
 
         return $this->render('sharable/index.html.twig', [
             'sharables' => $sharables,

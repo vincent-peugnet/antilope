@@ -31,6 +31,10 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\Regex(
+     *  pattern = "/^[a-z0-9A-Z]+(?:-[a-z0-9A-Z]+)*$/",
+     *  message = "pseudo should only contain a-z, A-Z, 0-9 separated only by - or _"
+     * )
      */
     private $username;
 

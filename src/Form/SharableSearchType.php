@@ -16,22 +16,37 @@ class SharableSearchType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $default = new SharableSearch();
         $builder
-            ->add('q', SearchType::class, [
+            ->add('query', SearchType::class, [
                 'label' => 'Search',
                 'required' => false,
+                'help' => 'search in Sharables names'
             ])
             ->add('disabled', ChoiceType::class, [
-                'choices' => SharableSearch::DISABLED
+                'choices' => SharableSearch::DISABLED,
+                'empty_data' => $default->getDisabled(),
+                'required' => false,
+                'expanded' => true,
             ])
             ->add('validated', ChoiceType::class, [
-                'choices' => SharableSearch::VALIDATED
+                'choices' => SharableSearch::VALIDATED,
+                'empty_data' => $default->getValidated(),
+                'required' => false,
+                'expanded' => true,
+            ])
+            ->add('managedBy', IntegerType::class, [
+                'required' => false,
+                'label' => 'Managed by',
+                'help' => 'user ID'
             ])
             ->add('sortBy', ChoiceType::class, [
-                'choices' => SharableSearch::SORT_BY
+                'choices' => SharableSearch::SORT_BY,
+                'empty_data' => $default->getSortBy(),
             ])
             ->add('order', ChoiceType::class, [
-                'choices' => SharableSearch::ORDER
+                'choices' => SharableSearch::ORDER,
+                'empty_data' => $default->getOrder(),
             ])
             ->add('search', SubmitType::class)
         ;

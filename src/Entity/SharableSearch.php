@@ -9,12 +9,10 @@ class SharableSearch
     const DISABLED = [
         'only disabled' => 1,
         'hide disabled' => 0,
-        'show all' => -1,
     ];
     const VALIDATED = [
-        'already validated' => 1,
-        'not validated' => 0,
-        'show all' => -1,
+        'I validated' => 1,
+        'I did not validate' => 0,
     ];
     const SORT_BY = [
         'id' => 'id',
@@ -28,45 +26,39 @@ class SharableSearch
     ];
 
     /**
-     * @var string
+     * @var string|null
      */
-    public $q = '';
+    private $query = '';
 
     /**
-     * @var int
-     * @Assert\Choice(callback="useDisabled")
+     * @var bool|null
      */
-    public $disabled = 0;
+    private $disabled = 0;
 
     /**
-     * @var int
-     * @Assert\Choice(callback="useValidated")
+     * @var bool|null
      */
-    public $validated = -1;
+    private $validated = null;
 
     /**
-     * @var string
+     * @var int|null
+     */
+    private $managedBy = null;
+
+    /**
+     * @var string|null
      * @Assert\Choice(callback="useSortBy")
 
      */
-    public $sortBy = 'id';
+    private $sortBy = 'id';
 
     /**
-     * @var string
-     * @Assert\Choice(callback="useOrder")
-     * @Assert\NotBlank
+     * @var string|null
+     * @Assert\Choice(callback="useOrder", message="Order should be ASC or DESC")
      */
-    public $order = 'DESC';
+    private $order = 'DESC';
 
-    public static function useDisabled(): array
-    {
-        return array_values(self::DISABLED);
-    }
 
-    public static function useValidated(): array
-    {
-        return array_values(self::VALIDATED);
-    }
 
     public static function useSortBy(): array
     {
@@ -76,5 +68,79 @@ class SharableSearch
     public static function useOrder(): array
     {
         return array_values(self::ORDER);
+    }
+
+
+
+    public function getQuery(): ?string
+    {
+        return $this->query;
+    }
+
+    public function setQuery(?string $query): self
+    {
+        $this->query = $query;
+
+        return $this;
+    }
+
+    public function getDisabled(): ?bool
+    {
+        return $this->disabled;
+    }
+
+    public function setDisabled(?bool $disabled): self
+    {
+        $this->disabled = $disabled;
+
+        return $this;
+    }
+    
+    public function getValidated(): ?bool
+    {
+        return $this->validated;
+    }
+
+    public function setValidated(?bool $validated): self
+    {
+        $this->validated = $validated;
+
+        return $this;
+    }
+    
+    public function getManagedBy(): ?int
+    {
+        return $this->managedBy;
+    }
+
+    public function setManagedBy(?int $managedBy): self
+    {
+        $this->managedBy = $managedBy;
+
+        return $this;
+    }
+    
+    public function getSortBy(): ?string
+    {
+        return $this->sortBy;
+    }
+
+    public function setSortBy(?string $sortBy): self
+    {
+        $this->sortBy = $sortBy;
+
+        return $this;
+    }
+    
+    public function getOrder(): ?string
+    {
+        return $this->order;
+    }
+
+    public function setOrder(?string $order): self
+    {
+        $this->order = $order;
+
+        return $this;
     }
 }

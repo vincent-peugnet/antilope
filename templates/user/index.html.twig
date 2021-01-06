@@ -12,7 +12,12 @@
     <div class="card-header">
 
         <div class="card-title">
-            <h3>{{ user.username }}</h3>
+            <h5>
+            {{ user.username }}
+            <span class="badge badge-warning">{{ user.userClass.name }}</span>
+            <span class="badge badge-light">{{ user.shareScore }}</span>
+
+            </h5>
         </div>
     </div>
 

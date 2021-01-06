@@ -27,7 +27,7 @@
 
 
     <div class="card{{ sharable in validatedSharables ? ' border-success' }} mb-3">
-        <div class="card-header">
+        <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="card-title">
         {{ sharable.name }}
         {% if sharable.validations|length > 0 %}
@@ -43,20 +43,20 @@
         <span title="this sharable is disabled" class="badge badge-dark">disabled</span>
         {% endif %}
         </h5>
-        
-        </div>
+        <small>created {{ sharable.createdAt|ago }}</small>
+    </div>
 
 
-        <div class="card-body">
+    <div class="card-body">
 
 
         
         <p class="card-subtitle mb-2 text-muted">{{ sharable.description }}</p>
         <a class="btn btn-primary" href="{{ path('sharable_show', {id: sharable.id}) }}">details</a>
 
-        </div>
-
     </div>
+
+</div>
 
 
 

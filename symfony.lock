@@ -112,6 +112,9 @@
     "erusev/parsedown": {
         "version": "1.7.4"
     },
+    "knplabs/knp-time-bundle": {
+        "version": "v1.14.0"
+    },
     "monolog/monolog": {
         "version": "2.2.0"
     },
