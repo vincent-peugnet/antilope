@@ -108,6 +108,8 @@
                 {% endfor %}
                 </ul>
 
+                {% if is_granted('edit', user) and is_granted('create', sharable) %}<a class="btn btn-success btn-block mb-3" href="{{ path('sharable_new') }}">create new sharable</a> {% endif %}
+
             </div>
         </div>
 

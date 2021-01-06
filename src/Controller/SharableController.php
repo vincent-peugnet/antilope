@@ -12,6 +12,9 @@ use App\Form\SharableType;
 use App\Form\ValidationType;
 use App\Repository\SharableRepository;
 use App\Repository\UserClassRepository;
+use App\Repository\UserRepository;
+use App\Security\Voter\SharableVoter;
+use App\Security\Voter\UserVoter;
 use App\Service\LevelUp;
 use App\Service\SharePoints;
 use DateTime;
@@ -24,7 +27,7 @@ class SharableController extends AbstractController
     /**
      * @Route("/sharable", name="sharable")
      */
-    public function index(Request $request, SharableRepository $sharableRepository, UserClassRepository $userClassRepository): Response
+    public function index(Request $request, SharableRepository $sharableRepository, UserClassRepository $userClassRepository, UserRepository $userRepository): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -34,13 +37,32 @@ class SharableController extends AbstractController
 
         $form = $this->createForm(SharableSearchType::class, $search);
         $form->handleRequest($request);
+        /** @var SharableSearch $search */
         $search = $form->getData();
+
+
+
+        if ($search->getManagedBy()) {
+            $manager = $userRepository->find($search->getManagedBy());
+            if ($manager) {
+                $granted = $this->isGranted(UserVoter::VIEW_SHARABLES, $manager);
+            } else {
+                $granted = true;
+            }
+        } else {
+            $granted = true;
+        }
+
+        if ($granted) {
+            $sharables = $sharableRepository->getFilteredSharables($search, $visibleBy, $user);
+        } else {
+            $sharables = [];
+        }
+
 
         $validatedSharables = $user->getValidations()->map(function (Validation $validation) {
             return $validation->getSharable();
         });
-
-        $sharables = $sharableRepository->getFilteredSharables($search, $visibleBy, $user);
 
         return $this->render('sharable/index.html.twig', [
             'sharables' => $sharables,
@@ -56,7 +78,7 @@ class SharableController extends AbstractController
      */
     public function show(Sharable $sharable)
     {
-        $this->denyAccessUnlessGranted('view', $sharable);
+        $this->denyAccessUnlessGranted(SharableVoter::VIEW, $sharable);
 
         return $this->render('sharable/show.html.twig', [
             'sharable' => $sharable,

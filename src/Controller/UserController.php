@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Sharable;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Service\LevelUp;
@@ -39,6 +40,7 @@ class UserController extends AbstractController
 
         return $this->render('user/show.html.twig', [
             'user' => $user,
+            'sharable' => new Sharable(),
         ]);
     }
 
