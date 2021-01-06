@@ -34,20 +34,26 @@ class SharableRepository extends ServiceEntityRepository
      * 
      * @param int $offset
      * @param UserClass[] $visibleBy Collection of UserClass
+     * @param Sharable[] $validated Array of sharables validated by the user
      * @param User the actual user
      */
-    public function getFilteredSharables(SharableSearch $search, $visibleBy, User $user)
+    public function getFilteredSharables(SharableSearch $search, $visibleBy, $validated, User $user)
     {
         $visibleByIds = array_map(function (UserClass $userClass)
         {
             return $userClass->getId();
         }, $visibleBy);
 
+        $validatedIds = $validated->map(function (Sharable $sharable)
+        {
+            return $sharable->getId();
+        });
+
         $query = $this->createQueryBuilder('s');
 
         if ($user->getUserClass()->getAccess()) {
             $query->where(
-                $query->expr()->In('s.visibleBy', $visibleByIds)
+                $query->expr()->in('s.visibleBy', $visibleByIds)
             )
             ->orWhere(
                 $query->expr()->isNull('s.visibleBy')
@@ -68,6 +74,20 @@ class SharableRepository extends ServiceEntityRepository
             $query = $query
                 ->andWhere('s.disabled = :d')
                 ->setParameter('d', $search->disabled);
+        }
+
+        if ($search->validated !== -1) {
+            if ($search->validated === 1) {
+                $query = $query
+                ->andWhere(
+                    $query->expr()->In('s.id', $validatedIds)
+                );
+            } elseif ($search->validated === 0) {
+                $query = $query
+                ->andWhere(
+                    $query->expr()->notIn('s.id', $validatedIds)
+                );
+            }
         }
 
         $result = $query->orderBy('s.' .$search->sortBy, $search->order)

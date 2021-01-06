@@ -27,6 +27,8 @@ class SharableController extends AbstractController
      */
     public function index(Request $request, SharableRepository $sharableRepository, UserClassRepository $userClassRepository): Response
     {
+        $validatedSharables = [];
+        $sharables = [];
         /** @var User $user */
         $user = $this->getUser();
         $visibleBy = $userClassRepository->findLowerthan($user->getUserClass());
@@ -37,14 +39,15 @@ class SharableController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $search = $form->getData();
+
+
+            $validatedSharables = $user->getValidations()->map(function (Validation $validation)
+            {
+                return $validation->getSharable();
+            });
+
+            $sharables = $sharableRepository->getFilteredSharables($search, $visibleBy, $validatedSharables, $user);
         }
-
-        $validatedSharables = $user->getValidations()->map(function (Validation $validation)
-        {
-            return $validation->getSharable();
-        });
-
-        $sharables = $sharableRepository->getFilteredSharables($search, $visibleBy, $user);
 
         return $this->render('sharable/index.html.twig', [
             'sharables' => $sharables,

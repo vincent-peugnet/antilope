@@ -22,25 +22,16 @@ class SharableSearchType extends AbstractType
                 'required' => false,
             ])
             ->add('disabled', ChoiceType::class, [
-                'choices' => [
-                    'only disabled' => 1,
-                    'hide disabled' => 0,
-                    'show all' => -1,
-                ],
+                'choices' => SharableSearch::DISABLED
+            ])
+            ->add('validated', ChoiceType::class, [
+                'choices' => SharableSearch::VALIDATED
             ])
             ->add('sortBy', ChoiceType::class, [
-                'choices' => [
-                    'id' => 'id',
-                    'createdAt' => 'createdAt',
-                    'name' => 'name',
-                    'lastEditedAt' => 'lastEditedAt',
-                ]
+                'choices' => SharableSearch::SORT_BY
             ])
             ->add('order', ChoiceType::class, [
-                'choices' => [
-                    'ASC' => 'ASC',
-                    'DESC' => 'DESC',
-                ]
+                'choices' => SharableSearch::ORDER
             ])
             ->add('search', SubmitType::class)
         ;
