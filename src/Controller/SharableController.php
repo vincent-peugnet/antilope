@@ -15,6 +15,7 @@ use App\Form\ValidationType;
 use App\Repository\SharableRepository;
 use App\Repository\UserClassRepository;
 use App\Repository\UserRepository;
+use App\Repository\ValidationRepository;
 use App\Security\Voter\SharableVoter;
 use App\Security\Voter\UserVoter;
 use App\Service\LevelUp;
@@ -197,6 +198,19 @@ class SharableController extends AbstractController
         return $this->render('sharable/validate.html.twig', [
             'sharable' => $sharable,
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/sharable/{id}/validation", name="sharable_validation", requirements={"id"="\d+"})
+     */
+    public function validation(Sharable $sharable, ValidationRepository $repository): Response
+    {
+        $validations = $repository->findBy(['sharable' => $sharable->getId()], ['id' => 'DESC']);
+
+        return $this->render('sharable/validation.html.twig', [
+            'sharable' => $sharable,
+            'validations' => $validations,
         ]);
     }
 

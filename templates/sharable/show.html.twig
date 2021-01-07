@@ -18,19 +18,19 @@
 
     <h1>
     {{ sharable.name }}
+
+    </h1>
+
+    <p>{{ sharable.description }}</p>
+
+    <div class="btn-group mb-3">
+            
         {% if is_granted('edit', sharable) %}
         <a class="btn btn-primary" href="{{ path('sharable_edit', {id: sharable.id}) }}">edit</a>
         {% endif %}
         {% if is_granted('validate', sharable) %}
         <a class="btn btn-success" href="{{ path('sharable_validate', {id: sharable.id}) }}">validate</a>
         {% endif %}
-    </h1>
-
-    <p>{{ sharable.description }}</p>
-
-    <div class="btn-group">
-            
-
 
 
     </div>
@@ -48,10 +48,8 @@
                 <div class="card-title">
                     <h4>
                     Details
-                    {% if is_granted('edit', sharable) %}
-                    <a class="btn btn-primary" href="{{ path('sharable_edit', {id: sharable.id}) }}">edit details</a>
                     </h4>
-        {% endif %}
+
                 </div>
             </div>
 
@@ -124,7 +122,7 @@
             <div class="card-header">
 
                 <div class="card-title">
-                    <h4>Managed by :</h4>
+                    <h4>Managed by</h4>
                 </div>
             </div>
 
@@ -159,7 +157,7 @@
             <div class="card-header">
 
                 <div class="card-title">
-                    <h4>Validations :</h4>
+                    <h4>Validations</h4>
                 </div>
             </div>
 
@@ -170,12 +168,14 @@
 
                 <li>
 
-                <a href="{{ path('user_show', {id: validation.user.id} ) }}">{{ validation.user.username }}</a> : {{ validation.message }}
+                <a href="{{ path('user_show', {id: validation.user.id} ) }}">{{ validation.user.username }}</a> <small>{{ validation.sendAt|ago }}</small>
 
                 </li>
 
                 {% endfor %}
                 </ul>
+
+                <a href="{{ path('sharable_validation', {id: sharable.id}) }}" class="btn btn-primary">view validations</a>
 
             </div>
         </div>

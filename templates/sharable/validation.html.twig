@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}{{ sharable.name }} : Validations{% endblock %}
+
+
+
+{% block content %}
+
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
+
+{{ breadcrumbs.render([
+    {'url': url('sharable'), 'text': 'Sharables'},
+    {'url': url('sharable_show', {id: sharable.id}), 'text': sharable.name},
+    {'text': 'Validations'},
+]) }}
+
+<div class="container-fluid p-0">
+
+<h1>Validations</h1>
+
+
+{% for validation in validations %}
+
+<div class="card mt-3">
+
+
+
+
+    <div class="card-body">
+
+    <p>{{ validation.message }}</p>
+
+
+        
+    </div>
+
+    <div class="card-footer d-flex justify-content-between align-items-center">
+
+        <h5 class="card-title">By <a href="{{ path('user_show', {id: validation.user.id}) }}">{{ validation.user.username }}</a>
+        <span class="badge badge-warning">{{ validation.user.userClass.name }}</span>
+        <small>
+            {{ validation.sendAt|ago }}
+        </small>
+        </h5>
+
+
+
+        {% if is_granted('edit', sharable) %}
+            <a class="btn btn-danger disabled" href="">report</a>
+        {% endif %}
+    </div>
+</div>
+
+{% endfor %}
+
+
+
+
+</div>
+
+
+
+{% endblock %}

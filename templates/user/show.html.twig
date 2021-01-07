@@ -63,7 +63,8 @@
             <div class="card-body">
 
                 <ul>
-                    <li>User class : <a href="{{ path('userclass_show', {id: user.userclass.id}) }}">{{ user.userclass }}</a></li>
+                    <li>Joined {{ user.getCreatedAt|ago }}</li>
+                    <li>User class : <span class="badge badge-warning">{{ user.userclass }}</span></li>
                     <li>Managed sharables : {{ user.manages|length }}</li>
                     <li>Validations given : {{ user.validations|length }}</li>
                     <li>Paranoïa level : {{ user.paranoia }}</li>
@@ -71,7 +72,6 @@
                     {% if user.getInvitation %}
                     <li>Invited by : <a href="{{ path('user_show', {id: user.getInvitation.getParent.id}) }}">{{ user.getInvitation.getParent.username }}</a></li>
                     {% endif %}
-                    <li>Account creation : {{ user.getCreatedAt|format_date('short', locale='fr') }}</li>
                 </ul>
 
             </div>
@@ -101,7 +101,6 @@
 
                 <a href="{{ path('sharable_show', {id: manage.sharable.id}) }}">{{ manage.sharable.name }}</a>
                 {% if is_granted('edit', manage.sharable) %}
-                <a class="btn btn-light" href="{{ path('sharable_edit', {id: manage.sharable.id}) }}">edit</a>
                 {% endif %}
 
                 </li>
@@ -132,12 +131,11 @@
             <div class="card-body">
 
 
-                <ul>
+                <ul class="list-group list-group-flush">
                 {% for validation in user.Validations %}
 
-                <li>
+                <li class="list-group-item">
                 <a href="{{ path('sharable_show', {id: validation.sharable.id}) }}">{{ validation.sharable.name }}</a>
-                {{ validation.message }}
                 </li>
 
                 {% endfor %}
