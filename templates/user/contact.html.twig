@@ -19,25 +19,55 @@
 <a  class="btn btn-success" href="{{ path('user_contact_add', {id: user.id}) }}">add new contact</a>
 {% endif %}
 
-<ul>
-    {% for contact in userContacts %}
 
-    <li>
-        {{ contact.type }}
 
-        {% if contact.type == 'email' %}
-            <a href="mailto:{{ contact.content }}">{{ contact.content }}</a>
-        {% elseif contact.type == 'website' %}
-            <a target="_blank" href="{{ contact.content }}">{{ contact.content }}</a>
-        {% elseif contact.type == 'phone' %}
-            <a href="tel:{{ contact.content }}">{{ contact.content }}</a>
+{% for contact in userContacts %}
+
+<div class="card mt-3">
+
+    <div class="card-header d-flex justify-content-between align-items-center">
+
+        <h5 class="card-title">{{ contact.type }} : 
+
+            {% if contact.type == 'email' %}
+                <a href="mailto:{{ contact.content }}">{{ contact.content }}</a>
+            {% elseif contact.type == 'url' %}
+                <a target="_blank" href="{{ contact.content }}">{{ contact.content }}</a>
+            {% elseif contact.type == 'phone' %}
+                <a href="tel:{{ contact.content }}">{{ contact.content }}</a>
+            {% else %}
+                {{ contact.content }}
+            {% endif %}
+        </h5>
+        <small>
+            {{ contact.createdAt|ago }}
+        </small>
+
+    </div>
+
+    {% if contact.info %}
+
+    <div class="card-body">
+
+
+        {% if contact.info|length > 500 %}
+            <a class="btn btn-primary" data-toggle="collapse" href="#info_{{ contact.id }}" role="button" aria-expanded="false" aria-controls="info_{{ contact.id }}">
+                View info
+            </a>
+            <div class="collapse" id="info_{{ contact.id }}">
+                <pre>{{ contact.info }}</pre>
+            </div>
         {% else %}
-            {{ contact.content }}
+            <pre>{{ contact.info }}</pre>
         {% endif %}
-        <p>{{ contact.info }}</p>
-    </li>
 
-    {% endfor %}
-</ul>
+        
+    </div>
+
+    {% endif %}
+</div>
+
+{% endfor %}
+
 
 {% endblock %}
