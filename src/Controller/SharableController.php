@@ -8,6 +8,7 @@ use App\Entity\Sharable;
 use App\Entity\User;
 use App\Entity\Validation;
 use App\Form\ManagerType;
+use App\Form\ManageType;
 use App\Form\SharableSearchType;
 use App\Form\SharableType;
 use App\Form\ValidationType;
@@ -123,29 +124,28 @@ class SharableController extends AbstractController
     {
         $this->denyAccessUnlessGranted('edit', $sharable);
 
-        // $form = $this->createForm(ManagerType::class, null, ['managedBy' => $sharable->getManagedBy()]);
+        $form = $this->createForm(ManageType::class, null, ['managedBy' => $sharable->getManagedBy()]);
 
 
-        // $form->handleRequest($request);
-        // if ($form->isSubmitted() && $form->isValid()) {
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
             
-        //     $user = $form->getData()['managedBy'];
+            $manage = $form->getData();
+            $manage->setSharable($sharable);
 
-        //     $sharable->addManagedBy($user);
 
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($manage);
+            $entityManager->flush();
 
-        //     $entityManager = $this->getDoctrine()->getManager();
-        //     $entityManager->persist($sharable);
-        //     $entityManager->flush();
+            return $this->redirectToRoute('sharable_managers', ['id' => $sharable->getId()]);
 
-        //     return $this->redirectToRoute('sharable_managers', ['id' => $sharable->getId()]);
+        }
 
-        // }
-
-        // return $this->render('sharable/managers.html.twig', [
-        //     'sharable' => $sharable,
-        //     'form' => $form->createView(),
-        // ]);
+        return $this->render('sharable/managers.html.twig', [
+            'sharable' => $sharable,
+            'form' => $form->createView(),
+        ]);
 
     }
 

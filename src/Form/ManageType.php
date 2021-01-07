@@ -2,8 +2,10 @@
 
 namespace App\Form;
 
+use App\Entity\Manage;
 use App\Entity\Sharable;
 use App\Entity\User;
+use App\Repository\ManageRepository;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -13,41 +15,38 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ManagerType extends AbstractType
+class ManageType extends AbstractType
 {
-        /** @var UserRepository */
-        private $userRepository;
-
+    private $userRepository;
 
     public function __construct(UserRepository $userRepository) {
         $this->userRepository = $userRepository;
     }
 
-
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /** @var Collection */
-        $managedBy = $options['managedBy'];
-
-
+        /** @var Collection|Manage[] $managedBy */
+        $managedBy = $options['managedBy']->map(function (Manage $manage) {
+            return $manage->getUser();
+        });
 
         $builder
-            ->add('managedBy', EntityType::class, [
+            ->add('user', EntityType::class, [
                 'class' => User::class,
                 'choices' => $this->userRepository->findAllExcept($managedBy),
                 'required' => true,
                 'placeholder' => 'select an user',
             ])
             ->add('add_manager', SubmitType::class);
-
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(['managedBy' => new ArrayCollection()]);
-
-        $resolver->setAllowedTypes('managedBy', Collection::class);
+        $resolver->setDefaults([
+            'data_class' => Manage::class,
+            'managedBy' => new ArrayCollection(),
+        ]);
+        $resolver->setAllowedTypes('managedBy', Collection::class );
     }
 }

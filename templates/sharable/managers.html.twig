@@ -14,15 +14,37 @@
     {'text': 'set Managers'},
 ]) }}
 
-<ul>
+<h1>Managers</h1>
+
+<ul class="list-group">
 {% for manage in sharable.managedBy %}
-<li>
+<li class="list-group-item">
 {{ manage.user.username }}
+<span class="badge badge-warning">{{ manage.user.userClass.name }}</span>
+
+<span class="ml-auto"><small>added {{ manage.createdAt|ago }}</small></span>
 </li>
 {% endfor %}
 </ul>
 
-{{ form(form) }}
+
+<div class="card mt-3">
+
+    <div class="card-header">
+
+        <div class="card-title">
+            <h5>Add manager</h5>
+        </div>
+    </div>
+
+    <div class="card-body">
+
+        <div class="alert alert-warning">Beware, once you've added managers, you can't remove them.</div>
+
+        {{ form(form) }}
+
+    </div>
+</div>
 
 
 {% endblock %}
