@@ -27,6 +27,9 @@
             
         {% if is_granted('edit', sharable) %}
         <a class="btn btn-primary" href="{{ path('sharable_edit', {id: sharable.id}) }}">edit</a>
+        {% endif %}            
+        {% if is_granted('interested', sharable) %}
+        <a class="btn btn-danger" href="{{ path('sharable_interested', {id: sharable.id}) }}">interested</a>
         {% endif %}
         {% if is_granted('validate', sharable) %}
         <a class="btn btn-success" href="{{ path('sharable_validate', {id: sharable.id}) }}">validate</a>
@@ -76,37 +79,37 @@
 
             <div class="card-body">
 
-                <ul>
-                    <li>
-                        Validations : {{ sharable.validations|length }}
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item list-group-item-success">
+                        {{ sharable.validations|length }} validations
                     </li>
-                    <li>
-                        Created : {{ sharable.createdAt|format_datetime('short', 'short', locale='fr') }}
+                    <li class="list-group-item">
+                        created {{ sharable.createdAt|ago }}
                     </li>
-                    <li>
-                        Last Edited : {{ sharable.lastEditedAt|format_datetime('short', 'short', locale='fr') }}
+                    <li class="list-group-item">
+                        last Edited {{ sharable.lastEditedAt|ago }}
                     </li>
                     {% if sharable.beginAt %}
-                    <li>
-                        Begin : {{ sharable.beginAt|format_datetime('short', 'short', locale='fr') }}
+                    <li class="list-group-item">
+                        begin {{ sharable.beginAt|ago }}
                     </li>
                     {% endif %}
                     {% if sharable.endAt %}
-                    <li>
-                        End : {{ sharable.endAt|format_datetime('short', 'short', locale='fr') }}
+                    <li class="list-group-item">
+                        end {{ sharable.endAt|ago }}
                     </li>
                     {% endif %}
-                    <li>
+                    <li class="list-group-item">
                     {% if sharable.responsibility %}
-                        Managers are responsable of this
+                        managers are responsable of this
                     {% else %}
-                        Managers does not take responsibility for this
+                        managers do not take responsibility for this
                     {% endif %}
                     </li>
 
                     {% if sharable.disabled %}
-                    <li>
-                        This Sharable is <strong>disabled</strong> for now
+                    <li class="list-group-item list-group-item-dark">
+                        disabled
                     </li>
                     {% endif %}
                 </ul>

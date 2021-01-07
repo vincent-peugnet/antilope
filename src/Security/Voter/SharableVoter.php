@@ -2,6 +2,7 @@
 
 namespace App\Security\Voter;
 
+use App\Entity\Interested;
 use App\Entity\Manage;
 use App\Entity\Sharable;
 use App\Entity\User;
@@ -98,45 +99,38 @@ class SharableVoter extends Voter
 
     private function canBeInterested(Sharable $sharable, User $user): bool
     {
-        if ($sharable->getInterestedMethod() === 1) {
+        if ($this->canEdit($sharable, $user)) {
             return false;
-        } else {
-            return true;
         }
+        if (
+            !$sharable->getDisabled() &&
+            $sharable->getInterestedMethod() > 1 &&
+            $this->canView($sharable, $user) &&
+            !$this->passedEnd($sharable) &&
+            !$this->alreadyInterested($sharable, $user)
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     private function canValidate(Sharable $sharable, User $user): bool
     {
-        // if users can edit, this mean they manage the sharable
         if ($this->canEdit($sharable, $user)) {
             return false;
         }
 
-        // Check if the begin date is already passed
-        if (!empty($sharable->getBeginAt())) {
-            if ($sharable->getBeginAt() < new DateTime()) {
-                $passed = true;
-            } else {
-                $passed = false;
-            }
-        } else {
-            $passed = true;
-        }
-
-
-        if ($this->canView($sharable, $user)
-            && !$sharable->getDisabled()
-            && $passed
-            ) {
-
-             /** @var ValidationRepository  */
-            $validationRepo = $this->em->getRepository(Validation::class);
-            
-            $alreadyValidated = $validationRepo->count([
-                'user' => $user->getId(),
-                'sharable' => $sharable->getId(),
-            ]);
-            if (!$alreadyValidated) {
+        if (
+            !$sharable->getDisabled() &&
+            $this->passedBegin($sharable) &&
+            $this->passedBegin($sharable) &&
+            !$this->alreadyValidated($sharable, $user)
+        ) {
+            if ($sharable->getInterestedMethod() === 1) {
+                return true;
+            } elseif ($this->alreadyInterested($sharable, $user)) {
                 return true;
             } else {
                 return false;
@@ -144,10 +138,48 @@ class SharableVoter extends Voter
         } else {
             return false;
         }
+
     }
 
     private function canCreate(User $user): bool
     {
         return $user->getUserClass()->getShare();
+    }
+
+
+    private function passedBegin(Sharable $sharable): bool
+    {
+        if (!empty($sharable->getBeginAt())) {
+            return ($sharable->getBeginAt() < new DateTime());
+        } else {
+            return true;
+        }
+    }
+
+    private function passedEnd(Sharable $sharable): bool
+    {
+        if (!empty($sharable->getEndAt())) {
+            return ($sharable->getEndAt() < new DateTime());
+        } else {
+            return false;
+        }
+    }
+
+    private function alreadyInterested(Sharable $sharable, User $user): bool
+    {
+        $interestedRepository = $this->em->getRepository(Interested::class);
+        return (bool) $interestedRepository->findOneBy([
+            'user' => $user->getId(),
+            'sharable' => $sharable->getId()
+        ]);
+    }
+
+    private function alreadyValidated(Sharable $sharable, User $user): bool
+    {
+        $validationRepo = $this->em->getRepository(Validation::class);
+        return (bool) $validationRepo->findOneBy([
+            'user' => $user->getId(),
+            'sharable' => $sharable->getId(),
+        ]);
     }
 }

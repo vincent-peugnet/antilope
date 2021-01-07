@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Interested;
 use App\Entity\Manage;
 use App\Entity\SharableSearch;
 use App\Entity\Sharable;
 use App\Entity\User;
 use App\Entity\Validation;
+use App\Form\InterestedType;
 use App\Form\ManagerType;
 use App\Form\ManageType;
 use App\Form\SharableSearchType;
@@ -159,10 +161,8 @@ class SharableController extends AbstractController
     {
         $this->denyAccessUnlessGranted('validate', $sharable);
 
-        $validation = new Validation();
-        $form =$this->createForm(ValidationType::class);
+        $form =$this->createForm(ValidationType::class, new Validation());
 
-        
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $validation = $form->getData();
@@ -200,6 +200,36 @@ class SharableController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+
+
+    /**
+     * @Route("/sharable/{id}/interested", name="sharable_interested", requirements={"id"="\d+"})
+     */
+    public function interested(Sharable $sharable, Request $request): Response
+    {
+        $this->denyAccessUnlessGranted(SharableVoter::INTERESTED, $sharable);
+
+        $form = $this->createForm(InterestedType::class, new Interested);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $interested = $form->getData();
+            $interested->setUser($this->getUser())
+                ->setSharable($sharable);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($interested);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('sharable_show', ['id' => $sharable->getId()]);
+        }
+
+        return $this->render('sharable/interested.html.twig', [
+            'sharable' => $sharable,
+            'form' => $form->createView(),
+        ]);
+    }
+
+
 
     /**
      * @Route("/sharable/{id}/validation", name="sharable_validation", requirements={"id"="\d+"})

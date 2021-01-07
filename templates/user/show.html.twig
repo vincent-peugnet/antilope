@@ -136,6 +136,7 @@
 
                 <li class="list-group-item">
                 <a href="{{ path('sharable_show', {id: validation.sharable.id}) }}">{{ validation.sharable.name }}</a>
+                <small>{{ validation.sendAt|ago }}</small>
                 </li>
 
                 {% endfor %}

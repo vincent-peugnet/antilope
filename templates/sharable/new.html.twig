@@ -5,10 +5,12 @@
 
 {% block content %}
 
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 
-<a href="{{ path('sharable') }}">sharables</a> > new
-
-<hr>
+{{ breadcrumbs.render([
+    {'url': url('sharable'), 'text': 'Sharables'},
+    {'text': 'Create new'},
+]) }}
 
 <h1>Create new sharable</h1>
 

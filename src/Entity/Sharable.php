@@ -126,6 +126,11 @@ class Sharable
      */
     private $interestedMethod;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Interested::class, mappedBy="sharable")
+     */
+    private $interesteds;
+
     public function __construct()
     {
         $this->managedBy = new ArrayCollection();
@@ -134,6 +139,7 @@ class Sharable
         $this->lastEditedAt = new DateTime();
         $this->responsibility = true;
         $this->interestMethod = 2;
+        $this->interesteds = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -334,6 +340,36 @@ class Sharable
     public function setInterestedMethod(int $interestedMethod): self
     {
         $this->interestedMethod = $interestedMethod;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Interested[]
+     */
+    public function getInteresteds(): Collection
+    {
+        return $this->interesteds;
+    }
+
+    public function addInterested(Interested $interested): self
+    {
+        if (!$this->interesteds->contains($interested)) {
+            $this->interesteds[] = $interested;
+            $interested->setSharable($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInterested(Interested $interested): self
+    {
+        if ($this->interesteds->removeElement($interested)) {
+            // set the owning side to null (unless already changed)
+            if ($interested->getSharable() === $this) {
+                $interested->setSharable(null);
+            }
+        }
 
         return $this;
     }
