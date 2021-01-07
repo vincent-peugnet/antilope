@@ -4,8 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Sharable;
 use App\Entity\User;
+use App\Entity\UserContact;
+use App\Form\UserContactType;
 use App\Form\UserType;
 use App\Service\LevelUp;
+use Doctrine\Common\Annotations\Annotation\Required;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -71,4 +74,49 @@ class UserController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/user/{id}/contact", name="user_contact", requirements={"id"="\d+"})
+     */
+    public function contact(User $user): Response
+    {
+        $repository = $this->getDoctrine()->getRepository(UserContact::class);
+        $userContacts = $repository->findBy(['user' => $user->getId()]);
+
+        return $this->render('user/contact.html.twig', [
+            'user' => $user,
+            'userContacts' => $userContacts,
+        ]);
+    }
+
+    /**
+     * @Route("/user/{id}/contact/add", name="user_contact_add", requirements={"id"="\d+"})
+     */
+    public function contactAdd(User $user, Request $request): Response
+    {
+        $this->denyAccessUnlessGranted('edit', $user);
+
+
+
+        $form = $this->createForm(UserContactType::class, new UserContact);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $userContact = $form->getData();
+
+            $userContact->setUser($user);
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($userContact);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('user_contact', ['id' => $user->getId()]);
+        }
+
+
+
+        return $this->render('user/contact_add.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+        ]);
+    }
 }

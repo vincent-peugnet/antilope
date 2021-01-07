@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+
+{% block content %}
+
+
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
+
+{{ breadcrumbs.render([
+    {'url': url('user'), 'text': 'Users'},
+    {'url': url('user_show', {id: user.id}), 'text': user.username},
+    {'text': 'contacts'},
+]) }}
+
+
+<h1>Contacts</h1>
+
+{% if is_granted('edit', user) %}
+<a  class="btn btn-success" href="{{ path('user_contact_add', {id: user.id}) }}">add new contact</a>
+{% endif %}
+
+<ul>
+    {% for contact in userContacts %}
+
+    <li>
+        {{ contact.type }}
+
+        {% if contact.type == 'email' %}
+            <a href="mailto:{{ contact.content }}">{{ contact.content }}</a>
+        {% elseif contact.type == 'website' %}
+            <a target="_blank" href="{{ contact.content }}">{{ contact.content }}</a>
+        {% elseif contact.type == 'phone' %}
+            <a href="tel:{{ contact.content }}">{{ contact.content }}</a>
+        {% else %}
+            {{ contact.content }}
+        {% endif %}
+        <p>{{ contact.info }}</p>
+    </li>
+
+    {% endfor %}
+</ul>
+
+{% endblock %}

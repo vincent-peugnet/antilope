@@ -106,6 +106,11 @@ class User implements UserInterface
      */
     private $manages;
 
+    /**
+     * @ORM\OneToMany(targetEntity=UserContact::class, mappedBy="user")
+     */
+    private $userContacts;
+
     public function __construct()
     {
         $this->sharables = new ArrayCollection();
@@ -115,6 +120,7 @@ class User implements UserInterface
         $this->shareScore = 0;
         $this->paranoia = 0;
         $this->manages = new ArrayCollection();
+        $this->userContacts = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -392,6 +398,36 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($manage->getUser() === $this) {
                 $manage->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UserContact[]
+     */
+    public function getUserContacts(): Collection
+    {
+        return $this->userContacts;
+    }
+
+    public function addUserContact(UserContact $userContact): self
+    {
+        if (!$this->userContacts->contains($userContact)) {
+            $this->userContacts[] = $userContact;
+            $userContact->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserContact(UserContact $userContact): self
+    {
+        if ($this->userContacts->removeElement($userContact)) {
+            // set the owning side to null (unless already changed)
+            if ($userContact->getUser() === $this) {
+                $userContact->setUser(null);
             }
         }
 
