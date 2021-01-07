@@ -1,5 +1,6 @@
 includes:
     - vendor/phpstan/phpstan-symfony/extension.neon
+    - vendor/phpstan/phpstan-symfony/rules.neon
     - vendor/phpstan/phpstan-phpunit/extension.neon
     - vendor/phpstan/phpstan-deprecation-rules/rules.neon
 
@@ -12,3 +13,4 @@ parameters:
         - vendor/*
     symfony:
         container_xml_path: var/cache/dev/App_KernelDevDebugContainer.xml
+        console_application_loader: build/console-loader.php

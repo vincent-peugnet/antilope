@@ -91,9 +91,18 @@
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
         "check": [
-            "@phpstan"
+            "@phpstan",
+            "@check-symfony"
         ],
-        "phpstan": "phpstan analyse --ansi",
+        "check-symfony": [
+            "@php bin/console --ansi lint:container",
+            "@php bin/console --ansi lint:twig",
+            "@php bin/console --ansi doctrine:schema:validate --skip-sync"
+        ],
+        "phpstan": [
+            "@php bin/console cache:warmup -q",
+            "phpstan analyse --ansi"
+        ],
         "post-install-cmd": [
             "@auto-scripts"
         ],
