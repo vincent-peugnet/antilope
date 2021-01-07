@@ -44,7 +44,7 @@ class SharableType extends AbstractType
 
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-            /** @var Sharable */
+            /** @var Sharable $sharable */
             $sharable = $event->getData();
             $form = $event->getForm();
 
@@ -63,7 +63,7 @@ class SharableType extends AbstractType
                 ]);
             }
             
-            if (!$sharable || $sharable->getId() === null) {
+            if ($sharable->getId() === null) {
                 $form->add('create', SubmitType::class);
             } else {
                 $form->add('edit', SubmitType::class);

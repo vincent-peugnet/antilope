@@ -33,7 +33,7 @@ class SharableSearch
     /**
      * @var bool|null
      */
-    private $disabled = 0;
+    private $disabled = false;
 
     /**
      * @var bool|null

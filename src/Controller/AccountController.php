@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Invitation;
+use App\Entity\User;
 use App\Form\InvitationCreateType;
 use App\Repository\InvitationRepository;
 use App\Repository\UserRepository;

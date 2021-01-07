@@ -43,7 +43,7 @@ class UserClassRepository extends ServiceEntityRepository
      * 
      * @param UserClass $userClass the user class as reference
      * 
-     * @return UserClass[] Returns an array of UserClass objects
+     * @return UserClass|null Returns an array of UserClass objects
      */
     public function findNext(UserClass $userClass): ?UserClass
     {
