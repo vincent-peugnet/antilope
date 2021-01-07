@@ -12,6 +12,10 @@ Alternatives names could be *Argali* or *Urial* as it refers to *Gazelle*, the m
 
     composer check
 
+### Run the dev server
+
+    bin/console server:start
+
 ### Generate migrations for sqlite
 
     bin/console doctrine:migrations:diff --db-configuration sqlite
