@@ -15,9 +15,9 @@
 ]) }}
 
 <ul>
-{% for user in sharable.managedBy %}
+{% for manage in sharable.managedBy %}
 <li>
-{{ user.username }}
+{{ manage.user.username }}
 </li>
 {% endfor %}
 </ul>

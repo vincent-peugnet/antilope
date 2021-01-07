@@ -12,8 +12,8 @@ class SharePoints
         $userRank = $user->getUserClass()->getRank();
         $validations = $sharable->getValidations();
         $validationCount = count($validations);
-        $managers = $sharable->getManagedBy();
-        $managerCount = count($managers);
+        $managedBy = $sharable->getManagedBy();
+        $managerCount = count($managedBy);
 
         $rankPoint = 100 * log10($userRank + 11) - 100;
         $validationRatio = ( 4 / ( $validationCount + 1 ));

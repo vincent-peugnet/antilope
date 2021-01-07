@@ -53,11 +53,11 @@ class SharableRepository extends ServiceEntityRepository
 
         // Filter Sharables by manager
         // Not working,
-        if ($search->getManagedBy() !== null) {
-                $qb->andWhere('m.id = :mid')
-                ->setParameter('mid', $search->getManagedBy());
+        // if ($search->getManagedBy() !== null) {
+        //         $qb->andWhere('m.id = :mid')
+        //         ->setParameter('mid', $search->getManagedBy());
 
-        }
+        // }
 
         // Work, but there may be a better way to do this including a lot of joins
         if ($user->getUserClass()->getAccess()) {

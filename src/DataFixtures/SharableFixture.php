@@ -22,22 +22,15 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager)
     {
-        $sharableRepo = $manager->getRepository(User::class);
-        $audrey = $sharableRepo->findOneBy(['username' => 'audrey']);
-        $guillaume = $sharableRepo->findOneBy(['username' => 'guillaume']);
-        $nicolas = $sharableRepo->findOneBy(['username' => 'nicolas']);
-        $leatine = $sharableRepo->findOneBy(['username' => 'leatine']);
-
         $userClassRepo = $manager->getRepository(UserClass::class);
         $basicUser = $userClassRepo->findOneBy(['name' => 'basic_user']);
         $elite = $userClassRepo->findOneBy(['name' => 'elite']);
 
         $sharable = new Sharable();
-        $sharable->addManagedBy($nicolas)
+        $sharable->setName('Aide sur les Thinkpads')
             ->setDisabled(false)
             ->setCreatedAt(new DateTime('2020-01-02'))
             ->setLastEditedAt(new DateTime('2020-03-02'))
-            ->setName('Aide sur les Thinkpads')
             ->setVisibleBy($basicUser)
             ->setResponsibility(true)
             ->setDescription('Je peux vous aider à trouver ou réparer des Thinkpads')
@@ -47,11 +40,10 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
         $manager->flush();
 
         $sharable = new Sharable();
-        $sharable->addManagedBy($guillaume)
+        $sharable->setName('Un microscope')
             ->setDisabled(false)
             ->setCreatedAt(new DateTime('2019-11-11'))
             ->setLastEditedAt(new DateTime('2019-11-11'))
-            ->setName('Un microscope')
             ->setResponsibility(true)
             ->setDescription('Je peux voir des trucs avec mon microscope.')
             ->setDetails('Un *petit* microsope, qui saura donner des résultats intéressants.');
@@ -59,11 +51,10 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
         $manager->flush();
 
         $sharable = new Sharable();
-        $sharable->addManagedBy($audrey)
+        $sharable->setName('Grotte scrète')
             ->setDisabled(false)
             ->setCreatedAt(new DateTime('2019-12-11'))
             ->setLastEditedAt(new DateTime('2019-12-12'))
-            ->setName('Grotte scrète')
             ->setResponsibility(true)
             ->setDescription('Cachette secrète sous la maison familiale.')
             ->setDetails('![](https://www.grottes-musee-de-saulges.com/sites/www.grottes-musee-de-saulges.com/files/styles/edito_paragraphe_1/public/thumbnails/image/margot_salle_des_troglodythes.jpg?itok=DWnszGyz)');
@@ -71,12 +62,10 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
         $manager->flush();
 
         $sharable = new Sharable();
-        $sharable->addManagedBy($nicolas)
-            ->addManagedBy($guillaume)
+        $sharable->setName('Maison de mers')
             ->setDisabled(true)
             ->setCreatedAt(new DateTime('2020-08-08'))
             ->setLastEditedAt(new DateTime('2020-09-09'))
-            ->setName('Maison de mers')
             ->setResponsibility(true)
             ->setDescription('La bonne vielle maison familiale')
             ->setDetails('- Nombreux couchages
@@ -86,11 +75,10 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
         $manager->flush();
 
         $sharable = new Sharable();
-        $sharable->addManagedBy($leatine)
+        $sharable->setName('Concert de Tendre Ael')
             ->setDisabled(false)
             ->setCreatedAt(new DateTime('2020-07-07'))
             ->setLastEditedAt(new DateTime('2020-07-08'))
-            ->setName('Concert de Tendre Ael')
             ->setResponsibility(true)
             ->setVisibleBy($elite)
             ->setDescription('Un concert très privé !')
@@ -99,10 +87,8 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
         $manager->flush();
 
         $sharable = new Sharable();
-        $sharable->addManagedBy($leatine)
-            ->addManagedBy($guillaume)
+        $sharable->setName('Un coin à champignon')
             ->setDisabled(false)
-            ->setName('Un coin à champignon')
             ->setLastEditedAt(new DateTime('2020-07-08'))
             ->setResponsibility(false)
             ->setDescription('Dans la forêt de Bernouille')

@@ -71,11 +71,6 @@ class User implements UserInterface
     private $shareScore;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Sharable::class, mappedBy="managedBy")
-     */
-    private $sharables;
-
-    /**
      * @ORM\OneToMany(targetEntity=Validation::class, mappedBy="user")
      */
     private $validations;
@@ -106,6 +101,11 @@ class User implements UserInterface
      */
     private $isVerified = false;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Manage::class, mappedBy="user")
+     */
+    private $manages;
+
     public function __construct()
     {
         $this->sharables = new ArrayCollection();
@@ -114,6 +114,7 @@ class User implements UserInterface
         $this->createdAt = new DateTime();
         $this->shareScore = 0;
         $this->paranoia = 0;
+        $this->manages = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -250,33 +251,6 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|Sharable[]
-     */
-    public function getSharables(): Collection
-    {
-        return $this->sharables;
-    }
-
-    public function addSharable(Sharable $sharable): self
-    {
-        if (!$this->sharables->contains($sharable)) {
-            $this->sharables[] = $sharable;
-            $sharable->addManagedBy($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSharable(Sharable $sharable): self
-    {
-        if ($this->sharables->removeElement($sharable)) {
-            $sharable->removeManagedBy($this);
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection|Validation[]
      */
     public function getValidations(): Collection
@@ -390,6 +364,36 @@ class User implements UserInterface
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Manage[]
+     */
+    public function getManages(): Collection
+    {
+        return $this->manages;
+    }
+
+    public function addManage(Manage $manage): self
+    {
+        if (!$this->manages->contains($manage)) {
+            $this->manages[] = $manage;
+            $manage->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeManage(Manage $manage): self
+    {
+        if ($this->manages->removeElement($manage)) {
+            // set the owning side to null (unless already changed)
+            if ($manage->getUser() === $this) {
+                $manage->setUser(null);
+            }
+        }
 
         return $this;
     }

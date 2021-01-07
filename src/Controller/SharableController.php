@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Manage;
 use App\Entity\SharableSearch;
 use App\Entity\Sharable;
 use App\Entity\User;
@@ -122,29 +123,29 @@ class SharableController extends AbstractController
     {
         $this->denyAccessUnlessGranted('edit', $sharable);
 
-        $form = $this->createForm(ManagerType::class, null, ['managedBy' => $sharable->getManagedBy()]);
+        // $form = $this->createForm(ManagerType::class, null, ['managedBy' => $sharable->getManagedBy()]);
 
 
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        // $form->handleRequest($request);
+        // if ($form->isSubmitted() && $form->isValid()) {
             
-            $user = $form->getData()['managedBy'];
+        //     $user = $form->getData()['managedBy'];
 
-            $sharable->addManagedBy($user);
+        //     $sharable->addManagedBy($user);
 
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($sharable);
-            $entityManager->flush();
+        //     $entityManager = $this->getDoctrine()->getManager();
+        //     $entityManager->persist($sharable);
+        //     $entityManager->flush();
 
-            return $this->redirectToRoute('sharable_managers', ['id' => $sharable->getId()]);
+        //     return $this->redirectToRoute('sharable_managers', ['id' => $sharable->getId()]);
 
-        }
+        // }
 
-        return $this->render('sharable/managers.html.twig', [
-            'sharable' => $sharable,
-            'form' => $form->createView(),
-        ]);
+        // return $this->render('sharable/managers.html.twig', [
+        //     'sharable' => $sharable,
+        //     'form' => $form->createView(),
+        // ]);
 
     }
 
@@ -172,7 +173,8 @@ class SharableController extends AbstractController
 
             $entityManager = $this->getDoctrine()->getManager();
 
-            foreach ($sharable->getManagedBy() as $manager) {
+            foreach ($sharable->getManagedBy() as $manage) {
+                $manager = $manage->getUser();
                 $manager->addShareScore($sharePoints);
                 $checkedManager = $levelUp->check($manager);
                 $entityManager->persist($checkedManager);
@@ -215,11 +217,15 @@ class SharableController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $sharable = $form->getData();
             
-            $sharable->addManagedBy($this->getUser());
+            $manage = new Manage();
+            $manage->setSharable($sharable)
+                ->setUser($this->getUser())
+                ->setContactable(true);
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($sharable);
-            $entityManager->flush();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($sharable);
+            $em->persist($manage);
+            $em->flush();
 
             return $this->redirectToRoute('sharable');
         }

@@ -2,6 +2,7 @@
 
 namespace App\Security\Voter;
 
+use App\Entity\Manage;
 use App\Entity\Sharable;
 use App\Entity\User;
 use App\Entity\Validation;
@@ -66,7 +67,11 @@ class SharableVoter extends Voter
 
     private function canEdit(Sharable $sharable, User $user): bool
     {
-        return $sharable->getManagedBy()->contains($user);
+        $manageRepository = $this->em->getRepository(Manage::class);
+        return (bool) $manageRepository->findOneBy([
+            'user' => $user->getId(),
+            'sharable' => $sharable->getId()
+        ]);
     }
 
     private function canView(Sharable $sharable, User $user): bool

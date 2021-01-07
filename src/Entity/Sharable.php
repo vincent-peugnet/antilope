@@ -62,11 +62,6 @@ class Sharable
     private $endAt;
 
     /**
-     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="sharables")
-     */
-    private $managedBy;
-
-    /**
      * @ORM\Column(type="boolean")
      */
     private $disabled;
@@ -107,6 +102,11 @@ class Sharable
      * @ORM\Column(type="datetime")
      */
     private $lastEditedAt;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Manage::class, mappedBy="sharable")
+     */
+    private $managedBy;
 
     public function __construct()
     {
@@ -171,30 +171,6 @@ class Sharable
     public function setEndAt(?\DateTimeInterface $endAt): self
     {
         $this->endAt = $endAt;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|User[]
-     */
-    public function getManagedBy(): Collection
-    {
-        return $this->managedBy;
-    }
-
-    public function addManagedBy(User $managedBy): self
-    {
-        if (!$this->managedBy->contains($managedBy)) {
-            $this->managedBy[] = $managedBy;
-        }
-
-        return $this;
-    }
-
-    public function removeManagedBy(User $managedBy): self
-    {
-        $this->managedBy->removeElement($managedBy);
 
         return $this;
     }
@@ -297,6 +273,36 @@ class Sharable
     public function setLastEditedAt(\DateTimeInterface $lastEditedAt): self
     {
         $this->lastEditedAt = $lastEditedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Manage[]
+     */
+    public function getManagedBy(): Collection
+    {
+        return $this->managedBy;
+    }
+
+    public function addManagedBy(Manage $managedBy): self
+    {
+        if (!$this->managedBy->contains($managedBy)) {
+            $this->managedBy[] = $managedBy;
+            $managedBy->setSharable($this);
+        }
+
+        return $this;
+    }
+
+    public function removeManagedBy(Manage $managedBy): self
+    {
+        if ($this->managedBy->removeElement($managedBy)) {
+            // set the owning side to null (unless already changed)
+            if ($managedBy->getSharable() === $this) {
+                $managedBy->setSharable(null);
+            }
+        }
 
         return $this;
     }

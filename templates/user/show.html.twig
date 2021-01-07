@@ -63,7 +63,7 @@
 
                 <ul>
                     <li>User class : <a href="{{ path('userclass_show', {id: user.userclass.id}) }}">{{ user.userclass }}</a></li>
-                    <li>Managed sharables : {{ user.sharables|length }}</li>
+                    <li>Managed sharables : {{ user.manages|length }}</li>
                     <li>Validations given : {{ user.validations|length }}</li>
                     <li>Paranoïa level : {{ user.paranoia }}</li>
                     <li>Share Score : {{ user.shareScore }}</li>
@@ -93,14 +93,14 @@
             <div class="card-body">
 
                 <ul class="list-group list-group-flush">
-                {% for sharable in user.sharables %}
+                {% for manage in user.manages %}
 
                 <li class="list-group-item">
 
 
-                <a href="{{ path('sharable_show', {id: sharable.id}) }}">{{ sharable.name }}</a>
-                {% if is_granted('edit', sharable) %}
-                <a class="btn btn-light" href="{{ path('sharable_edit', {id: sharable.id}) }}">edit</a>
+                <a href="{{ path('sharable_show', {id: manage.sharable.id}) }}">{{ manage.sharable.name }}</a>
+                {% if is_granted('edit', manage.sharable) %}
+                <a class="btn btn-light" href="{{ path('sharable_edit', {id: manage.sharable.id}) }}">edit</a>
                 {% endif %}
 
                 </li>
