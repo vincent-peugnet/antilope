@@ -1,0 +1,14 @@
+includes:
+    - vendor/phpstan/phpstan-symfony/extension.neon
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-deprecation-rules/rules.neon
+
+parameters:
+    level: 5
+    paths:
+        - src
+        - tests
+    excludes_analyse:
+        - vendor/*
+    symfony:
+        container_xml_path: var/cache/dev/App_KernelDevDebugContainer.xml
