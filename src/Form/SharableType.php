@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Sharable;
 use DateTime;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -32,7 +33,13 @@ class SharableType extends AbstractType
             ->add('visibleBy', null, [
                 'placeholder' => '',
                 'help' => 'Your sharable will be accessible from this user class',
-            ])   
+            ])
+            ->add('interestedMethod', ChoiceType::class, [
+                'label' => 'How contact infos are exchanged',
+                'choices' => Sharable::INTERESTED_OPTIONS,
+                'help' => '1: user don\'t need access any contact infos</br>2: contact infos are automaticaly exchanged</br>3: contact infos are manualy send to interested users</br>4: Only interested user contact infos are send',
+                'help_html' => true,
+            ])
         ;
 
 

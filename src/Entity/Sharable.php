@@ -15,6 +15,18 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Sharable
 {
+    const INTERESTED_OPTIONS = [
+        '1 No need' => 1,
+        '2 Automatic' => 2,
+        '3 Manual' => 3,
+        '4 Never' => 4,
+    ];
+
+    static public function interestedOptionsValues()
+    {
+        return array_values(self::INTERESTED_OPTIONS);
+    }
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -108,6 +120,12 @@ class Sharable
      */
     private $managedBy;
 
+    /**
+     * @ORM\Column(type="smallint")
+     * @Assert\Choice(callback="interestedOptionsValues")
+     */
+    private $interestedMethod;
+
     public function __construct()
     {
         $this->managedBy = new ArrayCollection();
@@ -115,6 +133,7 @@ class Sharable
         $this->createdAt = new DateTime();
         $this->lastEditedAt = new DateTime();
         $this->responsibility = true;
+        $this->interestMethod = 2;
     }
 
     public function __toString(): string
@@ -303,6 +322,18 @@ class Sharable
                 $managedBy->setSharable(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getInterestedMethod(): ?int
+    {
+        return $this->interestedMethod;
+    }
+
+    public function setInterestedMethod(int $interestedMethod): self
+    {
+        $this->interestedMethod = $interestedMethod;
 
         return $this;
     }

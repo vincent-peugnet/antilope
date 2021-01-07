@@ -18,10 +18,11 @@ class SharableVoter extends Voter
 {
     private $em;
 
-    const VIEW     = 'view';
-    const EDIT     = 'edit';
-    const VALIDATE = 'validate';
-    const CREATE   = 'create';
+    const VIEW       = 'view';
+    const EDIT       = 'edit';
+    const VALIDATE   = 'validate';
+    const CREATE     = 'create';
+    const INTERESTED = 'interested';
 
     public function __construct(EntityManagerInterface $em) {
         $this->em = $em;
@@ -31,7 +32,7 @@ class SharableVoter extends Voter
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, [self::VIEW, self::EDIT, self::VALIDATE, self::CREATE])
+        return in_array($attribute, [self::VIEW, self::EDIT, self::VALIDATE, self::CREATE, self::INTERESTED])
             && $subject instanceof \App\Entity\Sharable;
     }
 
@@ -59,6 +60,9 @@ class SharableVoter extends Voter
                 break;
             case self::CREATE:
                 return $this->canCreate($user);
+                break;
+            case self::INTERESTED:
+                return $this->canBeInterested($sharable, $user);
                 break;
         }
 
@@ -92,6 +96,15 @@ class SharableVoter extends Voter
         return false;
     }
 
+    private function canBeInterested(Sharable $sharable, User $user): bool
+    {
+        if ($sharable->getInterestedMethod() === 1) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     private function canValidate(Sharable $sharable, User $user): bool
     {
         // if users can edit, this mean they manage the sharable
@@ -115,9 +128,6 @@ class SharableVoter extends Voter
             && !$sharable->getDisabled()
             && $passed
             ) {
-            /**
-             * @todo Check if the user already validated this sharable
-             */
 
              /** @var ValidationRepository  */
             $validationRepo = $this->em->getRepository(Validation::class);
@@ -125,7 +135,7 @@ class SharableVoter extends Voter
             $alreadyValidated = $validationRepo->count([
                 'user' => $user->getId(),
                 'sharable' => $sharable->getId(),
-                ]);
+            ]);
             if (!$alreadyValidated) {
                 return true;
             } else {
