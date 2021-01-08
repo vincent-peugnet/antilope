@@ -61,10 +61,10 @@ class SharableRepository extends ServiceEntityRepository
         if ($search->getManagedBy() !== null) {
             $userRepo = $this->getEntityManager()->getRepository(User::class);
             $manager = $userRepo->find($search->getManagedBy());
+
             if ($this->security->isGranted(UserVoter::VIEW_SHARABLES, $manager)) {
-                $qb->andWhere(
-                    $qb->expr()->in('m.user', $manager->getId())
-                );
+                $qb->andWhere('m.user = :mid')
+                ->setParameter('mid', $manager->getId());
             }
 
         }
@@ -72,13 +72,14 @@ class SharableRepository extends ServiceEntityRepository
         // Work, but there may be a better way to do this including a lot of joins
         if ($user->getUserClass()->getAccess()) {
             $qb->andwhere(
-                $qb->expr()->in('s.visibleBy', $visibleByIds)
-            )
-            ->orWhere(
-                $qb->expr()->isNull('s.visibleBy')
+                $qb->expr()->orX(
+                    $qb->expr()->in('s.visibleBy', $visibleByIds),
+                    $qb->expr()->isNull('s.visibleBy')
+                )
             );
+
         } else {
-            $qb->where(
+            $qb->andWhere(
                 $qb->expr()->in('s.visibleBy', $visibleByIds)
             );
         }
