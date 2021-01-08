@@ -50,6 +50,10 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.4",
+        "phpstan/phpstan": "^0.12.65",
+        "phpstan/phpstan-deprecation-rules": "^0.12.6",
+        "phpstan/phpstan-phpunit": "^0.12.17",
+        "phpstan/phpstan-symfony": "^0.12.12",
         "symfony/browser-kit": "^5.2",
         "symfony/css-selector": "^5.2",
         "symfony/debug-bundle": "^5.2",
@@ -86,6 +90,19 @@
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
+        "check": [
+            "@phpstan",
+            "@check-symfony"
+        ],
+        "check-symfony": [
+            "@php bin/console --ansi lint:container",
+            "@php bin/console --ansi lint:twig",
+            "@php bin/console --ansi doctrine:schema:validate --skip-sync"
+        ],
+        "phpstan": [
+            "@php bin/console cache:warmup -q",
+            "phpstan analyse --ansi"
+        ],
         "post-install-cmd": [
             "@auto-scripts"
         ],
