@@ -11,12 +11,14 @@ class UserVoter extends Voter
 {
     const PARANOIA = [
         0 => [],
-        1 => [self::VIEW_VALIDATIONS],
-        2 => [self::VIEW_VALIDATIONS, self::VIEW_SHARABLES],
-        3 => [self::VIEW_VALIDATIONS, self::VIEW_SHARABLES, self::VIEW_STATS],
+        1 => [self::VIEW_INTERESTEDS],
+        2 => [self::VIEW_INTERESTEDS, self::VIEW_VALIDATIONS],
+        3 => [self::VIEW_INTERESTEDS, self::VIEW_VALIDATIONS, self::VIEW_SHARABLES],
+        4 => [self::VIEW_INTERESTEDS, self::VIEW_VALIDATIONS, self::VIEW_SHARABLES, self::VIEW_STATS],
     ];
 
     const VIEW_STATS = 'view_stats';
+    const VIEW_INTERESTEDS = 'view_interesteds';
     const VIEW_VALIDATIONS = 'view_validations';
     const VIEW_SHARABLES = 'view_sharables';
     const VIEW     = 'view';
@@ -34,7 +36,14 @@ class UserVoter extends Voter
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, [self::EDIT, self::VIEW, self::VIEW_VALIDATIONS, self::VIEW_SHARABLES, self::VIEW_STATS])
+        return in_array($attribute, [
+            self::EDIT,
+            self::VIEW,
+            self::VIEW_VALIDATIONS,
+            self::VIEW_SHARABLES,
+            self::VIEW_STATS,
+            self::VIEW_INTERESTEDS,
+            ])
             && $subject instanceof \App\Entity\User;
     }
 
@@ -56,6 +65,8 @@ class UserVoter extends Voter
                 return $this->canEdit($user, $userProfile);
             case self::VIEW:
                 return true;
+            case self::VIEW_INTERESTEDS:
+                return $this->canView($user, $userProfile, self::VIEW_INTERESTEDS);
             case self::VIEW_VALIDATIONS:
                 return $this->canView($user, $userProfile, self::VIEW_VALIDATIONS);
             case self::VIEW_SHARABLES:

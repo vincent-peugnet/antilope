@@ -22,18 +22,4 @@ class UserClassController extends AbstractController
             'userClasses' => $userClasses,
         ]);
     }
-
-
-    /**
-     * @Route("/userclass/{id}", name="userclass_show")
-     */
-    public function show(UserClass $userClass, UserRepository $userRepository): Response
-    {
-        $users = $userRepository->findByUserClass($userClass);
-        return $this->render('user_class/show.html.twig', [
-            'userClass' => $userClass,
-            'users' => $users,
-        ]);
-    }
-
 }

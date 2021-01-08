@@ -115,6 +115,9 @@
     "knplabs/knp-time-bundle": {
         "version": "v1.14.0"
     },
+    "lorenzo/pinky": {
+        "version": "1.0.5"
+    },
     "monolog/monolog": {
         "version": "2.2.0"
     },
@@ -563,8 +566,17 @@
     "symfonycasts/verify-email-bundle": {
         "version": "v1.1.1"
     },
+    "tijsverkoyen/css-to-inline-styles": {
+        "version": "2.2.3"
+    },
+    "twig/cssinliner-extra": {
+        "version": "v3.2.1"
+    },
     "twig/extra-bundle": {
         "version": "v3.1.1"
+    },
+    "twig/inky-extra": {
+        "version": "v3.2.1"
     },
     "twig/intl-extra": {
         "version": "v3.1.1"

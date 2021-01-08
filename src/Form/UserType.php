@@ -24,12 +24,14 @@ class UserType extends AbstractType
                 'help' => 'You can use Markdown to describe yourself.',
             ])
             ->add('paranoia', ChoiceType::class, [
+                'label' => 'Paranoïa level',
                 'choice_loader' => new CallbackChoiceLoader(
                     function() use ($user) {
                         return array_slice(UserVoter::getParanoiaLevels(), 0, $user->getUserClass()->getMaxParanoia() + 1);
                     }
                 ),
-                'help' => '0 : all users can see your profile, 1 : hide validations, 2 : hide validations, sharables, 3 : hide validations, sharables, stats',
+                'help' => '0 all users can see your profile</br>1 hide interested</br>2 hide interested, validations</br>3 hide interested, validations, sharables</br>4 hide interested, validations, sharables, stats',
+                'help_html' => true,
             ])
             ->add('edit', SubmitType::class)
         ;

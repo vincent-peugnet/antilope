@@ -147,6 +147,36 @@
 
         {% endif %}
 
+        {% if is_granted('view_interesteds', user) %}
+
+        <div class="card mb-3">
+
+            <div class="card-header">
+
+                <div class="card-title">
+                    <h3>Interested in</h3>
+                </div>
+            </div>
+
+            <div class="card-body">
+
+
+                <ul class="list-group list-group-flush">
+                {% for interested in user.interesteds %}
+
+                <li class="list-group-item">
+                <a href="{{ path('sharable_show', {id: interested.sharable.id}) }}">{{ interested.sharable.name }}</a>
+                <small>{{ interested.createdAt|ago }}</small>
+                </li>
+
+                {% endfor %}
+                </ul>
+
+            </div>
+        </div>
+
+        {% endif %}
+
 
 
     </div>
