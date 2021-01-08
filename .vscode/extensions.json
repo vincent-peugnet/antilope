@@ -3,6 +3,7 @@
         "felixfbecker.php-debug",
         "bmewburn.vscode-intelephense-client",
         "levacic.vscode-phpstan",
-        "st-pham.php-refactor-tool"
+        "st-pham.php-refactor-tool",
+        "wongjn.php-sniffer"
     ]
 }

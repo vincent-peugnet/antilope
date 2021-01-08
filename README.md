@@ -12,6 +12,10 @@ Alternatives names could be *Argali* or *Urial* as it refers to *Gazelle*, the m
 
     composer check
 
+### Fix basic check errors
+
+    composer fix
+
 ### Run the dev server
 
     bin/console server:start
