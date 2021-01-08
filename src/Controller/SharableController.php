@@ -14,6 +14,7 @@ use App\Form\ManageType;
 use App\Form\SharableSearchType;
 use App\Form\SharableType;
 use App\Form\ValidationType;
+use App\Repository\InterestedRepository;
 use App\Repository\SharableRepository;
 use App\Repository\UserClassRepository;
 use App\Repository\UserRepository;
@@ -194,11 +195,25 @@ class SharableController extends AbstractController
 
 
     /**
-     * @Route("/sharable/{id}/interested", name="sharable_interested", requirements={"id"="\d+"})
+     * @Route("/sharable/{id}/validation", name="sharable_validation", requirements={"id"="\d+"})
      */
-    public function interested(Sharable $sharable, Request $request): Response
+    public function validation(Sharable $sharable, ValidationRepository $repository): Response
     {
-        $this->denyAccessUnlessGranted(SharableVoter::INTERESTED, $sharable);
+        $validations = $repository->findBy(['sharable' => $sharable->getId()], ['id' => 'DESC']);
+
+        return $this->render('sharable/validation.html.twig', [
+            'sharable' => $sharable,
+            'validations' => $validations,
+        ]);
+    }
+
+
+    /**
+     * @Route("/sharable/{id}/interest", name="sharable_interest", requirements={"id"="\d+"})
+     */
+    public function interest(Sharable $sharable, Request $request): Response
+    {
+        $this->denyAccessUnlessGranted(SharableVoter::INTEREST, $sharable);
 
         $form = $this->createForm(InterestedType::class, new Interested);
         $form->handleRequest($request);
@@ -213,27 +228,27 @@ class SharableController extends AbstractController
             return $this->redirectToRoute('sharable_show', ['id' => $sharable->getId()]);
         }
 
-        return $this->render('sharable/interested.html.twig', [
+        return $this->render('sharable/interest.html.twig', [
             'sharable' => $sharable,
             'form' => $form->createView(),
         ]);
     }
 
 
-
     /**
-     * @Route("/sharable/{id}/validation", name="sharable_validation", requirements={"id"="\d+"})
+     * @Route("/sharable/{id}/interested", name="sharable_interested", requirements={"id"="\d+"})
      */
-    public function validation(Sharable $sharable, ValidationRepository $repository): Response
+    public function interested(Sharable $sharable, Request $request, InterestedRepository $interestedRepository): Response
     {
-        $validations = $repository->findBy(['sharable' => $sharable->getId()], ['id' => 'DESC']);
+        $this->denyAccessUnlessGranted(SharableVoter::INTERESTED, $sharable);
 
-        return $this->render('sharable/validation.html.twig', [
+        $interesteds = $interestedRepository->findBy(['sharable' => $sharable->getId()], ['id' => 'DESC']);
+
+        return $this->render('sharable/interested.html.twig', [
             'sharable' => $sharable,
-            'validations' => $validations,
+            'interesteds' => $interesteds,
         ]);
     }
-
 
 
     /**

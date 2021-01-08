@@ -23,6 +23,7 @@ class SharableVoter extends Voter
     const EDIT       = 'edit';
     const VALIDATE   = 'validate';
     const CREATE     = 'create';
+    const INTEREST   = 'interest';
     const INTERESTED = 'interested';
 
     public function __construct(EntityManagerInterface $em) {
@@ -33,7 +34,7 @@ class SharableVoter extends Voter
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, [self::VIEW, self::EDIT, self::VALIDATE, self::CREATE, self::INTERESTED])
+        return in_array($attribute, [self::VIEW, self::EDIT, self::VALIDATE, self::CREATE, self::INTEREST, self::INTERESTED])
             && $subject instanceof \App\Entity\Sharable;
     }
 
@@ -59,8 +60,10 @@ class SharableVoter extends Voter
                 return $this->canValidate($sharable, $user);
             case self::CREATE:
                 return $this->canCreate($user);
-            case self::INTERESTED:
+            case self::INTEREST:
                 return $this->canBeInterested($sharable, $user);
+            case self::INTERESTED:
+                return $this->canViewInterested($sharable, $user);
         }
 
         return false;
@@ -110,6 +113,11 @@ class SharableVoter extends Voter
             return false;
         }
 
+    }
+
+    private function canViewInterested(Sharable $sharable, User $user): bool
+    {
+        return ($this->canEdit($sharable, $user) && $sharable->getInterestedMethod() > 1);
     }
 
     private function canValidate(Sharable $sharable, User $user): bool

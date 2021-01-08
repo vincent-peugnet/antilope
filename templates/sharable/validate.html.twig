@@ -14,12 +14,29 @@
     {'url': url('sharable_show', {id: sharable.id}), 'text': sharable.name},
     {'text': 'Validate'},
 ]) }}
-<h1>{{ sharable.name }}</h1>
+<h1>Validation</h1>
 
-<h2>Validation</h2>
+    <div class="card mb-3">
 
-{{ form(form) }}
+        <div class="card-header">
+
+            <div class="card-title">
+                <h4>
+                You can add a little message with your validation
+                </h4>
+
+            </div>
+        </div>
+
+        <div class="card-body">
+        
+            {{ form(form) }}
+
+        </div>
+    </div>
 
 
+
+</div>
 
 {% endblock %}

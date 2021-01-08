@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}{{ sharable.name }}{% endblock %}
+
+
+
+{% block content %}
+
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
+
+{{ breadcrumbs.render([
+    {'url': url('sharable'), 'text': 'Sharables'},
+    {'url': url('sharable_show', {id: sharable.id}), 'text': sharable.name},
+    {'text': 'Interested'},
+]) }}
+<h1>{{ sharable.name }}</h1>
+
+<h2>Interested</h2>
+
+<div class="alert alert-warning">
+By clicking on this button, you automatically send you contacts informations to the sharable's managers.
+</div>
+
+{{ form(form) }}
+
+
+
+{% endblock %}

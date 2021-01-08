@@ -27,9 +27,12 @@
             
         {% if is_granted('edit', sharable) %}
         <a class="btn btn-primary" href="{{ path('sharable_edit', {id: sharable.id}) }}">edit</a>
-        {% endif %}            
+        {% endif %}
         {% if is_granted('interested', sharable) %}
-        <a class="btn btn-danger" href="{{ path('sharable_interested', {id: sharable.id}) }}">interested</a>
+        <a class="btn btn-primary" href="{{ path('sharable_interested', {id: sharable.id}) }}">see interested</a>
+        {% endif %}  
+        {% if is_granted('interest', sharable) %}
+        <a class="btn btn-danger" href="{{ path('sharable_interest', {id: sharable.id}) }}">interested</a>
         {% endif %}
         {% if is_granted('validate', sharable) %}
         <a class="btn btn-success" href="{{ path('sharable_validate', {id: sharable.id}) }}">validate</a>
