@@ -138,7 +138,7 @@ class Sharable
         $this->createdAt = new DateTime();
         $this->lastEditedAt = new DateTime();
         $this->responsibility = true;
-        $this->interestMethod = 2;
+        $this->interestedMethod = 2;
         $this->interesteds = new ArrayCollection();
     }
 
