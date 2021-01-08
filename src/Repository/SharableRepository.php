@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Entity\UserClass;
 use App\Security\Voter\UserVoter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
@@ -121,6 +122,23 @@ class SharableRepository extends ServiceEntityRepository
     }
 
 
+    /**
+     * @return Sharable[]|Collection
+     */
+    public function findByManagerAndInterested(User $manager, User $interested): Collection
+    {
+        $sharables = $this->createQueryBuilder('s')
+            ->leftJoin('s.managedBy', 'm')
+            ->andWhere('m.user = :mid')
+            ->setParameter('mid', $manager->getId())
+            ->leftJoin('s.interesteds', 'i')
+            ->andWhere('i.user = :iid')
+            ->setParameter('iid', $interested->getId())
+            ->getQuery()
+            ->getResult()
+        ;
+        return new ArrayCollection($sharables);
+    }
 
     // /**
     //  * @return Sharable[] Returns an array of Sharable objects

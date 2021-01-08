@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Entity\UserContact;
 use App\Form\UserContactType;
 use App\Form\UserType;
+use App\Security\Voter\UserVoter;
 use App\Service\LevelUp;
 use Doctrine\Common\Annotations\Annotation\Required;
 use Doctrine\ORM\EntityManager;
@@ -79,6 +80,8 @@ class UserController extends AbstractController
      */
     public function contact(User $user): Response
     {
+        $this->denyAccessUnlessGranted(UserVoter::CONTACT, $user);
+
         $repository = $this->getDoctrine()->getRepository(UserContact::class);
         $userContacts = $repository->findBy(['user' => $user->getId()]);
 

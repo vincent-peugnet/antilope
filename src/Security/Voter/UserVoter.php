@@ -2,7 +2,11 @@
 
 namespace App\Security\Voter;
 
+use App\Entity\Interested;
+use App\Entity\Sharable;
 use App\Entity\User;
+use App\Repository\SharableRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -23,6 +27,15 @@ class UserVoter extends Voter
     const VIEW_SHARABLES = 'view_sharables';
     const VIEW     = 'view';
     const EDIT     = 'edit';
+    const CONTACT = 'contact';
+
+    /** @var EntityManagerInterface $em */
+    private $em;
+
+    public function __construct(EntityManagerInterface $em) {
+        $this->em = $em;
+    }
+
 
     /**
      * Return all the paranoïa levels listed in the PARANOIA constant
@@ -43,6 +56,7 @@ class UserVoter extends Voter
             self::VIEW_SHARABLES,
             self::VIEW_STATS,
             self::VIEW_INTERESTEDS,
+            self::CONTACT,
             ])
             && $subject instanceof \App\Entity\User;
     }
@@ -73,6 +87,8 @@ class UserVoter extends Voter
                 return $this->canView($user, $userProfile, self::VIEW_SHARABLES);
             case self::VIEW_STATS:
                 return $this->canView($user, $userProfile, self::VIEW_STATS);
+            case self::CONTACT:
+                return $this->canContact($user, $userProfile);
         }
 
         return false;
@@ -91,6 +107,24 @@ class UserVoter extends Voter
             return false;
         } else {
             return true;
+        }
+    }
+
+    private function canContact(User $user, User $userProfile): bool
+    {
+        if ($this->canEdit($user, $userProfile)) {
+            return true;
+        }
+        if ($user->getManages()->count() > 0 && $userProfile->getInteresteds()->count() > 0) {
+            $sharableRepo = $this->em->getRepository(Sharable::class);
+            assert($sharableRepo instanceof SharableRepository);
+            $sharables = $sharableRepo->findByManagerAndInterested($user, $userProfile);
+            $filteredSharables = $sharables->filter(function (Sharable $sharable) {
+                return $sharable->getInterestedMethod() > 1;
+            });
+            return !$filteredSharables->isEmpty();
+        } else {
+            return false;
         }
     }
 }

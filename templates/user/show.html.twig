@@ -14,7 +14,9 @@
 
 <h1>{{ user.username }}</h1>
 
+{% if is_granted('contact', user) %}
 <a class="btn btn-primary" href="{{ path('user_contact', {id: user.id}) }}">contacts</a>
+{% endif %}
 
 {% if is_granted('edit', user) %}
 <a class="btn btn-primary" href="{{ path('user_edit', {id: user.id}) }}">edit</a>
