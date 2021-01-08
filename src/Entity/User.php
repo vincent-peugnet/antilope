@@ -118,7 +118,6 @@ class User implements UserInterface
 
     public function __construct()
     {
-        $this->sharables = new ArrayCollection();
         $this->validations = new ArrayCollection();
         $this->invitations = new ArrayCollection();
         $this->createdAt = new DateTime();
@@ -196,6 +195,7 @@ class User implements UserInterface
     public function getSalt()
     {
         // not needed when using the "bcrypt" algorithm in security.yaml
+        return null;
     }
 
     /**
@@ -207,7 +207,7 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }

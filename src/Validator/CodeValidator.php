@@ -23,7 +23,7 @@ class CodeValidator extends ConstraintValidator
 
     public function validate($value, Constraint $constraint)
     {
-        /* @var $constraint \App\Validator\Code */
+        assert($constraint instanceof Code);
 
         if (null === $value || '' === $value) {
             return;

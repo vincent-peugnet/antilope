@@ -39,6 +39,7 @@ class SharableVoter extends Voter
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token)
     {
+        /** @var User $user */
         $user = $token->getUser();
         // if the user is anonymous, do not grant access
         if (!$user instanceof UserInterface) {
@@ -52,19 +53,14 @@ class SharableVoter extends Voter
         switch ($attribute) {
             case self::EDIT:
                 return $this->canEdit($sharable, $user);
-                break;
             case self::VIEW:
                 return $this->canView($sharable, $user);
-                break;
             case self::VALIDATE:
                 return $this->canValidate($sharable, $user);
-                break;
             case self::CREATE:
                 return $this->canCreate($user);
-                break;
             case self::INTERESTED:
                 return $this->canBeInterested($sharable, $user);
-                break;
         }
 
         return false;

@@ -40,6 +40,7 @@ class UserVoter extends Voter
 
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
+        /** @var User $user */
         $user = $token->getUser();
         // if the user is anonymous, do not grant access
         if (!$user instanceof UserInterface) {
@@ -53,19 +54,14 @@ class UserVoter extends Voter
         switch ($attribute) {
             case self::EDIT:
                 return $this->canEdit($user, $userProfile);
-                break;
             case self::VIEW:
                 return true;
-                break;
             case self::VIEW_VALIDATIONS:
                 return $this->canView($user, $userProfile, self::VIEW_VALIDATIONS);
-                break;
             case self::VIEW_SHARABLES:
                 return $this->canView($user, $userProfile, self::VIEW_SHARABLES);
-                break;
             case self::VIEW_STATS:
                 return $this->canView($user, $userProfile, self::VIEW_STATS);
-                break;
         }
 
         return false;
