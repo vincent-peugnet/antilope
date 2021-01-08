@@ -1,5 +1,6 @@
 # editor files
-.vscode/
+.vscode/*
+!.vscode/extensions.json
 
 ###> symfony/framework-bundle ###
 /.env.local

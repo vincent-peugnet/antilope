@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "felixfbecker.php-debug",
+        "bmewburn.vscode-intelephense-client",
+        "levacic.vscode-phpstan",
+        "st-pham.php-refactor-tool"
+    ]
+}
