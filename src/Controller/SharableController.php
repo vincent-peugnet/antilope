@@ -45,28 +45,16 @@ class SharableController extends AbstractController
         /** @var SharableSearch $search */
         $search = $form->getData();
 
-
-
-        if ($search->getManagedBy()) {
-            $manager = $userRepository->find($search->getManagedBy());
-            if ($manager) {
-                $granted = $this->isGranted(UserVoter::VIEW_SHARABLES, $manager);
-            } else {
-                $granted = true;
-            }
-        } else {
-            $granted = true;
-        }
-
-        if ($granted) {
-            $sharables = $sharableRepository->getFilteredSharables($search, $visibleBy, $user);
-        } else {
-            $sharables = [];
-        }
-
+        $sharables = $sharableRepository->getFilteredSharables($search, $visibleBy, $user);
 
         $validatedSharables = $user->getValidations()->map(function (Validation $validation) {
             return $validation->getSharable();
+        });
+        $interestedSharables = $user->getInteresteds()->map(function (Interested $interested) {
+            return $interested->getSharable();
+        });
+        $managedSharables = $user->getManages()->map(function (Manage $manage) {
+            return $manage->getSharable();
         });
 
         return $this->render('sharable/index.html.twig', [
@@ -75,6 +63,8 @@ class SharableController extends AbstractController
             'total' => count($sharables),
             'form' => $form->createView(),
             'validatedSharables' => $validatedSharables,
+            'interestedSharables' => $interestedSharables,
+            'managedSharables' => $managedSharables,
         ]);
     }
 

@@ -10,12 +10,47 @@
 
 
 
+{% if is_granted('create', sharable) %}
+    <a class="btn btn-success btn-lg btn-block mb-3" href="{{ path('sharable_new') }}">create new sharable</a>
+{% endif %}
 
-{% if is_granted('create', sharable) %}<a class="btn btn-success btn-lg btn-block mb-3" href="{{ path('sharable_new') }}">create new sharable</a> {% endif %}
 
+<div class="container">
 
-{{ form(form) }}
+{{ form_start(form) }}
+    {{ form_errors(form) }}
 
+    <div class="row">
+        <div class="col-sm-6">
+            {{ form_row(form.query) }}
+        </div>
+        <div class="col-xs-1" id="some-custom-id">
+            {{ form_row(form.sortBy) }}
+        </div>
+        <div class="col-xs-1" id="some-custom-id">
+            {{ form_row(form.order) }}
+        </div>
+        <div class="col-xs-1" id="some-custom-id">
+            {{ form_row(form.search) }}
+        </div>
+    </div>
+    <div class="row">
+        <a class="btn mb-3 btn-secondary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">advanced search</a>
+    </div>
+    <div class="row collapse" id="collapseExample">
+        <div class="col" id="some-custom-id">
+            {{ form_row(form.disabled) }}
+        </div>
+        <div class="col" id="some-custom-id">
+            {{ form_row(form.validated) }}
+        </div>
+        <div class="col" id="some-custom-id">
+            {{ form_row(form.managedBy) }}
+        </div>
+    </div>
+{{ form_end(form) }}
+
+</div>
 
 <div class="alert alert-info">
 {{ total }} sharables founded
@@ -25,8 +60,17 @@
 
 {% for sharable in sharables %}
 
+    {% set border = '' %}
+    {% if sharable in managedSharables %}
+        {% set border = 'border-primary' %}
+    {% elseif sharable in validatedSharables %}
+        {% set border = 'border-success' %}
+    {% elseif sharable in interestedSharables %}
+        {% set border = 'border-danger' %}
+    {% endif %}
 
-    <div class="card{{ sharable in validatedSharables ? ' border-success' }} mb-3">
+
+    <div class="card {{ border }} mb-3">
         <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="card-title">
         {{ sharable.name }}

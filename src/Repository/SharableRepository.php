@@ -11,6 +11,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @method Sharable|null find($id, $lockMode = null, $lockVersion = null)
@@ -23,10 +24,13 @@ class SharableRepository extends ServiceEntityRepository
 
     public const PAGINATOR_PER_PAGE = 5;
 
+    private $security;
 
-    public function __construct(ManagerRegistry $registry)
+
+    public function __construct(ManagerRegistry $registry, Security $security)
     {
         parent::__construct($registry, Sharable::class);
+        $this->security = $security;
     }
 
 
@@ -44,7 +48,7 @@ class SharableRepository extends ServiceEntityRepository
         }, $visibleBy);
 
         $qb = $this->createQueryBuilder('s')
-            ->join('s.managedBy', 'm')
+            ->leftJoin('s.managedBy', 'm')
             ->addSelect('m')
             ->leftJoin('s.visibleBy', 'uc')
             ->addSelect('uc')
@@ -52,12 +56,17 @@ class SharableRepository extends ServiceEntityRepository
             ->addSelect('v');
 
         // Filter Sharables by manager
-        // Not working,
-        // if ($search->getManagedBy() !== null) {
-        //         $qb->andWhere('m.id = :mid')
-        //         ->setParameter('mid', $search->getManagedBy());
+        // Check if user paranoia level authorize this
+        if ($search->getManagedBy() !== null) {
+            $userRepo = $this->getEntityManager()->getRepository(User::class);
+            $manager = $userRepo->find($search->getManagedBy());
+            if ($this->security->isGranted(UserVoter::VIEW_SHARABLES, $manager)) {
+                $qb->andWhere(
+                    $qb->expr()->in('m.user', $manager->getId())
+                );
+            }
 
-        // }
+        }
 
         // Work, but there may be a better way to do this including a lot of joins
         if ($user->getUserClass()->getAccess()) {

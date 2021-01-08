@@ -21,7 +21,9 @@ class SharableSearchType extends AbstractType
             ->add('query', SearchType::class, [
                 'label' => 'Search',
                 'required' => false,
-                'help' => 'search in Sharables names'
+                'attr' => [
+                    'placeholder' => 'search in Sharables names',
+                ],
             ])
             ->add('disabled', ChoiceType::class, [
                 'choices' => SharableSearch::DISABLED,
