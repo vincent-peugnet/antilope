@@ -131,6 +131,11 @@ class Sharable
      */
     private $interesteds;
 
+    /**
+     * @ORM\OneToMany(targetEntity=SharableContact::class, mappedBy="sharable")
+     */
+    private $sharableContacts;
+
     public function __construct()
     {
         $this->managedBy = new ArrayCollection();
@@ -140,6 +145,7 @@ class Sharable
         $this->responsibility = true;
         $this->interestedMethod = 2;
         $this->interesteds = new ArrayCollection();
+        $this->sharableContacts = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -368,6 +374,36 @@ class Sharable
             // set the owning side to null (unless already changed)
             if ($interested->getSharable() === $this) {
                 $interested->setSharable(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|SharableContact[]
+     */
+    public function getSharableContacts(): Collection
+    {
+        return $this->sharableContacts;
+    }
+
+    public function addSharableContact(SharableContact $sharableContact): self
+    {
+        if (!$this->sharableContacts->contains($sharableContact)) {
+            $this->sharableContacts[] = $sharableContact;
+            $sharableContact->setSharable($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSharableContact(SharableContact $sharableContact): self
+    {
+        if ($this->sharableContacts->removeElement($sharableContact)) {
+            // set the owning side to null (unless already changed)
+            if ($sharableContact->getSharable() === $this) {
+                $sharableContact->setSharable(null);
             }
         }
 

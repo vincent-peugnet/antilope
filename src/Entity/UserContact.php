@@ -3,13 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserContactRepository;
-use DateTime;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints\Email;
-use Symfony\Component\Validator\Constraints\Url;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
-use Symfony\Component\Validator\Validation;
 
 /**
  * @ORM\Entity(repositoryClass=UserContactRepository::class)
@@ -31,7 +25,7 @@ class UserContact extends Contact
 
     public function __construct()
     {
-        $this->createdAt = new DateTime();
+        parent::__construct();
         $this->disabled = false;
     }
 

@@ -75,7 +75,6 @@ abstract class Contact
     public function __construct()
     {
         $this->createdAt = new DateTime();
-        $this->disabled = false;
     }
 
     public function getId(): ?int
