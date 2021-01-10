@@ -9,7 +9,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
 /**
  * @ORM\Entity(repositoryClass=SharableRepository::class)
  */
@@ -351,11 +350,15 @@ class Sharable
     }
 
     /**
+     * Return only real interested Objects, users that validated are removed from this selection
+     * 
      * @return Collection|Interested[]
      */
     public function getInteresteds(): Collection
     {
-        return $this->interesteds;
+        return $this->interesteds->filter(function (Interested $interested) {
+            return !$this->getValidatedBy()->contains($interested->getUser());
+        });
     }
 
     public function addInterested(Interested $interested): self
@@ -408,5 +411,17 @@ class Sharable
         }
 
         return $this;
+    }
+
+    /**
+     * Get the Users that validated the Sharable
+     * 
+     * @return Collection|User[]
+     */
+    public function getValidatedBy(): Collection
+    {
+        return $this->validations->map(function (Validation $validation) {
+            return $validation->getUser();
+        });
     }
 }
