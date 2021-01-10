@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Interested;
 use App\Entity\Manage;
 use App\Entity\Sharable;
 use App\Entity\User;
@@ -25,15 +26,16 @@ class ManageType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /** @var Collection|Manage[] $managedBy */
-        $managedBy = $options['managedBy']->map(function (Manage $manage) {
-            return $manage->getUser();
-        });
+        $manage = $builder->getData();
+        assert($manage instanceof Manage);
+        $sharable = $manage->getSharable();
+
+        
 
         $builder
             ->add('user', EntityType::class, [
                 'class' => User::class,
-                'choices' => $this->userRepository->findAllExcept($managedBy),
+                'choices' => $this->userRepository->findPossibleManagers($sharable),
                 'required' => true,
                 'placeholder' => 'select an user',
             ])
@@ -45,8 +47,6 @@ class ManageType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Manage::class,
-            'managedBy' => new ArrayCollection(),
         ]);
-        $resolver->setAllowedTypes('managedBy', Collection::class );
     }
 }

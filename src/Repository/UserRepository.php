@@ -2,9 +2,12 @@
 
 namespace App\Repository;
 
+use App\Entity\Sharable;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
@@ -53,6 +56,27 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->orderBy('u.id', 'ASC')
             ->getQuery()
             ->getResult();
+    }
+
+
+    public function findPossibleManagers(Sharable $sharable): Array
+    {
+        $qb = $this->createQueryBuilder('uu');
+        return $qb->andWhere(
+            $qb->expr()->notIn('uu.id', $this->findImpossibleManagerQuery($sharable)->getDQL())
+        )
+            ->getQuery()
+            ->getResult();
+    }
+
+    private function findImpossibleManagerQuery(Sharable $sharable): Query
+    {
+        $qb = $this->createQueryBuilder('u');
+        return $qb->leftJoin('u.manages', 'm')
+            ->leftJoin('u.interesteds', 'i')
+            ->Where($qb->expr()->eq('m.sharable', $sharable->getId()))
+            ->orWhere($qb->expr()->eq('i.sharable', $sharable->getId()))
+            ->getQuery();
     }
 
     /*

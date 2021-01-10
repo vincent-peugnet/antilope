@@ -19,7 +19,7 @@
 <ul class="list-group">
 {% for manage in sharable.managedBy %}
 <li class="list-group-item">
-{{ manage.user.username }}
+<a href="{{ path('user_show', {id: manage.user.id}) }}">{{ manage.user.username }}</a>
 <span class="badge badge-warning">{{ manage.user.userClass.name }}</span>
 
 <span class="ml-auto"><small>added {{ manage.createdAt|ago }}</small></span>

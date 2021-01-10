@@ -9,7 +9,6 @@ use App\Entity\Sharable;
 use App\Entity\User;
 use App\Entity\Validation;
 use App\Form\InterestedType;
-use App\Form\ManagerType;
 use App\Form\ManageType;
 use App\Form\SharableSearchType;
 use App\Form\SharableType;
@@ -114,22 +113,32 @@ class SharableController extends AbstractController
     /**
      * @Route("/sharable/{id}/managers", name="sharable_managers", requirements={"id"="\d+"})
      */
-    public function managers(Sharable $sharable, Request $request): Response
+    public function managers(Sharable $sharable, Request $request, InterestedRepository $interestedRepo): Response
     {
         $this->denyAccessUnlessGranted('edit', $sharable);
-
-        $form = $this->createForm(ManageType::class, null, ['managedBy' => $sharable->getManagedBy()]);
+        $manage = new Manage();
+        $manage->setSharable($sharable);
+        $form = $this->createForm(ManageType::class, $manage);
 
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             
             $manage = $form->getData();
-            $manage->setSharable($sharable);
+            assert($manage instanceof Manage);
+
+            $intrested = $interestedRepo->findOneBy(
+                ['user' => $manage->getUser()->getId(),
+                'sharable' => $sharable->getId()]
+            );
+
 
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($manage);
+            if ($intrested) {
+                $entityManager->remove($intrested);
+            }
             $entityManager->flush();
 
             return $this->redirectToRoute('sharable_managers', ['id' => $sharable->getId()]);
@@ -206,50 +215,6 @@ class SharableController extends AbstractController
             'validations' => $validations,
         ]);
     }
-
-
-    /**
-     * @Route("/sharable/{id}/interest", name="sharable_interest", requirements={"id"="\d+"})
-     */
-    public function interest(Sharable $sharable, Request $request): Response
-    {
-        $this->denyAccessUnlessGranted(SharableVoter::INTEREST, $sharable);
-
-        $form = $this->createForm(InterestedType::class, new Interested);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $interested = $form->getData();
-            $interested->setUser($this->getUser())
-                ->setSharable($sharable);
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($interested);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('sharable_show', ['id' => $sharable->getId()]);
-        }
-
-        return $this->render('sharable/interest.html.twig', [
-            'sharable' => $sharable,
-            'form' => $form->createView(),
-        ]);
-    }
-
-
-    /**
-     * @Route("/sharable/{id}/interested", name="sharable_interested", requirements={"id"="\d+"})
-     */
-    public function interested(Sharable $sharable, Request $request, InterestedRepository $interestedRepository): Response
-    {
-        $this->denyAccessUnlessGranted(SharableVoter::INTERESTED, $sharable);
-
-        $interesteds = $interestedRepository->findBy(['sharable' => $sharable->getId()], ['id' => 'DESC']);
-
-        return $this->render('sharable/interested.html.twig', [
-            'sharable' => $sharable,
-            'interesteds' => $interesteds,
-        ]);
-    }
-
 
     /**
      * @Route("/sharable/new", name="sharable_new")

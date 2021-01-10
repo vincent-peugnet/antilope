@@ -119,6 +119,8 @@ class UserVoter extends Voter
             $sharableRepo = $this->em->getRepository(Sharable::class);
             assert($sharableRepo instanceof SharableRepository);
             $sharables = $sharableRepo->findByManagerAndInterested($user, $userProfile);
+
+            //TODO check if sharable end is passed
             $filteredSharables = $sharables->filter(function (Sharable $sharable) {
                 return $sharable->getInterestedMethod() > 1;
             });

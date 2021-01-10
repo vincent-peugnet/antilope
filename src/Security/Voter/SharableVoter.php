@@ -106,6 +106,7 @@ class SharableVoter extends Voter
             $sharable->getInterestedMethod() > 1 &&
             $this->canView($sharable, $user) &&
             !$this->passedEnd($sharable) &&
+            !$user->getUserContacts()->isEmpty() &&
             !$this->alreadyInterested($sharable, $user)
         ) {
             return true;
