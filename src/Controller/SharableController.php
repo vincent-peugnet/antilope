@@ -6,10 +6,12 @@ use App\Entity\Interested;
 use App\Entity\Manage;
 use App\Entity\SharableSearch;
 use App\Entity\Sharable;
+use App\Entity\SharableContact;
 use App\Entity\User;
 use App\Entity\Validation;
 use App\Form\InterestedType;
 use App\Form\ManageType;
+use App\Form\SharableContactType;
 use App\Form\SharableSearchType;
 use App\Form\SharableType;
 use App\Form\ValidationType;
@@ -126,6 +128,7 @@ class SharableController extends AbstractController
             
             $manage = $form->getData();
             assert($manage instanceof Manage);
+            $manage->setContactable(false);
 
             $intrested = $interestedRepo->findOneBy(
                 ['user' => $manage->getUser()->getId(),
@@ -150,6 +153,47 @@ class SharableController extends AbstractController
             'form' => $form->createView(),
         ]);
 
+    }
+
+
+    /**
+     * @Route("/sharable/{id}/contact", name="sharable_contact", requirements={"id"="\d+"})
+     */
+    public function contact(Sharable $sharable): Response
+    {
+        $this->denyAccessUnlessGranted(SharableVoter::CONTACT, $sharable);
+
+        return $this->render('sharable/contact.html.twig', [
+            'sharable' => $sharable,
+        ]);
+    }
+
+    /**
+     * @Route("/sharable/{id}/contact/add", name="sharable_contact_add", requirements={"id"="\d+"})
+     */
+    public function contactAdd(Sharable $sharable, Request $request): Response
+    {
+        $this->denyAccessUnlessGranted(SharableVoter::EDIT, $sharable);
+
+        $form = $this->createForm(SharableContactType::class, new SharableContact());
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $sharableContact = $form->getData();
+            assert($sharableContact instanceof SharableContact);
+            $sharableContact->setSharable($sharable);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($sharableContact);
+            $em->flush();
+
+            return $this->redirectToRoute('sharable_contact', ['id' => $sharable->getId()]);
+        }
+
+        return $this->render('sharable/contact_add.html.twig', [
+            'sharable' => $sharable,
+            'form' => $form->createView(),
+        ]);
     }
 
 

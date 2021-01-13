@@ -25,6 +25,7 @@ class SharableVoter extends Voter
     const CREATE     = 'create';
     const INTEREST   = 'interest';
     const INTERESTED = 'interested';
+    const CONTACT    = 'contact';
 
     public function __construct(EntityManagerInterface $em) {
         $this->em = $em;
@@ -34,7 +35,7 @@ class SharableVoter extends Voter
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, [self::VIEW, self::EDIT, self::VALIDATE, self::CREATE, self::INTEREST, self::INTERESTED])
+        return in_array($attribute, [self::VIEW, self::EDIT, self::VALIDATE, self::CREATE, self::INTEREST, self::INTERESTED, self::CONTACT])
             && $subject instanceof \App\Entity\Sharable;
     }
 
@@ -64,6 +65,8 @@ class SharableVoter extends Voter
                 return $this->canBeInterested($sharable, $user);
             case self::INTERESTED:
                 return $this->canViewInterested($sharable, $user);
+            case self::CONTACT:
+                return $this->canViewContact($sharable, $user);
         }
 
         return false;
@@ -121,8 +124,38 @@ class SharableVoter extends Voter
         return ($this->canEdit($sharable, $user) && $sharable->getInterestedMethod() > 1);
     }
 
+    private function canViewContact(Sharable $sharable, User $user): bool
+    {
+        if (!$this->canView($sharable, $user)) {
+            return false;
+        }
+        if ($this->canEdit($sharable, $user)) {
+            return true;
+        }
+        $interested = $this->alreadyInterested($sharable, $user);
+        if (
+            !$sharable->getDisabled() &&
+            $interested &&
+            !$this->alreadyValidated($sharable, $user)
+        ) {
+            assert($interested instanceof Interested);
+            switch ($sharable->getInterestedMethod()) {
+                case 2:
+                    return true;
+                case 3:
+                    return ($interested->getReviewed());
+                default:
+                    return false;
+            }
+        } 
+        return false;
+    }
+
     private function canValidate(Sharable $sharable, User $user): bool
     {
+        if (!$this->canView($sharable, $user)) {
+            return false;
+        }
         if ($this->canEdit($sharable, $user)) {
             return false;
         }
@@ -133,10 +166,16 @@ class SharableVoter extends Voter
             $this->passedBegin($sharable) &&
             !$this->alreadyValidated($sharable, $user)
         ) {
+            $interested = $this->alreadyInterested($sharable, $user);
             if ($sharable->getInterestedMethod() === 1) {
                 return true;
-            } elseif ($this->alreadyInterested($sharable, $user)) {
-                return true;
+            } elseif ($interested) {
+                assert($interested instanceof Interested);
+                if ($sharable->getInterestedMethod() === 3) {
+                    return $interested->getReviewed();
+                } else {
+                    return true;
+                }
             } else {
                 return false;
             }
@@ -170,10 +209,13 @@ class SharableVoter extends Voter
         }
     }
 
-    private function alreadyInterested(Sharable $sharable, User $user): bool
+    /**
+     * @return Interested|null 
+     */
+    private function alreadyInterested(Sharable $sharable, User $user)
     {
         $interestedRepository = $this->em->getRepository(Interested::class);
-        return (bool) $interestedRepository->findOneBy([
+        return $interestedRepository->findOneBy([
             'user' => $user->getId(),
             'sharable' => $sharable->getId()
         ]);

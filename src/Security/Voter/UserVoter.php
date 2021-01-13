@@ -3,6 +3,7 @@
 namespace App\Security\Voter;
 
 use App\Entity\Interested;
+use App\Entity\Manage;
 use App\Entity\Sharable;
 use App\Entity\User;
 use App\Repository\SharableRepository;
@@ -115,18 +116,49 @@ class UserVoter extends Voter
         if ($this->canEdit($user, $userProfile)) {
             return true;
         }
-        if ($user->getManages()->count() > 0 && $userProfile->getInteresteds()->count() > 0) {
+        if (!$user->getManages()->isEmpty() && !$userProfile->getInteresteds()->isEmpty()) {
             $sharableRepo = $this->em->getRepository(Sharable::class);
             assert($sharableRepo instanceof SharableRepository);
             $sharables = $sharableRepo->findByManagerAndInterested($user, $userProfile);
 
             //TODO check if sharable end is passed
             $filteredSharables = $sharables->filter(function (Sharable $sharable) {
-                return $sharable->getInterestedMethod() > 1;
+                return ($sharable->getInterestedMethod() > 1 && !$sharable->getDisabled() );
             });
             return !$filteredSharables->isEmpty();
-        } else {
-            return false;
         }
+        if (!$userProfile->getManages()->isEmpty() && !$user->getInteresteds()->isEmpty()) {
+            $sharableRepo = $this->em->getRepository(Sharable::class);
+            assert($sharableRepo instanceof SharableRepository);
+            $sharables = $sharableRepo->findByManagerAndInterested($userProfile, $user);
+
+            //TODO check if sharable end is passed
+            $filteredSharables = $sharables->filter(function (Sharable $sharable) use ($user) {
+                if (
+                    $sharable->getDisabled() ||
+                    $sharable->getInterestedMethod() === 1 ||
+                    $sharable->getInterestedMethod() === 4
+                ) {
+                    return false;
+                }
+                $contactableManagers = $sharable->getManagedBy()->filter(function (Manage $manage) {
+                    return $manage->getContactable();
+                });
+                if ($contactableManagers->isEmpty()) {
+                    return false;
+                }
+                if ($sharable->getInterestedMethod() === 3) {
+                    $reviwedInterest = $sharable->getInteresteds()->filter(function (Interested $interested) use ($user) {
+                        return ($interested->getUser() === $user && $interested->getReviewed());
+                    });
+                    return !$reviwedInterest->isEmpty();
+                } else {
+                    return true;
+                }
+            });
+            return !$filteredSharables->isEmpty();
+        }
+        return false;
+
     }
 }

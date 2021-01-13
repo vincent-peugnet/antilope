@@ -28,6 +28,9 @@
         {% if is_granted('edit', sharable) %}
         <a class="btn btn-primary" href="{{ path('sharable_edit', {id: sharable.id}) }}">edit</a>
         {% endif %}
+        {% if is_granted('contact', sharable) %}
+        <a class="btn btn-primary" href="{{ path('sharable_contact', {id: sharable.id}) }}">contacts</a>
+        {% endif %}
         {% if is_granted('interested', sharable) %}
         <a class="btn btn-primary" href="{{ path('sharable_interested', {id: sharable.id}) }}">see interested</a>
         {% endif %}  

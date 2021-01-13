@@ -2,15 +2,15 @@
 
 namespace App\Form;
 
-use App\Entity\UserContact;
+use App\Entity\SharableContact;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UserContactType extends ContactType
+class SharableContactType extends ContactType
 {
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => UserContact::class,
+            'data_class' => SharableContact::class,
         ]);
     }
 }
