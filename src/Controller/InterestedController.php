@@ -56,4 +56,23 @@ class InterestedController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    /**
+     * @Route("/interested/{id}/review", name="interested_review", requirements={"id"="\d+"})
+     */
+    public function review(Interested $interested)
+    {
+        $sharable = $interested->getSharable();
+        $this->denyAccessUnlessGranted(SharableVoter::EDIT, $sharable);
+
+        if ($sharable->getInterestedMethod() === 3) {
+            $interested->setReviewed(true);
+    
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($interested);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('sharable_interested', ['id' => $sharable->getId()]);
+    }
 }

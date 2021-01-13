@@ -68,15 +68,29 @@
 
             <div class="card-body">
 
-                <ul>
-                    <li>Joined {{ user.getCreatedAt|ago }}</li>
-                    <li>User class : <span class="badge badge-warning">{{ user.userclass }}</span></li>
-                    <li>Managed sharables : {{ user.manages|length }}</li>
-                    <li>Validations given : {{ user.validations|length }}</li>
-                    <li>Paranoïa level : {{ user.paranoia }}</li>
-                    <li>Share Score : {{ user.shareScore }}</li>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        Joined {{ user.getCreatedAt|ago }}
+                    </li>
+                    <li class="list-group-item">
+                        User class : <span class="badge badge-warning">{{ user.userclass }}</span>
+                    </li>
+                    <li class="list-group-item">
+                        Managed sharables : {{ user.manages|length }}
+                    </li>
+                    <li class="list-group-item">
+                        Validations given : {{ user.validations|length }}
+                    </li>
+                    <li class="list-group-item">
+                        Paranoïa level : {{ user.paranoia }}
+                    </li>
+                    <li class="list-group-item">
+                        Share Score : {{ user.shareScore }}
+                    </li>
                     {% if user.getInvitation %}
-                    <li>Invited by : <a href="{{ path('user_show', {id: user.getInvitation.getParent.id}) }}">{{ user.getInvitation.getParent.username }}</a></li>
+                    <li class="list-group-item">
+                        Invited by : <a href="{{ path('user_show', {id: user.getInvitation.getParent.id}) }}">{{ user.getInvitation.getParent.username }}</a>
+                    </li>
                     {% endif %}
                 </ul>
 

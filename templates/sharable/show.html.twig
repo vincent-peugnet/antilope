@@ -162,16 +162,16 @@
 
             <div class="card-body">
 
-                <ul>
+                <ul class="list-group list-group-flush">
                 {% for manage in sharable.managedby %}
 
-                <li>
+                    <li class="list-group-item">
 
 
-                <a href="{{ path('user_show', {id: manage.user.id} ) }}">{{ manage.user.username }}</a>
+                    <a href="{{ path('user_show', {id: manage.user.id} ) }}">{{ manage.user.username }}</a>
 
 
-                </li>
+                    </li>
 
                 {% endfor %}
                 </ul>
@@ -197,14 +197,14 @@
 
             <div class="card-body">
 
-                <ul>
+                <ul class="list-group list-group-flush">
                 {% for validation in sharable.validations %}
 
-                <li>
+                    <li class="list-group-item">
 
-                <a href="{{ path('user_show', {id: validation.user.id} ) }}">{{ validation.user.username }}</a> <small>{{ validation.sendAt|ago }}</small>
+                    <a href="{{ path('user_show', {id: validation.user.id} ) }}">{{ validation.user.username }}</a> <small>{{ validation.sendAt|ago }}</small>
 
-                </li>
+                    </li>
 
                 {% endfor %}
                 </ul>

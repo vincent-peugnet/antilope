@@ -23,7 +23,7 @@
 <p>All those users are Interested in your sharable !</p>
 
 {% if sharable.interestedMethod == 3 %}
-<p>You need to allow them to see sharable's contact infos manually by using the review button.</p>
+<p>You need to allow them to see sharable's contact infos manually by using the <strong>review</strong> button.</p>
 {% endif %}
 
 {% if sharable.interestedMethod == 2 %}
@@ -46,8 +46,8 @@
         </small>
 
 
-        {% if is_granted('interested', sharable) and sharable.interestedMethod == 3 %}
-            <a class="btn btn-primary disabled" href="">review</a>
+        {% if is_granted('interested', sharable) and sharable.interestedMethod == 3 and not interested.reviewed %}
+            <a class="btn btn-primary" href="{{ path('interested_review', {id: interested.id}) }}">review</a>
         {% endif %}
     </div>
 
