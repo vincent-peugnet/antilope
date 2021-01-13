@@ -18,12 +18,15 @@
 
 <ul class="list-group">
 {% for manage in sharable.managedBy %}
-<li class="list-group-item">
-<a href="{{ path('user_show', {id: manage.user.id}) }}">{{ manage.user.username }}</a>
-<span class="badge badge-warning">{{ manage.user.userClass.name }}</span>
+    <li class="list-group-item">
 
-<span class="ml-auto"><small>added {{ manage.createdAt|ago }}</small></span>
-</li>
+    <a href="{{ path('user_show', {id: manage.user.id}) }}">{{ manage.user.username }}</a>
+    <span class="badge badge-warning">{{ manage.user.userClass.name }}</span>
+
+    <span class="ml-auto"><small>added {{ manage.createdAt|ago }}</small></span>
+
+
+    </li>
 {% endfor %}
 </ul>
 
@@ -45,6 +48,27 @@
 
     </div>
 </div>
+
+<div class="card mt-3">
+
+    <div class="card-header">
+
+        <div class="card-title">
+            <h5>Remove manager</h5>
+        </div>
+    </div>
+
+    <div class="card-body">
+
+        {% if sharable.managedBy|length > 1 and ( not userManage.contactable or sharable.sharableContacts|length > 0 or sharable.getContactableManagers|length > 1 ) %}
+            <a class="btn btn-primary" href="{{ path('manage_remove', {id: userManage.id }) }}">remove myself from managers</a>
+        {% else %}
+            <p>You cannot remove yourself from managers for now.</p>
+        {% endif %}
+
+    </div>
+</div>
+
 
 
 {% endblock %}

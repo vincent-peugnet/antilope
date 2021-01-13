@@ -18,9 +18,15 @@ class ManageController extends AbstractController
         /**
      * @Route("/sharable/{id}/managers", name="sharable_managers", requirements={"id"="\d+"})
      */
-    public function managers(Sharable  $sharable, Request $request, InterestedRepository $interestedRepo): Response
+    public function managers(Sharable $sharable, Request $request, InterestedRepository $interestedRepo): Response
     {
         $this->denyAccessUnlessGranted('edit', $sharable);
+        $user = $this->getUser();
+        $filteredManages = $sharable->getManagedBy()->filter(function (Manage $manage) use ($user) {
+            return $manage->getUser() === $user;
+        });
+        $userManage = $filteredManages->first();
+
         $manage = new Manage();
         $manage->setSharable($sharable);
         $form = $this->createForm(ManageType::class, $manage);
@@ -49,6 +55,7 @@ class ManageController extends AbstractController
         return $this->render('manage/index.html.twig', [
             'sharable' => $sharable,
             'form' => $form->createView(),
+            'userManage' => $userManage,
         ]);
 
     }
@@ -94,6 +101,29 @@ class ManageController extends AbstractController
         return $this->redirectToRoute('sharable_contact', ['id' => $sharable->getId()]);
     }
 
+    /**
+     * @Route("/manage/{id}/remove", name="manage_remove", requirements={"id"="\d+"})
+     */
+    public function removeManage(Manage $manage): Response
+    {
+        $user = $manage->getUser();
+        $sharable = $manage->getSharable();
+        $this->denyAccessUnlessGranted(UserVoter::EDIT, $user);
 
-
+        if (
+            $sharable->getManagedBy()->count() > 1 &&
+            (
+                !$manage->getContactable() ||
+                !$sharable->getSharableContacts()->isEmpty() ||
+                $sharable->getContactableManagers()->count() > 1
+            )
+        ) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($manage);
+            $entityManager->flush();
+            return $this->redirectToRoute('sharable_show', ['id' => $sharable->getId()]);
+        } else {
+            return $this->redirectToRoute('sharable_managers', ['id' => $sharable->getId()]);
+        }
+    }
 }
