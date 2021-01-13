@@ -16,6 +16,7 @@ use App\Form\SharableSearchType;
 use App\Form\SharableType;
 use App\Form\ValidationType;
 use App\Repository\InterestedRepository;
+use App\Repository\ManageRepository;
 use App\Repository\SharableRepository;
 use App\Repository\UserClassRepository;
 use App\Repository\UserRepository;
@@ -73,12 +74,32 @@ class SharableController extends AbstractController
     /**
      * @Route("/sharable/{id}", name="sharable_show", requirements={"id"="\d+"})
      */
-    public function show(Sharable $sharable)
+    public function show(Sharable $sharable, InterestedRepository $interestedRepository, ValidationRepository $validationRepository, ManageRepository $manageRepository)
     {
         $this->denyAccessUnlessGranted(SharableVoter::VIEW, $sharable);
 
+        $user = $this->getUser();
+
+        $interested = $interestedRepository->findOneBy([
+            'user' => $user->getId(),
+            'sharable' => $sharable->getId()
+        ]);
+
+        $validated = $validationRepository->findOneBy([
+            'user' => $user->getId(),
+            'sharable' => $sharable->getId()
+        ]);
+
+        $manage = $manageRepository->findOneBy([
+            'user' => $user->getId(),
+            'sharable' => $sharable->getId()
+        ]);
+
         return $this->render('sharable/show.html.twig', [
             'sharable' => $sharable,
+            'interested' => $interested,
+            'validated' => $validated,
+            'manage' => $manage,
         ]);
     }
 

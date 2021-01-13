@@ -187,7 +187,10 @@ class SharableVoter extends Voter
 
     private function canCreate(User $user): bool
     {
-        return $user->getUserClass()->getShare();
+        return(
+            $user->getUserClass()->getShare() &&
+            !$user->getUserContacts()->isEmpty()
+        );
     }
 
 
