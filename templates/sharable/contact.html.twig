@@ -1,11 +1,12 @@
 {% extends 'base.html.twig' %}
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
+{% import 'macros/content_by_type.html.twig' as content_by_type %}
 
 
 {% block title %}{{ sharable.name }} : Contact{% endblock %}
 
 {% block content %}
 
-{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 
 {{ breadcrumbs.render([
     {'url': url('sharable'), 'text': 'Sharables'},
@@ -15,7 +16,11 @@
 
 <h1>Contacts</h1>
 
-<h3>Sharable contacts</h3>
+<h3>Sharable contacts 
+{% if is_granted('edit', sharable) %}
+<a class="btn btn-success" href="{{ path('sharable_contact_add', {id: sharable.id}) }}">add new contact</a>
+{% endif %}
+</h3>
 
 
 {% for sharableContact in sharable.sharableContacts %}
@@ -25,22 +30,38 @@
         <div class="card-header d-flex justify-content-between align-items-center">
 
             <h4 class="card-title">
-                {{ sharableContact.type }} : 
-                {{ sharableContact.content }}
+                {{ sharableContact.type }} :
+                {{ content_by_type.render(sharableContact.type, sharableContact.content) }}
             </h4>
+
+            <small>
+                {{ sharableContact.createdAt|ago }}
+            </small>
         </div>
 
-        <div class="card-body">
-            {{ sharableContact.info }}
-        </div>
+        {% if sharableContact.info %}
+
+            <div class="card-body">
+
+            {% if sharableContact.info|length > 500 %}
+                <a class="btn btn-primary" data-toggle="collapse" href="#info_{{ sharableContact.id }}" role="button" aria-expanded="false" aria-controls="info_{{ sharableContact.id }}">
+                    View info
+                </a>
+                <div class="collapse" id="info_{{ sharableContact.id }}">
+                    <pre>{{ sharableContact.info }}</pre>
+                </div>
+            {% else %}
+                <pre>{{ sharableContact.info }}</pre>
+            {% endif %}
+
+            </div>
+
+        {% endif %}
+
     </div>
 
 
 {% endfor %}
-
-{% if is_granted('edit', sharable) %}
-<a class="btn btn-success" href="{{ path('sharable_contact_add', {id: sharable.id}) }}">add new contact</a>
-{% endif %}
 
 
 <h3>Managers contacts</h3>
@@ -55,31 +76,42 @@
 
             <h4 class="card-title">
                 {{ manage.user.username }}
+
+                {% if is_granted('edit', sharable) %}
+                    <span>
+                    {% if manage.contactable %}
+                        <span class="badge badge-success" >contactable</span>
+                    {% else %}
+                        <span class="badge badge-danger" >uncontactable</span>
+                    {% endif %}
+                    </span>
+                {% endif %}
             </h4>
 
-            <span>
-            {% if manage.contactable %}
-                <span class="badge badge-success" >contactable</span>
-            {% else %}
-                <span class="badge badge-danger" >uncontactable</span>
+            {% if is_granted('edit', manage.user) %}
+                <a class="btn btn-primary" href="">
+                    became {{ manage.contactable ? 'uncontactalbe' : 'contactable' }}
+                </a> 
             {% endif %}
-            </span>
         </div>
 
         <div class="card-body">
 
-        {% if is_granted('edit', manage.user) %}
-        
-            <a class="btn btn-primary" href="">
-                {{ manage.contactable ? 'uncontactalbe' : 'contactable' }}
-            </a>
-        {% endif %}
 
         <ul>
         {% for userContact in manage.user.userContacts %}
-                <li>{{userContact.type}} : {{userContact.content}}</li>
+            <li>
+                {{userContact.type}} :
+                {{ content_by_type.render(userContact.type, userContact.content) }}
+                {% if userContact.info %}
+                    <span class="badge badge-warning">info</span>
+                {% endif %}
+            </li>
         {% endfor %}
-        </ul>
+        </ul>        
+
+        <a class="btn btn-primary" href="{{ path('user_contact', {id: manage.user.id}) }}">view detailed contact infos</a>
+
     
         </div>
 

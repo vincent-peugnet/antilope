@@ -1,0 +1,14 @@
+
+{% macro render(type, content) %}
+
+    {% if type == 'email' %}
+        <a href="mailto:{{ content }}">{{ content }}</a>
+    {% elseif type == 'url' %}
+        <a target="_blank" href="{{ content }}">{{ content }}</a>
+    {% elseif type == 'phone' %}
+        <a href="tel:{{ content }}">{{ content }}</a>
+    {% else %}
+        {{ content }}
+    {% endif %}
+
+{% endmacro %}

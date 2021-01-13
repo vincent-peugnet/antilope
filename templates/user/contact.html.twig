@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
-
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
+{% import 'macros/content_by_type.html.twig' as content_by_type %}
 
 {% block content %}
 
 
-{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 
 {{ breadcrumbs.render([
     {'url': url('user'), 'text': 'Users'},
@@ -29,15 +29,7 @@
 
         <h5 class="card-title">{{ contact.type }} : 
 
-            {% if contact.type == 'email' %}
-                <a href="mailto:{{ contact.content }}">{{ contact.content }}</a>
-            {% elseif contact.type == 'url' %}
-                <a target="_blank" href="{{ contact.content }}">{{ contact.content }}</a>
-            {% elseif contact.type == 'phone' %}
-                <a href="tel:{{ contact.content }}">{{ contact.content }}</a>
-            {% else %}
-                {{ contact.content }}
-            {% endif %}
+            {{ content_by_type.render(contact.type, contact.content) }}
         </h5>
         <small>
             {{ contact.createdAt|ago }}
