@@ -60,7 +60,7 @@ class InterestedController extends AbstractController
     /**
      * @Route("/interested/{id}/review", name="interested_review", requirements={"id"="\d+"})
      */
-    public function review(Interested $interested)
+    public function review(Interested $interested): Response
     {
         $sharable = $interested->getSharable();
         $this->denyAccessUnlessGranted(SharableVoter::EDIT, $sharable);

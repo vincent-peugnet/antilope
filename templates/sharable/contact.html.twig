@@ -95,16 +95,22 @@
                     {% if manage.contactable %}
                         <span class="badge badge-success" >contactable</span>
                     {% else %}
-                        <span class="badge badge-danger" >uncontactable</span>
+                        <span class="badge badge-danger" >hidden</span>
                     {% endif %}
                     </span>
                 {% endif %}
             </h4>
 
             {% if is_granted('edit', manage.user) %}
-                <a class="btn btn-primary" href="">
-                    became {{ manage.contactable ? 'uncontactalbe' : 'contactable' }}
-                </a> 
+                {% if manage.contactable and ( sharable.sharableContacts|length > 0 or sharable.getContactableManagers|length > 1  ) %}
+                <a class="btn btn-primary" href="{{ path('manage_uncontactable', {id: manage.id}) }}">
+                    hide contact infos
+                </a>
+                {% elseif manage.user.userContacts|length > 0 %}
+                <a class="btn btn-primary" href="{{ path('manage_contactable', {id: manage.id}) }}">
+                    become contactable
+                </a>
+                {% endif %}
             {% endif %}
         </div>
 

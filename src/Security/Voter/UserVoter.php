@@ -141,10 +141,7 @@ class UserVoter extends Voter
                 ) {
                     return false;
                 }
-                $contactableManagers = $sharable->getManagedBy()->filter(function (Manage $manage) {
-                    return $manage->getContactable();
-                });
-                if ($contactableManagers->isEmpty()) {
+                if ($sharable->getContactableManagers()->isEmpty()) {
                     return false;
                 }
                 if ($sharable->getInterestedMethod() === 3) {

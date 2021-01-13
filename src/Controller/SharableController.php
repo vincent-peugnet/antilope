@@ -134,50 +134,6 @@ class SharableController extends AbstractController
     }
 
     /**
-     * @Route("/sharable/{id}/managers", name="sharable_managers", requirements={"id"="\d+"})
-     */
-    public function managers(Sharable $sharable, Request $request, InterestedRepository $interestedRepo): Response
-    {
-        $this->denyAccessUnlessGranted('edit', $sharable);
-        $manage = new Manage();
-        $manage->setSharable($sharable);
-        $form = $this->createForm(ManageType::class, $manage);
-
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            
-            $manage = $form->getData();
-            assert($manage instanceof Manage);
-            $manage->setContactable(false);
-
-            $intrested = $interestedRepo->findOneBy(
-                ['user' => $manage->getUser()->getId(),
-                'sharable' => $sharable->getId()]
-            );
-
-
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($manage);
-            if ($intrested) {
-                $entityManager->remove($intrested);
-            }
-            $entityManager->flush();
-
-            return $this->redirectToRoute('sharable_managers', ['id' => $sharable->getId()]);
-
-        }
-
-        return $this->render('sharable/managers.html.twig', [
-            'sharable' => $sharable,
-            'form' => $form->createView(),
-        ]);
-
-    }
-
-
-    /**
      * @Route("/sharable/{id}/contact", name="sharable_contact", requirements={"id"="\d+"})
      */
     public function contact(Sharable $sharable): Response

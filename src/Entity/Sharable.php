@@ -413,6 +413,8 @@ class Sharable
         return $this;
     }
 
+    //_______________ special functions _______________
+
     /**
      * Get the Users that validated the Sharable
      * 
@@ -422,6 +424,18 @@ class Sharable
     {
         return $this->validations->map(function (Validation $validation) {
             return $validation->getUser();
+        });
+    }
+
+    /**
+     * Get all manage relation object that allow contact
+     * 
+     * @return Collection|Manage[]
+     */
+    public function getContactableManagers(): Collection
+    {
+        return $this->getManagedBy()->filter(function (Manage $manage) {
+            return $manage->getContactable();
         });
     }
 }
