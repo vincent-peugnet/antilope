@@ -52,10 +52,13 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.4",
+        "php-parallel-lint/php-parallel-lint": "^1.2",
         "phpstan/phpstan": "^0.12.65",
         "phpstan/phpstan-deprecation-rules": "^0.12.6",
+        "phpstan/phpstan-doctrine": "^0.12.26",
         "phpstan/phpstan-phpunit": "^0.12.17",
         "phpstan/phpstan-symfony": "^0.12.12",
+        "squizlabs/php_codesniffer": "^3.5",
         "symfony/browser-kit": "^5.2",
         "symfony/css-selector": "^5.2",
         "symfony/debug-bundle": "^5.2",
@@ -94,6 +97,8 @@
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
         "check": [
+            "@lint",
+            "@phpcs",
             "@phpstan",
             "@check-symfony"
         ],
@@ -102,6 +107,12 @@
             "@php bin/console --ansi lint:twig",
             "@php bin/console --ansi doctrine:schema:validate --skip-sync"
         ],
+        "fix": [
+            "@phpcbf"
+        ],
+        "lint": "parallel-lint --exclude app --exclude var --exclude vendor .",
+        "phpcs": "phpcs --runtime-set ignore_warnings_on_exit 1",
+        "phpcbf": "phpcbf",
         "phpstan": [
             "@php bin/console cache:warmup -q",
             "phpstan analyse --ansi"

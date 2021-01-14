@@ -119,6 +119,10 @@ For now, the only way to install an Antilope app is via Symfony and `composer`.
 
     composer check
 
+### Fix basic check errors
+
+    composer fix
+
 ### Run the dev server
 
     bin/console server:start
