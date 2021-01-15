@@ -38,7 +38,21 @@ jobs:
             ${{ runner.os }}-composer-
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-progress
+        run: |
+          echo "::add-matcher::.github/matchers/phplint.json"
+          composer install --prefer-dist --no-progress
 
       - name: Run checks
-        run: composer check
+        run: |
+          echo "::add-matcher::.github/matchers/phpcs.json"
+          echo "::add-matcher::.github/matchers/phpunit.json"
+
+          export PHPLINT_FLAGS="--no-progress"
+          export PHPCS_FLAGS="--report=csv -q"
+          export PHPSTAN_FLAGS="--no-progress"
+
+          composer check
+
+          echo "::remove-matcher owner=phpunit::"
+          echo "::remove-matcher owner=phpcs::"
+          echo "::remove-matcher owner=phplint::"

@@ -1,0 +1,16 @@
+{
+    "problemMatcher": [
+        {
+            "owner": "phplint",
+            "fileLocation": "relative",
+            "pattern": [
+                {
+                    "regexp": "^(.+)\\sin\\s(\\./.+\\.php)\\son\\sline\\s(\\d+)$",
+                    "message": 1,
+                    "file": 2,
+                    "line": 3
+                }
+            ]
+        }
+    ]
+}
