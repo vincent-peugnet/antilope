@@ -1,4 +1,6 @@
-# Antilope 
+# Antilope
+
+[![build][build-badge]][build-url] ![style][codestyle] ![phpstan][phpstan]
 
 __Antilope__ is the name of this __Sharable Network Tracker__.
 
@@ -131,3 +133,8 @@ For now, the only way to install an Antilope app is via Symfony and `composer`.
 
     bin/console doctrine:migrations:diff --db-configuration sqlite
 
+<!-- long url references -->
+[build-badge]:https://img.shields.io/github/workflow/status/vincent-peugnet/antilope/build/main
+[build-url]:https://github.com/vincent-peugnet/antilope/actions?query=branch%3Amain++workflow%3Abuild
+[codestyle]: https://img.shields.io/badge/code%20style-PSR12-brightgreen
+[phpstan]: https://img.shields.io/badge/phpstan-level%205-green
