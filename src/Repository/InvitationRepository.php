@@ -24,7 +24,7 @@ class InvitationRepository extends ServiceEntityRepository
 
     /**
      * Get all the invites that where used
-     * 
+     *
     * @return Invitation[] Returns an array of Invitation objects
     */
     public function findUsedInvitations(User $user)
@@ -40,7 +40,7 @@ class InvitationRepository extends ServiceEntityRepository
 
     /**
      * Get the current actives invites of an user
-     * @return Invitation[] 
+     * @return Invitation[]
      */
     public function findActiveInvitations(User $user, DateInterval $invitationDuration)
     {

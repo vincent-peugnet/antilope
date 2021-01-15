@@ -10,7 +10,7 @@ class UserClassFixture extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-        $userClass= new UserClass();
+        $userClass = new UserClass();
         $userClass
             ->setRank(10)
             ->setAccess(false)
@@ -21,7 +21,7 @@ class UserClassFixture extends Fixture
             ->setName('basic_user');
         $manager->persist($userClass);
 
-        $userClass= new UserClass();
+        $userClass = new UserClass();
         $userClass
             ->setRank(20)
             ->setAccess(true)
@@ -35,7 +35,7 @@ class UserClassFixture extends Fixture
             ->setName('member');
         $manager->persist($userClass);
 
-        $userClass= new UserClass();
+        $userClass = new UserClass();
         $userClass
             ->setRank(30)
             ->setAccess(true)
@@ -49,7 +49,7 @@ class UserClassFixture extends Fixture
             ->setName('power_user');
         $manager->persist($userClass);
 
-        $userClass= new UserClass();
+        $userClass = new UserClass();
         $userClass
             ->setRank(40)
             ->setAccess(true)

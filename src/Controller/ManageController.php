@@ -33,7 +33,6 @@ class ManageController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            
             $manage = $form->getData();
             assert($manage instanceof Manage);
             $manage->setContactable(false);
@@ -57,7 +56,6 @@ class ManageController extends AbstractController
             'form' => $form->createView(),
             'userManage' => $userManage,
         ]);
-
     }
 
     /**

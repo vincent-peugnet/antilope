@@ -30,8 +30,7 @@ class SignUpController extends AbstractController
         LoginFormAuthenticator $authenticator,
         UserPasswordEncoderInterface $passwordEncoder,
         InvitationRepository $invitationRepository
-    ): Response
-    {
+    ): Response {
 
         // Check user limit
         $userLimit = $this->getParameter('app.userLimit');
@@ -46,7 +45,11 @@ class SignUpController extends AbstractController
         $user = new User();
 
         $needCode = !$this->getParameter('app.openRegistration');
-        $form = $this->createForm(SignUpType::class, $user, ['needCode' => $needCode, 'userLimitReached' => $this->userLimitReached]);
+        $form = $this->createForm(
+            SignUpType::class,
+            $user,
+            ['needCode' => $needCode, 'userLimitReached' => $this->userLimitReached]
+        );
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -81,7 +84,8 @@ class SignUpController extends AbstractController
                 $request,
                 $authenticator,
                 'main' // firewall name in security.yaml
-            );        }
+            );
+        }
 
 
         return $this->render('sign_up/index.html.twig', [

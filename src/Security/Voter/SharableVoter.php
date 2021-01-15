@@ -19,15 +19,16 @@ class SharableVoter extends Voter
 {
     private $em;
 
-    const VIEW       = 'view';
-    const EDIT       = 'edit';
-    const VALIDATE   = 'validate';
-    const CREATE     = 'create';
-    const INTEREST   = 'interest';
-    const INTERESTED = 'interested';
-    const CONTACT    = 'contact';
+    public const VIEW       = 'view';
+    public const EDIT       = 'edit';
+    public const VALIDATE   = 'validate';
+    public const CREATE     = 'create';
+    public const INTEREST   = 'interest';
+    public const INTERESTED = 'interested';
+    public const CONTACT    = 'contact';
 
-    public function __construct(EntityManagerInterface $em) {
+    public function __construct(EntityManagerInterface $em)
+    {
         $this->em = $em;
     }
 
@@ -35,7 +36,15 @@ class SharableVoter extends Voter
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, [self::VIEW, self::EDIT, self::VALIDATE, self::CREATE, self::INTEREST, self::INTERESTED, self::CONTACT])
+        return in_array($attribute, [
+            self::VIEW,
+            self::EDIT,
+            self::VALIDATE,
+            self::CREATE,
+            self::INTEREST,
+            self::INTERESTED,
+            self::CONTACT,
+        ])
             && $subject instanceof \App\Entity\Sharable;
     }
 
@@ -116,7 +125,6 @@ class SharableVoter extends Voter
         } else {
             return false;
         }
-
     }
 
     private function canViewInterested(Sharable $sharable, User $user): bool
@@ -147,7 +155,7 @@ class SharableVoter extends Voter
                 default:
                     return false;
             }
-        } 
+        }
         return false;
     }
 
@@ -182,7 +190,6 @@ class SharableVoter extends Voter
         } else {
             return false;
         }
-
     }
 
     private function canCreate(User $user): bool
@@ -213,7 +220,7 @@ class SharableVoter extends Voter
     }
 
     /**
-     * @return Interested|null 
+     * @return Interested|null
      */
     private function alreadyInterested(Sharable $sharable, User $user)
     {

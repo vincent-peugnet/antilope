@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserVoter extends Voter
 {
-    const PARANOIA = [
+    public const PARANOIA = [
         0 => [],
         1 => [self::VIEW_INTERESTEDS],
         2 => [self::VIEW_INTERESTEDS, self::VIEW_VALIDATIONS],
@@ -22,18 +22,19 @@ class UserVoter extends Voter
         4 => [self::VIEW_INTERESTEDS, self::VIEW_VALIDATIONS, self::VIEW_SHARABLES, self::VIEW_STATS],
     ];
 
-    const VIEW_STATS = 'view_stats';
-    const VIEW_INTERESTEDS = 'view_interesteds';
-    const VIEW_VALIDATIONS = 'view_validations';
-    const VIEW_SHARABLES = 'view_sharables';
-    const VIEW     = 'view';
-    const EDIT     = 'edit';
-    const CONTACT = 'contact';
+    public const VIEW_STATS = 'view_stats';
+    public const VIEW_INTERESTEDS = 'view_interesteds';
+    public const VIEW_VALIDATIONS = 'view_validations';
+    public const VIEW_SHARABLES = 'view_sharables';
+    public const VIEW     = 'view';
+    public const EDIT     = 'edit';
+    public const CONTACT = 'contact';
 
     /** @var EntityManagerInterface $em */
     private $em;
 
-    public function __construct(EntityManagerInterface $em) {
+    public function __construct(EntityManagerInterface $em)
+    {
         $this->em = $em;
     }
 
@@ -41,7 +42,7 @@ class UserVoter extends Voter
     /**
      * Return all the paranoïa levels listed in the PARANOIA constant
      */
-    static function getParanoiaLevels(): array
+    static public function getParanoiaLevels(): array
     {
         return array_keys(self::PARANOIA);
     }
@@ -145,9 +146,11 @@ class UserVoter extends Voter
                     return false;
                 }
                 if ($sharable->getInterestedMethod() === 3) {
-                    $reviwedInterest = $sharable->getInteresteds()->filter(function (Interested $interested) use ($user) {
-                        return ($interested->getUser() === $user && $interested->getReviewed());
-                    });
+                    $reviwedInterest = $sharable->getInteresteds()->filter(
+                        function (Interested $interested) use ($user) {
+                            return ($interested->getUser() === $user && $interested->getReviewed());
+                        }
+                    );
                     return !$reviwedInterest->isEmpty();
                 } else {
                     return true;
@@ -156,6 +159,5 @@ class UserVoter extends Voter
             return !$filteredSharables->isEmpty();
         }
         return false;
-
     }
 }

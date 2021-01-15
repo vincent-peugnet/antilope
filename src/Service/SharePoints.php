@@ -21,7 +21,4 @@ class SharePoints
 
         return $points;
     }
-
-
-
 }

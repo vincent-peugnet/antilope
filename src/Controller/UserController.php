@@ -98,7 +98,7 @@ class UserController extends AbstractController
     {
         $this->denyAccessUnlessGranted('edit', $user);
 
-        $form = $this->createForm(UserContactType::class, new UserContact);
+        $form = $this->createForm(UserContactType::class, new UserContact());
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

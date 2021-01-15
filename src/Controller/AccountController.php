@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Uid\Uuid;
 
-
 class AccountController extends AbstractController
 {
     private $userLimitReached = false;
@@ -28,7 +27,7 @@ class AccountController extends AbstractController
     public function invitation(InvitationRepository $invitationRepository): Response
     {
         $invitationDuration = new DateInterval(
-            'PT' .$this->getParameter('app.invitationDuration'). 'H'
+            'PT' . $this->getParameter('app.invitationDuration') . 'H'
         );
 
         $usedInvitations = $invitationRepository->findUsedInvitations($this->getUser());
@@ -50,8 +49,11 @@ class AccountController extends AbstractController
     /**
      * @Route("/account/invitation/new", name="account_invitation_new")
      */
-    public function newInvitation(InvitationRepository $invitationRepository, Request $request, UserRepository $userRepository): Response
-    {
+    public function newInvitation(
+        InvitationRepository $invitationRepository,
+        Request $request,
+        UserRepository $userRepository
+    ): Response {
         /** @var User $user */
         $user = $this->getUser();
         $canInvite = $user->getUserClass()->getCanInvite();
@@ -71,7 +73,7 @@ class AccountController extends AbstractController
 
         // Check invite frequency
         if ($user->getUserClass()->getInviteFrequency() !== 0) {
-            $inviteFrequency = new DateInterval('P' .$user->getUserClass()->getInviteFrequency(). 'D');
+            $inviteFrequency = new DateInterval('P' . $user->getUserClass()->getInviteFrequency() . 'D');
             $lastInvitation = $invitationRepository->findOneBy(['parent' => $user->getId()], ['createdAt' => 'DESC']);
             if (!empty($lastInvitation)) {
                 $minInviteDate = $lastInvitation->getCreatedAt()->add($inviteFrequency);
@@ -87,13 +89,13 @@ class AccountController extends AbstractController
             'needToWait' => $this->needToWait,
         ]);
 
-        
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $invitation = $form->getData();
 
             $invitation->setParent($user);
-            
+
             $uuid = Uuid::v4();
             $code = $uuid->toBase58();
             $codeExist = $invitationRepository->findOneBy(['code' => $code]);
@@ -109,7 +111,7 @@ class AccountController extends AbstractController
         }
 
         $invitationDuration = new DateInterval(
-            'PT' .$this->getParameter('app.invitationDuration'). 'H'
+            'PT' . $this->getParameter('app.invitationDuration') . 'H'
         );
 
 
@@ -120,5 +122,4 @@ class AccountController extends AbstractController
             'needToWait' => $this->needToWait,
         ]);
     }
-
 }

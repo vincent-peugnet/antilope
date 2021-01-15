@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Entity;
 
 use DateTime;
@@ -13,13 +12,13 @@ use Symfony\Component\Validator\Validation;
 
 abstract class Contact
 {
-    const EMAIL = 'email';
-    const PHONE = 'phone';
-    const URL = 'url';
-    const ADRESS = 'adress';
-    const OTHER = 'other';
+    public const EMAIL = 'email';
+    public const PHONE = 'phone';
+    public const URL = 'url';
+    public const ADRESS = 'adress';
+    public const OTHER = 'other';
 
-    static public function allowedTypes(): array
+    public static function allowedTypes(): array
     {
         return [
             'Email' => self::EMAIL,
@@ -31,7 +30,7 @@ abstract class Contact
     }
 
 
-    static public function allowedTypeValues(): array
+    public static function allowedTypeValues(): array
     {
         return array_values(self::allowedTypes());
     }
@@ -153,10 +152,9 @@ abstract class Contact
         }
 
         if (isset($constraint)) {
-            
             $validator = Validation::createValidator();
             $violations = $validator->validate($this->content, $constraint);
-            
+
             if (0 !== count($violations)) {
                 foreach ($violations as $violation) {
                     $context->buildViolation($violation->getMessage())
@@ -171,10 +169,5 @@ abstract class Contact
             ->atPath('content')
             ->addViolation();
         }
-
-
     }
-
-
-
 }

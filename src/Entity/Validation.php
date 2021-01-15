@@ -40,7 +40,8 @@ class Validation
      */
     private $message;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->sendAt = new DateTime();
     }
 

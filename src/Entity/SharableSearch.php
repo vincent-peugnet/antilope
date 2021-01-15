@@ -6,21 +6,21 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class SharableSearch
 {
-    const DISABLED = [
+    public const DISABLED = [
         'only disabled' => 1,
         'hide disabled' => 0,
     ];
-    const VALIDATED = [
+    public const VALIDATED = [
         'I validated' => 1,
         'I did not validate' => 0,
     ];
-    const SORT_BY = [
+    public const SORT_BY = [
         'id' => 'id',
         'createdAt' => 'createdAt',
         'lastEditedAt' => 'lastEditedAt',
         'name' => 'name',
     ];
-    const ORDER = [
+    public const ORDER = [
         'ascending' => 'ASC',
         'descending' => 'DESC',
     ];
@@ -95,7 +95,7 @@ class SharableSearch
 
         return $this;
     }
-    
+
     public function getValidated(): ?bool
     {
         return $this->validated;
@@ -107,7 +107,7 @@ class SharableSearch
 
         return $this;
     }
-    
+
     public function getManagedBy(): ?int
     {
         return $this->managedBy;
@@ -119,7 +119,7 @@ class SharableSearch
 
         return $this;
     }
-    
+
     public function getSortBy(): ?string
     {
         return $this->sortBy;
@@ -131,7 +131,7 @@ class SharableSearch
 
         return $this;
     }
-    
+
     public function getOrder(): ?string
     {
         return $this->order;

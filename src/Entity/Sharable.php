@@ -14,14 +14,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Sharable
 {
-    const INTERESTED_OPTIONS = [
+    public const INTERESTED_OPTIONS = [
         '1 No need' => 1,
         '2 Automatic' => 2,
         '3 Manual' => 3,
         '4 Never' => 4,
     ];
 
-    static public function interestedOptionsValues()
+    public static function interestedOptionsValues()
     {
         return array_values(self::INTERESTED_OPTIONS);
     }
@@ -351,7 +351,7 @@ class Sharable
 
     /**
      * Return only real interested Objects, users that validated are removed from this selection
-     * 
+     *
      * @return Collection|Interested[]
      */
     public function getInteresteds(): Collection
@@ -417,7 +417,7 @@ class Sharable
 
     /**
      * Get the Users that validated the Sharable
-     * 
+     *
      * @return Collection|User[]
      */
     public function getValidatedBy(): Collection
@@ -429,7 +429,7 @@ class Sharable
 
     /**
      * Get all manage relation object that allow contact
-     * 
+     *
      * @return Collection|Manage[]
      */
     public function getContactableManagers(): Collection

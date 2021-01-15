@@ -52,6 +52,4 @@ class UserContact extends Contact
 
         return $this;
     }
-
-
 }

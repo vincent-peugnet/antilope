@@ -98,10 +98,5 @@ class ManageFixture extends Fixture implements DependentFixtureInterface
 
         $manager->persist($manage);
         $manager->flush();
-
-
-
-
-
     }
 }

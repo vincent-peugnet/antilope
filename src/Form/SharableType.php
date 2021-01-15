@@ -62,7 +62,7 @@ class SharableType extends AbstractType
                     'help' => 'If what you\'re sharing have a end date, indicate it',
                 ]);
             }
-            
+
             if ($sharable->getId() === null) {
                 $form->add('create', SubmitType::class);
             } else {

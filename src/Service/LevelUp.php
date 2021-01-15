@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Service;
 
 use App\Entity\User;
@@ -13,7 +14,8 @@ class LevelUp
     private $userClassRepository;
     private $em;
 
-    public function __construct(UserClassRepository $userClassRepository, EntityManagerInterface $em) {
+    public function __construct(UserClassRepository $userClassRepository, EntityManagerInterface $em)
+    {
         $this->userClassRepository = $userClassRepository;
         $this->em = $em;
     }
@@ -35,7 +37,7 @@ class LevelUp
 
     /**
      * Check if the User can level Up and update It
-     * 
+     *
      * @param User $user
      * @return User the updated or not user
      * @todo find a way to indicate that the user as been promoted
@@ -59,12 +61,12 @@ class LevelUp
 
     private function shareScore(User $user, UserClass $userClass)
     {
-        return ($user->getShareScore()>= $userClass->getShareScoreReq());
+        return ($user->getShareScore() >= $userClass->getShareScoreReq());
     }
 
     private function accountAge(User $user, UserClass $userClass)
     {
-        $interval = new DateInterval('P' .$userClass->getAccountAgeReq(). 'D');
+        $interval = new DateInterval('P' . $userClass->getAccountAgeReq() . 'D');
         $ageReq = $user->getCreatedAt()->add($interval);
         return ($ageReq < new DateTime());
     }

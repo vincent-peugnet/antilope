@@ -37,14 +37,13 @@ class SharableRepository extends ServiceEntityRepository
 
     /**
      * List all sharable based on user Class and visibleBy setting on the sharables
-     * 
+     *
      * @param UserClass[] $visibleBy Collection of UserClass
      * @param User $user the actual user
      */
     public function getFilteredSharables(SharableSearch $search, array $visibleBy, User $user)
     {
-        $visibleByIds = array_map(function (UserClass $userClass)
-        {
+        $visibleByIds = array_map(function (UserClass $userClass) {
             return $userClass->getId();
         }, $visibleBy);
 
@@ -66,7 +65,6 @@ class SharableRepository extends ServiceEntityRepository
                 $qb->andWhere('m.user = :mid')
                 ->setParameter('mid', $manager->getId());
             }
-
         }
 
         // Work, but there may be a better way to do this including a lot of joins
@@ -77,7 +75,6 @@ class SharableRepository extends ServiceEntityRepository
                     $qb->expr()->isNull('s.visibleBy')
                 )
             );
-
         } else {
             $qb->andWhere(
                 $qb->expr()->in('s.visibleBy', $visibleByIds)
@@ -113,13 +110,12 @@ class SharableRepository extends ServiceEntityRepository
         }
 
         if ($search->getSortBy() && $search->getOrder()) {
-            $qb->orderBy('s.' .$search->getSortBy(), $search->getOrder());   
+            $qb->orderBy('s.' . $search->getSortBy(), $search->getOrder());
         }
         $result = $qb->getQuery()
         ->getResult();
 
         return $result;
-
     }
 
 

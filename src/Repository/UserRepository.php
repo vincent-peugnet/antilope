@@ -59,7 +59,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
 
-    public function findPossibleManagers(Sharable $sharable): Array
+    public function findPossibleManagers(Sharable $sharable): array
     {
         $qb = $this->createQueryBuilder('uu');
         return $qb->andWhere(

@@ -29,7 +29,7 @@ class InvitationCreateType extends AbstractType
             'userLimitReached' => false,
             'needToWait' => false,
         ]);
-        $resolver->setAllowedTypes('userLimitReached', 'bool');        
-        $resolver->setAllowedTypes('needToWait', 'bool');        
+        $resolver->setAllowedTypes('userLimitReached', 'bool');
+        $resolver->setAllowedTypes('needToWait', 'bool');
     }
 }

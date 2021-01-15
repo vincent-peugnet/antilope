@@ -20,7 +20,8 @@ class ManageType extends AbstractType
 {
     private $userRepository;
 
-    public function __construct(UserRepository $userRepository) {
+    public function __construct(UserRepository $userRepository)
+    {
         $this->userRepository = $userRepository;
     }
 
@@ -30,7 +31,7 @@ class ManageType extends AbstractType
         assert($manage instanceof Manage);
         $sharable = $manage->getSharable();
 
-        
+
 
         $builder
             ->add('user', EntityType::class, [

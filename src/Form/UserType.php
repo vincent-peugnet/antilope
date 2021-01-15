@@ -26,8 +26,12 @@ class UserType extends AbstractType
             ->add('paranoia', ChoiceType::class, [
                 'label' => 'Paranoïa level',
                 'choice_loader' => new CallbackChoiceLoader(
-                    function() use ($user) {
-                        return array_slice(UserVoter::getParanoiaLevels(), 0, $user->getUserClass()->getMaxParanoia() + 1);
+                    function () use ($user) {
+                        return array_slice(
+                            UserVoter::getParanoiaLevels(),
+                            0,
+                            $user->getUserClass()->getMaxParanoia() + 1
+                        );
                     }
                 ),
                 'help' => '0 all users can see your profile</br>1 hide interested</br>2 hide interested, validations</br>3 hide interested, validations, sharables</br>4 hide interested, validations, sharables, stats',

@@ -21,9 +21,9 @@ class UserClassRepository extends ServiceEntityRepository
 
     /**
      * Get all UserClass that are at lower or equal rank.
-     * 
+     *
      * @param UserClass $userClass the user class as reference
-     * 
+     *
      * @return UserClass[] Returns an array of UserClass objects
      */
     public function findLowerthan(UserClass $userClass)
@@ -40,9 +40,9 @@ class UserClassRepository extends ServiceEntityRepository
 
     /**
      * Find next UserClass after the one given
-     * 
+     *
      * @param UserClass $userClass the user class as reference
-     * 
+     *
      * @return UserClass|null Returns an array of UserClass objects
      */
     public function findNext(UserClass $userClass): ?UserClass

@@ -30,13 +30,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
 class SharableController extends AbstractController
 {
     /**
      * @Route("/sharable", name="sharable")
      */
-    public function index(Request $request, SharableRepository $sharableRepository, UserClassRepository $userClassRepository, UserRepository $userRepository): Response
-    {
+    public function index(
+        Request $request,
+        SharableRepository $sharableRepository,
+        UserClassRepository $userClassRepository
+    ): Response {
         /** @var User $user */
         $user = $this->getUser();
         $visibleBy = $userClassRepository->findLowerthan($user->getUserClass());
@@ -74,8 +78,12 @@ class SharableController extends AbstractController
     /**
      * @Route("/sharable/{id}", name="sharable_show", requirements={"id"="\d+"})
      */
-    public function show(Sharable $sharable, InterestedRepository $interestedRepository, ValidationRepository $validationRepository, ManageRepository $manageRepository)
-    {
+    public function show(
+        Sharable $sharable,
+        InterestedRepository $interestedRepository,
+        ValidationRepository $validationRepository,
+        ManageRepository $manageRepository
+    ) {
         $this->denyAccessUnlessGranted(SharableVoter::VIEW, $sharable);
 
         $user = $this->getUser();
@@ -178,11 +186,15 @@ class SharableController extends AbstractController
      * @Route("/sharable/{id}/validate", name="sharable_validate", requirements={"id"="\d+"})
      * @todo send Email to each managers managing validated sharable and when user is promoted
      */
-    public function validate(Sharable $sharable, Request $request, LevelUp $levelUp, SharePoints $sharePointAlgo): Response
-    {
+    public function validate(
+        Sharable $sharable,
+        Request $request,
+        LevelUp $levelUp,
+        SharePoints $sharePointAlgo
+    ): Response {
         $this->denyAccessUnlessGranted('validate', $sharable);
 
-        $form =$this->createForm(ValidationType::class, new Validation());
+        $form = $this->createForm(ValidationType::class, new Validation());
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -201,7 +213,7 @@ class SharableController extends AbstractController
                 $checkedManager = $levelUp->check($manager);
                 $entityManager->persist($checkedManager);
             }
-            
+
             $entityManager->persist($validation);
 
             $user = $levelUp->check($this->getUser());
@@ -210,7 +222,7 @@ class SharableController extends AbstractController
             }
 
             $entityManager->flush();
-            
+
 
 
             return $this->redirectToRoute('sharable_show', ['id' => $sharable->getId()]);
@@ -247,11 +259,11 @@ class SharableController extends AbstractController
         $this->denyAccessUnlessGranted('create', $sharable);
 
         $form = $this->createForm(SharableType::class, $sharable);
-        
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $sharable = $form->getData();
-            
+
             $manage = new Manage();
             $manage->setSharable($sharable)
                 ->setUser($this->getUser())
@@ -270,5 +282,4 @@ class SharableController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
 }

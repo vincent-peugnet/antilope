@@ -79,7 +79,6 @@ class SignUpType extends AbstractType
         if ($userLimitReached) {
             $builder->get('signUp')->setDisabled(true);
         }
-
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -92,6 +91,5 @@ class SignUpType extends AbstractType
 
         $resolver->setAllowedTypes('needCode', 'bool');
         $resolver->setAllowedTypes('userLimitReached', 'bool');
-
     }
 }

@@ -15,7 +15,8 @@ class CodeValidator extends ConstraintValidator
     private $invitationRepository;
     private $invitationDuration;
 
-    public function __construct(InvitationRepository $invitationRepository, ParameterBagInterface $params) {
+    public function __construct(InvitationRepository $invitationRepository, ParameterBagInterface $params)
+    {
         $this->invitationRepository = $invitationRepository;
         $this->invitationDuration = $params->get('app.invitationDuration');
     }
@@ -38,7 +39,7 @@ class CodeValidator extends ConstraintValidator
         }
 
         $invitationDuration = new DateInterval(
-            'PT' .$this->invitationDuration. 'H'
+            'PT' . $this->invitationDuration . 'H'
         );
         $invitation = $this->invitationRepository->findOneBy(['code' => $value]);
 

@@ -38,7 +38,7 @@ class InterestedController extends AbstractController
     {
         $this->denyAccessUnlessGranted(SharableVoter::INTEREST, $sharable);
 
-        $form = $this->createForm(InterestedType::class, new Interested);
+        $form = $this->createForm(InterestedType::class, new Interested());
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $interested = $form->getData();
@@ -67,7 +67,7 @@ class InterestedController extends AbstractController
 
         if ($sharable->getInterestedMethod() === 3) {
             $interested->setReviewed(true);
-    
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($interested);
             $entityManager->flush();

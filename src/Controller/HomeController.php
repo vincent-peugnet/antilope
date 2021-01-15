@@ -14,8 +14,11 @@ class HomeController extends AbstractController
     /**
      * @Route("/", name="app_homepage")
      */
-    public function index(SharableRepository $sharableRepository, UserRepository $userRepository, ValidationRepository $validationRepository): Response
-    {
+    public function index(
+        SharableRepository $sharableRepository,
+        UserRepository $userRepository,
+        ValidationRepository $validationRepository
+    ): Response {
         return $this->render('home/index.html.twig', [
             'userCount' => $userRepository->count([]),
             'sharableCount' => $sharableRepository->count([]),
