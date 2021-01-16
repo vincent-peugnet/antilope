@@ -146,7 +146,7 @@ class AccountController extends AbstractController
             'needToWait' => $this->needToWait,
         ]);
     }
-    
+
     /**
      * @Route("/account/settings", name="account_settings")
      */

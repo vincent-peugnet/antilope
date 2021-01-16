@@ -10,8 +10,10 @@
 {{ breadcrumbs.render([
     {'url': url('sharable'), 'text': 'Sharables'},
     {'url': url('sharable_show', {id: sharable.id}), 'text': sharable.name},
-    {'text': 'edit'},
+    {'text': 'Edit'},
 ]) }}
+
+<h1>Sharable edit</h1>
 
 {{ form(form) }}
 
