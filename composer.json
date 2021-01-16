@@ -1,6 +1,8 @@
 {
+    "name": "vincent-peugnet/antilope",
+    "description": "Antilope is a real life private tracker, allowing members to share anything inside communities",
     "type": "project",
-    "license": "proprietary",
+    "license": "AGPL-3.0-or-later",
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
