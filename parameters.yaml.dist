@@ -1,9 +1,8 @@
-# This file is auto-generated during the composer install
 parameters:
+    app.openRegistration: true
     app.userLimit: 1000
     app.invitationDuration: 24
-    app.siteName: Antilope
+    app.siteName: 'Antilope'
     app.siteDescription: 'A sharable Network'
     app.siteAlert: 'beware of not sharing too much COVID-19, share carefully !'
     app.showHomeStats: false
-    app.openRegistration: ': true'

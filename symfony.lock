@@ -112,6 +112,9 @@
     "erusev/parsedown": {
         "version": "1.7.4"
     },
+    "incenteev/composer-parameter-handler": {
+        "version": "v2.1.4"
+    },
     "knplabs/knp-time-bundle": {
         "version": "v1.14.0"
     },

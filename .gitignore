@@ -2,6 +2,9 @@
 .vscode/*
 !.vscode/extensions.json
 
+# local parameters
+/parameters.yaml
+
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
