@@ -17,9 +17,17 @@
     <file>public/</file>
     <file>src/</file>
     <file>tests/</file>
+    <file>standards/</file>
 
     <!-- Include the whole PSR12 standard -->
     <rule ref="PSR12"></rule>
+
+    <!-- Include Antilope custom ruleset -->
+    <rule ref="./standards/Antilope">
+        <exclude-pattern>*/config/*</exclude-pattern>
+        <exclude-pattern>*/public/*</exclude-pattern>
+        <exclude-pattern>*/tests/*</exclude-pattern>
+    </rule>
 
     <!-- Add some rules -->
     <rule ref="Generic.Metrics.NestingLevel"></rule>
