@@ -15,6 +15,12 @@
 
 <h1>Settings</h1>
 
-Verified account: {{ app.user.isVerified ? 'yes' : 'no' }}
+<p>Verified account: {{ app.user.isVerified ? 'yes' : 'no' }}</p>
+
+{% if not app.user.isVerified %}
+
+<a class="btn btn-primary" href="{{ path('app_email_send') }}">Send email verification</a>
+
+{% endif %}
 
 {% endblock %}
