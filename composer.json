@@ -96,6 +96,7 @@
     },
     "scripts": {
         "auto-scripts": {
+            "parallel-lint src": "script",
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
@@ -113,12 +114,12 @@
         "fix": [
             "@phpcbf"
         ],
-        "lint": "parallel-lint --exclude app --exclude var --exclude vendor .",
-        "phpcs": "phpcs --runtime-set ignore_warnings_on_exit 1",
+        "lint": "parallel-lint $PHPLINT_FLAGS --exclude app --exclude var --exclude vendor .",
+        "phpcs": "phpcs $PHPCS_FLAGS --runtime-set ignore_warnings_on_exit 1",
         "phpcbf": "phpcbf",
         "phpstan": [
             "@php bin/console cache:warmup -q",
-            "phpstan analyse --ansi"
+            "phpstan analyse $PHPSTAN_FLAGS --ansi"
         ],
         "post-install-cmd": [
             "@auto-scripts"
