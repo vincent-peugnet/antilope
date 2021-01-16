@@ -11,7 +11,7 @@
 
 
 {% if is_granted('create', sharable) %}
-    <a class="btn btn-success btn-lg btn-block mb-3" href="{{ path('sharable_new') }}">create new sharable</a>
+    <a class="btn btn-success btn-lg btn-block mb-3" href="{{ path('sharable_new') }}"><i class="fas fa-plus-circle"></i> create new sharable</a>
 {% endif %}
 
 
@@ -75,13 +75,13 @@
         <h5 class="card-title">
         {{ sharable.name }}
         {% if sharable.validations|length > 0 %}
-        <span title="" class="badge badge-success">{{ sharable.validations|length }} validations</span>
+        <span title="" class="badge badge-success">{{ sharable.validations|length }} <i class="fas fa-check-circle"></i></span>
         {% endif %}
         {% if sharable.visibleBy %}
         <span title="accessible by {{ sharable.visibleBy.name }}" class="badge badge-warning">{{ sharable.visibleBy.name }}</span>
         {% endif %}
         {% if sharable.disabled %}
-        <span title="this sharable is disabled" class="badge badge-dark">disabled</span>
+        <span title="this sharable is disabled" class="badge badge-dark"><i class="fas fa-times"></i> disabled</span>
         {% endif %}
         </h5>
         <small>created {{ sharable.createdAt|ago }}</small>
@@ -93,7 +93,7 @@
 
         
         <p class="card-subtitle mb-2 text-muted">{{ sharable.description }}</p>
-        <a class="btn btn-primary" href="{{ path('sharable_show', {id: sharable.id}) }}">details</a>
+        <a class="btn btn-primary" href="{{ path('sharable_show', {id: sharable.id}) }}"><i class="fas fa-info-circle"></i> details</a>
 
     </div>
 

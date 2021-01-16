@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
+
+
+
+
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+
+{{ breadcrumbs.render([
+    {'text': 'Account'},
+    {'text': 'Setings'},
+]) }}
+
+<h1>Settings</h1>
+
+Verified account: {{ app.user.isVerified ? 'yes' : 'no' }}
+
+{% endblock %}

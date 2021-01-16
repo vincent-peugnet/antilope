@@ -1,8 +1,16 @@
 {% extends 'base.html.twig' %}
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 
 {% block title %}New Invitation{% endblock %}
 
 {% block content %}
+
+{{ breadcrumbs.render([
+    {'text': 'Account'},
+    {'url': url('account_invitation'), 'text': 'Invitations'},
+    {'text': 'New'},
+]) }}
+
 
 <h1>New invitation</h1>
 

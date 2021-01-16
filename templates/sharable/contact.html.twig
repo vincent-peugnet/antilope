@@ -29,11 +29,11 @@
     </div>
 {% endif %}
 
-<h3>Sharable contacts 
+<h3>Sharable contacts</h3>
+
 {% if is_granted('edit', sharable) %}
-<a class="btn btn-success" href="{{ path('sharable_contact_add', {id: sharable.id}) }}">add new contact</a>
+<a class="btn btn-success mb-3" href="{{ path('sharable_contact_add', {id: sharable.id}) }}"><i class="fas fa-plus-circle"></i> add new contact</a>
 {% endif %}
-</h3>
 
 
 {% for sharableContact in sharable.sharableContacts %}
@@ -93,22 +93,22 @@
                 {% if is_granted('edit', sharable) %}
                     <span>
                     {% if manage.contactable %}
-                        <span class="badge badge-success" >contactable</span>
+                        <span class="badge badge-success" ><i class="fas fa-eye"></i> visible</span>
                     {% else %}
-                        <span class="badge badge-danger" >hidden</span>
+                        <span class="badge badge-danger" ><i class="fas fa-eye-slash"></i> hidden</span>
                     {% endif %}
                     </span>
                 {% endif %}
             </h4>
 
             {% if is_granted('edit', manage.user) %}
-                {% if manage.contactable and ( sharable.sharableContacts|length > 0 or sharable.getContactableManagers|length > 1  ) %}
-                <a class="btn btn-primary" href="{{ path('manage_uncontactable', {id: manage.id}) }}">
-                    hide contact infos
-                </a>
-                {% elseif manage.user.userContacts|length > 0 %}
+                {% if not manage.contactable and manage.user.userContacts|length > 0 %}
                 <a class="btn btn-primary" href="{{ path('manage_contactable', {id: manage.id}) }}">
-                    become contactable
+                    <i class="fas fa-eye"></i> show contact infos
+                </a>
+                {% elseif ( sharable.sharableContacts|length > 0 or sharable.getContactableManagers|length > 1  ) %}
+                <a class="btn btn-primary" href="{{ path('manage_uncontactable', {id: manage.id}) }}">
+                    <i class="fas fa-eye-slash"></i> hide contact infos
                 </a>
                 {% endif %}
             {% endif %}
@@ -129,7 +129,7 @@
         {% endfor %}
         </ul>        
 
-        <a class="btn btn-primary" href="{{ path('user_contact', {id: manage.user.id}) }}">view detailed contact infos</a>
+        <a class="btn btn-primary" href="{{ path('user_contact', {id: manage.user.id}) }}"><i class="fas fa-info-circle"></i> view detailed contact infos</a>
 
     
         </div>

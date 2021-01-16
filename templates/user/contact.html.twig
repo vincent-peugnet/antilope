@@ -16,7 +16,7 @@
 <h1>Contacts</h1>
 
 {% if is_granted('edit', user) %}
-<a  class="btn btn-success" href="{{ path('user_contact_add', {id: user.id}) }}">add new contact</a>
+<a  class="btn btn-success" href="{{ path('user_contact_add', {id: user.id}) }}"><i class="fas fa-plus-circle"></i> add new contact</a>
 {% endif %}
 
 

@@ -146,4 +146,13 @@ class AccountController extends AbstractController
             'needToWait' => $this->needToWait,
         ]);
     }
+    
+    /**
+     * @Route("/account/settings", name="account_settings")
+     */
+    public function settings()
+    {
+        return $this->render('account/settings.html.twig', [
+        ]);
+    }
 }

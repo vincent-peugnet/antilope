@@ -74,7 +74,10 @@ class SharableSearchType extends AbstractType
                 'choices' => SharableSearch::ORDER,
                 'empty_data' => $default->getOrder(),
             ])
-            ->add('search', SubmitType::class)
+            ->add('search', SubmitType::class, [
+                'label' => '<i class="fas fa-search"></i> Search',
+                'label_html' => true,
+            ])
         ;
     }
 

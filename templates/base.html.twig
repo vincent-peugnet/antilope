@@ -6,7 +6,7 @@
         <meta name="description" content="{% block description %}{{ siteDescription }}{% endblock %}">
         <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/darkly/bootstrap.min.css">
-        {% block stylesheets %}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />        {% block stylesheets %}
         {% endblock %}
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous" async></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous" async></script>
@@ -52,7 +52,7 @@
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item{{ route_name == 'account_invitation' ? ' active' }}" href="{{ path('account_invitation') }}">invitation</a>
-                                <a class="dropdown-item disabled">settings</a>
+                                <a class="dropdown-item{{ route_name == 'account_settings' ? ' active' }}" href="{{ path('account_settings') }}">settings</a>
                             </div>
                         </li>
 
@@ -66,16 +66,16 @@
                         </li>
                         {% endif %}
                         <li class="nav-item">
-                            <a class="nav-link d-flex" href="{{ path('app_logout') }}">logout</a>
+                            <a class="nav-link d-flex" href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt"></i> logout</a>
                         </li>
 
                         {% else %}
 
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_login') }}">login</a>
+                            <a class="nav-link" href="{{ path('app_login') }}"><i class="fas fa-sign-in-alt"></i> login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('sign_up') }}">sign up</a>
+                            <a class="nav-link" href="{{ path('sign_up') }}"><i class="fas fa-user-plus"></i> sign up</a>
                         </li>
 
                         {% endif %}
@@ -90,7 +90,13 @@
 
                 {% if app.user and app.user.userContacts is empty %}
                     <div class="alert alert-warning" >
-                    You haven't set any <a href="{{ path('user_contact', {id: app.user.id}) }}">Contact Infos</a> yet, you won't be able to create sharables or access a lot of them.
+                    <i class="fas fa-address-book"></i> You haven't set any <a href="{{ path('user_contact', {id: app.user.id}) }}">Contact Infos</a> yet, you won't be able to create sharables or access a lot of them.
+                    </div>
+                {% endif %}
+
+                {% if app.user and not app.user.isVerified %}
+                    <div class="alert alert-warning" >
+                    <i class="fas fa-envelope"></i> You haven't verified your email adress. Checkout your <a href="{{ path('account_settings') }}">Account Settings</a> to send a new verification mail.
                     </div>
                 {% endif %}
 
