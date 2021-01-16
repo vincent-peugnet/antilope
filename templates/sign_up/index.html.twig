@@ -7,14 +7,9 @@
 
 <h1>Sign Up</h1>
 
-    {% for flashError in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
-    {% endfor %}
-
     {% if userLimitReached %}
-    <div class="alert alert-warning">User limit reached, impossible to sign up.</div>
+        <div class="alert alert-warning">User limit reached, impossible to sign up.</div>
     {% endif %}
-
 
     {{ form(form) }}
 
