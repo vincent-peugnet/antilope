@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "410ac3af10ba628a28e872f38bb4c7d2",
+    "content-hash": "e11cc39f274a234fe82d9381a0bd1e0b",
     "packages": [
         {
             "name": "composer/package-versions-deprecated",
@@ -1442,17 +1442,68 @@
             "time": "2021-01-14T21:52:44+00:00"
         },
         {
-            "name": "knplabs/knp-time-bundle",
-            "version": "v1.14.0",
+            "name": "incenteev/composer-parameter-handler",
+            "version": "v2.1.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/KnpLabs/KnpTimeBundle.git",
-                "reference": "2210e5e8f5ece34b8ec65fa5fe07aa48205f0ce8"
+                "url": "https://github.com/Incenteev/ParameterHandler.git",
+                "reference": "084befb11ec21faeadcddefb88b66132775ff59b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/KnpTimeBundle/zipball/2210e5e8f5ece34b8ec65fa5fe07aa48205f0ce8",
-                "reference": "2210e5e8f5ece34b8ec65fa5fe07aa48205f0ce8",
+                "url": "https://api.github.com/repos/Incenteev/ParameterHandler/zipball/084befb11ec21faeadcddefb88b66132775ff59b",
+                "reference": "084befb11ec21faeadcddefb88b66132775ff59b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "symfony/yaml": "^2.3 || ^3.0 || ^4.0 || ^5.0"
+            },
+            "require-dev": {
+                "composer/composer": "^1.0@dev",
+                "symfony/filesystem": "^2.3 || ^3 || ^4 || ^5",
+                "symfony/phpunit-bridge": "^4.0 || ^5.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Incenteev\\ParameterHandler\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christophe Coevoet",
+                    "email": "stof@notk.org"
+                }
+            ],
+            "description": "Composer script handling your ignored parameter file",
+            "homepage": "https://github.com/Incenteev/ParameterHandler",
+            "keywords": [
+                "parameters management"
+            ],
+            "time": "2020-03-17T21:10:00+00:00"
+        },
+        {
+            "name": "knplabs/knp-time-bundle",
+            "version": "v1.15.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/KnpLabs/KnpTimeBundle.git",
+                "reference": "96bc6523babd1a85988f8b4ecd2730c3aa064b8c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/KnpLabs/KnpTimeBundle/zipball/96bc6523babd1a85988f8b4ecd2730c3aa064b8c",
+                "reference": "96bc6523babd1a85988f8b4ecd2730c3aa064b8c",
                 "shasum": ""
             },
             "require": {
@@ -1505,7 +1556,7 @@
                 "knplabs",
                 "time"
             ],
-            "time": "2020-12-16T16:46:24+00:00"
+            "time": "2021-01-15T18:15:43+00:00"
         },
         {
             "name": "laminas/laminas-code",
@@ -7602,16 +7653,16 @@
         },
         {
             "name": "symfony/maker-bundle",
-            "version": "1.27.0",
+            "version": "v1.28.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/maker-bundle.git",
-                "reference": "a47408fa6e39034a5abe324a46f4e6733266267a"
+                "reference": "6f4d27a68c92179c124f5331a27e32d197c9bd59"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/a47408fa6e39034a5abe324a46f4e6733266267a",
-                "reference": "a47408fa6e39034a5abe324a46f4e6733266267a",
+                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/6f4d27a68c92179c124f5331a27e32d197c9bd59",
+                "reference": "6f4d27a68c92179c124f5331a27e32d197c9bd59",
                 "shasum": ""
             },
             "require": {
@@ -7668,7 +7719,7 @@
                 "scaffold",
                 "scaffolding"
             ],
-            "time": "2021-01-08T18:14:10+00:00"
+            "time": "2021-01-15T18:19:20+00:00"
         },
         {
             "name": "symfony/phpunit-bridge",
