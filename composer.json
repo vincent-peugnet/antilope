@@ -123,12 +123,12 @@
             "phpstan analyse $PHPSTAN_FLAGS --ansi"
         ],
         "post-install-cmd": [
-            "@auto-scripts",
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+            "@auto-scripts"
         ],
         "post-update-cmd": [
-            "@auto-scripts",
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+            "@auto-scripts"
         ]
     },
     "conflict": {
