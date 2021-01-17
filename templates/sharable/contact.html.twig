@@ -101,16 +101,15 @@
                 {% endif %}
             </h4>
 
-            {% if is_granted('edit', manage.user) %}
-                {% if not manage.contactable and manage.user.userContacts|length > 0 %}
-                <a class="btn btn-primary" href="{{ path('manage_contactable', {id: manage.id}) }}">
-                    <i class="fas fa-eye"></i> show contact infos
-                </a>
-                {% elseif ( sharable.sharableContacts|length > 0 or sharable.getContactableManagers|length > 1  ) %}
+
+            {% if is_granted('hide_contact', manage) %}
                 <a class="btn btn-primary" href="{{ path('manage_uncontactable', {id: manage.id}) }}">
                     <i class="fas fa-eye-slash"></i> hide contact infos
                 </a>
-                {% endif %}
+            {% elseif is_granted('show_contact', manage) %}
+                <a class="btn btn-primary" href="{{ path('manage_contactable', {id: manage.id}) }}">
+                    <i class="fas fa-eye"></i> show contact infos
+                </a>
             {% endif %}
         </div>
 

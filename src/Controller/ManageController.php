@@ -90,19 +90,15 @@ class ManageController extends AbstractController
      */
     public function manageUnContactable(Manage $manage): Response
     {
-        $user = $manage->getUser();
-        $sharable = $manage->getSharable();
-        $this->denyAccessUnlessGranted(UserVoter::EDIT, $user);
+        $this->denyAccessUnlessGranted(ManageVoter::HIDE_CONTACT, $manage);
 
-        if (!$sharable->getSharableContacts()->isEmpty() || $sharable->getContactableManagers()->count() > 1) {
-            $manage->setContactable(false);
+        $manage->setContactable(false);
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($manage);
-            $entityManager->flush();
-        }
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($manage);
+        $entityManager->flush();
 
-        return $this->redirectToRoute('sharable_contact', ['id' => $sharable->getId()]);
+        return $this->redirectToRoute('sharable_contact', ['id' => $manage->getSharable()->getId()]);
     }
 
 
@@ -111,19 +107,14 @@ class ManageController extends AbstractController
      */
     public function manageContactable(Manage $manage): Response
     {
-        $user = $manage->getUser();
-        $sharable = $manage->getSharable();
-        $this->denyAccessUnlessGranted(UserVoter::EDIT, $user);
+        $this->denyAccessUnlessGranted(ManageVoter::SHOW_CONTACT, $manage);
 
-        if ($user->getUserContacts()->count() > 0) {
-            $manage->setContactable(true);
+        $manage->setContactable(true);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($manage);
+        $entityManager->flush();
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($manage);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('sharable_contact', ['id' => $sharable->getId()]);
+        return $this->redirectToRoute('sharable_contact', ['id' => $manage->getSharable()->getId()]);
     }
 
     /**

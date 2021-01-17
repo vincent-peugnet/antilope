@@ -34,14 +34,16 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class ManageVoter extends Voter
 {
-    public const REMOVE  = 'remove';
-    public const CONFIRM = 'confirm';
+    public const REMOVE       = 'remove';
+    public const CONFIRM      = 'confirm';
+    public const HIDE_CONTACT = 'hide_contact';
+    public const SHOW_CONTACT = 'show_contact';
 
     protected function supports($attribute, $subject)
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, [self::REMOVE, self::CONFIRM])
+        return in_array($attribute, [self::REMOVE, self::CONFIRM, self::HIDE_CONTACT, self::SHOW_CONTACT])
             && $subject instanceof \App\Entity\Manage;
     }
 
@@ -61,6 +63,10 @@ class ManageVoter extends Voter
                 return $this->canRemove($manage, $user);
             case self::CONFIRM:
                 return $this->canConfirm($manage, $user);
+            case self::HIDE_CONTACT:
+                return $this->canHideContact($manage, $user);
+            case self::SHOW_CONTACT:
+                return $this->canShowContact($manage, $user);
         }
 
         return false;
@@ -90,5 +96,32 @@ class ManageVoter extends Voter
     public function canConfirm(Manage $manage, User $user): bool
     {
         return ($manage->getUser() === $user && !$manage->getConfirmed());
+    }
+
+    public function canHideContact(Manage $manage, User $user): bool
+    {
+        $sharable = $manage->getSharable();
+        return (
+            $this->isConfirmedManager($manage, $user) &&
+            $manage->getContactable() &&
+            (
+                !$sharable->getSharableContacts()->isEmpty() ||
+                !$sharable->getContactableManagers()->isEmpty()
+            )
+        );
+    }
+
+    public function canShowContact(Manage $manage, User $user): bool
+    {
+        return (
+            $this->isConfirmedManager($manage, $user) &&
+            !$manage->getContactable() &&
+            !$user->getUserContacts()->isEmpty()
+        );
+    }
+
+    private function isConfirmedManager(Manage $manage, User $user): bool
+    {
+        return ($manage->getUser() === $user && $manage->getConfirmed());
     }
 }
