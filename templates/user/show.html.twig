@@ -106,9 +106,11 @@
 
             <div class="card-header">
 
-                <div class="card-title">
-                    <h3>Sharables</h3>
-                </div>
+                <h3 class="card-title d-flex justify-content-between align-items-center">
+                Manage
+                <small><span class="badge badge-light">{{ user.manages|length }}</span></small>
+                </h3>
+
             </div>
 
             <div class="card-body">
@@ -116,14 +118,17 @@
                 <ul class="list-group list-group-flush">
                 {% for manage in user.manages %}
 
-                <li class="list-group-item">
+                {% if is_granted('view', manage.sharable) %}
 
+                    <li class="list-group-item">
 
-                <a href="{{ path('sharable_show', {id: manage.sharable.id}) }}">{{ manage.sharable.name }}</a>
-                {% if is_granted('edit', manage.sharable) %}
+                    <a href="{{ path('sharable_show', {id: manage.sharable.id}) }}">{{ manage.sharable.name }}</a>
+                    {% if is_granted('edit', manage.sharable) %}
+                    {% endif %}
+
+                    </li>
+                
                 {% endif %}
-
-                </li>
 
                 {% endfor %}
                 </ul>
@@ -143,9 +148,11 @@
 
             <div class="card-header">
 
-                <div class="card-title">
-                    <h3>Validations given</h3>
-                </div>
+                <h3 class="card-title d-flex justify-content-between align-items-center">
+                Validations given
+                <small><span class="badge badge-light">{{ user.validations|length }}</span></small>
+                </h3>
+
             </div>
 
             <div class="card-body">
@@ -154,10 +161,14 @@
                 <ul class="list-group list-group-flush">
                 {% for validation in user.Validations %}
 
-                <li class="list-group-item">
-                <a href="{{ path('sharable_show', {id: validation.sharable.id}) }}">{{ validation.sharable.name }}</a>
-                <small>{{ validation.sendAt|ago }}</small>
-                </li>
+                {% if is_granted('view', validation.sharable) %}
+
+                    <li class="list-group-item">
+                    <a href="{{ path('sharable_show', {id: validation.sharable.id}) }}">{{ validation.sharable.name }}</a>
+                    <small>{{ validation.sendAt|ago }}</small>
+                    </li>
+                
+                {% endif %}
 
                 {% endfor %}
                 </ul>
@@ -173,9 +184,11 @@
 
             <div class="card-header">
 
-                <div class="card-title">
-                    <h3>Interested in</h3>
-                </div>
+                <h3 class="card-title d-flex justify-content-between align-items-center">
+                Interested in
+                <small><span class="badge badge-light">{{ user.interesteds|length }}</span></small>
+                </h3>
+
             </div>
 
             <div class="card-body">
@@ -184,10 +197,14 @@
                 <ul class="list-group list-group-flush">
                 {% for interested in user.interesteds %}
 
-                <li class="list-group-item">
-                <a href="{{ path('sharable_show', {id: interested.sharable.id}) }}">{{ interested.sharable.name }}</a>
-                <small>{{ interested.createdAt|ago }}</small>
-                </li>
+                {% if is_granted('view', interested.sharable) %}
+
+                    <li class="list-group-item">
+                    <a href="{{ path('sharable_show', {id: interested.sharable.id}) }}">{{ interested.sharable.name }}</a>
+                    <small>{{ interested.createdAt|ago }}</small>
+                    </li>
+
+                {% endif %}
 
                 {% endfor %}
                 </ul>
