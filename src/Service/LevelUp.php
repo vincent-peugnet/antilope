@@ -49,10 +49,8 @@ class LevelUp
      */
     public function checkUpdate(User $user): User
     {
-        $originalUserClass = $user->getUserClass();
-        $user = $this->check($user);
-        if ($user->getUserClass() !== $originalUserClass) {
-            // User is promoted !
+        $needUpdate = $this->check($user);
+        if ($needUpdate) {
             $this->em->persist($user);
             $this->em->flush();
         }
@@ -60,13 +58,25 @@ class LevelUp
     }
 
     /**
+     * Check for promotion or demotion
+     * @param User $user the User to check, passed by reference and modified if promoting or demoting is needed
+     * @return bool True in case of userClass change
+     */
+    public function check(User &$user): bool
+    {
+        $originalUserClass = $user->getUserClass();
+        $user = $this->checkDown($user);
+        $user = $this->checkUp($user);
+        return $user->getUserClass() !== $originalUserClass;
+    }
+
+    /**
      * Check if the User can level Up and update It
      *
      * @param User $user
      * @return User the updated or not user
-     * @todo find a way to indicate that the user as been promoted
      */
-    public function check(User $user): User
+    public function checkUp(User $user): User
     {
         $userClass = $this->userClassRepository->findNext($user->getUserClass());
         if ($userClass) {
@@ -77,7 +87,31 @@ class LevelUp
                 $this->verified($user, $userClass)
             ) {
                 $user->setUserClass($userClass);
-                $this->check($user);
+                $this->checkUp($user);
+            }
+        }
+        return $user;
+    }
+
+    /**
+     *  Check if the User still deserve it's user class, otherwise, downgrade it
+     *
+     * @param User $user
+     * @return User the updated or not user
+     */
+    public function checkDown(User $user): User
+    {
+        $userClass = $user->getUserClass();
+        if (
+            !$this->shareScore($user, $userClass) ||
+            !$this->accountAge($user, $userClass) ||
+            !$this->validated($user, $userClass) ||
+            !$this->verified($user, $userClass)
+        ) {
+            $userClass = $this->userClassRepository->findPrevious($user->getUserClass());
+            if ($userClass) {
+                $user->setUserClass($userClass);
+                $this->checkDown($user);
             }
         }
         return $user;

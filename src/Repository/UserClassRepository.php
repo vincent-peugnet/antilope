@@ -67,12 +67,31 @@ class UserClassRepository extends ServiceEntityRepository
      *
      * @param UserClass $userClass the user class as reference
      *
-     * @return UserClass|null Returns an array of UserClass objects
+     * @return UserClass|null UserClass objects if exists
      */
     public function findNext(UserClass $userClass): ?UserClass
     {
         return $this->createQueryBuilder('u')
             ->andWhere('u.rank > :rank')
+            ->setParameter('rank', $userClass->getRank())
+            ->orderBy('u.rank', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    /**
+     * Find previous UserClass after the one given
+     *
+     * @param UserClass $userClass the user class as reference
+     *
+     * @return UserClass|null UserClass objects if exists
+     */
+    public function findPrevious(UserClass $userClass): ?UserClass
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.rank < :rank')
             ->setParameter('rank', $userClass->getRank())
             ->orderBy('u.rank', 'ASC')
             ->setMaxResults(1)

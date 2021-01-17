@@ -15,12 +15,49 @@
 
 <h1>Settings</h1>
 
-<p>Verified account: {{ app.user.isVerified ? 'yes' : 'no' }}</p>
 
-{% if not app.user.isVerified %}
+<div class="card mb-3">
 
-<a class="btn btn-primary" href="{{ path('app_email_send') }}">Send email verification</a>
+    <div class="card-header">
 
-{% endif %}
+        <h3 class="card-title">
+            Email
+            <span class="badge"><small>{{ app.user.isVerified ? 'verified' : 'not verified' }}</small></span>
+        </h3>
+
+    </div>
+
+    <div class="card-body">
+
+    <p>Actual email adress: <code>{{ app.user.email }}</code></p>
+
+    {% if not app.user.isVerified %}
+
+    <a class="btn btn-primary" href="{{ path('email_send') }}">Send email verification</a>
+
+    {% endif %}
+
+    <a class="btn btn-primary" href="{{ path('email_edit') }}">Change Email adress</a>
+
+
+    </div>
+</div>
+
+<div class="card mb-3">
+
+    <div class="card-header">
+
+        <h3 class="card-title">
+            Security
+        </h3>
+
+    </div>
+
+    <div class="card-body">
+
+        <a class="btn btn-primary" href="">Reset password</a>
+
+    </div>
+</div>
 
 {% endblock %}

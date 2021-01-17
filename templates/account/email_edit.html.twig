@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
+
+
+
+
+{% block title %}Email{% endblock %}
+
+{% block content %}
+
+{{ breadcrumbs.render([
+    {'text': 'Account'},
+    {'url': url('account_settings'), 'text': 'Settings'},
+    {'text': 'Email'},
+]) }}
+
+<h1>Email</h1>
+
+{% if app.user.isVerified %}
+
+<p>Beware ! as your actual Email is verified, you will loose your status by changing it. Be sure to verify the new one as soon as possible.</p>
+
+{% endif %}
+
+{{ form(form) }}
+
+{% endblock %}

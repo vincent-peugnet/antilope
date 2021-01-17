@@ -32,11 +32,14 @@ use App\Form\InvitationCreateType;
 use App\Repository\InvitationRepository;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
+use App\Service\LevelUp;
 use DateInterval;
 use DateTime;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidV4Generator;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
@@ -166,14 +169,45 @@ class AccountController extends AbstractController
     }
 
     /**
-     * @Route("account/settings/email/send", name="app_email_send")
+     * @Route("account/settings/email/edit", name="email_edit")
+     */
+    public function editUserEmail(Request $request, LevelUp $levelUp): Response
+    {
+        $oldEmail = $this->getUser()->getEmail();
+        $form = $this->createFormBuilder($this->getUser())
+            ->add('email', EmailType::class)
+            ->add('update', SubmitType::class)
+            ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $editedUser = $form->getData();
+            assert($editedUser instanceof User);
+            if ($editedUser->getEmail() !== $oldEmail) {
+                $editedUser->setIsVerified(false);
+                $entityManager = $this->getDoctrine()->getManager();
+                $levelUp->check($editedUser);
+                $entityManager->persist($editedUser);
+                $entityManager->flush();
+                return $this->redirectToRoute('email_send');
+            }
+            return $this->redirectToRoute('account_settings');
+        }
+
+        return $this->render('account/email_edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("account/settings/email/send", name="email_send")
      */
     public function sendUserEmail(): Response
     {
         $user = $this->getUser();
         // generate a signed url and email it to the user
         $this->emailVerifier->sendEmailConfirmation(
-            'app_email_verify',
+            'email_verify',
             $user,
             (new TemplatedEmail())
                 ->from(new Address('noreply@antilope.net', $this->getParameter('app.siteName')))
@@ -182,16 +216,16 @@ class AccountController extends AbstractController
                 ->htmlTemplate('email/confirmation_email.html.twig')
         );
         $email = $user->getEmail();
-        $this->addFlash('primary', "An email have been send to $email");
+        $this->addFlash('primary', "An email have been send to $email for validation");
         return $this->redirectToRoute('account_settings');
     }
 
 
 
     /**
-     * @Route("account/settings/email/verify", name="app_email_verify")
+     * @Route("account/settings/email/verify", name="email_verify")
      */
-    public function verifyUserEmail(Request $request): Response
+    public function verifyUserEmail(Request $request, LevelUp $levelUp): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -204,9 +238,9 @@ class AccountController extends AbstractController
             return $this->redirectToRoute('account_settings');
         }
 
-        // @TODO Change the redirect on success and handle or remove the flash message in your templates
+        $levelUp->checkUpdate($this->getUser());
         $this->addFlash('success', 'Your email address has been verified.');
 
-        return $this->redirectToRoute('account_settings');
+        return $this->redirectToRoute('app_homepage');
     }
 }
