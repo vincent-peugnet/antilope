@@ -14,13 +14,11 @@
 
 <h1>New invitation</h1>
 
-
-{% if userLimitReached %}
-<div class="alert alert-warning">User limit reached, impossible to invite new users.</div>
-{% endif %}
-
-
-{% if needToWait %}
+{% if openRegistration %}
+<div class="alert alert-light">Registrations are open, no more need for invitation.</div>
+{% elseif userLimitReached %}
+<div class="alert alert-danger">User limit reached, impossible to invite new users.</div>
+{% elseif needToWait %}
 <div class="alert alert-warning">Last invitation send too recently, impossible to invite new users.</div>
 {% endif %}
 

@@ -36,24 +36,17 @@ class InvitationCreateType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $userLimitReached = $options['userLimitReached'];
-        $needToWait = $options['needToWait'];
-
         $builder->add('generate', SubmitType::class);
 
-        if ($userLimitReached || $needToWait) {
-            $builder->get('generate')->setDisabled(true);
-        }
+        $builder->get('generate')->setDisabled($options['disabled']);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => Invitation::class,
-            'userLimitReached' => false,
-            'needToWait' => false,
+            'disabled' => false,
         ]);
-        $resolver->setAllowedTypes('userLimitReached', 'bool');
-        $resolver->setAllowedTypes('needToWait', 'bool');
+        $resolver->setAllowedTypes('disabled', 'bool');
     }
 }

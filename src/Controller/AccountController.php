@@ -32,6 +32,7 @@ use App\Form\InvitationCreateType;
 use App\Repository\InvitationRepository;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
+use App\Service\InvitationService;
 use App\Service\LevelUp;
 use DateInterval;
 use DateTime;
@@ -61,11 +62,11 @@ class AccountController extends AbstractController
     /**
      * @Route("/account/invitation", name="account_invitation")
      */
-    public function invitation(InvitationRepository $invitationRepository): Response
-    {
-        $invitationDuration = new DateInterval(
-            'PT' . $this->getParameter('app.invitationDuration') . 'H'
-        );
+    public function invitation(
+        InvitationRepository $invitationRepository,
+        InvitationService $invitationService
+    ): Response {
+        $invitationDuration = $invitationService->getInvitationDuration();
 
         $usedInvitations = $invitationRepository->findUsedInvitations($this->getUser());
 
@@ -88,43 +89,25 @@ class AccountController extends AbstractController
      */
     public function newInvitation(
         InvitationRepository $invitationRepository,
-        Request $request,
-        UserRepository $userRepository
+        InvitationService $invitationService,
+        Request $request
     ): Response {
         /** @var User $user */
         $user = $this->getUser();
-        $canInvite = $user->getUserClass()->getCanInvite();
-        if (!$canInvite) {
+        if (!$user->getUserClass()->getCanInvite()) {
             throw $this->createAccessDeniedException();
         }
 
+        $userLimitReached = $invitationService->userLimitReached();
+        $needToWait = $invitationService->needToWait($user);
+        $openRegistration = $invitationService->getopenRegistration();
+        $disabled = (
+            $openRegistration ||
+            $userLimitReached ||
+            $needToWait
+        );
 
-        // Check user limit
-        $userLimit = $this->getParameter('app.userLimit');
-        if (!empty($userLimit)) {
-            $userCount = $userRepository->count([]);
-            if ($userCount >= $userLimit) {
-                $this->userLimitReached = true;
-            }
-        }
-
-        // Check invite frequency
-        if ($user->getUserClass()->getInviteFrequency() !== 0) {
-            $inviteFrequency = new DateInterval('P' . $user->getUserClass()->getInviteFrequency() . 'D');
-            $lastInvitation = $invitationRepository->findOneBy(['parent' => $user->getId()], ['createdAt' => 'DESC']);
-            if (!empty($lastInvitation)) {
-                $minInviteDate = $lastInvitation->getCreatedAt()->add($inviteFrequency);
-                if ($minInviteDate >= new DateTime()) {
-                    $this->needToWait = true;
-                }
-            }
-        }
-
-        $invitation = new Invitation();
-        $form = $this->createForm(InvitationCreateType::class, null, [
-            'userLimitReached' => $this->userLimitReached,
-            'needToWait' => $this->needToWait,
-        ]);
+        $form = $this->createForm(InvitationCreateType::class, null, ['disabled' => $disabled]);
 
 
         $form->handleRequest($request);
@@ -147,16 +130,12 @@ class AccountController extends AbstractController
             return $this->redirectToRoute('account_invitation');
         }
 
-        $invitationDuration = new DateInterval(
-            'PT' . $this->getParameter('app.invitationDuration') . 'H'
-        );
-
-
         return $this->render('account/invitation_new.html.twig', [
             'form' => $form->createView(),
-            'invitationDuration' => $invitationDuration,
-            'userLimitReached' => $this->userLimitReached,
-            'needToWait' => $this->needToWait,
+            'invitationDuration' => $invitationService->getInvitationDuration(),
+            'userLimitReached' => $userLimitReached,
+            'needToWait' => $needToWait,
+            'openRegistration' => $openRegistration,
         ]);
     }
 
