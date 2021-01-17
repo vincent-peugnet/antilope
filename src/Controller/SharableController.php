@@ -308,7 +308,7 @@ class SharableController extends AbstractController
             $em->persist($manage);
             $em->flush();
 
-            return $this->redirectToRoute('sharable');
+            return $this->redirectToRoute('sharable_show', ['id' => $sharable->getId()]);
         }
 
 

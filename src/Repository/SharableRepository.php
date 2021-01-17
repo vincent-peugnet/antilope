@@ -96,12 +96,16 @@ class SharableRepository extends ServiceEntityRepository
             $qb->andwhere(
                 $qb->expr()->orX(
                     $qb->expr()->in('s.visibleBy', $visibleByIds),
-                    $qb->expr()->isNull('s.visibleBy')
+                    $qb->expr()->isNull('s.visibleBy'),
+                    $qb->expr()->eq('m.user', $user->getId())
                 )
             );
         } else {
             $qb->andWhere(
-                $qb->expr()->in('s.visibleBy', $visibleByIds)
+                $qb->expr()->orX(
+                    $qb->expr()->in('s.visibleBy', $visibleByIds),
+                    $qb->expr()->eq('m.user', $user->getId())
+                )
             );
         }
 
