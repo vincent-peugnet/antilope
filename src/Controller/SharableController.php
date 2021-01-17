@@ -219,6 +219,7 @@ class SharableController extends AbstractController
         $this->denyAccessUnlessGranted('validate', $sharable);
 
         $user = $this->getUser();
+        assert($user instanceof User);
         $form = $this->createForm(ValidationType::class, new Validation());
 
         $form->handleRequest($request);
@@ -227,8 +228,6 @@ class SharableController extends AbstractController
 
             $validation->setUser($user);
             $validation->setSharable($sharable);
-
-            
 
             $sharePoints = $sharePointAlgo->calculate($user, $sharable);
 
@@ -246,6 +245,14 @@ class SharableController extends AbstractController
             $needUpdate = $levelUp->check($user);
             if ($needUpdate) {
                 $entityManager->persist($user);
+            }
+
+            // remove the interest after validation
+            $interesteds = $user->getInteresteds()->filter(function (Interested $interested) use ($sharable) {
+                return $interested->getSharable() === $sharable;
+            });
+            if (!$interesteds->isEmpty()) {
+                $entityManager->remove($interesteds->first());
             }
 
             $entityManager->flush();

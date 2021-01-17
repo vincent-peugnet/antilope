@@ -494,4 +494,16 @@ class User implements UserInterface
 
         return $this;
     }
+
+    //_______________ special functions _______________
+
+    /**
+     * @return Collection|Sharable[] ArrayCollection of Sharable objects
+     */
+    public function getInterestedSharables(): Collection
+    {
+        return $this->interesteds->map(function (Interested $interested) {
+            return $interested->getSharable();
+        });
+    }
 }

@@ -31,8 +31,6 @@ use App\Entity\Manage;
 use App\Entity\Sharable;
 use App\Entity\User;
 use App\Entity\Validation;
-use App\Repository\UserClassRepository;
-use App\Repository\ValidationRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -143,7 +141,8 @@ class SharableVoter extends Voter
             $this->canView($sharable, $user) &&
             !$this->passedEnd($sharable) &&
             !$user->getUserContacts()->isEmpty() &&
-            !$this->alreadyInterested($sharable, $user)
+            !$this->alreadyInterested($sharable, $user) &&
+            !$this->alreadyValidated($sharable, $user)
         ) {
             return true;
         } else {
