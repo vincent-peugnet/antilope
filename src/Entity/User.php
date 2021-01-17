@@ -506,4 +506,16 @@ class User implements UserInterface
             return $interested->getSharable();
         });
     }
+
+    /**
+     * Get Real Managed list
+     *
+     * @return Collection|Manage[]
+     */
+    public function getConfirmedManages(): Collection
+    {
+        return $this->manages->filter(function (Manage $manage) {
+            return $manage->getConfirmed();
+        });
+    }
 }

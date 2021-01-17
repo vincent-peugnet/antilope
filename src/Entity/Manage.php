@@ -64,10 +64,16 @@ class Manage
      */
     private $contactable;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $confirmed;
+
     public function __construct()
     {
         $this->createdAt = new DateTime();
         $this->contactable = false;
+        $this->confirmed = true;
     }
 
     public function getId(): ?int
@@ -119,6 +125,18 @@ class Manage
     public function setContactable(bool $contactable): self
     {
         $this->contactable = $contactable;
+
+        return $this;
+    }
+
+    public function getConfirmed(): ?bool
+    {
+        return $this->confirmed;
+    }
+
+    public function setConfirmed(bool $confirmed): self
+    {
+        $this->confirmed = $confirmed;
 
         return $this;
     }

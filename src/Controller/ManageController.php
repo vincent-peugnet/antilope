@@ -30,6 +30,8 @@ use App\Entity\Manage;
 use App\Entity\Sharable;
 use App\Form\ManageType;
 use App\Repository\InterestedRepository;
+use App\Security\Voter\ManageVoter;
+use App\Security\Voter\SharableVoter;
 use App\Security\Voter\UserVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -60,6 +62,7 @@ class ManageController extends AbstractController
             $manage = $form->getData();
             assert($manage instanceof Manage);
             $manage->setContactable(false);
+            $manage->setConfirmed(false);
 
             $intrested = $interestedRepo->findOneBy(
                 ['user' => $manage->getUser()->getId(),
@@ -128,24 +131,28 @@ class ManageController extends AbstractController
      */
     public function removeManage(Manage $manage): Response
     {
-        $user = $manage->getUser();
-        $sharable = $manage->getSharable();
-        $this->denyAccessUnlessGranted(UserVoter::EDIT, $user);
+        $this->denyAccessUnlessGranted(ManageVoter::REMOVE, $manage);
 
-        if (
-            $sharable->getManagedBy()->count() > 1 &&
-            (
-                !$manage->getContactable() ||
-                !$sharable->getSharableContacts()->isEmpty() ||
-                $sharable->getContactableManagers()->count() > 1
-            )
-        ) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($manage);
-            $entityManager->flush();
-            return $this->redirectToRoute('sharable_show', ['id' => $sharable->getId()]);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($manage);
+        $entityManager->flush();
+        if ($this->isGranted(SharableVoter::VIEW, $manage->getSharable())) {
+            return $this->redirectToRoute('sharable_show', ['id' => $manage->getSharable()->getId()]);
         } else {
-            return $this->redirectToRoute('sharable_managers', ['id' => $sharable->getId()]);
+            return $this->redirectToRoute('sharable');
         }
+    }
+
+    /**
+     * @Route("/manage/{id}/confirm", name="manage_confirm", requirements={"id"="\d+"})
+     */
+    public function confirmManage(Manage $manage): Response
+    {
+        $this->denyAccessUnlessGranted(ManageVoter::CONFIRM, $manage);
+        $manage->setConfirmed(true);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($manage);
+        $entityManager->flush();
+        return $this->redirectToRoute('sharable_show', ['id' => $manage->getSharable()->getId()]);
     }
 }

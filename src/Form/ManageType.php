@@ -64,7 +64,7 @@ class ManageType extends AbstractType
                 'required' => true,
                 'placeholder' => 'select an user',
             ])
-            ->add('add_manager', SubmitType::class);
+            ->add('invite', SubmitType::class);
         ;
     }
 

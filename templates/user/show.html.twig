@@ -108,7 +108,7 @@
 
                 <h3 class="card-title d-flex justify-content-between align-items-center">
                 Manage
-                <small><span class="badge badge-light">{{ user.manages|length }}</span></small>
+                <small><span class="badge badge-light">{{ user.getConfirmedManages|length }}</span></small>
                 </h3>
 
             </div>
@@ -116,7 +116,7 @@
             <div class="card-body">
 
                 <ul class="list-group list-group-flush">
-                {% for manage in user.manages %}
+                {% for manage in user.getConfirmedManages %}
 
                 {% if is_granted('view', manage.sharable) %}
 

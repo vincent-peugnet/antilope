@@ -462,4 +462,16 @@ class Sharable
             return $manage->getContactable();
         });
     }
+
+    /**
+     * Get all manage relation object that have confirmed
+     *
+     * @return Collection|Manage[]
+     */
+    public function getConfirmedManagers(): Collection
+    {
+        return $this->getManagedBy()->filter(function (Manage $manage) {
+            return $manage->getConfirmed();
+        });
+    }
 }

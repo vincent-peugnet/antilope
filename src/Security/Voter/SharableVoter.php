@@ -105,16 +105,17 @@ class SharableVoter extends Voter
 
     private function canEdit(Sharable $sharable, User $user): bool
     {
-        $manageRepository = $this->em->getRepository(Manage::class);
-        return (bool) $manageRepository->findOneBy([
-            'user' => $user->getId(),
-            'sharable' => $sharable->getId()
-        ]);
+        $manage = $this->canManage($sharable, $user);
+        if ($manage !== null) {
+            return $manage->getConfirmed();
+        } else {
+            return false;
+        }
     }
 
     private function canView(Sharable $sharable, User $user): bool
     {
-        if ($this->canEdit($sharable, $user)) {
+        if ($this->canManage($sharable, $user)) {
             return true;
         }
         if (null !== $sharable->getVisibleBy()) {
@@ -132,7 +133,7 @@ class SharableVoter extends Voter
 
     private function canBeInterested(Sharable $sharable, User $user): bool
     {
-        if ($this->canEdit($sharable, $user)) {
+        if ($this->canManage($sharable, $user)) {
             return false;
         }
         if (
@@ -245,7 +246,7 @@ class SharableVoter extends Voter
     /**
      * @return Interested|null
      */
-    private function alreadyInterested(Sharable $sharable, User $user)
+    private function alreadyInterested(Sharable $sharable, User $user): ?Interested
     {
         $interestedRepository = $this->em->getRepository(Interested::class);
         return $interestedRepository->findOneBy([
@@ -260,6 +261,19 @@ class SharableVoter extends Voter
         return (bool) $validationRepo->findOneBy([
             'user' => $user->getId(),
             'sharable' => $sharable->getId(),
+        ]);
+    }
+
+    /**
+     * Check if Manage object exist
+     * @return Manage|null
+     */
+    private function canManage(Sharable $sharable, User $user): ?Manage
+    {
+        $manageRepository = $this->em->getRepository(Manage::class);
+        return $manageRepository->findOneBy([
+            'user' => $user->getId(),
+            'sharable' => $sharable->getId()
         ]);
     }
 }

@@ -17,7 +17,18 @@
 <div class="container-fluid p-0">
 
     {% if manage %}
-        <div class="alert alert-primary"><i class="fas fa-wrench"></i> You are managing this Sharable.</div>
+        <div class="alert alert-primary"><i class="fas fa-wrench"></i>
+        {% if manage.confirmed %}
+            You are managing this Sharable.
+            {% else %}
+            You've been invited to manage this Sharable.
+
+            <div class="btn-group">
+                <a class="btn btn-secondary" href="{{ path('manage_confirm', {id: manage.id}) }}"><i class="fas fa-check"></i> confirm</a>
+                <a class="btn btn-secondary" href="{{ path('manage_remove', {id: manage.id}) }}"><i class="fas fa-times"></i> refuse</a>
+            </div>
+        {% endif %}
+        </div>
     {% elseif validated %}
         <div class="alert alert-success"><i class="fas fa-check-circle"></i> You have validated this Sharable.</div>
     {% elseif interested %}

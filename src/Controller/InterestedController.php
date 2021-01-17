@@ -30,6 +30,7 @@ use App\Entity\Interested;
 use App\Entity\Sharable;
 use App\Form\InterestedType;
 use App\Repository\InterestedRepository;
+use App\Repository\ManageRepository;
 use App\Security\Voter\SharableVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,7 +59,7 @@ class InterestedController extends AbstractController
     /**
      * @Route("/sharable/{id}/interest", name="sharable_interest", requirements={"id"="\d+"})
      */
-    public function interest(Sharable $sharable, Request $request): Response
+    public function interest(Sharable $sharable, Request $request, ManageRepository $manageRepo): Response
     {
         $this->denyAccessUnlessGranted(SharableVoter::INTEREST, $sharable);
 

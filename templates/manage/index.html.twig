@@ -22,7 +22,7 @@
 
     <a href="{{ path('user_show', {id: manage.user.id}) }}">{{ manage.user.username }}</a>
     <span class="badge badge-warning">{{ manage.user.userClass.name }}</span>
-
+    <span class="badge badge-light">{{ manage.confirmed ? 'confirmed' : 'invited' }}</span>
     <span class="ml-auto"><small>added {{ manage.createdAt|ago }}</small></span>
 
 
@@ -36,13 +36,13 @@
     <div class="card-header">
 
         <div class="card-title">
-            <h5>Add manager</h5>
+            <h5>Invite manager</h5>
         </div>
     </div>
 
     <div class="card-body">
 
-        <div class="alert alert-warning">Beware, once you've added managers, you can't remove them.</div>
+        <div class="alert alert-warning">Beware, once you've invited managers, you can't remove them.</div>
 
         {{ form(form) }}
 
@@ -60,7 +60,7 @@
 
     <div class="card-body">
 
-        {% if sharable.managedBy|length > 1 and ( not userManage.contactable or sharable.sharableContacts|length > 0 or sharable.getContactableManagers|length > 1 ) %}
+        {% if is_granted('remove', userManage) %}
             <a class="btn btn-primary" href="{{ path('manage_remove', {id: userManage.id }) }}">remove myself from managers</a>
         {% else %}
             <p>You cannot remove yourself from managers for now.</p>
