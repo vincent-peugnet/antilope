@@ -16,7 +16,7 @@
   * You should have received a copy of the GNU Affero General Public License
   * along with this program.  If not, see <https://www.gnu.org/licenses/>.
   *
-  * PHP version 7.2
+  * PHP version 7.4
   *
   * @package Antilope
   * @author Vincent Peugnet <vincent-peugnet@riseup.net>

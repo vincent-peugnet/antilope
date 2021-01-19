@@ -137,7 +137,7 @@
         "version": "v2.5.1"
     },
     "php": {
-        "version": "7.2"
+        "version": "7.4"
     },
     "php-parallel-lint/php-parallel-lint": {
         "version": "v1.2.0"
