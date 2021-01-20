@@ -74,17 +74,17 @@ class UserClass
     /**
      * @ORM\Column(type="boolean")
      */
-    private $share;
+    private $share = false;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $access;
+    private $access = false;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $canInvite;
+    private $canInvite = false;
 
     /**
      * @ORM\Column(type="smallint")

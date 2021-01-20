@@ -57,11 +57,9 @@ class UserClassController extends AbstractController
      */
     public function show(UserClass $userClass): Response
     {
-
         return $this->render('user_class/show.html.twig', [
             'userClass' => $userClass,
         ]);
-
     }
 
     /**
