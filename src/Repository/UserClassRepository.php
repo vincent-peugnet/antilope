@@ -20,7 +20,8 @@
  *
  * @package Antilope
  * @author Vincent Peugnet <vincent-peugnet@riseup.net>
- * @copyright 2020-2021 Vincent Peugnet
+ * @author Nicolas Peugnet <n.peugnet@free.fr>
+ * @copyright 2020-2021 Vincent Peugnet, Nicolas Peugnet
  * @license https://www.gnu.org/licenses/agpl-3.0.txt AGPL-3.0-or-later
  */
 
@@ -28,6 +29,7 @@ namespace App\Repository;
 
 use App\Entity\UserClass;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -117,6 +119,42 @@ class UserClassRepository extends ServiceEntityRepository
         return $query->getOneOrNullResult();
     }
 
+    /**
+     * Recursive SQL raw query to find a list of user class between two others.
+     *
+     * @param UserClass $from the lowest class from which to search (included).
+     * @param UserClass|null $to the optional highest class to which the search should stop (included).
+     * @return UserClass[] the list of classes that match the given parameters.
+     */
+    public function findBetween(UserClass $from, ?UserClass $to = null): array
+    {
+        $rsm = new ResultSetMappingBuilder($this->_em);
+        $rsm->addRootEntityFromClassMetadata(UserClass::class, 'cte');
+
+        $exitCondition = !is_null($to) ? 'WHERE c.id != ?' : '';
+        $sql = "WITH RECURSIVE cte as (
+                SELECT u.*
+                FROM   user_class as u
+                WHERE  u.id = ?
+
+                UNION  ALL
+
+                SELECT n.*
+                FROM   cte c
+                JOIN   user_class n ON n.id = c.next_id
+                $exitCondition
+            )
+            SELECT *
+            FROM   cte;";
+        $query = $this->_em->createNativeQuery($sql, $rsm);
+
+        $query->setParameter(1, $from);
+        if (!is_null($to)) {
+            $query->setParameter(2, $to);
+        }
+        $result = $query->getResult();
+        return $result;
+    }
 
     /*
     public function findOneBySomeField($value): ?UserClass
