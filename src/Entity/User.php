@@ -518,4 +518,12 @@ class User implements UserInterface
             return $manage->getConfirmed();
         });
     }
+
+    /**
+     * @return bool if user is admin
+     */
+    public function isAdmin(): bool
+    {
+        return (in_array(self::ROLE_ADMIN, $this->roles));
+    }
 }

@@ -105,7 +105,8 @@ Every time an user validate a Sharable, every user managing it win an amount of 
 
 ![interface](https://246.eu/media/projets/antilope/antilope.gif)
 
-## Setup
+Setup
+-----
 
 ### Requirements
 
@@ -115,7 +116,31 @@ For now, the only way to install an Antilope app is via Symfony and `composer`.
 - PHP 7
 - MySQL
 
-## Development
+### Install
+
+Install via git clone.
+
+```
+git clone https://github.com/vincent-peugnet/antilope <APP_DIRECTORY>
+```
+
+Then run composer
+
+```
+composer install
+```
+
+### Global parameters
+
+Default global parameters are generated interactively during `composer install` command.
+
+- `app.openRegistration (bool)` Allow free sign up, disable the invite code system
+- `app.userLimit (int)` Max user limit. If this number is reached, registrations are closed
+- `app.invitationDuration (int)` Duration of invite code before it expired (in hours)
+- `app.userClassRankSwap (bool)` Allow User Class to be increased after next one or decrease before previous one
+
+Development
+-----------
 
 ### Run checks
 

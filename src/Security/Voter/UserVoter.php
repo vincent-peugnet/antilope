@@ -65,6 +65,7 @@ class UserVoter extends Voter
 
     /**
      * Return all the paranoïa levels listed in the PARANOIA constant
+     * @return array|int[]
      */
     public static function getParanoiaLevels(): array
     {

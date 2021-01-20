@@ -5,6 +5,10 @@
 
 <h1>User Classes</h1>
 
+    {% if is_granted('create', userClass) %}
+    <a class="btn btn-success mb-3" href="{{ path('userclass_new', {id: userClass.id}) }}"><i class="fas fa-plus"></i> create new user class</a>
+    {% endif %}
+
 
 {% for userClass in userClasses %}
 
@@ -62,7 +66,10 @@
             {% endif %}
         </ul>
 
+        <a class="btn btn-primary" href="{{ path('userclass_show', {id:userClass.id}) }}">details</a>
+
     </div>
+
 
 </div>
 

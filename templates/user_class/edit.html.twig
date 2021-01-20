@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ userClass.name }}{% endblock %}
+
+{% block content %}
+
+
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
+
+{{ breadcrumbs.render([
+    {'url': url('userclass'), 'text': 'User Classes'},
+    {'url': url('userclass_show', {id: userClass.id}), 'text': userClass.name},
+    {'text': 'Edit'},
+]) }}
+
+
+<h1>Edit</h1>
+
+
+{{ form(form) }}
+
+
+
+{% endblock %}

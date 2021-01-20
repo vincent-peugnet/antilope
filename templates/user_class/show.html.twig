@@ -1,0 +1,139 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ userClass.name }}{% endblock %}
+
+{% block content %}
+
+
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
+
+{{ breadcrumbs.render([
+    {'url': url('userclass'), 'text': 'User Classes'},
+    {'text': userClass.name},
+]) }}
+
+
+<h1>{{ userClass.name }}</h1>
+
+<div class="btn-group mb-3">
+
+    {% if is_granted('edit', userClass) %}
+    <a class="btn btn-primary" href="{{ path('userclass_edit', {id: userClass.id}) }}"><i class="fas fa-pen"></i> edit</a>
+    {% endif %}
+
+    {% if is_granted('delete', userClass) %}
+    <a class="btn btn-danger" href="{{ path('userclass_delete', {id: userClass.id}) }}"><i class="fas fa-times"></i> delete</a>
+    {% endif %}
+
+</div>
+
+<div class="row">
+
+
+    <div class="col-lg-8">
+    
+
+        <div class="card mb-3">
+
+            <div class="card-header">
+
+                <div class="card-title">
+                    <h3>Infos</h3>
+                </div>
+            </div>
+
+            <div class="card-body">
+
+
+                <ul>
+                {% if userClass.share %}
+                <li>can create sharables</li>
+                {% endif %}
+                {% if userClass.access %}
+                <li>can access the sharables with no specific access settings</li>
+                {% endif %}
+                {% if userClass.canInvite %}
+                {% if userClass.inviteFrequency == 0 %}
+                <li>can invite people without limitation</li>
+                {% else %}
+                <li>can invite one user every {{ userClass.inviteFrequency }} days</li>
+                {% endif %}
+                {% endif %}
+                <li>maximum paranoïa level : {{ userClass.maxParanoia }}</li>
+                </ul>
+
+                <h5>Requirements</h5>
+
+                <ul>
+                    {% if userClass.shareScoreReq %}
+                    <li>
+                    Share Score : {{ userClass.shareScoreReq }}
+                    </li>
+                    {% endif %}
+                    {% if userClass.accountAgeReq %}
+                    <li>
+                    Account Age : {{ userClass.accountAgeReq }} days
+                    </li>
+                    {% endif %}
+                    {% if userClass.validatedReq %}
+                    <li>
+                    Validations given : {{ userClass.validatedReq }}
+                    </li>
+                    {% endif %}
+                    {% if userClass.verifiedReq %}
+                    <li>
+                    The user need to be verified
+                    </li>
+                    {% endif %}
+                </ul>
+
+                    </div>
+
+                </div>
+            </div>
+
+
+    <div class="col-lg-4">
+
+
+        <div class="card mb-3">
+
+            <div class="card-header">
+
+                <div class="card-title">
+                    <h3>Stats</h3>
+                </div>
+            </div>
+
+            <div class="card-body">
+
+                <ul>
+                    <li>
+                        {{ userClass.users|length }} users
+                    </li>
+                    <li>
+                        sharables visibles by this userClass
+                    </li>
+                    <li>
+                        Rank: {{ userClass.rank }}
+                    </li>
+                    <li>
+                        Last edited {{ userClass.lastEditedAt|ago }}
+                    </li>
+                    <li>
+                        Created {{ userClass.createdAt|ago }}
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+{% endblock %}

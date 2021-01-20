@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
- * PHP version 7.4
+ * PHP version 7.2
  *
  * @package Antilope
  * @author Vincent Peugnet <vincent-peugnet@riseup.net>
@@ -31,13 +31,19 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Entity\User;
+use App\Security\Voter\UserVoter;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserClassRepository::class)
  */
 class UserClass
 {
+    public const RANK_MIN = 0;
+    public const RANK_MAX = 100;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -46,10 +52,10 @@ class UserClass
     private $id;
 
     /**
-     * @ORM\Column(type="smallint")
+     * @ORM\Column(type="smallint", unique=true)
      * @Assert\Range(
-     *      min = 0,
-     *      max = 100,
+     *      min = self::RANK_MIN,
+     *      max = self::RANK_MAX,
      *      notInRangeMessage = "Rank must be beetwen {{ min }} and {{ max }}.",
      * )
      */
@@ -88,6 +94,12 @@ class UserClass
 
     /**
      * @ORM\Column(type="smallint")
+     * @Assert\NotBlank()
+     * @Assert\Range(
+     *      min = 0,
+     *      max = 8760,
+     *      notInRangeMessage = "Rank must be beetwen {{ min }} and {{ max }}.",
+     * )
      */
     private $inviteFrequency;
 
@@ -111,13 +123,28 @@ class UserClass
      */
     private $verifiedReq;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $lastEditedAt;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $paranoiaLevels = UserVoter::getParanoiaLevels();
+        $this->maxParanoia = end($paranoiaLevels);
+        $this->inviteFrequency = 0;
         $this->shareScoreReq = 0;
         $this->accountAgeReq = 0;
         $this->validatedReq = 0;
         $this->verifiedReq = false;
+        $this->createdAt = new DateTime();
+        $this->lastEditedAt = $this->createdAt;
     }
 
     public function __toString(): string
@@ -288,6 +315,30 @@ class UserClass
     public function setVerifiedReq(bool $verifiedReq): self
     {
         $this->verifiedReq = $verifiedReq;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getLastEditedAt(): ?\DateTimeInterface
+    {
+        return $this->lastEditedAt;
+    }
+
+    public function setLastEditedAt(\DateTimeInterface $lastEditedAt): self
+    {
+        $this->lastEditedAt = $lastEditedAt;
 
         return $this;
     }

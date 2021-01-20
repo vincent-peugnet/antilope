@@ -27,9 +27,13 @@
 namespace App\Controller;
 
 use App\Entity\UserClass;
+use App\Form\UserClassDeleteType;
+use App\Form\UserClassType;
 use App\Repository\UserClassRepository;
-use App\Repository\UserRepository;
+use App\Security\Voter\UserClassVoter;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -38,12 +42,105 @@ class UserClassController extends AbstractController
     /**
      * @Route("/userclass", name="userclass")
      */
-    public function index(UserClassRepository $userClassRepository)
+    public function index(UserClassRepository $userClassRepository): Response
     {
-        $userClasses = $userClassRepository->findAll();
+        $userClasses = $userClassRepository->findBy([], ['rank' => 'ASC']);
 
         return $this->render('user_class/index.html.twig', [
+            'userClass' => new UserClass(),
             'userClasses' => $userClasses,
+        ]);
+    }
+
+    /**
+     * @Route("/userclass/{id}", name="userclass_show", requirements={"id"="\d+"})
+     */
+    public function show(UserClass $userClass): Response
+    {
+
+        return $this->render('user_class/show.html.twig', [
+            'userClass' => $userClass,
+        ]);
+
+    }
+
+    /**
+     * @Route("/userclass/{id}/delete", name="userclass_delete", requirements={"id"="\d+"})
+     */
+    public function delete(UserClass $userClass, Request $request): Response
+    {
+        $this->denyAccessUnlessGranted(UserClassVoter::DELETE, $userClass);
+
+        $form = $this->createForm(UserClassDeleteType::class, $userClass);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $userClass = $form->getData();
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($userClass);
+            $entityManager->flush();
+
+            $this->redirectToRoute('userclass_show', ['id' => $userClass->getId()]);
+        }
+
+        return $this->render('user_class/delete.html.twig', [
+            'userClass' => $userClass,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/userclass/{id}/edit", name="userclass_edit", requirements={"id"="\d+"})
+     */
+    public function edit(UserClass $userClass, Request $request): Response
+    {
+        $this->denyAccessUnlessGranted(UserClassVoter::EDIT, $userClass);
+
+        $form = $this->createForm(UserClassType::class, $userClass);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $userClass = $form->getData();
+            $userClass->setLastEditedAt(new DateTime());
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($userClass);
+            $entityManager->flush();
+
+            $this->redirectToRoute('userclass_show', ['id' => $userClass->getId()]);
+        }
+
+        return $this->render('user_class/edit.html.twig', [
+            'userClass' => $userClass,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/userclass/new", name="userclass_new")
+     */
+    public function new(Request $request): Response
+    {
+        $userClass = new UserClass();
+        $this->denyAccessUnlessGranted(UserClassVoter::CREATE, $userClass);
+
+        $form = $this->createForm(UserClassType::class, $userClass);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $userClass = $form->getData();
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($userClass);
+            $entityManager->flush();
+
+            $this->redirectToRoute('userclass_show', ['id' => $userClass->getId()]);
+        }
+
+        return $this->render('user_class/new.html.twig', [
+            'userClass' => $userClass,
+            'form' => $form->createView(),
         ]);
     }
 }

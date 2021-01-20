@@ -82,7 +82,7 @@ class UserClassRepository extends ServiceEntityRepository
     }
 
     /**
-     * Find previous UserClass after the one given
+     * Find previous UserClass before the one given
      *
      * @param UserClass $userClass the user class as reference
      *
@@ -93,7 +93,7 @@ class UserClassRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('u')
             ->andWhere('u.rank < :rank')
             ->setParameter('rank', $userClass->getRank())
-            ->orderBy('u.rank', 'ASC')
+            ->orderBy('u.rank', 'DESC')
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult()
