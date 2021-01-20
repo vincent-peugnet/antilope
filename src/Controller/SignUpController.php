@@ -90,7 +90,7 @@ class SignUpController extends AbstractController
 
             // stop user creation if no user class exist
 
-            $userClass = $userClassRepository->findOneBy([], ['rank' => 'ASC']);
+            $userClass = $userClassRepository->findFirst();
             $user->setUserClass($userClass);
 
             $entityManager = $this->getDoctrine()->getManager();

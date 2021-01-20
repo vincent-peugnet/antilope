@@ -133,6 +133,16 @@ class UserClass
      */
     private $lastEditedAt;
 
+    /**
+     * @ORM\OneToOne(targetEntity=UserClass::class, inversedBy="prev", cascade={"persist", "remove"})
+     */
+    private $next;
+
+    /**
+     * @ORM\OneToOne(targetEntity=UserClass::class, mappedBy="next", cascade={"persist", "remove"})
+     */
+    private $prev;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -339,6 +349,40 @@ class UserClass
     public function setLastEditedAt(\DateTimeInterface $lastEditedAt): self
     {
         $this->lastEditedAt = $lastEditedAt;
+
+        return $this;
+    }
+
+    public function getNext(): ?self
+    {
+        return $this->next;
+    }
+
+    public function setNext(?self $next): self
+    {
+        $this->next = $next;
+
+        return $this;
+    }
+
+    public function getPrev(): ?self
+    {
+        return $this->prev;
+    }
+
+    public function setPrev(?self $prev): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($prev === null && $this->prev !== null) {
+            $this->prev->setNext(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($prev !== null && $prev->getNext() !== $this) {
+            $prev->setNext($this);
+        }
+
+        $this->prev = $prev;
 
         return $this;
     }

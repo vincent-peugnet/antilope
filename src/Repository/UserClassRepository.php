@@ -100,6 +100,23 @@ class UserClassRepository extends ServiceEntityRepository
         ;
     }
 
+    /**
+     * Return first UserClass
+     */
+    public function findFirst(): ?UserClass
+    {
+        $qb = $this->createQueryBuilder('u');
+        $sq = $qb
+            ->select('IDENTITY(u.next)')
+            ->where($qb->expr()->isNotNull('u.next'));
+
+        $qb = $this->createQueryBuilder('uc');
+        $query = $qb
+            ->andWhere($qb->expr()->notIn('uc.id', $sq->getDQL()))
+            ->getQuery();
+        return $query->getOneOrNullResult();
+    }
+
 
     /*
     public function findOneBySomeField($value): ?UserClass
