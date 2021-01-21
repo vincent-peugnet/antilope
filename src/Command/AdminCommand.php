@@ -26,20 +26,20 @@
 
 namespace App\Command;
 
+use App\Entity\User;
 use App\Entity\UserClass;
 use App\Repository\UserClassRepository;
-use Doctrine\ORM\EntityManager;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class UserClassDefaultCommand extends Command
+class AdminCommand extends Command
 {
-    protected static $defaultName = 'app:userclass';
+    protected static $defaultName = 'app:admin';
 
     private EntityManagerInterface $entityManager;
 
@@ -53,37 +53,46 @@ class UserClassDefaultCommand extends Command
     protected function configure()
     {
         $this
-            ->setDescription('Setup a default user class')
-            ->setHelp('You need at least one user class for Antilope to work.')
-            // ->addArgument('arg1', InputArgument::OPTIONAL, 'Optional name for the userclass')
-            // ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
+            ->setDescription('Add or remove admin privilege to an user')
+            ->setHelp('This is helpfull to create your first admin')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        // $arg1 = $input->getArgument('arg1');
 
-        // if ($arg1) {
-        //     $io->note(sprintf('You passed an argument: %s', $arg1));
-        // }
 
-        // if ($input->getOption('option1')) {
-        //     // ...
-        // }
+        $userRepository = $this->entityManager->getRepository(User::class);
+        assert($userRepository instanceof UserRepository);
 
-        $userClass = new UserClass();
-        $userClass
-            ->setName('default')
-            ->setRank(55)
-            ->setMaxParanoia(0)
-        ;
-        $this->entityManager->persist($userClass);
-        $this->entityManager->flush();
+        if ($userRepository->count([]) === 0) {
+            $io->warning('There are no user in your database, please register an user first.');
+            return Command::FAILURE;
+        }
 
-        $io->success('a default user class have been created');
+        $helper = $this->getHelper('question');
+        $question = new Question('Choose an user to grant or remove admin privileges by indicating the corresponding user ID (int) : ');
+        $userId = $helper->ask($input, $output, $question);
 
-        return Command::SUCCESS;
+        if (!is_numeric($userId)) {
+            $io->warning('User ID should be a number');
+            return Command::FAILURE;
+        }
+
+        $user = $userRepository->findOneBy(['id' => $userId]);
+        if (!is_null($user)) {
+            $username = $user->getUsername();
+            $user->setAdmin(!$user->isAdmin());
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
+            $isadmin = $user->isAdmin() ? 'obtained' : 'lost';
+
+            $io->success("user $username of ID $userId have $isadmin admin privilege");
+            return Command::SUCCESS;
+        } else {
+            $io->error("user with ID $userId not founded");
+            return Command::SUCCESS;
+        }
     }
 }

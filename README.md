@@ -124,10 +124,44 @@ Install via git clone.
 git clone https://github.com/vincent-peugnet/antilope <APP_DIRECTORY>
 ```
 
+Go into your app_directory folder.
+
+Setup database connexion using `.env` files. see [symfony documentation](https://symfony.com/doc/current/configuration.html#configuration-environments).
+
+By default SQLite 3 will be used in DEV environment but incremental migration mode won't work.
+
 Then run composer
 
 ```
 composer install
+```
+
+Some questions will be asked set your app parameters. You can press enter many times to set those as default and change them later in the `paramaters.yaml` file.
+
+Create the database
+
+```
+bin/console doctrine:database:create
+```
+
+Migrate the migrations
+
+```
+bin/console doctrine:migration:migrate
+```
+
+Create the first user Class
+
+```
+bin/console app:userclass
+```
+
+Then you will have to create your first user. Verify that `app.openegistration` is set to `true`, and access sign up at `/signup` to register.
+
+To toogle admin privilege on a user, you'll need it's user ID. Navigate to an user profile page and get the number like this `/user/<USER_ID>/show`. Then, use the following command:
+
+```
+bin/console app:admin
 ```
 
 ### Global parameters

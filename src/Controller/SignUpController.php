@@ -33,6 +33,7 @@ use App\Repository\UserClassRepository;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use App\Security\LoginFormAuthenticator;
+use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -91,7 +92,11 @@ class SignUpController extends AbstractController
             // stop user creation if no user class exist
 
             $userClass = $userClassRepository->findOneBy([], ['rank' => 'ASC']);
+            if (is_null($userClass)) {
+                throw $this->createNotFoundException('No User Class Defined');
+            }
             $user->setUserClass($userClass);
+
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
