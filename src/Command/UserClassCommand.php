@@ -72,7 +72,10 @@ class UserClassCommand extends Command
 
 
         $helper = $this->getHelper('question');
-        $question = new Question('Please enter the name of the default user class (this can be changed later) : ', 'basic_user');
+        $question = new Question(
+            'Please enter the name of the default user class (this can be changed later): ',
+            'basic_user'
+        );
 
         $userClassName = $helper->ask($input, $output, $question);
 

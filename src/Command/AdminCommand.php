@@ -72,7 +72,9 @@ class AdminCommand extends Command
         }
 
         $helper = $this->getHelper('question');
-        $question = new Question('Choose an user to grant or remove admin privileges by indicating the corresponding user ID (int) : ');
+        $question = new Question(
+            'Choose an user to grant or remove admin privileges by indicating the corresponding user ID: '
+        );
         $userId = $helper->ask($input, $output, $question);
 
         if (!is_numeric($userId)) {

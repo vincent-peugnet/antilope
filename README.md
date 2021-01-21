@@ -136,7 +136,7 @@ Then run composer
 composer install
 ```
 
-Some questions will be asked set your app parameters. You can press enter many times to set those as default and change them later in the `paramaters.yaml` file.
+Some questions will be asked to set your app parameters. You can press enter many times to set those as default and change them later in the `paramaters.yaml` file.
 
 Create the database
 
@@ -162,6 +162,16 @@ To toogle admin privilege on a user, you'll need it's user ID. Navigate to an us
 
 ```
 bin/console app:admin
+```
+
+### Email
+
+Edit your `.env` file as defined in [symfony's DSN protocol](https://symfony.com/doc/current/mailer.html#using-built-in-transports).
+
+Then you can use the following command to send a test mail, just to be sure you've set everything up alright.
+
+```
+bin/console app:mail <your-email-adress>
 ```
 
 ### Global parameters
