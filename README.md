@@ -110,11 +110,15 @@ Setup
 
 ### Requirements
 
-For now, the only way to install an Antilope app is via Symfony and `composer`.
+For now, the only way to install Antilope is using `git` and `composer`.
 
 - Apache
-- PHP 7
+- PHP 7.4
 - MySQL
+    - MariaDB 10.2+
+    - MySQL 8.0.1+
+    - PostgreSQL 8.4+
+    - SQLite 3.8.3+
 
 ### Install
 
