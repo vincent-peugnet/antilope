@@ -8,7 +8,15 @@ Alternatives names could be *Argali* or *Urial* as it refers to *Gazelle*, the m
 
 This isn't an app, but a tool allowing people to create their own networks and setting them up for each use case. Checkout the [requirements](#requirements) to set up your own instance on a server.
 
-> It's built using __PHP 7__ with __Symfony 5__ framework and __Bootstrap 4__ toolkit.
+> It's built using __PHP 7__ and __MySQL__ with __Symfony 5__ framework and __Bootstrap 4__ toolkit.
+
+_________________
+
+1. [Concept](#concept) *what is this strange network ?*
+2. [Setup](#setup) *how to install*
+3. [Development](#development) *usefull tools for develpment thanks to [n-peugnet](https://github.com/n-peugnet)*
+
+___________________
 
 ## Concept
 
