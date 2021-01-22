@@ -119,6 +119,15 @@ class UserClassRepository extends ServiceEntityRepository
         return $query->getOneOrNullResult();
     }
 
+    public function findLast(): ?UserClass
+    {
+        $qb = $this->createQueryBuilder('u');
+        return $qb->andWhere($qb->expr()->isNull('u.next'))
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
     /**
      * Recursive SQL raw query to find a list of user class between two others.
      *
@@ -154,6 +163,15 @@ class UserClassRepository extends ServiceEntityRepository
         }
         $result = $query->getResult();
         return $result;
+    }
+
+    /**
+     * @return UserClass[] All the user classes sorted from first to last
+     */
+    public function findAll(): array
+    {
+        $first = $this->findFirst();
+        return $this->findBetween($first);
     }
 
     /*

@@ -14,11 +14,44 @@
 ]) }}
 
 
-<h1>Delete</h1>
+<h1>{{ userClass.name }}</h1>
 
 
-{{ form(form) }}
+
+<div class="card mb-3">
+
+    <div class="card-header">
+
+        <div class="card-title">
+            <h3>delete</h3>
+        </div>
+    </div>
+
+    <div class="card-body">
+
+        {% if userClass.users|length %}
+            <div class="alert border border-danger">
+                {% if userClass.prev %}
+                {{ userClass.users|length }} users will be downgraded to closest previous user class : <strong>{{ userClass.prev.name }}</strong>.
+                {% else %}
+                {{ userClass.users|length }} users will be upgraded to closest next user class : <strong>{{ userClass.next.name }}</strong>
+                {% endif %}        
+            </div>
+        {% endif %}
+
+        {% if userClass.sharables|length %}
+            <div class="alert border border-danger">{{ userClass.sharables|length }} sharable(s) are set as visible by this user class. It's recommend to move them to upper class, but you can select what you prefer.</div>
+        {% endif %}
+
+        <p>
+
+        </p>
 
 
+        {{ form(form) }}
+
+
+    </div>
+</div>
 
 {% endblock %}

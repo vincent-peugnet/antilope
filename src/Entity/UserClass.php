@@ -34,7 +34,6 @@ use App\Entity\User;
 use App\Security\Voter\UserVoter;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserClassRepository::class)
@@ -135,6 +134,7 @@ class UserClass
 
     /**
      * @ORM\OneToOne(targetEntity=UserClass::class, inversedBy="prev", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(onDelete="cascade")
      */
     private $next;
 
@@ -142,6 +142,11 @@ class UserClass
      * @ORM\OneToOne(targetEntity=UserClass::class, mappedBy="next", cascade={"persist", "remove"})
      */
     private $prev;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Sharable::class, mappedBy="visibleBy")
+     */
+    private $sharables;
 
     public function __construct()
     {
@@ -383,6 +388,36 @@ class UserClass
         }
 
         $this->prev = $prev;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Sharable[]
+     */
+    public function getSharables(): Collection
+    {
+        return $this->sharables;
+    }
+
+    public function addSharable(Sharable $sharable): self
+    {
+        if (!$this->sharables->contains($sharable)) {
+            $this->sharables[] = $sharable;
+            $sharable->setVisibleBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSharable(Sharable $sharable): self
+    {
+        if ($this->sharables->removeElement($sharable)) {
+            // set the owning side to null (unless already changed)
+            if ($sharable->getVisibleBy() === $this) {
+                $sharable->setVisibleBy(null);
+            }
+        }
 
         return $this;
     }

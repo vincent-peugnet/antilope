@@ -44,7 +44,6 @@
 
             <div class="card-body">
 
-
                 <ul>
                 {% if userClass.share %}
                 <li>can create sharables</li>
@@ -107,12 +106,29 @@
 
             <div class="card-body">
 
+                <div class="btn-group mb-3">
+
+
+                {% if userClass.prev %}
+                <a class="btn btn-primary" href="{{ path('userclass_show', {id: userClass.prev.id}) }}">previous</a>
+                {% else %}
+                <a class="btn btn-primary disabled">previous</a>
+                {% endif %}
+
+                {% if userClass.next %}
+                <a class="btn btn-primary" href="{{ path('userclass_show', {id: userClass.next.id}) }}">next</a>
+                {% else %}
+                <a class="btn btn-primary disabled">next</a>
+                {% endif %}
+
+                </div>
+
                 <ul>
                     <li>
                         {{ userClass.users|length }} users
                     </li>
                     <li>
-                        sharables visibles by this userClass
+                        {{ userClass.sharables|length }} sharables
                     </li>
                     <li>
                         Rank: {{ userClass.rank }}
