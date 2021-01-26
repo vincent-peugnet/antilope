@@ -37,22 +37,18 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-composer-
 
-      - name: Install dependencies
+      - name: Add problem matchers
         run: |
           echo "::add-matcher::.github/matchers/phplint.json"
-          composer install --prefer-dist --no-progress
-
-      - name: Run checks
-        run: |
           echo "::add-matcher::.github/matchers/phpcs.json"
           echo "::add-matcher::.github/matchers/phpunit.json"
 
-          export PHPLINT_FLAGS="--no-progress"
-          export PHPCS_FLAGS="--report=csv -q"
-          export PHPSTAN_FLAGS="--no-progress"
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
 
-          composer check
-
-          echo "::remove-matcher owner=phpunit::"
-          echo "::remove-matcher owner=phpcs::"
-          echo "::remove-matcher owner=phplint::"
+      - name: Run checks
+        env:
+          PHPLINT_FLAGS: --no-progress
+          PHPCS_FLAGS: --report=csv -q
+          PHPSTAN_FLAGS: --no-progress
+        run: composer check

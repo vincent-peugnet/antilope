@@ -109,7 +109,8 @@
         ],
         "check-symfony": [
             "@php bin/console --ansi lint:container",
-            "@php bin/console --ansi lint:twig",
+            "@php bin/console --ansi lint:twig templates",
+            "@php bin/console --ansi lint:yaml config",
             "@php bin/console --ansi doctrine:schema:validate --skip-sync"
         ],
         "fix": [
