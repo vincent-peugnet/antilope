@@ -133,13 +133,13 @@ class UserClass
     private $lastEditedAt;
 
     /**
-     * @ORM\OneToOne(targetEntity=UserClass::class, inversedBy="prev", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=UserClass::class, inversedBy="prev", cascade={"persist"})
      * @ORM\JoinColumn(onDelete="cascade")
      */
     private $next;
 
     /**
-     * @ORM\OneToOne(targetEntity=UserClass::class, mappedBy="next", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=UserClass::class, mappedBy="next", cascade={"persist"})
      */
     private $prev;
 

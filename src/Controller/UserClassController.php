@@ -94,14 +94,16 @@ class UserClassController extends AbstractController
                 }
             }
 
+            $prev = $userClass->getPrev();
+            $next = $userClass->getNext();
             $em->getConnection()->beginTransaction();
             try {
-                $prev = $userClass->getPrev();
+                $userClass->setNext(null);
                 if (!is_null($prev)) {
                     $prev->setNext(null);
                     $em->persist($prev);
                     $em->flush();
-                    $prev->setNext($userClass->getNext());
+                    $prev->setNext($next);
                 }
                 $em->remove($userClass);
                 $em->flush();
