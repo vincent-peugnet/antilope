@@ -40,25 +40,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class UserClass
 {
-    public const RANK_MIN = 0;
-    public const RANK_MAX = 100;
-
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private $id;
-
-    /**
-     * @ORM\Column(type="smallint", unique=true)
-     * @Assert\Range(
-     *      min = self::RANK_MIN,
-     *      max = self::RANK_MAX,
-     *      notInRangeMessage = "Rank must be beetwen {{ min }} and {{ max }}.",
-     * )
-     */
-    private $rank;
 
     /**
      * @ORM\Column(type="string", length=32)
@@ -97,7 +84,7 @@ class UserClass
      * @Assert\Range(
      *      min = 0,
      *      max = 8760,
-     *      notInRangeMessage = "Rank must be beetwen {{ min }} and {{ max }}.",
+     *      notInRangeMessage = "must be beetwen {{ min }} and {{ max }}.",
      * )
      */
     private $inviteFrequency;
@@ -170,18 +157,6 @@ class UserClass
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getRank(): ?int
-    {
-        return $this->rank;
-    }
-
-    public function setRank(int $rank): self
-    {
-        $this->rank = $rank;
-
-        return $this;
     }
 
     public function getName(): ?string

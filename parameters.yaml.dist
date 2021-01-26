@@ -6,4 +6,3 @@ parameters:
     app.siteDescription: 'A sharable Network'
     app.siteAlert: 'beware of not sharing too much COVID-19, share carefully !'
     app.showHomeStats: false
-    app.userClassRankSwap: false

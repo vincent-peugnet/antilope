@@ -29,7 +29,6 @@ namespace App\Form;
 use App\Entity\UserClass;
 use App\Repository\UserClassRepository;
 use App\Security\Voter\UserVoter;
-use App\Validator\Rank;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -69,18 +68,6 @@ class UserClassType extends AbstractType
         }
 
         $builder
-            ->add('rank', IntegerType::class, [
-                'label' => 'Rank',
-                'help' => 'Rank indicate the order of user classes between 0 and 100',
-                'attr' => [
-                    'min' => UserClass::RANK_MIN,
-                    'max' => UserClass::RANK_MAX,
-                ],
-                'constraints' => [
-                    new NotBlank(),
-                    new Rank(),
-                ]
-            ])
             ->add('name')
             ->add('share')
             ->add('access')

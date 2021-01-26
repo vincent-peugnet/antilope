@@ -27,7 +27,10 @@
 namespace App\Form;
 
 use App\Entity\Sharable;
+use App\Entity\UserClass;
+use App\Repository\UserClassRepository;
 use DateTime;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
@@ -39,6 +42,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SharableType extends AbstractType
 {
+    private UserClassRepository $userClassRepository;
+
+    public function __construct(UserClassRepository $userClassRepository)
+    {
+        $this->userClassRepository = $userClassRepository;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -55,7 +65,9 @@ class SharableType extends AbstractType
             ->add('responsibility', null, [
                 'help' => 'check this if you feel responsible for the sharable',
             ])
-            ->add('visibleBy', null, [
+            ->add('visibleBy', EntityType::class, [
+                'class' => UserClass::class,
+                'choices' => $this->userClassRepository->findAll(),
                 'placeholder' => '',
                 'help' => 'Your sharable will be accessible from this user class',
             ])

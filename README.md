@@ -89,7 +89,7 @@ But if there is a real problem with a sharable, user could *report* it. Dependin
 
 ### User Class system
 
-One of the most efficient way to increase gamification in a network is to implement an user class system. In Antilope admins can set up any user classes they want from rank 0 to 100. They allow or disallow users to share or access sharables, invite users... And the user classes can be triggered by many parameters such as the [share score](#share-score), account age, number of validations the user gave...
+One of the most efficient way to increase gamification in a network is to implement an user class system. They allow or disallow users to share or access sharables, invite users... And the user classes can be triggered by many parameters such as the [share score](#share-score), account age, number of validations the user gave...
 
 ### Share Score
 
@@ -97,7 +97,7 @@ The share score is the system that try to give an indication of how much an user
 
 Every time an user validate a Sharable, every user managing it win an amount of points, based on :
 
-- validating user rank (higher user rank give more points)
+- validating user class (higher user rank give more points)
 - the amount of validation already given for this sharable (first validations give more points)
 - divided by the number of managers
 
@@ -141,7 +141,6 @@ Default global parameters are generated interactively during `composer install` 
 - `app.openRegistration (bool)` Allow free sign up, disable the invite code system
 - `app.userLimit (int)` Max user limit. If this number is reached, registrations are closed
 - `app.invitationDuration (int)` Duration of invite code before it expired (in hours)
-- `app.userClassRankSwap (bool)` Allow User Class to be increased after next one or decrease before previous one
 
 Development
 -----------

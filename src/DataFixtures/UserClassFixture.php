@@ -36,7 +36,6 @@ class UserClassFixture extends Fixture
     {
         $elite = new UserClass();
         $elite
-            ->setRank(40)
             ->setAccess(true)
             ->setShare(true)
             ->setCanInvite(true)
@@ -50,7 +49,6 @@ class UserClassFixture extends Fixture
 
         $powerUser = new UserClass();
         $powerUser
-            ->setRank(30)
             ->setNext($elite)
             ->setAccess(true)
             ->setShare(true)
@@ -65,7 +63,6 @@ class UserClassFixture extends Fixture
 
         $member = new UserClass();
         $member
-            ->setRank(20)
             ->setNext($powerUser)
             ->setAccess(true)
             ->setShare(true)
@@ -80,7 +77,6 @@ class UserClassFixture extends Fixture
 
         $basicUser = new UserClass();
         $basicUser
-            ->setRank(10)
             ->setNext($member)
             ->setAccess(false)
             ->setShare(true)

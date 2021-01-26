@@ -46,60 +46,15 @@ class UserClassRepository extends ServiceEntityRepository
     }
 
     /**
-     * Get all UserClass that are at lower or equal rank.
+     * Get all UserClass that are at lower or equal.
      *
      * @param UserClass $userClass the user class as reference
      *
      * @return UserClass[] Returns an array of UserClass objects
      */
-    public function findLowerthan(UserClass $userClass)
+    public function findLowerthan(UserClass $userClass): array
     {
-
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.rank <= :rank')
-            ->setParameter('rank', $userClass->getRank())
-            ->orderBy('u.rank', 'ASC')
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-
-    /**
-     * Find next UserClass after the one given
-     *
-     * @param UserClass $userClass the user class as reference
-     *
-     * @return UserClass|null UserClass objects if exists
-     */
-    public function findNext(UserClass $userClass): ?UserClass
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.rank > :rank')
-            ->setParameter('rank', $userClass->getRank())
-            ->orderBy('u.rank', 'ASC')
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-
-    /**
-     * Find previous UserClass before the one given
-     *
-     * @param UserClass $userClass the user class as reference
-     *
-     * @return UserClass|null UserClass objects if exists
-     */
-    public function findPrevious(UserClass $userClass): ?UserClass
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.rank < :rank')
-            ->setParameter('rank', $userClass->getRank())
-            ->orderBy('u.rank', 'DESC')
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        return $this->findBetween($this->findFirst(), $userClass);
     }
 
     /**

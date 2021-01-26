@@ -28,12 +28,32 @@ namespace App\Service;
 
 use App\Entity\Sharable;
 use App\Entity\User;
+use App\Entity\UserClass;
+use App\Repository\UserClassRepository;
 
 class SharePoints
 {
-    public function calculate(User $user, Sharable $sharable)
+    private UserClassRepository $userClassRepository;
+
+    public function __construct(UserClassRepository $userClassRepository)
     {
-        $userRank = $user->getUserClass()->getRank();
+        $this->userClassRepository = $userClassRepository;
+    }
+
+    /**
+     * Indicate the Rank of an userClass in percent
+     */
+    public function rank(UserClass $userClass): int
+    {
+        $position = count($this->userClassRepository->findLowerthan($userClass));
+        $total = count($this->userClassRepository->findAll());
+        $rank = round($position / $total) * 100;
+        return (int) $rank;
+    }
+
+    public function calculate(User $user, Sharable $sharable): int
+    {
+        $userRank = $this->rank($user->getUserClass());
         $validations = $sharable->getValidations();
         $validationCount = count($validations);
         $managedBy = $sharable->getManagedBy();
@@ -43,6 +63,6 @@ class SharePoints
         $validationRatio = ( 4 / ( $validationCount + 1 ));
         $points = round($rankPoint * $validationRatio / $managerCount);
 
-        return $points;
+        return (int) $points;
     }
 }
