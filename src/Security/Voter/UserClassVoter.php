@@ -28,6 +28,7 @@ namespace App\Security\Voter;
 
 use App\Entity\User;
 use App\Entity\UserClass;
+use App\Repository\UserClassRepository;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -37,6 +38,13 @@ class UserClassVoter extends Voter
     public const EDIT   = 'edit';
     public const CREATE = 'create';
     public const DELETE = 'delete';
+
+    private UserClassRepository $userClassRepository;
+
+    public function __construct(UserClassRepository $userClassRepository)
+    {
+        $this->userClassRepository = $userClassRepository;
+    }
 
     protected function supports($attribute, $subject)
     {
@@ -81,6 +89,6 @@ class UserClassVoter extends Voter
 
     private function canDelete(User $user)
     {
-        return $user->isAdmin();
+        return ($user->isAdmin() && $this->userClassRepository->count([]) > 1);
     }
 }

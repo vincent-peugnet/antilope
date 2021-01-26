@@ -91,7 +91,8 @@ class SignUpController extends AbstractController
 
             // stop user creation if no user class exist
 
-            $userClass = $userClassRepository->findOneBy([], ['rank' => 'ASC']);
+
+            $userClass = $userClassRepository->findFirst();
             if (is_null($userClass)) {
                 throw $this->createNotFoundException('No User Class Defined');
             }

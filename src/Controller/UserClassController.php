@@ -32,6 +32,8 @@ use App\Form\UserClassType;
 use App\Repository\UserClassRepository;
 use App\Security\Voter\UserClassVoter;
 use DateTime;
+use Doctrine\DBAL\ConnectionException;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,7 +46,7 @@ class UserClassController extends AbstractController
      */
     public function index(UserClassRepository $userClassRepository): Response
     {
-        $userClasses = $userClassRepository->findBy([], ['rank' => 'ASC']);
+        $userClasses = $userClassRepository->findAll();
 
         return $this->render('user_class/index.html.twig', [
             'userClass' => new UserClass(),
@@ -65,7 +67,7 @@ class UserClassController extends AbstractController
     /**
      * @Route("/userclass/{id}/delete", name="userclass_delete", requirements={"id"="\d+"})
      */
-    public function delete(UserClass $userClass, Request $request): Response
+    public function delete(UserClass $userClass, Request $request, EntityManagerInterface $em): Response
     {
         $this->denyAccessUnlessGranted(UserClassVoter::DELETE, $userClass);
 
@@ -73,13 +75,44 @@ class UserClassController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $userClass = $form->getData();
+            if (!$userClass->getSharables()->isEmpty()) {
+                $sharableTarget = $form->get('target')->getData();
+                assert($sharableTarget instanceof UserClass);
+                foreach ($userClass->getSharables() as $sharable) {
+                    $sharable->setVisibleBy($sharableTarget);
+                    $em->persist($sharable);
+                    $em->flush();
+                }
+            }
+            if (!$userClass->getUsers()->isEmpty()) {
+                $userTarget = is_null($userClass->getPrev()) ? $userClass->getNext() : $userClass->getPrev();
+                foreach ($userClass->getUsers() as $user) {
+                    $user->setUserClass($userTarget);
+                    $em->persist($user);
+                    $em->flush();
+                }
+            }
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($userClass);
-            $entityManager->flush();
+            $prev = $userClass->getPrev();
+            $next = $userClass->getNext();
+            $em->getConnection()->beginTransaction();
+            try {
+                $userClass->setNext(null);
+                if (!is_null($prev)) {
+                    $prev->setNext(null);
+                    $em->persist($prev);
+                    $em->flush();
+                    $prev->setNext($next);
+                }
+                $em->remove($userClass);
+                $em->flush();
+                $em->getConnection()->commit();
+            } catch (ConnectionException $e) {
+                $em->getConnection()->rollBack();
+                throw $e;
+            }
 
-            $this->redirectToRoute('userclass_show', ['id' => $userClass->getId()]);
+            return $this->redirectToRoute('userclass_show', ['id' => $userClass->getId()]);
         }
 
         return $this->render('user_class/delete.html.twig', [
@@ -100,13 +133,15 @@ class UserClassController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $userClass = $form->getData();
+            assert($userClass instanceof UserClass);
+
             $userClass->setLastEditedAt(new DateTime());
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($userClass);
-            $entityManager->flush();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($userClass);
+            $em->flush();
 
-            $this->redirectToRoute('userclass_show', ['id' => $userClass->getId()]);
+            return $this->redirectToRoute('userclass_show', ['id' => $userClass->getId()]);
         }
 
         return $this->render('user_class/edit.html.twig', [
@@ -118,8 +153,11 @@ class UserClassController extends AbstractController
     /**
      * @Route("/userclass/new", name="userclass_new")
      */
-    public function new(Request $request): Response
-    {
+    public function new(
+        Request $request,
+        UserClassRepository $userClassRepository,
+        EntityManagerInterface $em
+    ): Response {
         $userClass = new UserClass();
         $this->denyAccessUnlessGranted(UserClassVoter::CREATE, $userClass);
 
@@ -128,12 +166,25 @@ class UserClassController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $userClass = $form->getData();
+            assert($userClass instanceof UserClass);
+            $replaced = $userClassRepository->findOneBy(['next' => $userClass->getNext()]);
+            $em->getConnection()->beginTransaction();
+            try {
+                if (!is_null($replaced)) {
+                    $replaced->setNext(null);
+                    $em->persist($replaced);
+                    $em->flush();
+                    $replaced->setNext($userClass);
+                }
+                $em->persist($userClass);
+                $em->flush();
+                $em->getConnection()->commit();
+            } catch (ConnectionException $e) {
+                $em->getConnection()->rollBack();
+                throw $e;
+            }
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($userClass);
-            $entityManager->flush();
-
-            $this->redirectToRoute('userclass_show', ['id' => $userClass->getId()]);
+            return $this->redirectToRoute('userclass_show', ['id' => $userClass->getId()]);
         }
 
         return $this->render('user_class/new.html.twig', [

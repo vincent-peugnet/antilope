@@ -114,7 +114,7 @@ class Sharable
     private $description;
 
     /**
-     * @ORM\ManyToOne(targetEntity=UserClass::class)
+     * @ORM\ManyToOne(targetEntity=UserClass::class, inversedBy="sharables")
      */
     private $visibleBy;
 

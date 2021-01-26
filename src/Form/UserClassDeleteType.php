@@ -27,7 +27,10 @@
 namespace App\Form;
 
 use App\Entity\UserClass;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -35,21 +38,42 @@ class UserClassDeleteType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $choices = [];
+        $userClass = $builder->getData();
+        assert($userClass instanceof UserClass);
+
+        if (!$userClass->getSharables()->isEmpty()) {
+            if (!is_null($userClass->getPrev())) {
+                $choices['previous'] = [$userClass->getPrev()];
+                $data = $userClass->getPrev();
+            }
+            if (!is_null($userClass->getNext())) {
+                $choices['next'] = [$userClass->getNext()];
+                $data = $userClass->getNext();
+            }
+
+            $builder
+                ->add('target', EntityType::class, [
+                    'class' => UserClass::class,
+                    'mapped' => false,
+                    'choices' => $choices,
+                    'required' => true,
+                    'label' => 'Target user class for sharables',
+                    'help' => 'Select the new user class for sharables that where accessible by this user class'
+                ])
+            ;
+        }
         $builder
-            ->add('rank')
-            ->add('name')
-            ->add('share')
-            ->add('access')
-            ->add('canInvite')
-            ->add('maxParanoia')
-            ->add('inviteFrequency')
-            ->add('shareScoreReq')
-            ->add('accountAgeReq')
-            ->add('validatedReq')
-            ->add('verifiedReq')
-            ->add('createdAt')
-            ->add('lastEditedAt')
+            ->add('delete', SubmitType::class, [
+                'label' => 'delete user class',
+                'attr' => [
+                    'class' => 'btn-danger',
+                ]
+            ])
         ;
+        if (isset($data)) {
+            $builder->get('target')->setData($data);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver)

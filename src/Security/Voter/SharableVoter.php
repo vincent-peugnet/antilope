@@ -30,7 +30,12 @@ use App\Entity\Interested;
 use App\Entity\Manage;
 use App\Entity\Sharable;
 use App\Entity\User;
+use App\Entity\UserClass;
 use App\Entity\Validation;
+use App\Repository\InterestedRepository;
+use App\Repository\ManageRepository;
+use App\Repository\UserClassRepository;
+use App\Repository\ValidationRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -49,9 +54,21 @@ class SharableVoter extends Voter
     public const INTERESTED = 'interested';
     public const CONTACT    = 'contact';
 
-    public function __construct(EntityManagerInterface $em)
-    {
-        $this->em = $em;
+    private UserClassRepository $userClassRepository;
+    private InterestedRepository $interestedRepository;
+    private ValidationRepository $validationRepository;
+    private ManageRepository $manageRepository;
+
+    public function __construct(
+        UserClassRepository $userClassRepository,
+        InterestedRepository $interestedRepository,
+        ValidationRepository $validationRepository,
+        ManageRepository $manageRepository
+    ) {
+        $this->userClassRepository = $userClassRepository;
+        $this->interestedRepository = $interestedRepository;
+        $this->validationRepository = $validationRepository;
+        $this->manageRepository = $manageRepository;
     }
 
     protected function supports($attribute, $subject)
@@ -118,12 +135,9 @@ class SharableVoter extends Voter
         if ($this->canManage($sharable, $user)) {
             return true;
         }
-        if (null !== $sharable->getVisibleBy()) {
-            if ($user->getUserClass()->getRank() >= $sharable->getVisibleBy()->getRank()) {
-                return true;
-            } else {
-                return false;
-            }
+        if (!is_null($sharable->getVisibleBy())) {
+            $visibleByUserClasses = $this->userClassRepository->findBetween($sharable->getVisibleBy());
+            return (in_array($user->getUserClass(), $visibleByUserClasses));
         }
         if ($user->getUserClass()->getAccess()) {
             return true;
@@ -248,8 +262,7 @@ class SharableVoter extends Voter
      */
     private function alreadyInterested(Sharable $sharable, User $user): ?Interested
     {
-        $interestedRepository = $this->em->getRepository(Interested::class);
-        return $interestedRepository->findOneBy([
+        return $this->interestedRepository->findOneBy([
             'user' => $user->getId(),
             'sharable' => $sharable->getId()
         ]);
@@ -257,8 +270,7 @@ class SharableVoter extends Voter
 
     private function alreadyValidated(Sharable $sharable, User $user): bool
     {
-        $validationRepo = $this->em->getRepository(Validation::class);
-        return (bool) $validationRepo->findOneBy([
+        return (bool) $this->validationRepository->findOneBy([
             'user' => $user->getId(),
             'sharable' => $sharable->getId(),
         ]);
@@ -270,8 +282,7 @@ class SharableVoter extends Voter
      */
     private function canManage(Sharable $sharable, User $user): ?Manage
     {
-        $manageRepository = $this->em->getRepository(Manage::class);
-        return $manageRepository->findOneBy([
+        return $this->manageRepository->findOneBy([
             'user' => $user->getId(),
             'sharable' => $sharable->getId()
         ]);

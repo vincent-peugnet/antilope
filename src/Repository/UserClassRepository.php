@@ -20,7 +20,8 @@
  *
  * @package Antilope
  * @author Vincent Peugnet <vincent-peugnet@riseup.net>
- * @copyright 2020-2021 Vincent Peugnet
+ * @author Nicolas Peugnet <n.peugnet@free.fr>
+ * @copyright 2020-2021 Vincent Peugnet, Nicolas Peugnet
  * @license https://www.gnu.org/licenses/agpl-3.0.txt AGPL-3.0-or-later
  */
 
@@ -28,6 +29,7 @@ namespace App\Repository;
 
 use App\Entity\UserClass;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -44,62 +46,88 @@ class UserClassRepository extends ServiceEntityRepository
     }
 
     /**
-     * Get all UserClass that are at lower or equal rank.
+     * Get all UserClass that are at lower or equal.
      *
      * @param UserClass $userClass the user class as reference
      *
      * @return UserClass[] Returns an array of UserClass objects
      */
-    public function findLowerthan(UserClass $userClass)
+    public function findLowerthan(UserClass $userClass): array
     {
-
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.rank <= :rank')
-            ->setParameter('rank', $userClass->getRank())
-            ->orderBy('u.rank', 'ASC')
-            ->getQuery()
-            ->getResult()
-        ;
+        return $this->findBetween($this->findFirst(), $userClass);
     }
 
     /**
-     * Find next UserClass after the one given
-     *
-     * @param UserClass $userClass the user class as reference
-     *
-     * @return UserClass|null UserClass objects if exists
+     * Return first UserClass
      */
-    public function findNext(UserClass $userClass): ?UserClass
+    public function findFirst(): ?UserClass
     {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.rank > :rank')
-            ->setParameter('rank', $userClass->getRank())
-            ->orderBy('u.rank', 'ASC')
-            ->setMaxResults(1)
+        $qb = $this->createQueryBuilder('u');
+        $sq = $qb
+            ->select('IDENTITY(u.next)')
+            ->where($qb->expr()->isNotNull('u.next'));
+
+        $qb = $this->createQueryBuilder('uc');
+        $query = $qb
+            ->andWhere($qb->expr()->notIn('uc.id', $sq->getDQL()))
+            ->getQuery();
+        return $query->getOneOrNullResult();
+    }
+
+    public function findLast(): ?UserClass
+    {
+        $qb = $this->createQueryBuilder('u');
+        return $qb->andWhere($qb->expr()->isNull('u.next'))
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
 
     /**
-     * Find previous UserClass before the one given
+     * Recursive SQL raw query to find a list of user class between two others.
      *
-     * @param UserClass $userClass the user class as reference
-     *
-     * @return UserClass|null UserClass objects if exists
+     * @param UserClass $from the lowest class from which to search (included).
+     * @param UserClass|null $to the optional highest class to which the search should stop (included).
+     * @return UserClass[] the list of classes that match the given parameters.
      */
-    public function findPrevious(UserClass $userClass): ?UserClass
+    public function findBetween(UserClass $from, ?UserClass $to = null): array
     {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.rank < :rank')
-            ->setParameter('rank', $userClass->getRank())
-            ->orderBy('u.rank', 'DESC')
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $rsm = new ResultSetMappingBuilder($this->_em);
+        $rsm->addRootEntityFromClassMetadata(UserClass::class, 'cte');
+
+        $exitCondition = !is_null($to) ? 'WHERE c.id != ?' : '';
+        $sql = "WITH RECURSIVE cte as (
+                SELECT u.*
+                FROM   user_class as u
+                WHERE  u.id = ?
+
+                UNION  ALL
+
+                SELECT n.*
+                FROM   cte c
+                JOIN   user_class n ON n.id = c.next_id
+                $exitCondition
+            )
+            SELECT *
+            FROM   cte;";
+        $query = $this->_em->createNativeQuery($sql, $rsm);
+
+        $query->setParameter(1, $from);
+        if (!is_null($to)) {
+            $query->setParameter(2, $to);
+        }
+        $result = $query->getResult();
+        return $result;
     }
 
+    /**
+     * @return UserClass[] All the user classes sorted from first to last
+     */
+    public function findAll(): array
+    {
+        $first = $this->findFirst();
+        return $this->findBetween($first);
+    }
 
     /*
     public function findOneBySomeField($value): ?UserClass

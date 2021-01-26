@@ -28,19 +28,16 @@ namespace App\Service;
 
 use App\Entity\User;
 use App\Entity\UserClass;
-use App\Repository\UserClassRepository;
 use DateInterval;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 
 class LevelUp
 {
-    private $userClassRepository;
     private $em;
 
-    public function __construct(UserClassRepository $userClassRepository, EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em)
     {
-        $this->userClassRepository = $userClassRepository;
         $this->em = $em;
     }
 
@@ -78,7 +75,7 @@ class LevelUp
      */
     public function checkUp(User $user): User
     {
-        $userClass = $this->userClassRepository->findNext($user->getUserClass());
+        $userClass = $user->getUserClass()->getNext();
         if ($userClass) {
             if (
                 $this->shareScore($user, $userClass) &&
@@ -94,7 +91,7 @@ class LevelUp
     }
 
     /**
-     *  Check if the User still deserve it's user class, otherwise, downgrade it
+     *  Check if the User still deserve it's user class, otherwise, downgrade findNext($user->getUserClass()it
      *
      * @param User $user
      * @return User the updated or not user
@@ -108,7 +105,7 @@ class LevelUp
             !$this->validated($user, $userClass) ||
             !$this->verified($user, $userClass)
         ) {
-            $userClass = $this->userClassRepository->findPrevious($user->getUserClass());
+            $userClass = $user->getUserClass()->getPrev();
             if ($userClass) {
                 $user->setUserClass($userClass);
                 $this->checkDown($user);

@@ -34,32 +34,18 @@ use App\Entity\User;
 use App\Security\Voter\UserVoter;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserClassRepository::class)
  */
 class UserClass
 {
-    public const RANK_MIN = 0;
-    public const RANK_MAX = 100;
-
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private $id;
-
-    /**
-     * @ORM\Column(type="smallint", unique=true)
-     * @Assert\Range(
-     *      min = self::RANK_MIN,
-     *      max = self::RANK_MAX,
-     *      notInRangeMessage = "Rank must be beetwen {{ min }} and {{ max }}.",
-     * )
-     */
-    private $rank;
 
     /**
      * @ORM\Column(type="string", length=32)
@@ -98,7 +84,7 @@ class UserClass
      * @Assert\Range(
      *      min = 0,
      *      max = 8760,
-     *      notInRangeMessage = "Rank must be beetwen {{ min }} and {{ max }}.",
+     *      notInRangeMessage = "must be beetwen {{ min }} and {{ max }}.",
      * )
      */
     private $inviteFrequency;
@@ -133,6 +119,22 @@ class UserClass
      */
     private $lastEditedAt;
 
+    /**
+     * @ORM\OneToOne(targetEntity=UserClass::class, inversedBy="prev", cascade={"persist"})
+     * @ORM\JoinColumn(onDelete="cascade")
+     */
+    private $next;
+
+    /**
+     * @ORM\OneToOne(targetEntity=UserClass::class, mappedBy="next", cascade={"persist"})
+     */
+    private $prev;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Sharable::class, mappedBy="visibleBy")
+     */
+    private $sharables;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -155,18 +157,6 @@ class UserClass
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getRank(): ?int
-    {
-        return $this->rank;
-    }
-
-    public function setRank(int $rank): self
-    {
-        $this->rank = $rank;
-
-        return $this;
     }
 
     public function getName(): ?string
@@ -339,6 +329,70 @@ class UserClass
     public function setLastEditedAt(\DateTimeInterface $lastEditedAt): self
     {
         $this->lastEditedAt = $lastEditedAt;
+
+        return $this;
+    }
+
+    public function getNext(): ?self
+    {
+        return $this->next;
+    }
+
+    public function setNext(?self $next): self
+    {
+        $this->next = $next;
+
+        return $this;
+    }
+
+    public function getPrev(): ?self
+    {
+        return $this->prev;
+    }
+
+    public function setPrev(?self $prev): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($prev === null && $this->prev !== null) {
+            $this->prev->setNext(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($prev !== null && $prev->getNext() !== $this) {
+            $prev->setNext($this);
+        }
+
+        $this->prev = $prev;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Sharable[]
+     */
+    public function getSharables(): Collection
+    {
+        return $this->sharables;
+    }
+
+    public function addSharable(Sharable $sharable): self
+    {
+        if (!$this->sharables->contains($sharable)) {
+            $this->sharables[] = $sharable;
+            $sharable->setVisibleBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSharable(Sharable $sharable): self
+    {
+        if ($this->sharables->removeElement($sharable)) {
+            // set the owning side to null (unless already changed)
+            if ($sharable->getVisibleBy() === $this) {
+                $sharable->setVisibleBy(null);
+            }
+        }
 
         return $this;
     }

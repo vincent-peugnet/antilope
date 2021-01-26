@@ -27,8 +27,9 @@
 namespace App\Form;
 
 use App\Entity\UserClass;
+use App\Repository\UserClassRepository;
 use App\Security\Voter\UserVoter;
-use App\Validator\Rank;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -42,21 +43,31 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class UserClassType extends AbstractType
 {
+    private UserClassRepository $userClassRepository;
+
+    public function __construct(UserClassRepository $userClassRepository)
+    {
+        $this->userClassRepository = $userClassRepository;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $userClass = $builder->getData();
+        assert($userClass instanceof UserClass);
+
+        // If The it's a new user class
+        if (is_null($userClass->getId())) {
+            $builder->add('next', EntityType::class, [
+                'class' => UserClass::class,
+                'label' => 'Next user class',
+                'choices' => $this->userClassRepository->findAll(),
+                'placeholder' => 'none',
+                'help' => 'Your user class will be placed before the selected one.',
+                'required' => false,
+            ]);
+        }
+
         $builder
-            ->add('rank', IntegerType::class, [
-                'label' => 'Rank',
-                'help' => 'Rank indicate the order of user classes between 0 and 100',
-                'attr' => [
-                    'min' => UserClass::RANK_MIN,
-                    'max' => UserClass::RANK_MAX,
-                ],
-                'constraints' => [
-                    new NotBlank(),
-                    new Rank(),
-                ]
-            ])
             ->add('name')
             ->add('share')
             ->add('access')
@@ -75,6 +86,8 @@ class UserClassType extends AbstractType
             $userClass = $event->getData();
             assert($userClass instanceof UserClass);
             $form = $event->getForm();
+
+
 
             if ($userClass->getId() === null) {
                 $form->add('create', SubmitType::class);
