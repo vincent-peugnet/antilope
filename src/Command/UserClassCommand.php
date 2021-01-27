@@ -87,7 +87,6 @@ class UserClassCommand extends Command
         $userClass = new UserClass();
         $userClass
             ->setName($userClassName)
-            ->setRank(55)
             ->setMaxParanoia(0)
         ;
         $this->entityManager->persist($userClass);

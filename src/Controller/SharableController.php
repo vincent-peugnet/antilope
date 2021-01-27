@@ -284,6 +284,20 @@ class SharableController extends AbstractController
     }
 
     /**
+     * @Route("/sharable/{id}/activation", name="sharable_activation", requirements={"id"="\d+"})
+     */
+    public function activation(Sharable $sharable): Response
+    {
+        $this->denyAccessUnlessGranted('edit', $sharable);
+        $em = $this->getDoctrine()->getManager();
+        $sharable->setDisabled($sharable->getDisabled() ? false : true);
+        $em->persist($sharable);
+        $em->flush();
+
+        return $this->redirectToRoute('sharable_show', ['id' => $sharable->getId()]);
+    }
+
+    /**
      * @Route("/sharable/new", name="sharable_new")
      */
     public function new(Request $request): Response

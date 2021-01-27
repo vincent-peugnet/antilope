@@ -58,10 +58,6 @@ class SharableType extends AbstractType
                 'required' => true,
                 'help' => 'Long description, where you can use Markdown'
             ])
-            ->add('disabled', null, [
-                // phpcs:ignore Generic.Files.LineLength.TooLong
-                'help' => 'check this if the thing you\'re sharing is not available anymore (but can be available in the future)',
-            ])
             ->add('responsibility', null, [
                 'help' => 'check this if you feel responsible for the sharable',
             ])
@@ -69,6 +65,7 @@ class SharableType extends AbstractType
                 'class' => UserClass::class,
                 'choices' => $this->userClassRepository->findAll(),
                 'placeholder' => '',
+                'required' => false,
                 'help' => 'Your sharable will be accessible from this user class',
             ])
             ->add('interestedMethod', ChoiceType::class, [

@@ -42,7 +42,12 @@
     {% endif %}
 
     {% if sharable.disabled %}
-        <div class="alert alert-dark"><i class="fas fa-times-circle"></i> This sharable is disabled.</div>
+        <div class="alert alert-dark">
+            <i class="fas fa-times-circle"></i> This sharable is disabled.
+            {% if is_granted('edit', sharable) %}
+                <a href="{{ path('sharable_activation', {id: sharable.id}) }}">Activate it !</a>
+            {% endif %}
+        </div>
     {% endif %}
 
     <h1>
@@ -68,6 +73,9 @@
         {% endif %}
         {% if is_granted('validate', sharable) %}
         <a class="btn btn-success" href="{{ path('sharable_validate', {id: sharable.id}) }}"><i class="fas fa-check-circle"></i> validate</a>
+        {% endif %}            
+        {% if is_granted('edit', sharable) and not sharable.getDisabled %}
+        <a class="btn btn-dark" href="{{ path('sharable_activation', {id: sharable.id}) }}"><i class="fas fa-times-circle"></i> disable</a>
         {% endif %}
 
 
