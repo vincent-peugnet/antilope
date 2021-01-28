@@ -74,6 +74,9 @@
                         Joined {{ user.getCreatedAt|ago }}
                     </li>
                     <li class="list-group-item">
+                        Last active {{ user.getLastActivity|ago }}
+                    </li>
+                    <li class="list-group-item">
                         User class : <span class="badge badge-warning">{{ user.userclass }}</span>
                     </li>
                     <li class="list-group-item">

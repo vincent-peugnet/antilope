@@ -141,11 +141,17 @@ class User implements UserInterface
      */
     private $interesteds;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $lastActivity;
+
     public function __construct()
     {
         $this->validations = new ArrayCollection();
         $this->invitations = new ArrayCollection();
         $this->createdAt = new DateTime();
+        $this->lastActivity = new DateTime();
         $this->shareScore = 0;
         $this->paranoia = 0;
         $this->manages = new ArrayCollection();
@@ -537,6 +543,18 @@ class User implements UserInterface
                 return $role !== self::ROLE_ADMIN;
             });
         }
+
+        return $this;
+    }
+
+    public function getLastActivity(): ?\DateTimeInterface
+    {
+        return $this->lastActivity;
+    }
+
+    public function setLastActivity(\DateTimeInterface $lastActivity): self
+    {
+        $this->lastActivity = $lastActivity;
 
         return $this;
     }
