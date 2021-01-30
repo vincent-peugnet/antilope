@@ -56,7 +56,8 @@ class SharableType extends AbstractType
             ->add('description')
             ->add('details', null, [
                 'required' => true,
-                'help' => 'Long description, where you can use Markdown'
+                'help' => 'Long description, where you can use Markdown <i class="fab fa-markdown"></i>',
+                'help_html' => true,
             ])
             ->add('responsibility', null, [
                 'help' => 'check this if you feel responsible for the sharable',

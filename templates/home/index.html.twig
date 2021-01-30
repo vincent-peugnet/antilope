@@ -48,6 +48,29 @@
 
 </div>
 
+<div class="card mb-3">
+
+    <div class="card-header">
+        <h3 class="card-title">Last active users</h3>
+    </div>
+
+    <div class="card-body">
+        <ul class="list-group list-group-flush">
+            {% for user in activeUsers %}
+            <li class="list-group-item">
+                <a href="{{ path('user_show', {id: user.id}) }}">{{ user.username }}</a>
+                <a href="{{ path('userclass_show', {id: user.userClass.id}) }}">
+                    <span class="badge badge-warning">{{ user.userClass.name }}</span>
+                </a>
+                <span class="badge badge-light">{{ user.shareScore }}</span>
+                <small>last seen {{ user.lastActivity|ago }}</small>
+            </li>
+            {% endfor %}
+        </ul>
+
+    </div>
+
+</div>
 
 {% endif %}
 

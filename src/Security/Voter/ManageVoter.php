@@ -106,7 +106,7 @@ class ManageVoter extends Voter
             $manage->getContactable() &&
             (
                 !$sharable->getSharableContacts()->isEmpty() ||
-                !$sharable->getContactableManagers()->isEmpty()
+                $sharable->getContactableManagers()->count() > 1
             )
         );
     }

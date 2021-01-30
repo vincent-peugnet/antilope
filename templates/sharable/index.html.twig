@@ -74,14 +74,27 @@
         <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="card-title">
         {{ sharable.name }}
+        {% if sharable.interesteds|length > 0 %}
+        <span title="{{ sharable.interesteds|length }} users are insterested in this sharable" class="badge badge-danger">
+            {{ sharable.interesteds|length }}
+            <i class="fas fa-question-circle"></i>
+        </span>
+        {% endif %}
         {% if sharable.validations|length > 0 %}
-        <span title="" class="badge badge-success">{{ sharable.validations|length }} <i class="fas fa-check-circle"></i></span>
+        <span title="{{ sharable.validations|length }} users have validated this sharable" class="badge badge-success">
+            {{ sharable.validations|length }}
+            <i class="fas fa-check-circle"></i></span>
         {% endif %}
         {% if sharable.visibleBy %}
         <span title="accessible by {{ sharable.visibleBy.name }}" class="badge badge-warning">{{ sharable.visibleBy.name }}</span>
         {% endif %}
         {% if sharable.disabled %}
-        <span title="this sharable is disabled" class="badge badge-dark"><i class="fas fa-times"></i> disabled</span>
+        <span class="badge badge-danger" title="This sharable is disabled"><i class="fas fa-ban"></i></span>
+        {% endif %}
+        {% if sharable in managedSharables %}
+        <span title="You manage this sharable" class="badge badge-primary">
+            <i class="fas fa-edit"></i>
+        </span>
         {% endif %}
         </h5>
         <small>created {{ sharable.createdAt|ago }}</small>

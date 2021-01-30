@@ -28,11 +28,14 @@ namespace App\Repository;
 
 use App\Entity\Sharable;
 use App\Entity\User;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
+use PhpParser\Node\Expr\Cast\Array_;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -103,6 +106,20 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->orWhere($qb->expr()->eq('i.sharable', $sharable->getId()))
             ->orWhere($qb->expr()->isNull('uc'))
             ->getQuery();
+    }
+
+    /**
+     * @param int $minute Number of minute to filter
+     */
+    public function findActiveUsers(int $minute = 15): array
+    {
+        $qb = $this->createQueryBuilder('u');
+        return $qb->where('u.lastActivity > :lastActivity')
+            ->setParameter('lastActivity', new DateTime("$minute minutes ago"), Types::DATETIME_MUTABLE)
+            ->orderBy('u.lastActivity', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     /*
