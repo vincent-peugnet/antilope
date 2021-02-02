@@ -88,11 +88,6 @@ class InterestedFixture extends Fixture implements DependentFixtureInterface
             ->setUser($audrey);
         $manager->persist($audreyInterestedInMicroscope);
 
-        $audreyInterestedInMicroscope = new Interested();
-        $audreyInterestedInMicroscope->setSharable($microscope)
-            ->setUser($audrey);
-        $manager->persist($audreyInterestedInMicroscope);
-
         $nicolasInterestedInCliffandCars = new Interested();
         $nicolasInterestedInCliffandCars->setSharable($cliffAndCars)
             ->setUser($nicolas);

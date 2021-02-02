@@ -128,17 +128,18 @@ class SharableVoter extends Voter
 
     private function canView(Sharable $sharable, User $user): bool
     {
-        if ($user->isDisabled() || !$user->getUserClass()->getAccess()) {
+        if ($user->isDisabled()) {
             return false;
-        }
-        if ($this->canManage($sharable, $user)) {
+        } elseif ($user->getUserClass()->getAccess()) {
             return true;
-        }
-        if (!is_null($sharable->getVisibleBy())) {
+        } elseif ($this->canManage($sharable, $user)) {
+            return true;
+        } elseif (!is_null($sharable->getVisibleBy())) {
             $visibleByUserClasses = $this->userClassRepository->findBetween($sharable->getVisibleBy());
             return (in_array($user->getUserClass(), $visibleByUserClasses));
+        } else {
+            return false;
         }
-        return false;
     }
 
     private function canBeInterested(Sharable $sharable, User $user): bool

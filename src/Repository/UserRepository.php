@@ -116,6 +116,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $qb = $this->createQueryBuilder('u');
         return $qb->where('u.lastActivity > :lastActivity')
             ->setParameter('lastActivity', new DateTime("$minute minutes ago"), Types::DATETIME_MUTABLE)
+            ->andWhere('u.disabled = 0')
             ->orderBy('u.lastActivity', 'DESC')
             ->getQuery()
             ->getResult()

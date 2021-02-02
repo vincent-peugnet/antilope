@@ -39,6 +39,7 @@ abstract class Contact
     public const EMAIL = 'email';
     public const PHONE = 'phone';
     public const URL = 'url';
+    public const MATRIX = 'matrix';
     public const ADRESS = 'adress';
     public const OTHER = 'other';
 
@@ -47,6 +48,7 @@ abstract class Contact
         return [
             'Email' => self::EMAIL,
             'Phone number' => self::PHONE,
+            'Matrix ID' => self::MATRIX,
             'URL adress' => self::URL,
             'Adress' => self::ADRESS,
             'Other' => self::OTHER,
@@ -171,6 +173,12 @@ abstract class Contact
             case self::PHONE:
                 if (!is_numeric($this->content)) {
                     $message = 'Phone number should only contain numerical characters';
+                }
+                break;
+
+            case self::MATRIX:
+                if (!preg_match('#^\@[a-zA-Z0-9-_]+\:([a-zA-Z0-9-_.]+\.[a-zA-Z0-9-_.]+)+$#', $this->content)) {
+                    $message = 'Matrix ID should use the form @username:server.net';
                 }
                 break;
         }
