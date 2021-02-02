@@ -1,0 +1,9 @@
+{% extends "email/notification/base.html.twig" %}
+
+{% block content %}
+
+Your interest on sharable:
+<a href="{{ url('sharable_show', {id: sharable.id}) }}">{{ sharable.name }}</a>
+has been reviewed. You can now access the <a href="{{ url('sharable_contact', {id: sharable.id}) }}">contact infos</a>.
+
+{% endblock %}

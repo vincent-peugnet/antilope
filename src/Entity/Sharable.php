@@ -476,6 +476,9 @@ class Sharable
         });
     }
 
+    /**
+     * @return Collection|Manage[] Collection of Manage objects
+     */
     public function getConfirmedNotDisabledManagers(): Collection
     {
         return $this->getManagedBy()->filter(function (Manage $manage) {

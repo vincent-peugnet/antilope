@@ -67,7 +67,7 @@
         <a class="btn btn-primary" href="{{ path('sharable_contact', {id: sharable.id}) }}"><i class="fas fa-address-book"></i> contacts</a>
         {% endif %}
         {% if is_granted('interested', sharable) %}
-        <a class="btn btn-primary" href="{{ path('sharable_interested', {id: sharable.id}) }}"><i class="fas fa-eye"></i> view interested</a>
+        <a class="btn btn-warning" href="{{ path('sharable_interested', {id: sharable.id}) }}"><i class="fas fa-eye"></i> view interested</a>
         {% endif %}  
         {% if is_granted('interest', sharable) %}
         <a class="btn btn-warning" href="{{ path('sharable_interest', {id: sharable.id}) }}"><i class="fas fa-question-circle"></i> interested</a>

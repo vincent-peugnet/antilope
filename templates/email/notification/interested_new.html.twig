@@ -1,0 +1,30 @@
+{% extends "email/notification/base.html.twig" %}
+
+{% block content %}
+
+<p>
+    <a href="{{ url('user_show', {id: interestedUser.id}) }}">{{ interestedUser.username }}</a>
+    is interested in your sharable:
+    <a href="{{ url('sharable_show', {id: sharable.id}) }}">{{ sharable.name }}</a>.
+</p>
+
+<p>
+    {% if sharable.interestedMethod == 2 %}
+    As your sharable contact method is automatic (2),
+    <a href="{{ url('user_show', {id: interestedUser.id}) }}">{{ interestedUser.username }}</a>
+    can now access the sharable contact infos and you can see this user contacts.
+    {% elseif sharable.interestedMethod == 3 %}
+    As your sharable contact method is manual (3),
+    You can now review
+    <a href="{{ url('user_show', {id: interestedUser.id}) }}">{{ interestedUser.username }}</a>
+    interest to allow this user access sharable contact infos.
+    {% elseif sharable.interestedMethod == 4 %}
+    As your sharable contact method is never (4),
+    You can access
+    <a href="{{ url('user_show', {id: interestedUser.id}) }}">{{ interestedUser.username }}</a>
+    contact infos and contact this user when you want.
+    {% endif %}
+</p>
+
+
+{% endblock %}

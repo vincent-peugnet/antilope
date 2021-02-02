@@ -28,11 +28,12 @@ namespace App\Controller;
 
 use App\Entity\Interested;
 use App\Entity\Sharable;
+use App\Event\InterestedEvent;
 use App\Form\InterestedType;
 use App\Repository\InterestedRepository;
-use App\Repository\ManageRepository;
 use App\Security\Voter\SharableVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -59,7 +60,7 @@ class InterestedController extends AbstractController
     /**
      * @Route("/sharable/{id}/interest", name="sharable_interest", requirements={"id"="\d+"})
      */
-    public function interest(Sharable $sharable, Request $request, ManageRepository $manageRepo): Response
+    public function interest(Sharable $sharable, Request $request, EventDispatcherInterface $dispatcher): Response
     {
         $this->denyAccessUnlessGranted(SharableVoter::INTEREST, $sharable);
 
@@ -73,6 +74,8 @@ class InterestedController extends AbstractController
             $entityManager->persist($interested);
             $entityManager->flush();
 
+            $dispatcher->dispatch(new InterestedEvent($interested), InterestedEvent::NEW);
+
             return $this->redirectToRoute('sharable_show', ['id' => $sharable->getId()]);
         }
 
@@ -85,7 +88,7 @@ class InterestedController extends AbstractController
     /**
      * @Route("/interested/{id}/review", name="interested_review", requirements={"id"="\d+"})
      */
-    public function review(Interested $interested): Response
+    public function review(Interested $interested, EventDispatcherInterface $dispatcher): Response
     {
         $sharable = $interested->getSharable();
         $this->denyAccessUnlessGranted(SharableVoter::EDIT, $sharable);
@@ -96,6 +99,8 @@ class InterestedController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($interested);
             $entityManager->flush();
+
+            $dispatcher->dispatch(new InterestedEvent($interested), InterestedEvent::REVIEWED);
         }
 
         return $this->redirectToRoute('sharable_interested', ['id' => $sharable->getId()]);
