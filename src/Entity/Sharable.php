@@ -460,7 +460,7 @@ class Sharable
     public function getContactableManagers(): Collection
     {
         return $this->getManagedBy()->filter(function (Manage $manage) {
-            return $manage->getContactable();
+            return ($manage->isContactable() && $manage->getConfirmed() && !$manage->getUser()->isDisabled());
         });
     }
 
@@ -474,5 +474,25 @@ class Sharable
         return $this->getManagedBy()->filter(function (Manage $manage) {
             return $manage->getConfirmed();
         });
+    }
+
+    public function getConfirmedNotDisabledManagers(): Collection
+    {
+        return $this->getManagedBy()->filter(function (Manage $manage) {
+            return ($manage->getConfirmed() && !$manage->getUser()->isDisabled());
+        });
+    }
+
+    public function isAccessible(): bool
+    {
+        return ($this->getConfirmedNotDisabledManagers()->count() > 0);
+    }
+
+    public function isContactable(): bool
+    {
+        $contactableManagers = $this->getConfirmedNotDisabledManagers()->filter(function (Manage $manage) {
+            return $manage->getUser()->isContactable();
+        });
+        return (!$this->getSharableContacts()->isEmpty() || !$contactableManagers->isEmpty());
     }
 }

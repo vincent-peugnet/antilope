@@ -80,7 +80,7 @@ class ManageVoter extends Voter
                 return (
                     $sharable->getConfirmedManagers()->count() > 1 &&
                     (
-                        !$manage->getContactable() ||
+                        !$manage->isContactable() ||
                         !$sharable->getSharableContacts()->isEmpty() ||
                         $sharable->getContactableManagers()->count() > 1
                     )
@@ -103,7 +103,7 @@ class ManageVoter extends Voter
         $sharable = $manage->getSharable();
         return (
             $this->isConfirmedManager($manage, $user) &&
-            $manage->getContactable() &&
+            $manage->isContactable() &&
             (
                 !$sharable->getSharableContacts()->isEmpty() ||
                 $sharable->getContactableManagers()->count() > 1
@@ -115,7 +115,7 @@ class ManageVoter extends Voter
     {
         return (
             $this->isConfirmedManager($manage, $user) &&
-            !$manage->getContactable() &&
+            !$manage->isContactable() &&
             !$user->getUserContacts()->isEmpty()
         );
     }

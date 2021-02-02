@@ -146,8 +146,14 @@ class User implements UserInterface
      */
     private $lastActivity;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $disabled;
+
     public function __construct()
     {
+        $this->disabled = false;
         $this->validations = new ArrayCollection();
         $this->invitations = new ArrayCollection();
         $this->createdAt = new DateTime();
@@ -501,6 +507,30 @@ class User implements UserInterface
         return $this;
     }
 
+    public function getLastActivity(): ?\DateTimeInterface
+    {
+        return $this->lastActivity;
+    }
+
+    public function setLastActivity(\DateTimeInterface $lastActivity): self
+    {
+        $this->lastActivity = $lastActivity;
+
+        return $this;
+    }
+
+    public function isDisabled(): ?bool
+    {
+        return $this->disabled;
+    }
+
+    public function setDisabled(bool $disabled): self
+    {
+        $this->disabled = $disabled;
+
+        return $this;
+    }
+
     //_______________ special functions _______________
 
     /**
@@ -547,15 +577,8 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getLastActivity(): ?\DateTimeInterface
+    public function isContactable(): bool
     {
-        return $this->lastActivity;
-    }
-
-    public function setLastActivity(\DateTimeInterface $lastActivity): self
-    {
-        $this->lastActivity = $lastActivity;
-
-        return $this;
+        return !$this->getUserContacts()->isEmpty();
     }
 }

@@ -21,7 +21,7 @@
     <li class="list-group-item">
 
     <a href="{{ path('user_show', {id: manage.user.id}) }}">{{ manage.user.username }}</a>
-    <span class="badge badge-warning">{{ manage.user.userClass.name }}</span>
+    <span class="badge badge-light">{{ manage.user.userClass.name }}</span>
     <span class="badge badge-light">{{ manage.confirmed ? 'confirmed' : 'invited' }}</span>
     <span class="ml-auto"><small>added {{ manage.createdAt|ago }}</small></span>
 

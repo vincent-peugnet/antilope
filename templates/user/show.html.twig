@@ -1,11 +1,12 @@
 {% extends 'base.html.twig' %}
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
+{% import 'macros/sharable.html.twig' as sharable %}
 
 {% block title %}{{ user.username }}{% endblock %}
 
 {% block content %}
 
 
-{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 
 {{ breadcrumbs.render([
     {'url': url('user'), 'text': 'Users'},
@@ -82,7 +83,7 @@
                         <i class="fas fa-shield-alt"></i>
                         User class:
                         <a href="{{ path('userclass_show', {id: user.userClass.id}) }}">
-                            <span class="badge badge-warning">{{ user.userClass.name }}</span>
+                            <span class="badge badge-primary">{{ user.userClass.name }}</span>
                         </a>
                     </li>
                     <li class="list-group-item">
@@ -144,11 +145,7 @@
                 {% if is_granted('view', manage.sharable) %}
 
                     <li class="list-group-item">
-
-                    <a href="{{ path('sharable_show', {id: manage.sharable.id}) }}">{{ manage.sharable.name }}</a>
-                    {% if is_granted('edit', manage.sharable) %}
-                    {% endif %}
-
+                        {{ sharable.render(manage.sharable) }}
                     </li>
                 
                 {% endif %}
@@ -190,10 +187,7 @@
                 {% if is_granted('view', validation.sharable) %}
 
                     <li class="list-group-item">
-                    <a href="{{ path('sharable_show', {id: validation.sharable.id}) }}">{{ validation.sharable.name }}</a>
-                    {% if validation.sharable.disabled %}
-                        <span class="badge badge-danger" title="This sharable is disabled"><i class="fas fa-ban"></i></span>
-                    {% endif %}
+                        {{ sharable.render(validation.sharable) }}
                     <small>{{ validation.sendAt|ago }}</small>
                     </li>
                 
@@ -232,7 +226,7 @@
                 {% if is_granted('view', interested.sharable) %}
 
                     <li class="list-group-item">
-                    <a href="{{ path('sharable_show', {id: interested.sharable.id}) }}">{{ interested.sharable.name }}</a>
+                        {{ sharable.render(interested.sharable) }}
                     <small>{{ interested.createdAt|ago }}</small>
                     </li>
 

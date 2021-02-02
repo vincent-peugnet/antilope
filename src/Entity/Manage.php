@@ -117,7 +117,7 @@ class Manage
         return $this;
     }
 
-    public function getContactable(): ?bool
+    public function isContactable(): ?bool
     {
         return $this->contactable;
     }

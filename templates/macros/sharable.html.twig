@@ -1,0 +1,19 @@
+{% macro render(sharable) %}
+    <a href="{{ path('sharable_show', {id: sharable.id}) }}" title="{{ sharable.description }}">
+        {{ sharable.name }}
+    </a>
+    {% if sharable.disabled or not sharable.isAccessible %}
+        <span class="badge badge-danger" title="This sharable is disabled"><i class="fas fa-ban"></i></span>
+    {% endif %}
+    {% if sharable.interesteds|length > 0 %}
+    <span title="{{ sharable.interesteds|length }} users are insterested in this sharable" class="badge badge-warning">
+        {{ sharable.interesteds|length }}
+        <i class="fas fa-question-circle"></i>
+    </span>
+    {% endif %}
+    {% if sharable.validations|length > 0 %}
+    <span title="{{ sharable.validations|length }} users have validated this sharable" class="badge badge-success">
+        {{ sharable.validations|length }}
+        <i class="fas fa-check-circle"></i></span>
+    {% endif %}
+{% endmacro %}

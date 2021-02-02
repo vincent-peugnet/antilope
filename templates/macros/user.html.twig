@@ -1,0 +1,12 @@
+{% macro render(user) %}
+    <a href="{{ path('user_show', {id: user.id}) }}">
+        {{ user.username }}
+    </a>
+    <a href="{{ path('userclass_show', {id: user.userClass.id}) }}">
+        <span class="badge badge-primary">{{ user.userClass.name }}</span>
+    </a>
+    <span class="badge badge-light">{{ user.shareScore }}</span>
+    {% if user.isDisabled %}
+        <span class="badge badge-danger" title="This user is disabled"><i class="fas fa-ban"></i></span>
+    {% endif %}
+{% endmacro %}

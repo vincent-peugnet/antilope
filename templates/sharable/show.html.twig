@@ -1,4 +1,6 @@
 {% extends 'base.html.twig' %}
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
+{% import "macros/user.html.twig" as userMacro %}
 
 
 {% block title %}{{ sharable.name }}{% endblock %}
@@ -7,7 +9,6 @@
 
 {% block content %}
 
-{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 
 {{ breadcrumbs.render([
     {'url': url('sharable'), 'text': 'Sharables'},
@@ -32,7 +33,7 @@
     {% elseif validated %}
         <div class="alert alert-success"><i class="fas fa-check-circle"></i> You have validated this Sharable.</div>
     {% elseif interested %}
-        <div class="alert alert-danger">
+        <div class="alert alert-warning">
             <i class="fas fa-question-circle"></i>
             You are interested in this Sharable.
             {% if sharable.interestedMethod == 3 %}
@@ -42,7 +43,7 @@
     {% endif %}
 
     {% if sharable.disabled %}
-        <div class="alert alert-dark">
+        <div class="alert alert-danger">
             <i class="fas fa-times-circle"></i> This sharable is disabled.
             {% if is_granted('edit', sharable) %}
                 <a href="{{ path('sharable_activation', {id: sharable.id}) }}">Activate it !</a>
@@ -69,13 +70,13 @@
         <a class="btn btn-primary" href="{{ path('sharable_interested', {id: sharable.id}) }}"><i class="fas fa-eye"></i> view interested</a>
         {% endif %}  
         {% if is_granted('interest', sharable) %}
-        <a class="btn btn-danger" href="{{ path('sharable_interest', {id: sharable.id}) }}"><i class="fas fa-question-circle"></i> interested</a>
+        <a class="btn btn-warning" href="{{ path('sharable_interest', {id: sharable.id}) }}"><i class="fas fa-question-circle"></i> interested</a>
         {% endif %}
         {% if is_granted('validate', sharable) %}
         <a class="btn btn-success" href="{{ path('sharable_validate', {id: sharable.id}) }}"><i class="fas fa-check-circle"></i> validate</a>
         {% endif %}            
         {% if is_granted('edit', sharable) and not sharable.getDisabled %}
-        <a class="btn btn-dark" href="{{ path('sharable_activation', {id: sharable.id}) }}"><i class="fas fa-times-circle"></i> disable</a>
+        <a class="btn btn-danger" href="{{ path('sharable_activation', {id: sharable.id}) }}"><i class="fas fa-times-circle"></i> disable</a>
         {% endif %}
 
 
@@ -127,7 +128,7 @@
                         {{ sharable.validations|length }} validations
                     </li>
                     {% if sharable.interestedmethod > 1 %}
-                    <li class="list-group-item list-group-item-danger">
+                    <li class="list-group-item list-group-item-warning">
                         {{ sharable.interesteds|length }} interested
                     </li>
                     {% endif %}
@@ -159,7 +160,7 @@
                     </li>
 
                     {% if sharable.disabled %}
-                    <li class="list-group-item list-group-item-dark">
+                    <li class="list-group-item list-group-item-danger">
                         disabled
                     </li>
                     {% endif %}
@@ -186,11 +187,7 @@
                 {% for manage in sharable.managedby %}
 
                     <li class="list-group-item">
-
-
-                    <a href="{{ path('user_show', {id: manage.user.id} ) }}">{{ manage.user.username }}</a>
-
-
+                        {{ userMacro.render(manage.user) }}
                     </li>
 
                 {% endfor %}
@@ -222,7 +219,7 @@
 
                     <li class="list-group-item">
 
-                    <a href="{{ path('user_show', {id: validation.user.id} ) }}">{{ validation.user.username }}</a> <small>{{ validation.sendAt|ago }}</small>
+                        {{ userMacro.render(validation.user) }}
 
                     </li>
 

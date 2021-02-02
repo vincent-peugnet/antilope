@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+{% import "macros/user.html.twig" as userMacro %}
 
 {% block title %}Home{% endblock %}
 
@@ -23,31 +24,6 @@
 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
 
 
-{% if siteAlert %}
-
-<div class="alert alert-danger">{{ siteAlert }}</div>
-
-{% endif %}
-
-<div class="card mb-3">
-
-    <div class="card-header">
-
-        <div class="card-title">
-        <h3>News</h3>
-        </div>
-    </div>
-
-    <div class="card-body">
-
-        <p class="card-subtitle mb-2">
-            Some news...
-        </p>
-
-    </div>
-
-</div>
-
 <div class="card mb-3">
 
     <div class="card-header">
@@ -58,11 +34,7 @@
         <ul class="list-group list-group-flush">
             {% for user in activeUsers %}
             <li class="list-group-item">
-                <a href="{{ path('user_show', {id: user.id}) }}">{{ user.username }}</a>
-                <a href="{{ path('userclass_show', {id: user.userClass.id}) }}">
-                    <span class="badge badge-warning">{{ user.userClass.name }}</span>
-                </a>
-                <span class="badge badge-light">{{ user.shareScore }}</span>
+                {{ userMacro.render(user) }}
                 <small>last seen {{ user.lastActivity|ago }}</small>
             </li>
             {% endfor %}

@@ -66,7 +66,7 @@
     {% elseif sharable in validatedSharables %}
         {% set border = 'border-success' %}
     {% elseif sharable in interestedSharables %}
-        {% set border = 'border-danger' %}
+        {% set border = 'border-warning' %}
     {% endif %}
 
 
@@ -75,7 +75,7 @@
         <h5 class="card-title">
         {{ sharable.name }}
         {% if sharable.interesteds|length > 0 %}
-        <span title="{{ sharable.interesteds|length }} users are insterested in this sharable" class="badge badge-danger">
+        <span title="{{ sharable.interesteds|length }} users are insterested in this sharable" class="badge badge-warning">
             {{ sharable.interesteds|length }}
             <i class="fas fa-question-circle"></i>
         </span>
@@ -86,7 +86,7 @@
             <i class="fas fa-check-circle"></i></span>
         {% endif %}
         {% if sharable.visibleBy %}
-        <span title="accessible by {{ sharable.visibleBy.name }}" class="badge badge-warning">{{ sharable.visibleBy.name }}</span>
+        <span title="accessible by {{ sharable.visibleBy.name }}" class="badge badge-primary">{{ sharable.visibleBy.name }}</span>
         {% endif %}
         {% if sharable.disabled %}
         <span class="badge badge-danger" title="This sharable is disabled"><i class="fas fa-ban"></i></span>

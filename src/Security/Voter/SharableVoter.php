@@ -153,6 +153,7 @@ class SharableVoter extends Voter
         if (
             !$sharable->getDisabled() &&
             $sharable->getInterestedMethod() > 1 &&
+            $sharable->isContactable() &&
             $this->canView($sharable, $user) &&
             !$this->passedEnd($sharable) &&
             !$user->getUserContacts()->isEmpty() &&

@@ -1,4 +1,6 @@
 {% extends 'base.html.twig' %}
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
+{% import 'macros/user.html.twig' as userMacro %}
 
 
 {% block title %}{{ sharable.name }} : Validations{% endblock %}
@@ -7,7 +9,6 @@
 
 {% block content %}
 
-{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 
 {{ breadcrumbs.render([
     {'url': url('sharable'), 'text': 'Sharables'},
@@ -37,8 +38,8 @@
 
     <div class="card-footer d-flex justify-content-between align-items-center">
 
-        <h5 class="card-title">By <a href="{{ path('user_show', {id: validation.user.id}) }}">{{ validation.user.username }}</a>
-        <span class="badge badge-warning">{{ validation.user.userClass.name }}</span>
+        <h5 class="card-title">By
+            {{ userMacro.render(validation.user) }}
         <small>
             {{ validation.sendAt|ago }}
         </small>

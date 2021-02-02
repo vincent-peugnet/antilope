@@ -69,6 +69,7 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
             ->setCreatedAt(new DateTime('2019-11-11'))
             ->setLastEditedAt(new DateTime('2019-11-11'))
             ->setResponsibility(true)
+            ->setInterestedMethod(3)
             ->setDescription('Je peux voir des trucs avec mon microscope.')
             ->setDetails('Un *petit* microsope, qui saura donner des résultats intéressants.');
         $manager->persist($sharable);
@@ -80,6 +81,7 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
             ->setCreatedAt(new DateTime('2019-12-11'))
             ->setLastEditedAt(new DateTime('2019-12-12'))
             ->setResponsibility(true)
+            ->setInterestedMethod(4)
             ->setDescription('Cachette secrète sous la maison familiale.')
             // phpcs:ignore Generic.Files.LineLength.TooLong
             ->setDetails('![](https://www.grottes-musee-de-saulges.com/sites/www.grottes-musee-de-saulges.com/files/styles/edito_paragraphe_1/public/thumbnails/image/margot_salle_des_troglodythes.jpg?itok=DWnszGyz)');
@@ -114,6 +116,7 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
         $sharable = new Sharable();
         $sharable->setName('Un coin à champignon')
             ->setDisabled(false)
+            ->setInterestedMethod(1)
             ->setLastEditedAt(new DateTime('2020-07-08'))
             ->setResponsibility(false)
             ->setDescription('Dans la forêt de Bernouille')
