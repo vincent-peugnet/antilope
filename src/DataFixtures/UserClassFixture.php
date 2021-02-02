@@ -43,7 +43,7 @@ class UserClassFixture extends Fixture
             ->setMaxParanoia(3)
             ->setShareScoreReq(5000)
             ->setAccountAgeReq(42)
-            ->setValidatedReq(5)
+            ->setValidatedReq(3)
             ->setName('elite');
         $manager->persist($elite);
 

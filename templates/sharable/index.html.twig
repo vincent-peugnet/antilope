@@ -88,7 +88,7 @@
         {% if sharable.visibleBy %}
         <span title="accessible by {{ sharable.visibleBy.name }}" class="badge badge-primary">{{ sharable.visibleBy.name }}</span>
         {% endif %}
-        {% if sharable.disabled %}
+        {% if sharable.disabled or not sharable.isAccessible %}
         <span class="badge badge-danger" title="This sharable is disabled"><i class="fas fa-ban"></i></span>
         {% endif %}
         {% if sharable in managedSharables %}

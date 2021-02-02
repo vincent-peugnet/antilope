@@ -50,6 +50,8 @@ class UserContactFixture extends Fixture implements DependentFixtureInterface
         $nicolas = $userRepo->findOneBy(['username' => 'nicolas']);
         $leatine = $userRepo->findOneBy(['username' => 'leatine']);
         $vincent = $userRepo->findOneBy(['username' => 'vincent']);
+        $guilhem = $userRepo->findOneBy(['username' => 'guilhem']);
+        $relou = $userRepo->findOneBy(['username' => 'relou']);
 
         $audreyContact = new UserContact();
         $audreyContact->setUser($audrey)
@@ -84,6 +86,21 @@ class UserContactFixture extends Fixture implements DependentFixtureInterface
             ->setContent('vincent-peugnet@riseup.net')
             ->setInfo('My new official email adress');
         $manager->persist($vincentContact);
+
+
+        $guilhemContact = new UserContact();
+        $guilhemContact->setUser($guilhem)
+            ->setType(Contact::PHONE)
+            ->setContent('0642722425')
+            ->setInfo('My phone');
+        $manager->persist($guilhemContact);
+
+        $relouContact = new UserContact();
+        $relouContact->setUser($relou)
+            ->setType(Contact::OTHER)
+            ->setContent('You cannot find me so easily')
+            ->setInfo('hehehe');
+        $manager->persist($relouContact);
 
         $manager->flush();
     }

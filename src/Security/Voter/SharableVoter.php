@@ -123,11 +123,7 @@ class SharableVoter extends Voter
     private function canEdit(Sharable $sharable, User $user): bool
     {
         $manage = $this->canManage($sharable, $user);
-        if ($manage !== null) {
-            return $manage->getConfirmed();
-        } else {
-            return false;
-        }
+        return ($manage !== null && $manage->getConfirmed() && !$user->isDisabled());
     }
 
     private function canView(Sharable $sharable, User $user): bool
@@ -139,7 +135,7 @@ class SharableVoter extends Voter
             $visibleByUserClasses = $this->userClassRepository->findBetween($sharable->getVisibleBy());
             return (in_array($user->getUserClass(), $visibleByUserClasses));
         }
-        if ($user->getUserClass()->getAccess()) {
+        if ($user->getUserClass()->getAccess() && !$user->isDisabled()) {
             return true;
         }
         return false;
@@ -151,6 +147,7 @@ class SharableVoter extends Voter
             return false;
         }
         if (
+            $sharable->isAccessible() &&
             !$sharable->getDisabled() &&
             $sharable->getInterestedMethod() > 1 &&
             $sharable->isContactable() &&
@@ -181,6 +178,7 @@ class SharableVoter extends Voter
         }
         $interested = $this->alreadyInterested($sharable, $user);
         if (
+            $sharable->isAccessible() &&
             !$sharable->getDisabled() &&
             $interested &&
             !$this->alreadyValidated($sharable, $user)
@@ -208,6 +206,7 @@ class SharableVoter extends Voter
         }
 
         if (
+            $sharable->isAccessible() &&
             !$sharable->getDisabled() &&
             $this->passedBegin($sharable) &&
             $this->passedBegin($sharable) &&
@@ -234,6 +233,7 @@ class SharableVoter extends Voter
     private function canCreate(User $user): bool
     {
         return(
+            !$user->isDisabled() &&
             $user->getUserClass()->getShare() &&
             !$user->getUserContacts()->isEmpty()
         );

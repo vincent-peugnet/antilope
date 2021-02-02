@@ -50,6 +50,7 @@ class ManageFixture extends Fixture implements DependentFixtureInterface
         $guillaume = $userRepo->findOneBy(['username' => 'guillaume']);
         $nicolas = $userRepo->findOneBy(['username' => 'nicolas']);
         $leatine = $userRepo->findOneBy(['username' => 'leatine']);
+        $relou = $userRepo->findOneBy(['username' => 'relou']);
 
         $sharableRepo = $manager->getRepository(Sharable::class);
         $thinkpad = $sharableRepo->findOneBy(['name' => 'Aide sur les Thinkpads']);
@@ -58,6 +59,8 @@ class ManageFixture extends Fixture implements DependentFixtureInterface
         $mers = $sharableRepo->findOneBy(['name' => 'Maison de mers']);
         $concert = $sharableRepo->findOneBy(['name' => 'Concert de Tendre Ael']);
         $champignon = $sharableRepo->findOneBy(['name' => 'Un coin à champignon']);
+        $cliffAndCars = $sharableRepo->findOneBy(['name' => "Cliff n' Cars"]);
+        $raveParty = $sharableRepo->findOneBy(['name' => "Rave Party"]);
 
         $manage = new Manage();
         $manage->setSharable($thinkpad);
@@ -118,6 +121,30 @@ class ManageFixture extends Fixture implements DependentFixtureInterface
         $manage = new Manage();
         $manage->setSharable($champignon);
         $manage->setUser($guillaume);
+        $manage->setContactable(true);
+
+        $manager->persist($manage);
+        $manager->flush();
+
+        $manage = new Manage();
+        $manage->setSharable($cliffAndCars);
+        $manage->setUser($relou);
+        $manage->setContactable(true);
+
+        $manager->persist($manage);
+        $manager->flush();
+
+        $manage = new Manage();
+        $manage->setSharable($raveParty);
+        $manage->setUser($relou);
+        $manage->setContactable(true);
+
+        $manager->persist($manage);
+        $manager->flush();
+
+        $manage = new Manage();
+        $manage->setSharable($raveParty);
+        $manage->setUser($nicolas);
         $manage->setContactable(true);
 
         $manager->persist($manage);

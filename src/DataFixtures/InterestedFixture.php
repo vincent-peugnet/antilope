@@ -60,6 +60,7 @@ class InterestedFixture extends Fixture implements DependentFixtureInterface
         $mers = $sharableRepo->findOneBy(['name' => 'Maison de mers']);
         $concert = $sharableRepo->findOneBy(['name' => 'Concert de Tendre Ael']);
         $champignon = $sharableRepo->findOneBy(['name' => 'Un coin à champignon']);
+        $cliffAndCars = $sharableRepo->findOneBy(['name' => "Cliff n' Cars"]);
 
         $vincentInterestedInGrotte = new Interested();
         $vincentInterestedInGrotte->setSharable($grotte)
@@ -86,6 +87,16 @@ class InterestedFixture extends Fixture implements DependentFixtureInterface
         $audreyInterestedInMicroscope->setSharable($microscope)
             ->setUser($audrey);
         $manager->persist($audreyInterestedInMicroscope);
+
+        $audreyInterestedInMicroscope = new Interested();
+        $audreyInterestedInMicroscope->setSharable($microscope)
+            ->setUser($audrey);
+        $manager->persist($audreyInterestedInMicroscope);
+
+        $nicolasInterestedInCliffandCars = new Interested();
+        $nicolasInterestedInCliffandCars->setSharable($cliffAndCars)
+            ->setUser($nicolas);
+        $manager->persist($nicolasInterestedInCliffandCars);
 
         $manager->flush();
     }

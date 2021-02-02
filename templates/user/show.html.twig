@@ -100,18 +100,24 @@
                         <i class="fas fa-envelope-open"></i>
                         Invited by: <a href="{{ path('user_show', {id: user.getInvitation.getParent.id}) }}">{{ user.getInvitation.getParent.username }}</a>
                     </li>
+                    {% endif %}
                     <li class="list-group-item">
                         <i class="fas fa-edit"></i>
                         Managed sharables: {{ user.manages|length }}
                     </li>
-                    <li class="list-group-item">
+                    <li class="list-group-item list-group-item-success">
                         <i class="fas fa-check-circle"></i>
                         Validations given: {{ user.validations|length }}
                     </li>
-                    <li class="list-group-item">
+                    <li class="list-group-item list-group-item-warning">
                         <i class="fas fa-question-circle"></i>
                         Interested in: {{ user.interesteds|length }}
                     </li>
+                    {% if user.disabled %}
+                        <li class="list-group-item list-group-item-danger">
+                            <i class="fas fa-ban"></i>
+                            Disabled
+                        </li>
                     {% endif %}
                 </ul>
 

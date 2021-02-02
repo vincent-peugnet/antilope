@@ -42,10 +42,10 @@
         </div>
     {% endif %}
 
-    {% if sharable.disabled %}
+    {% if sharable.disabled or not sharable.isAccessible %}
         <div class="alert alert-danger">
-            <i class="fas fa-times-circle"></i> This sharable is disabled.
-            {% if is_granted('edit', sharable) %}
+            <i class="fas fa-ban"></i> This sharable is disabled.
+            {% if is_granted('edit', sharable) and sharable.disabled %}
                 <a href="{{ path('sharable_activation', {id: sharable.id}) }}">Activate it !</a>
             {% endif %}
         </div>
@@ -102,6 +102,10 @@
 
             <div class="card-body">
 
+                <style>
+                    #description img { max-width: 100%; }               
+                </style>
+
                 <div id="description">
                 {{ sharable.details|markdown_to_html }}
                 </div>
@@ -125,42 +129,47 @@
 
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item list-group-item-success">
+                        <i class="fas fa-check-circle"></i>
                         {{ sharable.validations|length }} validations
                     </li>
                     {% if sharable.interestedmethod > 1 %}
                     <li class="list-group-item list-group-item-warning">
+                        <i class="fas fa-question-circle"></i>
                         {{ sharable.interesteds|length }} interested
                     </li>
                     {% endif %}
                     <li class="list-group-item">
+                        <i class="fas fa-address-book"></i>
                         contact method : {{ sharable.interestedMethod }}
                     </li>
                     <li class="list-group-item">
+                        <i class="fas fa-plus-circle"></i>
                         created {{ sharable.createdAt|ago }}
                     </li>
                     <li class="list-group-item">
-                        last Edited {{ sharable.lastEditedAt|ago }}
+                        <i class="fas fa-clock"></i>
+                        last edited {{ sharable.lastEditedAt|ago }}
                     </li>
                     {% if sharable.beginAt %}
                     <li class="list-group-item">
+                        <i class="fas fa-play"></i>
                         begin {{ sharable.beginAt|ago }}
                     </li>
                     {% endif %}
-                    {% if sharable.endAt %}
+                    {% if sharable.beginAt and sharable.endAt and date(sharable.beginAt) > date() %}
                     <li class="list-group-item">
+                        <i class="fas fa-stopwatch"></i>
+                        last {{ sharable.endAt.diff(sharable.beginAt)|date() }}
+                    </li>
+                    {% elseif sharable.endAt %}
+                    <li class="list-group-item">
+                        <i class="fas fa-stop"></i>
                         end {{ sharable.endAt|ago }}
                     </li>
                     {% endif %}
-                    <li class="list-group-item">
-                    {% if sharable.responsibility %}
-                        managers are responsable of this
-                    {% else %}
-                        managers do not take responsibility for this
-                    {% endif %}
-                    </li>
-
-                    {% if sharable.disabled %}
+                    {% if sharable.disabled or not sharable.isAccessible %}
                     <li class="list-group-item list-group-item-danger">
+                        <i class="fas fa-ban"></i>
                         disabled
                     </li>
                     {% endif %}
@@ -184,7 +193,7 @@
             <div class="card-body">
 
                 <ul class="list-group list-group-flush">
-                {% for manage in sharable.managedby %}
+                {% for manage in sharable.getConfirmedManagers %}
 
                     <li class="list-group-item">
                         {{ userMacro.render(manage.user) }}

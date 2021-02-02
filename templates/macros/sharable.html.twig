@@ -3,7 +3,9 @@
         {{ sharable.name }}
     </a>
     {% if sharable.disabled or not sharable.isAccessible %}
-        <span class="badge badge-danger" title="This sharable is disabled"><i class="fas fa-ban"></i></span>
+        <span class="badge badge-danger" title="This sharable is disabled">
+            <i class="fas fa-ban"></i>
+        </span>
     {% endif %}
     {% if sharable.interesteds|length > 0 %}
     <span title="{{ sharable.interesteds|length }} users are insterested in this sharable" class="badge badge-warning">

@@ -1,5 +1,6 @@
 {% extends 'base.html.twig' %}
 {% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
+{% import 'macros/user.html.twig' as userMacro %}
 
 
 {% block title %}{{ sharable.name }}{% endblock %}
@@ -20,8 +21,7 @@
 {% for manage in sharable.managedBy %}
     <li class="list-group-item">
 
-    <a href="{{ path('user_show', {id: manage.user.id}) }}">{{ manage.user.username }}</a>
-    <span class="badge badge-light">{{ manage.user.userClass.name }}</span>
+    {{ userMacro.render(manage.user) }}
     <span class="badge badge-light">{{ manage.confirmed ? 'confirmed' : 'invited' }}</span>
     <span class="ml-auto"><small>added {{ manage.createdAt|ago }}</small></span>
 

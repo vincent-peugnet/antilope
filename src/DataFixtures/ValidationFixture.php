@@ -28,6 +28,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Sharable;
 use App\Entity\User;
+use App\Entity\Validation;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -51,6 +52,7 @@ class ValidationFixture extends Fixture implements DependentFixtureInterface
         $nicolas = $userRepo->findOneBy(['username' => 'nicolas']);
         $leatine = $userRepo->findOneBy(['username' => 'leatine']);
         $relou = $userRepo->findOneBy(['username' => 'relou']);
+        $guilhem = $userRepo->findOneBy(['username' => 'guilhem']);
 
         $sharableRepo = $manager->getRepository(Sharable::class);
         $thinkpad = $sharableRepo->findOneBy(['name' => 'Aide sur les Thinkpads']);
@@ -59,6 +61,30 @@ class ValidationFixture extends Fixture implements DependentFixtureInterface
         $mers = $sharableRepo->findOneBy(['name' => 'Maison de mers']);
         $concert = $sharableRepo->findOneBy(['name' => 'Concert de Tendre Ael']);
         $champignon = $sharableRepo->findOneBy(['name' => 'Un coin à champignon']);
+
+        $guilhemValidatedChampignon = new Validation();
+        $guilhemValidatedChampignon->setSharable($champignon)
+            ->setUser($guilhem)
+            ->setMessage('Very good spot ! Thanks');
+        $manager->persist($guilhemValidatedChampignon);
+
+        $guilhemValidatedThinkpad = new Validation();
+        $guilhemValidatedThinkpad->setSharable($thinkpad)
+            ->setUser($guilhem)
+            ->setMessage('Thanks for helping me with my X250');
+        $manager->persist($guilhemValidatedThinkpad);
+
+        $guilhemValidatedMers = new Validation();
+        $guilhemValidatedMers->setSharable($mers)
+            ->setUser($guilhem)
+            ->setMessage('Even if I am not a big fan of water, the little town ambiance is charming');
+        $manager->persist($guilhemValidatedMers);
+
+        $audreyValidatedChampignon = new Validation();
+        $audreyValidatedChampignon->setSharable($champignon)
+            ->setUser($audrey)
+            ->setMessage('They are really delicious !');
+        $manager->persist($audreyValidatedChampignon);
 
         $manager->flush();
     }

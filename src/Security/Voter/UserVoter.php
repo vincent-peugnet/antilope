@@ -105,15 +105,15 @@ class UserVoter extends Voter
             case self::EDIT:
                 return $this->canEdit($user, $userProfile);
             case self::VIEW:
-                return true;
+                return $this->canView($user, $userProfile);
             case self::VIEW_INTERESTEDS:
-                return $this->canView($user, $userProfile, self::VIEW_INTERESTEDS);
+                return $this->canViewSpecific($user, $userProfile, self::VIEW_INTERESTEDS);
             case self::VIEW_VALIDATIONS:
-                return $this->canView($user, $userProfile, self::VIEW_VALIDATIONS);
+                return $this->canViewSpecific($user, $userProfile, self::VIEW_VALIDATIONS);
             case self::VIEW_SHARABLES:
-                return $this->canView($user, $userProfile, self::VIEW_SHARABLES);
+                return $this->canViewSpecific($user, $userProfile, self::VIEW_SHARABLES);
             case self::VIEW_STATS:
-                return $this->canView($user, $userProfile, self::VIEW_STATS);
+                return $this->canViewSpecific($user, $userProfile, self::VIEW_STATS);
             case self::CONTACT:
                 return $this->canContact($user, $userProfile);
         }
@@ -123,10 +123,15 @@ class UserVoter extends Voter
 
     private function canEdit(User $user, User $userProfile): bool
     {
-        return ($user === $userProfile);
+        return ($user === $userProfile && !$user->isDisabled());
     }
 
-    private function canView(User $user, User $userProfile, string $view): bool
+    private function canView(User $user, User $userProfile): bool
+    {
+        return (!$user->isDisabled() || $user === $userProfile);
+    }
+
+    private function canViewSpecific(User $user, User $userProfile, string $view): bool
     {
         if ($this->canEdit($user, $userProfile)) {
             return true;
@@ -142,35 +147,40 @@ class UserVoter extends Voter
         if ($this->canEdit($user, $userProfile)) {
             return true;
         }
+        if ($user->isDisabled() || $userProfile->isDisabled()) {
+            return false;
+        }
+
+        $sharableRepo = $this->em->getRepository(Sharable::class);
+        assert($sharableRepo instanceof SharableRepository);
+
+        // Check if $userProfile is interested by a sharable managed by $user
         if (!$user->getManages()->isEmpty() && !$userProfile->getInteresteds()->isEmpty()) {
-            $sharableRepo = $this->em->getRepository(Sharable::class);
-            assert($sharableRepo instanceof SharableRepository);
             $sharables = $sharableRepo->findByManagerAndInterested($user, $userProfile);
 
             //TODO check if sharable end is passed
             $filteredSharables = $sharables->filter(function (Sharable $sharable) {
-                return ($sharable->getInterestedMethod() > 1 && !$sharable->getDisabled() );
+                return ($sharable->getInterestedMethod() > 1 && !$sharable->getDisabled() && $sharable->isAccessible());
             });
             return !$filteredSharables->isEmpty();
         }
+
+        // Check if $user is interested by a sharable managed by $userProfile
         if (!$userProfile->getManages()->isEmpty() && !$user->getInteresteds()->isEmpty()) {
-            $sharableRepo = $this->em->getRepository(Sharable::class);
-            assert($sharableRepo instanceof SharableRepository);
             $sharables = $sharableRepo->findByManagerAndInterested($userProfile, $user);
 
             //TODO check if sharable end is passed
             $filteredSharables = $sharables->filter(function (Sharable $sharable) use ($user) {
                 if (
                     $sharable->getDisabled() ||
+                    !$sharable->isAccessible() ||
                     $sharable->getInterestedMethod() === 1 ||
-                    $sharable->getInterestedMethod() === 4
+                    $sharable->getInterestedMethod() === 4 ||
+                    $sharable->getContactableManagers()->isEmpty()
                 ) {
                     return false;
                 }
-                if ($sharable->getContactableManagers()->isEmpty()) {
-                    return false;
-                }
-                if ($sharable->getInterestedMethod() === 3) {
+                if ($sharable->getInterestedMethod() === 3 && $sharable->isAccessible()) {
                     $reviwedInterest = $sharable->getInteresteds()->filter(
                         function (Interested $interested) use ($user) {
                             return ($interested->getUser() === $user && $interested->getReviewed());

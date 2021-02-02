@@ -49,6 +49,7 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
         $userClassRepo = $manager->getRepository(UserClass::class);
         $basicUser = $userClassRepo->findOneBy(['name' => 'basic_user']);
         $elite = $userClassRepo->findOneBy(['name' => 'elite']);
+        $powerUser = $userClassRepo->findOneBy(['name' => 'power_user']);
 
         $sharable = new Sharable();
         $sharable->setName('Aide sur les Thinkpads')
@@ -121,6 +122,32 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
             ->setResponsibility(false)
             ->setDescription('Dans la forêt de Bernouille')
             ->setDetails('Ils sont miam miam');
+        $manager->persist($sharable);
+        $manager->flush();
+
+        $sharable = new Sharable();
+        $sharable->setName("Cliff n' Cars")
+            ->setVisibleBy($basicUser)
+            ->setDisabled(false)
+            ->setInterestedMethod(2)
+            ->setLastEditedAt(new DateTime('2020-03-02'))
+            ->setBeginAt(new DateTime("yesterday"))
+            ->setResponsibility(true)
+            ->setDescription('like in the movie "Rebel without a Cause" ')
+            ->setDetails('We are going to drive at high speed and then jump out at the last time.');
+        $manager->persist($sharable);
+        $manager->flush();
+
+        $sharable = new Sharable();
+        $sharable->setName("Rave Party")
+            ->setVisibleBy($powerUser)
+            ->setDisabled(false)
+            ->setInterestedMethod(2)
+            ->setBeginAt(new DateTime("tomorrow"))
+            ->setLastEditedAt(new DateTime('2020-03-02'))
+            ->setResponsibility(true)
+            ->setDescription('A classic good old Rave illegal Rave Party')
+            ->setDetails('You can grab some friends with you');
         $manager->persist($sharable);
         $manager->flush();
     }

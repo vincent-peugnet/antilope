@@ -62,6 +62,8 @@ class UserController extends AbstractController
      */
     public function show(User $user, LevelUp $levelUp): Response
     {
+        $this->denyAccessUnlessGranted('view', $user);
+
         if ($user === $this->getUser()) {
             $user = $levelUp->checkUpdate($user);
         }
