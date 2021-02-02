@@ -194,6 +194,18 @@ Default global parameters are generated interactively during `composer install` 
 - `app.userLimit (int)` Max user limit. If this number is reached, registrations are closed
 - `app.invitationDuration (int)` Duration of invite code before it expired (in hours)
 
+### Administration
+
+#### Inactivity pruning
+
+Users are automatically disabled if they login after too much time according to their user class, but you can also manually trigger a full check using this command:
+
+```
+bin/console app:inactivity [--dry]
+```
+
+Pass the `--dry` option to launch a dry run, this will tell you how many users need to be disabled because of inactivity.
+
 Development
 -----------
 

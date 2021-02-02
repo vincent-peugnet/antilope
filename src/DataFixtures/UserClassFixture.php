@@ -40,7 +40,7 @@ class UserClassFixture extends Fixture
             ->setShare(true)
             ->setCanInvite(true)
             ->setInviteFrequency(14)
-            ->setMaxParanoia(3)
+            ->setMaxParanoia(4)
             ->setShareScoreReq(5000)
             ->setAccountAgeReq(42)
             ->setValidatedReq(3)
@@ -54,7 +54,7 @@ class UserClassFixture extends Fixture
             ->setShare(true)
             ->setCanInvite(true)
             ->setInviteFrequency(30)
-            ->setMaxParanoia(2)
+            ->setMaxParanoia(3)
             ->setShareScoreReq(1000)
             ->setAccountAgeReq(21)
             ->setValidatedReq(1)
@@ -68,7 +68,8 @@ class UserClassFixture extends Fixture
             ->setShare(true)
             ->setCanInvite(false)
             ->setInviteFrequency(0)
-            ->setMaxParanoia(1)
+            ->setMaxInactivity(90)
+            ->setMaxParanoia(2)
             ->setShareScoreReq(300)
             ->setAccountAgeReq(7)
             ->setValidatedReq(0)
@@ -82,7 +83,8 @@ class UserClassFixture extends Fixture
             ->setShare(true)
             ->setCanInvite(false)
             ->setInviteFrequency(0)
-            ->setMaxParanoia(0)
+            ->setMaxInactivity(30)
+            ->setMaxParanoia(1)
             ->setName('basic_user');
         $manager->persist($basicUser);
 

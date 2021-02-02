@@ -111,7 +111,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     /**
      * @param int $minute Number of minute to filter
      */
-    public function findActiveUsers(int $minute = 15): array
+    public function findRecentlyActive(int $minute = 15): array
     {
         $qb = $this->createQueryBuilder('u');
         return $qb->where('u.lastActivity > :lastActivity')
@@ -120,6 +120,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    /**
+     * @return User[] All not disabled users
+     */
+    public function findAllActives(): array
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.disabled = 0')
+            ->getQuery()
+            ->getResult();
     }
 
     /*

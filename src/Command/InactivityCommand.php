@@ -26,25 +26,26 @@
 
 namespace App\Command;
 
+use App\Entity\User;
+use App\Repository\UserRepository;
+use App\Service\Inactivity;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email as MimeEmail;
-use Symfony\Component\Validator\Constraints\Email;
-use Symfony\Component\Validator\Validation;
 
-class MailCommand extends Command
+class InactivityCommand extends Command
 {
-    protected static $defaultName = 'app:mail';
-    private MailerInterface $mailer;
+    protected static $defaultName = 'app:inactivity';
+    private Inactivity $inactivity;
+    private UserRepository $userRepository;
 
-    public function __construct(MailerInterface $mailer)
+    public function __construct(Inactivity $inactivity, UserRepository $userRepository)
     {
-        $this->mailer = $mailer;
+        $this->inactivity = $inactivity;
+        $this->userRepository = $userRepository;
 
         parent::__construct();
     }
@@ -52,39 +53,35 @@ class MailCommand extends Command
     protected function configure()
     {
         $this
-            ->setDescription('Send a test mail to the given email adress to test email setup')
-            ->addArgument('emailAdress', InputArgument::REQUIRED, 'Email Recipient')
+            ->setDescription('disable all users that where inactive too long')
+            ->addOption('dry', null, InputOption::VALUE_NONE, 'Dry run')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $emailAdress = $input->getArgument('emailAdress');
 
-        $validator = Validation::createValidator();
-
-        if (count($validator->validate($emailAdress, new Email())) !== 0) {
-            $io->warning("$emailAdress is not a valid email adress");
-            return Command::FAILURE;
+        if ($input->getOption('dry')) {
+            $io->info('You have selected Dry run option');
         }
 
-
-        $email = (new MimeEmail())
-            ->from('hello@example.com')
-            ->to($emailAdress)
-            ->subject('Test Email from Antilope')
-            ->text('Looks like email is well configured !')
-            ->html('<p>Looks like email is well configured !</p>');
-
-        try {
-            $this->mailer->send($email);
-        } catch (TransportExceptionInterface $e) {
-            $io->error($e->getMessage());
-            return Command::FAILURE;
+        $users = $this->userRepository->findAllActives();
+        if ($input->getOption('dry')) {
+            $users = array_filter($users, function (User $user) {
+                return $this->inactivity->check($user);
+            });
+            $total = count($users);
+            $io->success("$total users need to be disabled");
+        } else {
+            $total = 0;
+            foreach ($users as $user) {
+                if ($this->inactivity->checkUpdate($user)) {
+                    $total++;
+                }
+            }
+            $io->success("$total users have been disabled");
         }
-
-        $io->success("An Email should have been send to $emailAdress, check tour mailbox !");
 
         return Command::SUCCESS;
     }

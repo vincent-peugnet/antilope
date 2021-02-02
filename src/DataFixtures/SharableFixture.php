@@ -134,7 +134,8 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
             ->setBeginAt(new DateTime("yesterday"))
             ->setResponsibility(true)
             ->setDescription('like in the movie "Rebel without a Cause" ')
-            ->setDetails('We are going to drive at high speed and then jump out at the last time.');
+            ->setDetails('We are going to drive at high speed and then jump out at the last time.
+                ![cliff](https://www.gametheory.net/images/popular/Chicken/Rebel1.jpg)');
         $manager->persist($sharable);
         $manager->flush();
 

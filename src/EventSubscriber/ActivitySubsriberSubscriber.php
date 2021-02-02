@@ -27,26 +27,42 @@
 namespace App\EventSubscriber;
 
 use App\Entity\User;
+use App\Service\Inactivity;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\TerminateEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
+use Symfony\Component\Security\Core\AuthenticationEvents;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Http\SecurityEvents;
 
 class ActivitySubsriberSubscriber implements EventSubscriberInterface
 {
     private Security $security;
     private EntityManagerInterface $em;
     private ParameterBagInterface $parameterBag;
+    private Inactivity $inactivity;
 
-    public function __construct(Security $security, EntityManagerInterface $em, ParameterBagInterface $parameterBag)
-    {
+    public function __construct(
+        Security $security,
+        EntityManagerInterface $em,
+        ParameterBagInterface $parameterBag,
+        Inactivity $inactivity
+    ) {
         $this->security = $security;
         $this->em = $em;
         $this->parameterBag = $parameterBag;
+        $this->inactivity = $inactivity;
+    }
+
+    public static function getSubscribedEvents()
+    {
+        return [
+            KernelEvents::TERMINATE => 'onKernelTerminate',
+            SecurityEvents::INTERACTIVE_LOGIN => 'onAuthenticationSuccess',
+        ];
     }
 
     public function onKernelTerminate(TerminateEvent $event)
@@ -62,10 +78,11 @@ class ActivitySubsriberSubscriber implements EventSubscriberInterface
         }
     }
 
-    public static function getSubscribedEvents()
+    public function onAuthenticationSuccess()
     {
-        return [
-            KernelEvents::TERMINATE => 'onKernelTerminate',
-        ];
+        $user = $this->security->getUser();
+        if ($user instanceof User) {
+            $this->inactivity->checkUpdate($user);
+        }
     }
 }

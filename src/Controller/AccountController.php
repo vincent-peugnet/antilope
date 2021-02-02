@@ -94,7 +94,7 @@ class AccountController extends AbstractController
     ): Response {
         /** @var User $user */
         $user = $this->getUser();
-        if (!$user->getUserClass()->getCanInvite()) {
+        if ($user->isDisabled() || !$user->getUserClass()->getCanInvite()) {
             throw $this->createAccessDeniedException();
         }
 

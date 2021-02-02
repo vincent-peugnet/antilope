@@ -156,6 +156,20 @@ class UserFixture extends Fixture implements DependentFixtureInterface
             ->setShareScore(455);
         $manager->persist($userRelou);
 
+        $userEscargot = new User();
+        $userEscargot
+            ->setUsername('escargot')
+            ->setEmail('escargot@gmail.com')
+            ->setPassword($this->passwordEncoder->encodePassword($userEscargot, 'escargot'))
+            ->setUserClass($basicUser)
+            ->setCreatedAt(new DateTime('2013-03-03'))
+            ->setLastActivity(new DateTime('2013-04-04'))
+            ->setParanoia(1)
+            ->setDisabled(false)
+            ->setIsVerified(false)
+            ->setShareScore(0);
+        $manager->persist($userEscargot);
+
 
         $manager->flush();
     }

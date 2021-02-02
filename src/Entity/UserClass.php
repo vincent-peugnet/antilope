@@ -32,6 +32,7 @@ use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Entity\User;
 use App\Security\Voter\UserVoter;
+use DateInterval;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -135,11 +136,23 @@ class UserClass
      */
     private $sharables;
 
+    /**
+     * @ORM\Column(type="smallint")
+     * @Assert\NotBlank()
+     * @Assert\Range(
+     *      min = 0,
+     *      max = 3650,
+     *      notInRangeMessage = "must be beetwen {{ min }} and {{ max }} days.",
+     * )
+     */
+    private $maxInactivity;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $paranoiaLevels = UserVoter::getParanoiaLevels();
         $this->maxParanoia = end($paranoiaLevels);
+        $this->maxInactivity = 0;
         $this->inviteFrequency = 0;
         $this->shareScoreReq = 0;
         $this->accountAgeReq = 0;
@@ -393,6 +406,23 @@ class UserClass
                 $sharable->setVisibleBy(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getMaxInactivity(): ?int
+    {
+        return $this->maxInactivity;
+    }
+
+    public function getMaxInactivityTime(): DateInterval
+    {
+        return new DateInterval('P' . $this->maxInactivity . 'D');
+    }
+
+    public function setMaxInactivity(int $maxInactivity): self
+    {
+        $this->maxInactivity = $maxInactivity;
 
         return $this;
     }

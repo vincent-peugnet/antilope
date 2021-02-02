@@ -36,51 +36,72 @@
         <div class="card mb-3">
 
             <div class="card-header">
-
-                <div class="card-title">
-                    <h3>Infos</h3>
-                </div>
+                <h3 class="card-title">Privileges</h3>
             </div>
 
             <div class="card-body">
 
-                <ul>
-                {% if userClass.share %}
-                <li>can create sharables</li>
-                {% endif %}
-                {% if userClass.access %}
-                <li>can access the sharables with no specific access settings</li>
-                {% endif %}
-                {% if userClass.canInvite %}
-                {% if userClass.inviteFrequency == 0 %}
-                <li>can invite people without limitation</li>
-                {% else %}
-                <li>can invite one user every {{ userClass.inviteFrequency }} days</li>
-                {% endif %}
-                {% endif %}
-                <li>maximum paranoïa level : {{ userClass.maxParanoia }}</li>
+                <ul class="list-group list-group-flush">
+                    {% if userClass.share %}
+                    <li class="list-group-item">
+                        can create sharables
+                    </li>
+                    {% endif %}
+                    {% if userClass.access %}
+                    <li class="list-group-item">
+                        can access sharables
+                    </li>
+                    {% endif %}
+                    {% if userClass.canInvite %}
+                        {% if userClass.inviteFrequency == 0 %}
+                        <li class="list-group-item">
+                            can invite people without limitation
+                        </li>
+                        {% else %}
+                        <li class="list-group-item">
+                            can invite one user every {{ userClass.inviteFrequency }} days
+                        </li>
+                        {% endif %}
+                    {% endif %}
+                    <li class="list-group-item">
+                        maximum paranoïa level : {{ userClass.maxParanoia }}
+                    </li>
+                    {% if userClass.maxInactivity %}
+                        <li class="list-group-item">
+                            Account is disabled after {{ userClass.maxInactivity }} days of inactivity.
+                        </li>
+                    {% endif %}
                 </ul>
 
-                <h5>Requirements</h5>
+            </div>
+        </div>
 
-                <ul>
+        <div class="card mb-3">
+
+            <div class="card-header">
+                <h3 class="card-title">Requirements</h3>
+            </div>
+
+            <div class="card-body">
+    
+                <ul class="list-group list-group-flush">
                     {% if userClass.shareScoreReq %}
-                    <li>
-                    Share Score : {{ userClass.shareScoreReq }}
+                    <li class="list-group-item">
+                    Share Score : <span class="badge badge-light">{{ userClass.shareScoreReq }}</span>
                     </li>
                     {% endif %}
                     {% if userClass.accountAgeReq %}
-                    <li>
+                    <li class="list-group-item">
                     Account Age : {{ userClass.accountAgeReq }} days
                     </li>
                     {% endif %}
                     {% if userClass.validatedReq %}
-                    <li>
+                    <li class="list-group-item">
                     Validations given : {{ userClass.validatedReq }}
                     </li>
                     {% endif %}
                     {% if userClass.verifiedReq %}
-                    <li>
+                    <li class="list-group-item">
                     The user need to be verified
                     </li>
                     {% endif %}
@@ -123,17 +144,17 @@
 
                 </div>
 
-                <ul>
-                    <li>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
                         {{ userClass.users|length }} users
                     </li>
-                    <li>
+                    <li class="list-group-item">
                         {{ userClass.sharables|length }} sharables
                     </li>
-                    <li>
+                    <li class="list-group-item">
                         Last edited {{ userClass.lastEditedAt|ago }}
                     </li>
-                    <li>
+                    <li class="list-group-item">
                         Created {{ userClass.createdAt|ago }}
                     </li>
                 </ul>

@@ -23,46 +23,36 @@
     </div>
 
     <div class="card-body">
-    
-        <ul>
-        {% if userClass.share %}
-        <li>can create sharables</li>
-        {% endif %}
-        {% if userClass.access %}
-        <li>can access the sharables with no specific access settings</li>
-        {% endif %}
-        {% if userClass.canInvite %}
-        {% if userClass.inviteFrequency == 0 %}
-        <li>can invite people without limitation</li>
-        {% else %}
-        <li>can invite one user every {{ userClass.inviteFrequency }} days</li>
-        {% endif %}
-        {% endif %}
-        <li>maximum paranoïa level : {{ userClass.maxParanoia }}</li>
-        </ul>
 
-        <h5>Requirements</h5>
-
-        <ul>
-            {% if userClass.shareScoreReq %}
-            <li>
-            Share Score : {{ userClass.shareScoreReq }}
+        <ul class="list-group">
+            {% if userClass.share %}
+            <li class="list-group-item">
+                can create sharables
             </li>
             {% endif %}
-            {% if userClass.accountAgeReq %}
-            <li>
-            Account Age : {{ userClass.accountAgeReq }} days
+            {% if userClass.access %}
+            <li class="list-group-item">
+                can access sharables
             </li>
             {% endif %}
-            {% if userClass.validatedReq %}
-            <li>
-            Validations given : {{ userClass.validatedReq }}
-            </li>
+            {% if userClass.canInvite %}
+                {% if userClass.inviteFrequency == 0 %}
+                <li class="list-group-item">
+                    can invite people without limitation
+                </li>
+                {% else %}
+                <li class="list-group-item">
+                    can invite one user every {{ userClass.inviteFrequency }} days
+                </li>
+                {% endif %}
             {% endif %}
-            {% if userClass.verifiedReq %}
-            <li>
-            The user need to be verified
+            <li class="list-group-item">
+                maximum paranoïa level : {{ userClass.maxParanoia }}
             </li>
+            {% if userClass.maxInactivity %}
+                <li class="list-group-item">
+                    Account is disabled after {{ userClass.maxInactivity }} days of inactivity.
+                </li>
             {% endif %}
         </ul>
 

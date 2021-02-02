@@ -72,6 +72,7 @@ class UserClassType extends AbstractType
             ->add('share')
             ->add('access')
             ->add('canInvite')
+            ->add('maxInactivity')
             ->add('maxParanoia', ChoiceType::class, [
                 'choices' => UserVoter::getParanoiaLevels(),
             ])

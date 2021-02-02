@@ -88,7 +88,7 @@
 
             <main class="container-fluid p-0 mt-3">
 
-                {% if app.user and app.user.userContacts is empty %}
+                {% if app.user and not app.user.disabled and app.user.userContacts is empty %}
                     <div class="alert alert-warning" >
                     <i class="fas fa-address-book"></i> You haven't set any <a href="{{ path('user_contact', {id: app.user.id}) }}">Contact Infos</a> yet, you won't be able to create sharables or access a lot of them.
                     </div>
@@ -97,6 +97,13 @@
                 {% if app.user and not app.user.isVerified %}
                     <div class="alert alert-warning" >
                     <i class="fas fa-envelope"></i> You haven't verified your email adress. Checkout your <a href="{{ path('account_settings') }}">Account Settings</a> to send a new verification mail.
+                    </div>
+                {% endif %}
+
+                {% if app.user and app.user.disabled %}
+                    <div class="alert alert-danger" >
+                    <i class="fas fa-ban"></i>
+                    Your account is disabled.
                     </div>
                 {% endif %}
 

@@ -50,7 +50,7 @@ class HomeController extends AbstractController
             'userLimit' => $this->getParameter('app.userLimit'),
             'openRegistration' => $this->getParameter('app.openRegistration'),
             'showHomeStats' => $this->getParameter('app.showHomeStats'),
-            'activeUsers' => $userRepository->findActiveUsers(60),
+            'activeUsers' => $userRepository->findRecentlyActive(60),
         ]);
     }
 }
