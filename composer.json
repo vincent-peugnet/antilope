@@ -55,6 +55,7 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.4",
+        "easycorp/easy-deploy-bundle": "^1.0",
         "php-parallel-lint/php-parallel-lint": "^1.2",
         "phpstan/phpstan": "^0.12.65",
         "phpstan/phpstan-deprecation-rules": "^0.12.6",
