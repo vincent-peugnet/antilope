@@ -16,10 +16,10 @@
         {% set route_name = app.request.attributes.get('_route') %}
         {% set route_param = app.request.attributes.get('_route_params')|join %}
 
-        <div class="container">
 
 
-            <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
+
+            <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark border-bottom border-primary">
 
             <a class="navbar-brand" href="{{ path('app_homepage') }}">{{ siteName }}</a>
 
@@ -44,6 +44,9 @@
                             <a class="nav-link{{ route_name == 'userclass' ? ' active' }}" href="{{ path('userclass') }}">user classes</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link{% if route_name == 'rule_index' %} active{% endif %}" href="{{ path('rule_index') }}">rules</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link{% if route_name == 'user_show' and route_param == app.user.id %} active{% endif %}" href="{{ path('user_show', {id: app.user.id} ) }}">{{ app.user.username }}</a>
                         </li>
                         <li class="nav-item dropdown">
@@ -59,12 +62,6 @@
                     </ul>
                     <ul class="navbar-nav ml-auto">
 
-
-                        {% if is_granted('ROLE_ADMIN') %}
-                        <li>
-                            <a class="nav-link" href="{{ path('easyadmin') }}">admin</a>
-                        </li>
-                        {% endif %}
                         <li class="nav-item">
                             <a class="nav-link d-flex" href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt"></i> logout</a>
                         </li>
@@ -85,7 +82,7 @@
             </div>
 
             </nav>
-
+        <div class="container">
             <main class="container-fluid p-0 mt-3">
 
                 {% if app.user and not app.user.disabled and app.user.userContacts is empty %}

@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rule index{% endblock %}
+
+{% block content %}
+    <h1>Rules</h1>
+    <div class="overflow-hidden">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Rule</th>
+                    {% if app.user.isAdmin %}
+                    <th>Edit</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+            {% for rule in rules %}
+                <tr>
+                    <td>
+                        <h3>
+                            <a href="{{ path('rule_show', {id: rule.id}) }}">
+                                {{ rule.id }}
+                            </a>
+                        </h3>
+                        
+                    </td>
+                    <td>
+                        <h5>
+                            <a href="{{ path('rule_show', {id: rule.id}) }}">
+                                {{ rule.name }}
+                            </a>
+                        </h5>
+                        <p>{{ rule.text }}</p>
+                    </td>
+                    {% if app.user.isAdmin %}
+                    <td>
+                        <a href="{{ path('rule_edit', {id: rule.id}) }}" class="btn btn-primary"><i class="fas fa-pen"></i></a>
+                    </td>
+                    {% endif %}
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <a href="{{ path('rule_new') }}" class="btn btn-success"><i class="fas fa-plus"></i> Create new</a>
+{% endblock %}
