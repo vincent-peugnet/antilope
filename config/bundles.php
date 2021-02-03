@@ -18,4 +18,5 @@ return [
     Knp\Bundle\TimeBundle\KnpTimeBundle::class => ['all' => true],
     /** @phpstan-ignore-next-line */
     Symfony\Bundle\WebServerBundle\WebServerBundle::class => ['dev' => true],
+    EasyCorp\Bundle\EasyDeployBundle\EasyDeployBundle::class => ['dev' => true, 'test' => true],
 ];
