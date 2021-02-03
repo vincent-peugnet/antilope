@@ -18,6 +18,11 @@
 
     <p class="text-muted">
         Created {{ rule.createdAt|ago }}
+        {% if rule.createdAt != rule.lastEditedAt %}
+        </br>
+        <i class="fas fa-clock"></i>
+        last edited {{ rule.lastEditedAt|ago }}
+        {% endif %}
     </p>
     
     {% if app.user.isAdmin %}

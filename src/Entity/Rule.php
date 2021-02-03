@@ -57,9 +57,15 @@ class Rule
      */
     private $createdAt;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $lastEditedAt;
+
     public function __construct()
     {
         $this->createdAt = new DateTime();
+        $this->lastEditedAt = new DateTime();
     }
 
     public function getId(): ?int
@@ -99,6 +105,18 @@ class Rule
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getLastEditedAt(): ?\DateTimeInterface
+    {
+        return $this->lastEditedAt;
+    }
+
+    public function setLastEditedAt(\DateTimeInterface $lastEditedAt): self
+    {
+        $this->lastEditedAt = $lastEditedAt;
 
         return $this;
     }

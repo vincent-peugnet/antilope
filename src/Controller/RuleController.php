@@ -98,7 +98,10 @@ class RuleController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $rule->setLastEditedAt(new DateTime());
+            $manager = $this->getDoctrine()->getManager();
+            $manager->persist($rule);
+            $manager->flush();
 
             return $this->redirectToRoute('rule_show', ['id' => $rule->getId()]);
         }

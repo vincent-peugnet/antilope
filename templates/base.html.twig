@@ -30,9 +30,9 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
+                    {% if app.user %}
                     <ul class="navbar-nav mr-auto">
 
-                        {% if app.user %}
 
                         <li class="nav-item">
                             <a class="nav-link{{ route_name == 'sharable' ? ' active' }}" href="{{ path('sharable') }}">sharables</a>
@@ -60,13 +60,16 @@
                         </li>
 
                     </ul>
+                    {% endif %}
+
                     <ul class="navbar-nav ml-auto">
 
+                        {% if app.user %}
                         <li class="nav-item">
                             <a class="nav-link d-flex" href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt"></i> logout</a>
                         </li>
-
                         {% else %}
+
 
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path('app_login') }}"><i class="fas fa-sign-in-alt"></i> login</a>

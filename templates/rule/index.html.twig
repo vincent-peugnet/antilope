@@ -48,5 +48,7 @@
             </tbody>
         </table>
     </div>
-    <a href="{{ path('rule_new') }}" class="btn btn-success"><i class="fas fa-plus"></i> Create new</a>
+    {% if app.user.isAdmin %}
+        <a href="{{ path('rule_new') }}" class="btn btn-success"><i class="fas fa-plus"></i> Create new</a>
+    {% endif %}
 {% endblock %}
