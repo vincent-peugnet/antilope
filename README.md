@@ -216,8 +216,9 @@ For this to work correctly you will have to set the following environment variab
 DEPLOY_SERVER=user@example.com
 DEPLOY_DIR=/absolute/path/to/antilope
 DEPLOY_REPOSITORY_URL=git@github.com:vincent-peugnet/antilope.git
-DEPLOY_REPOSITORY_BRANCH=main
-DEPLOY_WEBSERVER=apache
+DEPLOY_REPOSITORY_BRANCH=main   # optional
+DEPLOY_WEBSERVER=apache         # optional
+DEPLOY_COMPOSER_PATH            # optional
 ```
 
 The directory `DEPLOY_DIR` will have to be created on the remote and a `.env.local` file must be created inside with the correct variables.
