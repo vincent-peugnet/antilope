@@ -4,6 +4,14 @@ use EasyCorp\Bundle\EasyDeployBundle\Deployer\DefaultDeployer;
 
 return new class extends DefaultDeployer
 {
+
+    protected bool $isApache;
+
+    public function __construct()
+    {
+        $this->isApache = isset($_ENV['DEPLOY_WEBSERVER']) && $_ENV['DEPLOY_WEBSERVER'] == 'apache';
+    }
+
     public function configure()
     {
         return $this->getConfigBuilder()
@@ -40,13 +48,19 @@ return new class extends DefaultDeployer
 
     public function beforeOptimizing()
     {
-        $this->runRemote('{{ project_dir }}/bin/console app:check:env');
+        $this->runRemote('{{ console_bin }} app:check:env');
+        if ($this->isApache) {
+            $this->runRemote('composer require symfony/apache-pack');
+        }
     }
 
-    // run some local or remote commands after the deployment is finished
+    public function beforePublishing()
+    {
+        $this->runRemote('composer dump-env prod');
+    }
+
     public function beforeFinishingDeploy()
     {
-        // $this->runRemote('{{ console_bin }} app:my-task-name');
-        // $this->runLocal('say "The deployment has finished."');
+        $this->runRemote('{{ console_bin }} doctrine:migrations:migrate');
     }
 };
