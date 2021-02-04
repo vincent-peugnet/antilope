@@ -59,7 +59,7 @@ class SignUpController extends AbstractController
     ): Response {
 
         // Check user limit
-        $userLimit = $this->getParameter('app.userLimit');
+        $userLimit = (int) $this->getParameter('app.userLimit');
         if (!empty($userLimit)) {
             $userCount = $userRepository->count([]);
             if ($userCount >= $userLimit) {
