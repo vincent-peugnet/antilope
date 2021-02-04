@@ -18,6 +18,7 @@
         "erusev/parsedown": "^1.7",
         "incenteev/composer-parameter-handler": "^2.1",
         "knplabs/knp-time-bundle": "^1.14",
+        "php-parallel-lint/php-parallel-lint": "^1.2",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^5.6",
         "symfony/asset": "5.2.*",
@@ -55,7 +56,7 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.4",
-        "php-parallel-lint/php-parallel-lint": "^1.2",
+        "easycorp/easy-deploy-bundle": "^1.0",
         "phpstan/phpstan": "^0.12.65",
         "phpstan/phpstan-deprecation-rules": "^0.12.6",
         "phpstan/phpstan-doctrine": "^0.12.26",
@@ -123,11 +124,9 @@
             "@php bin/console cache:warmup -q",
             "phpstan analyse $PHPSTAN_FLAGS --ansi"
         ],
-        "post-install-cmd": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
-            "@auto-scripts"
-        ],
-        "post-update-cmd": [
+        "post-install-cmd": "@post-scripts",
+        "post-update-cmd": "@post-scripts",
+        "post-scripts": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "@auto-scripts"
         ]
