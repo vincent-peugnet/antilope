@@ -124,11 +124,9 @@
             "@php bin/console cache:warmup -q",
             "phpstan analyse $PHPSTAN_FLAGS --ansi"
         ],
-        "post-install-cmd": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
-            "@auto-scripts"
-        ],
-        "post-update-cmd": [
+        "post-install-cmd": "@post-scripts",
+        "post-update-cmd": "@post-scripts",
+        "post-scripts": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "@auto-scripts"
         ]
