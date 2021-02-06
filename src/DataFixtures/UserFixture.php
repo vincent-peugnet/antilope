@@ -116,7 +116,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
             ->setCreatedAt(new DateTime('2018-01-01'))
             ->setParanoia(1)
             ->setIsVerified(true)
-            ->setShareScore(745);
+            ->setShareScore(1200);
         $manager->persist($userNicolas);
 
         $userAudrey = new User();

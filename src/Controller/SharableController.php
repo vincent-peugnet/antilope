@@ -33,8 +33,7 @@ use App\Entity\Sharable;
 use App\Entity\SharableContact;
 use App\Entity\User;
 use App\Entity\Validation;
-use App\Form\InterestedType;
-use App\Form\ManageType;
+use App\Event\ValidationEvent;
 use App\Form\SharableContactType;
 use App\Form\SharableSearchType;
 use App\Form\SharableType;
@@ -43,14 +42,13 @@ use App\Repository\InterestedRepository;
 use App\Repository\ManageRepository;
 use App\Repository\SharableRepository;
 use App\Repository\UserClassRepository;
-use App\Repository\UserRepository;
 use App\Repository\ValidationRepository;
 use App\Security\Voter\SharableVoter;
-use App\Security\Voter\UserVoter;
 use App\Service\LevelUp;
 use App\Service\SharePoints;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -213,8 +211,7 @@ class SharableController extends AbstractController
     public function validate(
         Sharable $sharable,
         Request $request,
-        LevelUp $levelUp,
-        SharePoints $sharePointAlgo
+        EventDispatcherInterface $dispatcher
     ): Response {
         $this->denyAccessUnlessGranted('validate', $sharable);
 
@@ -229,23 +226,10 @@ class SharableController extends AbstractController
             $validation->setUser($user);
             $validation->setSharable($sharable);
 
-            $sharePoints = $sharePointAlgo->calculate($user, $sharable);
-
             $entityManager = $this->getDoctrine()->getManager();
-
-            foreach ($sharable->getManagedBy() as $manage) {
-                $manager = $manage->getUser();
-                $manager->addShareScore($sharePoints);
-                $levelUp->check($manager);
-                $entityManager->persist($manager);
-            }
-
             $entityManager->persist($validation);
 
-            $needUpdate = $levelUp->check($user);
-            if ($needUpdate) {
-                $entityManager->persist($user);
-            }
+            $dispatcher->dispatch(new ValidationEvent($validation), ValidationEvent::NEW);
 
             // remove the interest after validation
             $interesteds = $user->getInteresteds()->filter(function (Interested $interested) use ($sharable) {
