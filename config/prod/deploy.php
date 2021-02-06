@@ -65,6 +65,8 @@ return new class extends DefaultDeployer
         return $this->getConfigBuilder()
             // SSH connection string to connect to the remote server (format: user@host-or-IP:port-number)
             ->server($_ENV['DEPLOY_SERVER'])
+            // Forward SSH agent to use local keys
+            ->useSshAgentForwarding(true)
             // set files as shared between the different deployments
             ->sharedFilesAndDirs(['.env.local', 'parameters.yaml'])
             // composer is searched using which so don't need the full path
@@ -91,7 +93,7 @@ return new class extends DefaultDeployer
     {
         $this->runRemote('mkdir -p {{ deploy_dir }}/shared');
         $this->runRemote('cp {{ deploy_dir }}/repo/.env {{ project_dir }}/.env');
-        $this->runRemote('cp {{ deploy_dir }}/.env.local {{ deploy_dir }}/shared/.env.local');
+        $this->runRemote('ln -f {{ deploy_dir }}/.env.local {{ deploy_dir }}/shared/.env.local');
     }
 
     public function beforeOptimizing()
@@ -109,6 +111,7 @@ return new class extends DefaultDeployer
 
     public function beforeFinishingDeploy()
     {
+        $this->runRemote('{{ console_bin }} doctrine:database:create --if-not-exists');
         $this->runRemote('{{ console_bin }} doctrine:migrations:migrate');
     }
 };
