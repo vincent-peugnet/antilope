@@ -1,0 +1,13 @@
+{% extends "email/notification/base.html.twig" %}
+
+{% block content %}
+
+<p>
+    You invitation code <code>{{ invitation.code }}</code>
+    has been used by user:
+    <a href="{{ url('user_show', {id: invitation.child.id}) }}">
+        {{ invitation.child.username }}
+    </a>.
+</p>
+
+{% endblock %}

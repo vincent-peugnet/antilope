@@ -29,10 +29,12 @@ namespace App\EventSubscriber;
 use App\Entity\Manage;
 use App\Entity\User;
 use App\Event\InterestedEvent;
+use App\Event\InvitationEvent;
+use App\Event\UserEvent;
+use App\Event\ValidationEvent;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 
 class NotificationSubscriber implements EventSubscriberInterface
 {
@@ -46,8 +48,12 @@ class NotificationSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            InterestedEvent::NEW => 'onInterestedNew',
-            InterestedEvent::REVIEWED => 'onInterestedReviewed',
+            InterestedEvent::NEW => ['onInterestedNew', -100],
+            InterestedEvent::REVIEWED => ['onInterestedReviewed', -100],
+            ValidationEvent::NEW => ['onValidationNew', -100],
+            UserEvent::USERCLASS_UPDATE => ['onLevelUpdate', -100],
+            UserEvent::DISABLED => ['onUserDisabled', -100],
+            InvitationEvent::USED => ['onInvitationUsed', -100],
         ];
     }
 
@@ -78,7 +84,47 @@ class NotificationSubscriber implements EventSubscriberInterface
         ]);
     }
 
-    private function emailNotification(User $user, string $subject, string $template, array $context)
+    public function onValidationNew(ValidationEvent $event)
+    {
+        $name = $event->getValidation()->getSharable()->getName();
+        $managers = $event->getValidation()->getSharable()->getConfirmedNotDisabledManagers();
+        $subject = "You have recieved a validation on your sharable: $name";
+        foreach ($managers->toArray() as $manage) {
+            assert($manage instanceof Manage);
+            $this->emailNotification($manage->getUser(), $subject, 'validation_new', [
+                'validation' => $event->getValidation(),
+            ]);
+        }
+    }
+
+    public function onLevelUpdate(UserEvent $event)
+    {
+        $user = $event->getUser();
+        $userClassName = $user->getUserClass()->getName();
+        $subject = "You are now in the user class: $userClassName";
+        $this->emailNotification($user, $subject, 'user_userclass_update');
+    }
+
+    public function onUserDisabled(UserEvent $event)
+    {
+        $user = $event->getUser();
+        $disabled = $user->isDisabled() ? 'disabled' : 'not disabled';
+        $subject = "Your account is now $disabled";
+        $this->emailNotification($user, $subject, 'user_disabled');
+    }
+
+    public function onInvitationUsed(InvitationEvent $event)
+    {
+        $invitation = $event->getInvitation();
+        $parent = $invitation->getParent();
+        $childName = $invitation->getChild()->getUsername();
+        $subject = "Your invitation have been used by user: $childName";
+        $this->emailNotification($parent, $subject, 'invitation_used', [
+            'invitation' => $invitation,
+        ]);
+    }
+
+    private function emailNotification(User $user, string $subject, string $template, array $context = [])
     {
         $context['user'] = $user;
         if ($user->isVerified()) {

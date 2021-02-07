@@ -27,10 +27,12 @@
 namespace App\EventSubscriber;
 
 use App\Entity\User;
+use App\Event\UserEvent;
 use App\Service\Inactivity;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\TerminateEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -44,17 +46,20 @@ class ActivitySubsriberSubscriber implements EventSubscriberInterface
     private EntityManagerInterface $em;
     private ParameterBagInterface $parameterBag;
     private Inactivity $inactivity;
+    private EventDispatcherInterface $dispatcher;
 
     public function __construct(
         Security $security,
         EntityManagerInterface $em,
         ParameterBagInterface $parameterBag,
-        Inactivity $inactivity
+        Inactivity $inactivity,
+        EventDispatcherInterface $dispatcher
     ) {
         $this->security = $security;
         $this->em = $em;
         $this->parameterBag = $parameterBag;
         $this->inactivity = $inactivity;
+        $this->dispatcher = $dispatcher;
     }
 
     public static function getSubscribedEvents()
@@ -82,7 +87,10 @@ class ActivitySubsriberSubscriber implements EventSubscriberInterface
     {
         $user = $this->security->getUser();
         if ($user instanceof User) {
-            $this->inactivity->checkUpdate($user);
+            $change = $this->inactivity->checkUpdate($user);
+            if ($change) {
+                $this->dispatcher->dispatch(new UserEvent($user), UserEvent::DISABLED);
+            }
         }
     }
 }

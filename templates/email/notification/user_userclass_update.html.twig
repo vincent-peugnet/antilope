@@ -1,0 +1,11 @@
+{% extends "email/notification/base.html.twig" %}
+
+{% block content %}
+
+<p>
+    Your user class have changed, you are now part of <a href="{{ url('userclass_show', {id: user.userClass.id}) }}">{{ user.userClass.name }}</a>.
+</p>
+
+
+
+{% endblock %}

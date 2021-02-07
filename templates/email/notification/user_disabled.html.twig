@@ -1,0 +1,17 @@
+{% extends "email/notification/base.html.twig" %}
+
+{% block content %}
+
+{% if user.disabled %}
+    <p>
+        Your account is now disabled. It could be because of inactivity or because you did'nt respected the <a href="{{ url('rule_index') }}">rules</a>.
+    </p>
+{% else %}
+    <p>
+        Your account is now enabled.
+    </p>
+        
+{% endif %}
+
+
+{% endblock %}
