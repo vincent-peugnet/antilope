@@ -27,6 +27,7 @@
 namespace App\Command;
 
 use App\Entity\User;
+use App\Event\UserEvent;
 use App\Repository\UserRepository;
 use App\Service\Inactivity;
 use Symfony\Component\Console\Command\Command;
@@ -35,17 +36,23 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class InactivityCommand extends Command
 {
     protected static $defaultName = 'app:inactivity';
     private Inactivity $inactivity;
     private UserRepository $userRepository;
+    private EventDispatcherInterface $dispatcher;
 
-    public function __construct(Inactivity $inactivity, UserRepository $userRepository)
-    {
+    public function __construct(
+        Inactivity $inactivity,
+        UserRepository $userRepository,
+        EventDispatcherInterface $dispatcher
+    ) {
         $this->inactivity = $inactivity;
         $this->userRepository = $userRepository;
+        $this->dispatcher = $dispatcher;
 
         parent::__construct();
     }
@@ -77,6 +84,7 @@ class InactivityCommand extends Command
             $total = 0;
             foreach ($users as $user) {
                 if ($this->inactivity->checkUpdate($user)) {
+                    $this->dispatcher->dispatch(new UserEvent($user), UserEvent::DISABLED);
                     $total++;
                 }
             }

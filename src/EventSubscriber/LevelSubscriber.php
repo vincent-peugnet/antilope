@@ -26,7 +26,7 @@
 
 namespace App\EventSubscriber;
 
-use App\Event\LevelEvent;
+use App\Event\UserEvent;
 use App\Event\ShareScoreEvent;
 use App\Event\ValidationEvent;
 use App\Service\LevelUp;
@@ -62,7 +62,7 @@ class LevelSubscriber implements EventSubscriberInterface
         if ($change) {
             $this->em->persist($user);
             $this->em->flush();
-            $this->dispatcher->dispatch(new LevelEvent($user), LevelEvent::UPDATE);
+            $this->dispatcher->dispatch(new UserEvent($user), UserEvent::USERCLASS_UPDATE);
         }
     }
 
@@ -73,7 +73,7 @@ class LevelSubscriber implements EventSubscriberInterface
         if ($change) {
             $this->em->persist($user);
             $this->em->flush();
-            $this->dispatcher->dispatch(new LevelEvent($user), LevelEvent::UPDATE);
+            $this->dispatcher->dispatch(new UserEvent($user), UserEvent::USERCLASS_UPDATE);
         }
     }
 }

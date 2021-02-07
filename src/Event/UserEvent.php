@@ -29,9 +29,10 @@ namespace App\Event;
 use App\Entity\User;
 use Symfony\Contracts\EventDispatcher\Event;
 
-class LevelEvent extends Event
+class UserEvent extends Event
 {
-    public const UPDATE = "level.update";
+    public const USERCLASS_UPDATE = "user.userclass.update";
+    public const DISABLED = "user.disabled";
     private User $user;
 
     public function __construct(User $user)

@@ -29,7 +29,7 @@ namespace App\EventSubscriber;
 use App\Entity\Manage;
 use App\Entity\User;
 use App\Event\InterestedEvent;
-use App\Event\LevelEvent;
+use App\Event\UserEvent;
 use App\Event\ValidationEvent;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -50,7 +50,8 @@ class NotificationSubscriber implements EventSubscriberInterface
             InterestedEvent::NEW => ['onInterestedNew', -100],
             InterestedEvent::REVIEWED => ['onInterestedReviewed', -100],
             ValidationEvent::NEW => ['onValidationNew', -100],
-            LevelEvent::UPDATE => ['onLevelUpdate', -100],
+            UserEvent::USERCLASS_UPDATE => ['onLevelUpdate', -100],
+            UserEvent::DISABLED => ['onUserDisabled', -100],
         ];
     }
 
@@ -94,12 +95,20 @@ class NotificationSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onLevelUpdate(LevelEvent $event)
+    public function onLevelUpdate(UserEvent $event)
     {
         $user = $event->getUser();
         $userClassName = $user->getUserClass()->getName();
         $subject = "You are now in the user class: $userClassName";
-        $this->emailNotification($user, $subject, 'userclass_update');
+        $this->emailNotification($user, $subject, 'user_userclass_update');
+    }
+
+    public function onUserDisabled(UserEvent $event)
+    {
+        $user = $event->getUser();
+        $disabled = $user->isDisabled() ? 'disabled' : 'not disabled';
+        $subject = "Your account is now $disabled";
+        $this->emailNotification($user, $subject, 'user_disabled');
     }
 
     private function emailNotification(User $user, string $subject, string $template, array $context = [])

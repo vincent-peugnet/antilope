@@ -166,7 +166,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
             ->setLastActivity(new DateTime('2013-04-04'))
             ->setParanoia(1)
             ->setDisabled(false)
-            ->setIsVerified(false)
+            ->setIsVerified(true)
             ->setShareScore(0);
         $manager->persist($userEscargot);
 
