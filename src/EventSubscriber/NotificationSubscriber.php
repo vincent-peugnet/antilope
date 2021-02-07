@@ -29,10 +29,10 @@ namespace App\EventSubscriber;
 use App\Entity\Manage;
 use App\Entity\User;
 use App\Event\InterestedEvent;
+use App\Event\ValidationEvent;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 
 class NotificationSubscriber implements EventSubscriberInterface
 {
@@ -46,8 +46,9 @@ class NotificationSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            InterestedEvent::NEW => 'onInterestedNew',
-            InterestedEvent::REVIEWED => 'onInterestedReviewed',
+            InterestedEvent::NEW => ['onInterestedNew', -100],
+            InterestedEvent::REVIEWED => ['onInterestedReviewed', -100],
+            ValidationEvent::NEW => ['onValidationNew', -100],
         ];
     }
 
@@ -76,6 +77,20 @@ class NotificationSubscriber implements EventSubscriberInterface
         $this->emailNotification($user, $subject, 'interested_reviewed', [
             'sharable' => $event->getInterested()->getSharable(),
         ]);
+    }
+
+    public function onValidationNew(ValidationEvent $event)
+    {
+        $validatingUser = $event->getValidation()->getUser();
+        $name = $event->getValidation()->getSharable()->getName();
+        $managers = $event->getValidation()->getSharable()->getConfirmedNotDisabledManagers();
+        $subject = "You have recieved a validation on your sharable: $name";
+        foreach ($managers->toArray() as $manage) {
+            assert($manage instanceof Manage);
+            $this->emailNotification($manage->getUser(), $subject, 'validation_new', [
+                'validation' => $event->getValidation(),
+            ]);
+        }
     }
 
     private function emailNotification(User $user, string $subject, string $template, array $context)

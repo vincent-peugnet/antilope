@@ -1,0 +1,20 @@
+{% extends "email/notification/base.html.twig" %}
+
+{% block content %}
+
+<p>
+    <a href="{{ url('user_show', {id: validation.user.id}) }}">{{ validation.user.username }}</a>
+    has validated your sharable:
+    <a href="{{ url('sharable_show', {id: validation.sharable.id}) }}">{{ validation.sharable.name }}</a>.
+</p>
+
+{% if validation.message is not empty %}
+    <h3>Validation Message</h3>
+    <p>
+        {{ validation.message }}
+    </p>
+{% endif %}
+
+
+
+{% endblock %}
