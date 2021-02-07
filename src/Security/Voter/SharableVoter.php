@@ -174,7 +174,7 @@ class SharableVoter extends Voter
         if (!$this->canView($sharable, $user)) {
             return false;
         }
-        if ($this->canEdit($sharable, $user)) {
+        if ($sharable->getInterestedMethod() > 1 && $this->canEdit($sharable, $user)) {
             return true;
         }
         $interested = $this->alreadyInterested($sharable, $user);
