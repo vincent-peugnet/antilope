@@ -70,7 +70,7 @@ class ActivitySubsriberSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function onKernelTerminate(TerminateEvent $event)
+    public function onKernelTerminate(TerminateEvent $event): void
     {
         if ($event->isMasterRequest()) {
             $user = $this->security->getUser();
@@ -83,7 +83,7 @@ class ActivitySubsriberSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onAuthenticationSuccess()
+    public function onAuthenticationSuccess(): void
     {
         $user = $this->security->getUser();
         if ($user instanceof User) {

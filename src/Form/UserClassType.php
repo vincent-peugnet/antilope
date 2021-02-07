@@ -50,7 +50,7 @@ class UserClassType extends AbstractType
         $this->userClassRepository = $userClassRepository;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $userClass = $builder->getData();
         assert($userClass instanceof UserClass);
@@ -98,7 +98,7 @@ class UserClassType extends AbstractType
         });
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => UserClass::class,

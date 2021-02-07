@@ -42,14 +42,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ManageType extends AbstractType
 {
-    private $userRepository;
+    private UserRepository $userRepository;
 
     public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $manage = $builder->getData();
         assert($manage instanceof Manage);
@@ -68,7 +68,7 @@ class ManageType extends AbstractType
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Manage::class,

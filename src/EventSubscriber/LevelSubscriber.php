@@ -55,7 +55,7 @@ class LevelSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function onShareScoreUpdate(ShareScoreEvent $event)
+    public function onShareScoreUpdate(ShareScoreEvent $event): void
     {
         $user = $event->getUser();
         $change = $this->levelUp->check($user);
@@ -66,7 +66,7 @@ class LevelSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onValidationNew(ValidationEvent $event)
+    public function onValidationNew(ValidationEvent $event): void
     {
         $user = $event->getValidation()->getUser();
         $change = $this->levelUp->check($user);

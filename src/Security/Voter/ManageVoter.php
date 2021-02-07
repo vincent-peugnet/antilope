@@ -47,7 +47,7 @@ class ManageVoter extends Voter
             && $subject instanceof \App\Entity\Manage;
     }
 
-    protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
         if (!$user instanceof UserInterface) {

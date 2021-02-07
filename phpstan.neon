@@ -7,7 +7,7 @@ includes:
     - vendor/phpstan/phpstan-deprecation-rules/rules.neon
 
 parameters:
-    level: 5
+    level: 6
     paths:
         - src
         - tests
@@ -19,3 +19,4 @@ parameters:
         console_application_loader: build/console-loader.php
     doctrine:
         objectManagerLoader: build/doctrine-loader.php
+    checkGenericClassInNonGenericObjectType: false

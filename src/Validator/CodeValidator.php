@@ -36,17 +36,17 @@ use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
 class CodeValidator extends ConstraintValidator
 {
-    private $invitationRepository;
-    private $invitationDuration;
+    private InvitationRepository $invitationRepository;
+    private int $invitationDuration;
 
     public function __construct(InvitationRepository $invitationRepository, ParameterBagInterface $params)
     {
         $this->invitationRepository = $invitationRepository;
-        $this->invitationDuration = $params->get('app.invitationDuration');
+        $this->invitationDuration = (int) $params->get('app.invitationDuration');
     }
 
 
-    public function validate($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint): void
     {
         assert($constraint instanceof Code);
 

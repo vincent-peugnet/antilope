@@ -40,7 +40,7 @@ class InvitationVoter extends Voter
             && $subject instanceof \App\Entity\Invitation;
     }
 
-    protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
         // if the user is anonymous, do not grant access

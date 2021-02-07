@@ -27,7 +27,6 @@
 namespace App\Security\Voter;
 
 use App\Entity\Interested;
-use App\Entity\Manage;
 use App\Entity\Sharable;
 use App\Entity\User;
 use App\Repository\SharableRepository;
@@ -88,7 +87,7 @@ class UserVoter extends Voter
             && $subject instanceof \App\Entity\User;
     }
 
-    protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         /** @var User $user */
         $user = $token->getUser();

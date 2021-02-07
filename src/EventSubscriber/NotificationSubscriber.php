@@ -57,7 +57,7 @@ class NotificationSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function onInterestedNew(InterestedEvent $event)
+    public function onInterestedNew(InterestedEvent $event): void
     {
         $managers = $event->getInterested()->getSharable()->getConfirmedNotDisabledManagers();
         $interestedUser = $event->getInterested()->getUser();
@@ -74,7 +74,7 @@ class NotificationSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onInterestedReviewed(InterestedEvent $event)
+    public function onInterestedReviewed(InterestedEvent $event): void
     {
         $user = $event->getInterested()->getUser();
         $name = $event->getInterested()->getSharable()->getName();
@@ -84,7 +84,7 @@ class NotificationSubscriber implements EventSubscriberInterface
         ]);
     }
 
-    public function onValidationNew(ValidationEvent $event)
+    public function onValidationNew(ValidationEvent $event): void
     {
         $name = $event->getValidation()->getSharable()->getName();
         $managers = $event->getValidation()->getSharable()->getConfirmedNotDisabledManagers();
@@ -97,7 +97,7 @@ class NotificationSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onLevelUpdate(UserEvent $event)
+    public function onLevelUpdate(UserEvent $event): void
     {
         $user = $event->getUser();
         $userClassName = $user->getUserClass()->getName();
@@ -105,7 +105,7 @@ class NotificationSubscriber implements EventSubscriberInterface
         $this->emailNotification($user, $subject, 'user_userclass_update');
     }
 
-    public function onUserDisabled(UserEvent $event)
+    public function onUserDisabled(UserEvent $event): void
     {
         $user = $event->getUser();
         $disabled = $user->isDisabled() ? 'disabled' : 'not disabled';
@@ -113,7 +113,7 @@ class NotificationSubscriber implements EventSubscriberInterface
         $this->emailNotification($user, $subject, 'user_disabled');
     }
 
-    public function onInvitationUsed(InvitationEvent $event)
+    public function onInvitationUsed(InvitationEvent $event): void
     {
         $invitation = $event->getInvitation();
         $parent = $invitation->getParent();
@@ -124,7 +124,10 @@ class NotificationSubscriber implements EventSubscriberInterface
         ]);
     }
 
-    private function emailNotification(User $user, string $subject, string $template, array $context = [])
+    /**
+     * @param array $context like `'var' => value`
+     */
+    private function emailNotification(User $user, string $subject, string $template, array $context = []): void
     {
         $context['user'] = $user;
         if ($user->isVerified()) {

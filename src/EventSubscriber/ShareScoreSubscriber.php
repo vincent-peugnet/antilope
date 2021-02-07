@@ -60,7 +60,7 @@ class ShareScoreSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function onValidationNew(ValidationEvent $event)
+    public function onValidationNew(ValidationEvent $event): void
     {
         $sharable = $event->getValidation()->getSharable();
         $user = $event->getValidation()->getUser();

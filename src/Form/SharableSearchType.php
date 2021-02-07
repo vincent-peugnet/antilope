@@ -38,7 +38,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SharableSearchType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $default = new SharableSearch();
         $builder
@@ -81,7 +81,7 @@ class SharableSearchType extends AbstractType
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => SharableSearch::class,

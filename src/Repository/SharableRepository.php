@@ -49,7 +49,7 @@ class SharableRepository extends ServiceEntityRepository
 
     public const PAGINATOR_PER_PAGE = 5;
 
-    private $security;
+    private Security $security;
 
 
     public function __construct(ManagerRegistry $registry, Security $security)
@@ -65,7 +65,7 @@ class SharableRepository extends ServiceEntityRepository
      * @param UserClass[] $visibleBy Collection of UserClass
      * @param User $user the actual user
      */
-    public function getFilteredSharables(SharableSearch $search, array $visibleBy, User $user)
+    public function getFilteredSharables(SharableSearch $search, array $visibleBy, User $user): array
     {
         $visibleByIds = array_map(function (UserClass $userClass) {
             return $userClass->getId();

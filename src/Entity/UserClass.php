@@ -61,17 +61,17 @@ class UserClass
     /**
      * @ORM\Column(type="boolean")
      */
-    private $share = false;
+    private bool $share = false;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $access = false;
+    private bool $access = false;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $canInvite = false;
+    private bool $canInvite = false;
 
     /**
      * @ORM\Column(type="smallint")

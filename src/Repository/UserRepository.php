@@ -85,7 +85,9 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getResult();
     }
 
-
+    /**
+     * @return User[]
+     */
     public function findPossibleManagers(Sharable $sharable): array
     {
         $qb = $this->createQueryBuilder('uu');
@@ -110,6 +112,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     /**
      * @param int $minute Number of minute to filter
+     * @return User[]
      */
     public function findRecentlyActive(int $minute = 15): array
     {

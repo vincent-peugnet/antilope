@@ -46,7 +46,7 @@ class RuleVoter extends Voter
             && $subject instanceof \App\Entity\Rule;
     }
 
-    protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
         assert($user instanceof User);

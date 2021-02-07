@@ -44,8 +44,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class SharableVoter extends Voter
 {
-    private $em;
-
     public const VIEW       = 'view';
     public const EDIT       = 'edit';
     public const VALIDATE   = 'validate';
@@ -87,7 +85,7 @@ class SharableVoter extends Voter
             && $subject instanceof \App\Entity\Sharable;
     }
 
-    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token)
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         /** @var User $user */
         $user = $token->getUser();

@@ -35,11 +35,11 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class InvitationService
 {
-    private $userLimit;
-    private $userRepository;
-    private $invitationRepository;
-    private $openRegistration;
-    private $invitationDuration;
+    private int $userLimit;
+    private UserRepository $userRepository;
+    private InvitationRepository $invitationRepository;
+    private bool $openRegistration;
+    private int $invitationDuration;
 
     public function __construct(
         ParameterBagInterface $params,

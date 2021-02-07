@@ -54,7 +54,7 @@ class UserClassVoter extends Voter
             && $subject instanceof \App\Entity\UserClass;
     }
 
-    protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
         // if the user is anonymous, do not grant access
@@ -77,17 +77,17 @@ class UserClassVoter extends Voter
         return false;
     }
 
-    private function canEdit(User $user)
+    private function canEdit(User $user): bool
     {
         return $user->isAdmin();
     }
 
-    private function canCreate(User $user)
+    private function canCreate(User $user): bool
     {
         return $user->isAdmin();
     }
 
-    private function canDelete(User $user)
+    private function canDelete(User $user): bool
     {
         return ($user->isAdmin() && $this->userClassRepository->count([]) > 1);
     }

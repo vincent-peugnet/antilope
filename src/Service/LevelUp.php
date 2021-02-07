@@ -34,7 +34,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class LevelUp
 {
-    private $em;
+    private EntityManagerInterface $em;
 
     public function __construct(EntityManagerInterface $em)
     {
@@ -114,24 +114,24 @@ class LevelUp
         return $user;
     }
 
-    private function shareScore(User $user, UserClass $userClass)
+    private function shareScore(User $user, UserClass $userClass): bool
     {
         return ($user->getShareScore() >= $userClass->getShareScoreReq());
     }
 
-    private function accountAge(User $user, UserClass $userClass)
+    private function accountAge(User $user, UserClass $userClass): bool
     {
         $interval = new DateInterval('P' . $userClass->getAccountAgeReq() . 'D');
         $ageReq = $user->getCreatedAt()->add($interval);
         return ($ageReq < new DateTime());
     }
 
-    private function validated(User $user, UserClass $userClass)
+    private function validated(User $user, UserClass $userClass): bool
     {
         return (count($user->getValidations()) >= $userClass->getValidatedReq());
     }
 
-    private function verified(User $user, UserClass $userClass)
+    private function verified(User $user, UserClass $userClass): bool
     {
         return ($userClass->getVerifiedReq() && $user->isVerified() || !$userClass->getVerifiedReq());
     }
