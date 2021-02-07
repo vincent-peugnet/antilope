@@ -78,7 +78,11 @@ class EmailVerifier
     public function handleEmailConfirmation(Request $request, UserInterface $user): void
     {
         assert($user instanceof User);
-        $this->verifyEmailHelper->validateEmailConfirmation($request->getUri(), (string) $user->getId(), $user->getEmail());
+        $this->verifyEmailHelper->validateEmailConfirmation(
+            $request->getUri(),
+            (string) $user->getId(),
+            $user->getEmail()
+        );
 
         $user->setIsVerified(true);
 
