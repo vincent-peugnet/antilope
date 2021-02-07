@@ -29,6 +29,7 @@ namespace App\EventSubscriber;
 use App\Entity\Manage;
 use App\Entity\User;
 use App\Event\InterestedEvent;
+use App\Event\LevelEvent;
 use App\Event\ValidationEvent;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -49,6 +50,7 @@ class NotificationSubscriber implements EventSubscriberInterface
             InterestedEvent::NEW => ['onInterestedNew', -100],
             InterestedEvent::REVIEWED => ['onInterestedReviewed', -100],
             ValidationEvent::NEW => ['onValidationNew', -100],
+            LevelEvent::UPDATE => ['onLevelUpdate', -100],
         ];
     }
 
@@ -81,7 +83,6 @@ class NotificationSubscriber implements EventSubscriberInterface
 
     public function onValidationNew(ValidationEvent $event)
     {
-        $validatingUser = $event->getValidation()->getUser();
         $name = $event->getValidation()->getSharable()->getName();
         $managers = $event->getValidation()->getSharable()->getConfirmedNotDisabledManagers();
         $subject = "You have recieved a validation on your sharable: $name";
@@ -93,7 +94,15 @@ class NotificationSubscriber implements EventSubscriberInterface
         }
     }
 
-    private function emailNotification(User $user, string $subject, string $template, array $context)
+    public function onLevelUpdate(LevelEvent $event)
+    {
+        $user = $event->getUser();
+        $userClassName = $user->getUserClass()->getName();
+        $subject = "You are now in the user class: $userClassName";
+        $this->emailNotification($user, $subject, 'userclass_update');
+    }
+
+    private function emailNotification(User $user, string $subject, string $template, array $context = [])
     {
         $context['user'] = $user;
         if ($user->isVerified()) {
