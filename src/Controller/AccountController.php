@@ -50,8 +50,6 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class AccountController extends AbstractController
 {
-    private $userLimitReached = false;
-    private $needToWait = false;
     private $emailVerifier;
 
     public function __construct(EmailVerifier $emailVerifier)

@@ -29,6 +29,7 @@ namespace App\EventSubscriber;
 use App\Entity\Manage;
 use App\Entity\User;
 use App\Event\InterestedEvent;
+use App\Event\InvitationEvent;
 use App\Event\UserEvent;
 use App\Event\ValidationEvent;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -52,6 +53,7 @@ class NotificationSubscriber implements EventSubscriberInterface
             ValidationEvent::NEW => ['onValidationNew', -100],
             UserEvent::USERCLASS_UPDATE => ['onLevelUpdate', -100],
             UserEvent::DISABLED => ['onUserDisabled', -100],
+            InvitationEvent::USED => ['onInvitationUsed', -100],
         ];
     }
 
@@ -109,6 +111,17 @@ class NotificationSubscriber implements EventSubscriberInterface
         $disabled = $user->isDisabled() ? 'disabled' : 'not disabled';
         $subject = "Your account is now $disabled";
         $this->emailNotification($user, $subject, 'user_disabled');
+    }
+
+    public function onInvitationUsed(InvitationEvent $event)
+    {
+        $invitation = $event->getInvitation();
+        $parent = $invitation->getParent();
+        $childName = $invitation->getChild()->getUsername();
+        $subject = "Your invitation have been used by user: $childName";
+        $this->emailNotification($parent, $subject, 'invitation_used', [
+            'invitation' => $invitation,
+        ]);
     }
 
     private function emailNotification(User $user, string $subject, string $template, array $context = [])

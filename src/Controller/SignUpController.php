@@ -27,14 +27,14 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Event\InvitationEvent;
 use App\Form\SignUpType;
 use App\Repository\InvitationRepository;
 use App\Repository\UserClassRepository;
 use App\Repository\UserRepository;
-use App\Security\EmailVerifier;
 use App\Security\LoginFormAuthenticator;
-use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -55,7 +55,8 @@ class SignUpController extends AbstractController
         GuardAuthenticatorHandler $guardHandler,
         LoginFormAuthenticator $authenticator,
         UserPasswordEncoderInterface $passwordEncoder,
-        InvitationRepository $invitationRepository
+        InvitationRepository $invitationRepository,
+        EventDispatcherInterface $dispatcher
     ): Response {
 
         // Check user limit
@@ -107,9 +108,11 @@ class SignUpController extends AbstractController
                 $invitation = $invitationRepository->findOneBy(['code' => $code]);
                 $invitation->setChild($user);
                 $entityManager->persist($invitation);
+                $entityManager->flush();
+                $dispatcher->dispatch(new InvitationEvent($invitation), InvitationEvent::USED);
+            } else {
+                $entityManager->flush();
             }
-
-            $entityManager->flush();
 
             return $guardHandler->authenticateUserAndHandleSuccess(
                 $user,
