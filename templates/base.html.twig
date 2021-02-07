@@ -121,6 +121,13 @@
             </main>
         </div>
 
+
+        {% block footer %}
+        <footer class="border-top border-primary mt-3">
+            <p class="text-center text-muted mt-3">Made with <i>Antilope</i>. Follow the project, report bugs or share ideas on <a href="https://github.com/vincent-peugnet/antilope" target="_blank"><i class="fab fa-github"></i> Github</a></p>
+        </footer>
+        {% endblock %}
+
         {% block javascripts %}{% endblock %}
     </body>
 </html>
