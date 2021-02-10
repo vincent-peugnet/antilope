@@ -68,7 +68,7 @@ class EmailVerifier
         );
 
         $email = new TemplatedEmail();
-        $email->from(new Address('noreply@antilope.net', $this->parameters->get('app.siteName')))
+        $email->from(new Address($this->parameters->get('app.emailAddress'), $this->parameters->get('app.siteName')))
             ->to($user->getEmail())
             ->subject('Please Confirm your Email')
             ->htmlTemplate('email/confirmation_email.html.twig')

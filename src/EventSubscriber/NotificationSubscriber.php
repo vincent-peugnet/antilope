@@ -136,7 +136,7 @@ class NotificationSubscriber implements EventSubscriberInterface
         $context['user'] = $user;
         if ($user->isVerified()) {
             $email = (new TemplatedEmail())
-            ->from(new Address('noreply@antilope.net', $this->parameters->get('app.siteName')))
+            ->from(new Address($this->parameters->get('app.emailAddress'), $this->parameters->get('app.siteName')))
             ->to($user->getEmail())
             ->subject($subject)
             ->htmlTemplate("email/notification/$template.html.twig")
