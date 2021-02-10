@@ -130,15 +130,12 @@ class SharableVoter extends Voter
             return false;
         } elseif ($this->canManage($sharable, $user)) {
             return true;
-        } elseif ($user->getUserClass()->getAccess()) {
-            if (is_null($sharable->getVisibleBy())) {
-                return true;
-            } else {
-                $visibleByUserClasses = $this->userClassRepository->findBetween($sharable->getVisibleBy());
-                return (in_array($user->getUserClass(), $visibleByUserClasses));
-            }
+        }
+        if (is_null($sharable->getVisibleBy())) {
+            return $user->getUserClass()->getAccess();
         } else {
-            return false;
+            $visibleByUserClasses = $this->userClassRepository->findBetween($sharable->getVisibleBy());
+            return (in_array($user->getUserClass(), $visibleByUserClasses));
         }
     }
 

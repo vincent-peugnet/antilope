@@ -32,6 +32,7 @@ use App\Form\SignUpType;
 use App\Repository\InvitationRepository;
 use App\Repository\UserClassRepository;
 use App\Repository\UserRepository;
+use App\Security\EmailVerifier;
 use App\Security\LoginFormAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -56,7 +57,8 @@ class SignUpController extends AbstractController
         LoginFormAuthenticator $authenticator,
         UserPasswordEncoderInterface $passwordEncoder,
         InvitationRepository $invitationRepository,
-        EventDispatcherInterface $dispatcher
+        EventDispatcherInterface $dispatcher,
+        EmailVerifier $emailVerifier
     ): Response {
 
         // Check user limit
@@ -91,8 +93,6 @@ class SignUpController extends AbstractController
             );
 
             // stop user creation if no user class exist
-
-
             $userClass = $userClassRepository->findFirst();
             if (is_null($userClass)) {
                 throw $this->createNotFoundException('No User Class Defined');
@@ -113,6 +113,14 @@ class SignUpController extends AbstractController
             } else {
                 $entityManager->flush();
             }
+
+            // Send validation email
+            $emailVerifier->sendEmailConfirmation(
+                'email_verify',
+                $user
+            );
+            $email = $user->getEmail();
+            $this->addFlash('primary', "An email have been send to $email for validation");
 
             return $guardHandler->authenticateUserAndHandleSuccess(
                 $user,

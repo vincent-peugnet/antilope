@@ -26,24 +26,17 @@
 
 namespace App\Controller;
 
-use App\Entity\Invitation;
 use App\Entity\User;
 use App\Form\InvitationCreateType;
 use App\Repository\InvitationRepository;
-use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use App\Service\InvitationService;
 use App\Service\LevelUp;
-use DateInterval;
-use DateTime;
-use Symfony\Bridge\Doctrine\IdGenerator\UuidV4Generator;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Uid\Uuid;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
@@ -181,16 +174,12 @@ class AccountController extends AbstractController
      */
     public function sendUserEmail(): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $user = $this->getUser();
         // generate a signed url and email it to the user
         $this->emailVerifier->sendEmailConfirmation(
             'email_verify',
-            $user,
-            (new TemplatedEmail())
-                ->from(new Address('noreply@antilope.net', $this->getParameter('app.siteName')))
-                ->to($user->getEmail())
-                ->subject('Please Confirm your Email')
-                ->htmlTemplate('email/confirmation_email.html.twig')
+            $user
         );
         $email = $user->getEmail();
         $this->addFlash('primary', "An email have been send to $email for validation");

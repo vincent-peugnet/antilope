@@ -33,16 +33,20 @@ use App\Event\InvitationEvent;
 use App\Event\UserEvent;
 use App\Event\ValidationEvent;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 
 class NotificationSubscriber implements EventSubscriberInterface
 {
     private MailerInterface $mailer;
+    private ParameterBagInterface $parameters;
 
-    public function __construct(MailerInterface $mailer)
+    public function __construct(MailerInterface $mailer, ParameterBagInterface $parameters)
     {
         $this->mailer = $mailer;
+        $this->parameters = $parameters;
     }
 
     public static function getSubscribedEvents()
@@ -132,7 +136,7 @@ class NotificationSubscriber implements EventSubscriberInterface
         $context['user'] = $user;
         if ($user->isVerified()) {
             $email = (new TemplatedEmail())
-            ->from('hello@example.com')
+            ->from(new Address('noreply@antilope.net', $this->parameters->get('app.siteName')))
             ->to($user->getEmail())
             ->subject($subject)
             ->htmlTemplate("email/notification/$template.html.twig")

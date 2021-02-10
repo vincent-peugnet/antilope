@@ -29,8 +29,10 @@ namespace App\Security;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Security\Core\User\UserInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
@@ -40,21 +42,23 @@ class EmailVerifier
     private VerifyEmailHelperInterface $verifyEmailHelper;
     private MailerInterface $mailer;
     private EntityManagerInterface $entityManager;
+    private ParameterBagInterface $parameters;
 
     public function __construct(
         VerifyEmailHelperInterface $helper,
         MailerInterface $mailer,
-        EntityManagerInterface $manager
+        EntityManagerInterface $manager,
+        ParameterBagInterface $parameters
     ) {
         $this->verifyEmailHelper = $helper;
         $this->mailer = $mailer;
         $this->entityManager = $manager;
+        $this->parameters = $parameters;
     }
 
     public function sendEmailConfirmation(
         string $verifyEmailRouteName,
-        UserInterface $user,
-        TemplatedEmail $email
+        UserInterface $user
     ): void {
         assert($user instanceof User);
         $signatureComponents = $this->verifyEmailHelper->generateSignature(
@@ -62,6 +66,13 @@ class EmailVerifier
             (string) $user->getId(),
             $user->getEmail()
         );
+
+        $email = new TemplatedEmail();
+        $email->from(new Address('noreply@antilope.net', $this->parameters->get('app.siteName')))
+            ->to($user->getEmail())
+            ->subject('Please Confirm your Email')
+            ->htmlTemplate('email/confirmation_email.html.twig')
+        ;
 
         $context = $email->getContext();
         $context['signedUrl'] = $signatureComponents->getSignedUrl();
