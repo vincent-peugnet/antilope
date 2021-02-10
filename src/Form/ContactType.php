@@ -27,7 +27,6 @@
 namespace App\Form;
 
 use App\Entity\Contact;
-use App\Entity\UserContact;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -40,21 +39,39 @@ class ContactType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $contact = $builder->getData();
+        assert(is_subclass_of($contact, Contact::class));
+        $new = (is_null($contact->getId()));
+
         $builder
             ->add('type', ChoiceType::class, [
                 'choices' => Contact::allowedTypes(),
                 'placeholder' => 'Choose your contact type',
                 'required' => true,
+                'disabled' => !$new,
             ])
             ->add('content', TextType::class, [
                 'required' => true,
+                'disabled' => !$new,
                 'help' => 'Yout phone number, email adress, or wathever you whant to be join with',
             ])
             ->add('info', TextareaType::class, [
                 'help' => 'You can precise some infos if you feel the need',
                 'required' => false,
             ])
-            ->add('add', SubmitType::class)
         ;
+
+        if ($new) {
+            $builder->add('add', SubmitType::class);
+        } else {
+            $builder->add('edit', SubmitType::class);
+        }
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => Contact::class,
+        ]);
     }
 }

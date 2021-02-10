@@ -32,7 +32,6 @@ use App\Form\ManageType;
 use App\Repository\InterestedRepository;
 use App\Security\Voter\ManageVoter;
 use App\Security\Voter\SharableVoter;
-use App\Security\Voter\UserVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

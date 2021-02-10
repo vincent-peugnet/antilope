@@ -33,8 +33,10 @@ use App\Form\UserContactType;
 use App\Form\UserType;
 use App\Security\Voter\UserVoter;
 use App\Service\LevelUp;
+use DateTime;
 use Doctrine\Common\Annotations\Annotation\Required;
 use Doctrine\ORM\EntityManager;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -143,6 +145,36 @@ class UserController extends AbstractController
 
         return $this->render('user/contact_add.html.twig', [
             'user' => $user,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/user/{id}/contact/{cid}/edit", name="user_contact_edit", requirements={"uid"="\d+", "cid"="\d+"})
+     * @Entity("userContact", expr="repository.find(cid)")
+     */
+    public function contactEdit(User $user, UserContact $userContact, Request $request)
+    {
+        $this->denyAccessUnlessGranted('edit', $user);
+
+        $form = $this->createForm(UserContactType::class, $userContact);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $userContact = $form->getData();
+            assert($userContact instanceof UserContact);
+            $userContact->setLastEditedAt(new DateTime());
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($userContact);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('user_contact', ['id' => $user->getId()]);
+        }
+
+        return $this->render('user/contact_edit.html.twig', [
+            'user' => $user,
+            'userContact' => $userContact,
             'form' => $form->createView(),
         ]);
     }

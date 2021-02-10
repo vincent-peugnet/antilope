@@ -26,14 +26,14 @@
 <div class="card mt-3">
 
     <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title">                
+                {{ content_by_type.render(contact.type, contact.content) }}
+            </h5>
 
-        <h5 class="card-title">{{ contact.type }} : 
-
-            {{ content_by_type.render(contact.type, contact.content) }}
-        </h5>
-        <small>
-            {{ contact.createdAt|ago }}
-        </small>
+            <a href="{{ path('user_contact_edit', {id: user.id, cid: contact.id}) }}" class="btn btn-primary">
+                <i class="fas fa-pen"></i>
+                edit info
+            </a>
 
     </div>
 
@@ -58,6 +58,14 @@
 
     {% endif %}
 </div>
+<p class="text-muted">
+    Created
+    {{ contact.createdAt|ago }}
+    |
+    <i class="fas fa-clock"></i>
+    last edited
+    {{ contact.lastEditedAt|ago }}
+</p>
 
 {% endfor %}
 

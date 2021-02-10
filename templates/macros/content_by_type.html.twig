@@ -2,13 +2,22 @@
 {% macro render(type, content) %}
 
     {% if type == 'email' %}
+        <i class="fas fa-envelope"></i>
+        Email:
         <a href="mailto:{{ content }}">{{ content }}</a>
     {% elseif type == 'url' %}
+        <i class="fas fa-link"></i>
+        Url: 
         <a target="_blank" href="{{ content }}">{{ content }}</a>
     {% elseif type == 'phone' %}
+        <i class="fas fa-phone-alt"></i>
+        Phone:
         <a href="tel:{{ content }}">{{ content }}</a>
+    {% elseif type == 'address' %}
+        <i class="fas fa-map-marker-alt"></i>
+        {{type}}: {{ content }}
     {% else %}
-        {{ content }}
+        {{type}}: {{ content }}
     {% endif %}
 
 {% endmacro %}

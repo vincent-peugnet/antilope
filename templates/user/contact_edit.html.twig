@@ -10,13 +10,11 @@
     {'url': url('user'), 'text': 'Users'},
     {'url': url('user_show', {id: user.id}), 'text': user.username},
     {'url': url('user_contact', {id: user.id}), 'text': 'contacts'},
-    {'text': 'new'},
+    {'text': 'Edit'},
 ]) }}
 
 
-<h1>New contact</h1>
-
-<p>Double check your contact <strong>content</strong> beccause you will only be able to update the <strong>info</strong> later</p>
+<h1>Edit contact</h1>
 
 {{ form(form) }}
 

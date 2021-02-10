@@ -40,7 +40,7 @@ abstract class Contact
     public const PHONE = 'phone';
     public const URL = 'url';
     public const MATRIX = 'matrix';
-    public const ADRESS = 'adress';
+    public const ADRESS = 'address';
     public const OTHER = 'other';
 
     public static function allowedTypes(): array
@@ -50,7 +50,7 @@ abstract class Contact
             'Phone number' => self::PHONE,
             'Matrix ID' => self::MATRIX,
             'URL adress' => self::URL,
-            'Adress' => self::ADRESS,
+            'Address' => self::ADRESS,
             'Other' => self::OTHER,
         ];
     }
@@ -73,6 +73,11 @@ abstract class Contact
      * @ORM\Column(type="datetime")
      */
     protected $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    protected $lastEditedAt;
 
     /**
      * @ORM\Column(type="string", length=64)
@@ -100,6 +105,7 @@ abstract class Contact
     public function __construct()
     {
         $this->createdAt = new DateTime();
+        $this->lastEditedAt = new DateTime();
     }
 
     public function getId(): ?int
@@ -115,6 +121,18 @@ abstract class Contact
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getLastEditedAt(): ?\DateTimeInterface
+    {
+        return $this->lastEditedAt;
+    }
+
+    public function setLastEditedAt(\DateTimeInterface $lastEditedAt): self
+    {
+        $this->lastEditedAt = $lastEditedAt;
 
         return $this;
     }
