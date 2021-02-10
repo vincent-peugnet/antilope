@@ -21,33 +21,28 @@
     {{ form_errors(form) }}
 
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-3">
             {{ form_row(form.query) }}
         </div>
-        <div class="col-xs-1" id="some-custom-id">
-            {{ form_row(form.sortBy) }}
-        </div>
-        <div class="col-xs-1" id="some-custom-id">
-            {{ form_row(form.order) }}
-        </div>
-        <div class="col-xs-1" id="some-custom-id">
-            {{ form_row(form.search) }}
-        </div>
-    </div>
-    <div class="row">
-        <a class="btn mb-3 btn-secondary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">advanced search</a>
-    </div>
-    <div class="row collapse" id="collapseExample">
-        <div class="col" id="some-custom-id">
+
+
+        <div class="col-xs-1">
             {{ form_row(form.disabled) }}
         </div>
-        <div class="col" id="some-custom-id">
-            {{ form_row(form.validated) }}
-        </div>
-        <div class="col" id="some-custom-id">
+        <div class="col-sm-2">
             {{ form_row(form.managedBy) }}
         </div>
+        <div class="col-sm-2">
+            {{ form_row(form.validatedBy) }}
+        </div>
+        <div class="col-xs-1">
+            {{ form_row(form.sortBy) }}
+        </div>
+        <div class="col-xs-1">
+            {{ form_row(form.order) }}
+        </div>
     </div>
+        {{ form_row(form.search) }}
 {{ form_end(form) }}
 
 </div>
@@ -105,7 +100,15 @@
 
 
         
-        <p class="card-subtitle mb-2 text-muted">{{ sharable.description }}</p>
+        <p class="card-subtitle mb-2 text-muted">
+            {{ sharable.description }}
+            <em class="text-primary">
+                Managed by
+                {% for manage in sharable.managedBy %}
+                <strong>{{ manage.user.username }}</strong>,
+                {% endfor %}
+            </em>
+        </p>
         <a class="btn btn-primary" href="{{ path('sharable_show', {id: sharable.id}) }}"><i class="fas fa-info-circle"></i> details</a>
 
     </div>

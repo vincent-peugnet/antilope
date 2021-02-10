@@ -134,12 +134,18 @@
             <div class="card-header">
 
                 <h4 class="card-title d-flex justify-content-between align-items-center">
-                <span>
-                    <i class="fas fa-edit"></i>
-                    Manage
-                </span>
-                <small><span class="badge badge-light">{{ user.getConfirmedManages|length }}</span></small>
-                </h4>
+                    <span>
+                        <i class="fas fa-edit"></i>
+                        Manage
+                        
+                        
+                    </span>
+                    <small>
+                    <a href="{{ path('sharable', {managedBy: user.id, disabled: 1}) }}" class="btn btn-primary">
+                            {{ user.getConfirmedManages|length }}
+                    </a>
+                    </small>
+            </h4>
 
             </div>
 
@@ -179,7 +185,11 @@
                         <i class="fas fa-check-circle"></i>
                         Validations given
                     </span>
-                <small><span class="badge badge-light">{{ user.validations|length }}</span></small>
+                <small>
+                    <a href="{{ path('sharable', {validatedBy: user.id, disabled: 1}) }}" class="btn btn-success">
+                        {{ user.validations|length }}
+                    </a>
+                </small>
                 </h4>
 
             </div>

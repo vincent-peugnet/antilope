@@ -27,9 +27,12 @@
 namespace App\Form;
 
 use App\Entity\SharableSearch;
+use App\Entity\User;
+use EasyCorp\Bundle\EasyAdminBundle\Form\Filter\Type\BooleanFilterType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -40,6 +43,8 @@ class SharableSearchType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $sharableSearch = $builder->getData();
+        assert($sharableSearch instanceof SharableSearch);
         $default = new SharableSearch();
         $builder
             ->add('query', SearchType::class, [
@@ -49,22 +54,19 @@ class SharableSearchType extends AbstractType
                     'placeholder' => 'search in Sharables names',
                 ],
             ])
-            ->add('disabled', ChoiceType::class, [
-                'choices' => SharableSearch::DISABLED,
-                'empty_data' => $default->getDisabled(),
+            ->add('disabled', CheckboxType::class, [
+                'help' => 'Show disabled sharables',
                 'required' => false,
-                'expanded' => true,
             ])
-            ->add('validated', ChoiceType::class, [
-                'choices' => SharableSearch::VALIDATED,
-                'empty_data' => $default->getValidated(),
-                'required' => false,
-                'expanded' => true,
-            ])
-            ->add('managedBy', IntegerType::class, [
+            ->add('managedBy', EntityType::class, [
+                'class' => User::class,
                 'required' => false,
                 'label' => 'Managed by',
-                'help' => 'user ID'
+            ])
+            ->add('validatedBy', EntityType::class, [
+                'class' => User::class,
+                'required' => false,
+                'label' => 'Validated by',
             ])
             ->add('sortBy', ChoiceType::class, [
                 'choices' => SharableSearch::SORT_BY,

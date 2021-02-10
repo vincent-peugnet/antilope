@@ -30,14 +30,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class SharableSearch
 {
-    public const DISABLED = [
-        'only disabled' => 1,
-        'hide disabled' => 0,
-    ];
-    public const VALIDATED = [
-        'I validated' => 1,
-        'I did not validate' => 0,
-    ];
     public const SORT_BY = [
         'id' => 'id',
         'createdAt' => 'createdAt',
@@ -54,20 +46,17 @@ class SharableSearch
      */
     private $query = '';
 
-    /**
-     * @var bool|null
-     */
-    private $disabled = false;
+    private bool $disabled = false;
 
     /**
-     * @var bool|null
-     */
-    private $validated = null;
-
-    /**
-     * @var int|null
+     * @var User|null
      */
     private $managedBy = null;
+
+    /**
+     * @var User|null
+     */
+    private $validatedBy = null;
 
     /**
      * @var string|null
@@ -108,38 +97,38 @@ class SharableSearch
         return $this;
     }
 
-    public function getDisabled(): ?bool
+    public function getDisabled(): bool
     {
         return $this->disabled;
     }
 
-    public function setDisabled(?bool $disabled): self
+    public function setDisabled(bool $disabled): self
     {
         $this->disabled = $disabled;
 
         return $this;
     }
 
-    public function getValidated(): ?bool
-    {
-        return $this->validated;
-    }
-
-    public function setValidated(?bool $validated): self
-    {
-        $this->validated = $validated;
-
-        return $this;
-    }
-
-    public function getManagedBy(): ?int
+    public function getManagedBy(): ?User
     {
         return $this->managedBy;
     }
 
-    public function setManagedBy(?int $managedBy): self
+    public function setManagedBy(?User $managedBy): self
     {
         $this->managedBy = $managedBy;
+
+        return $this;
+    }
+
+    public function getValidatedBy(): ?User
+    {
+        return $this->validatedBy;
+    }
+
+    public function setValidatedBy(?User $validatedBy): self
+    {
+        $this->validatedBy = $validatedBy;
 
         return $this;
     }

@@ -88,6 +88,22 @@ class SharableRepository extends ServiceEntityRepository
             if ($this->security->isGranted(UserVoter::VIEW_SHARABLES, $manager)) {
                 $qb->andWhere('m.user = :mid')
                 ->setParameter('mid', $manager->getId());
+            } else {
+                return [];
+            }
+        }
+
+        // Filter Sharables by validatedBy
+        // Check if user paranoia level authorize this
+        if ($search->getValidatedBy() !== null) {
+            $userRepo = $this->getEntityManager()->getRepository(User::class);
+            $manager = $userRepo->find($search->getValidatedBy());
+
+            if ($this->security->isGranted(UserVoter::VIEW_VALIDATIONS, $manager)) {
+                $qb->andWhere('v.user = :vid')
+                ->setParameter('vid', $manager->getId());
+            } else {
+                return [];
             }
         }
 
@@ -115,26 +131,10 @@ class SharableRepository extends ServiceEntityRepository
                 ->setParameter('q', "%{$search->getQuery()}%");
         }
 
-        if ($search->getDisabled() !== null) {
+        if (!$search->getDisabled()) {
             $qb = $qb
                 ->andWhere('s.disabled = :d')
                 ->setParameter('d', $search->getDisabled());
-        }
-
-        if ($search->getValidated() !== null) {
-            if ($search->getValidated()) {
-                $qb = $qb->andWhere(
-                    $qb->expr()->In('v.user', $user->getId())
-                );
-            } else {
-                $qb = $qb->andWhere(
-                    $qb->expr()->orX(                // does not work
-
-                        $qb->expr()->notIn('v.user', $user->getId()),
-                        $qb->expr()->isNull('v.user')
-                    )
-                );
-            }
         }
 
         if ($search->getSortBy() && $search->getOrder()) {
