@@ -80,6 +80,11 @@ abstract class Contact
     protected $lastEditedAt;
 
     /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected ?DateTime $forgottenAt = null;
+
+    /**
      * @ORM\Column(type="string", length=64)
      * @Assert\Choice(callback="allowedTypeValues", message="Type does not exist")
      */
@@ -137,6 +142,18 @@ abstract class Contact
         return $this;
     }
 
+    public function getForgottenAt(): ?DateTime
+    {
+        return $this->forgottenAt;
+    }
+
+    public function setForgottenAt(?DateTime $forgottenAt): self
+    {
+        $this->forgottenAt = $forgottenAt;
+
+        return $this;
+    }
+
     public function getType(): ?string
     {
         return $this->type;
@@ -171,6 +188,13 @@ abstract class Contact
         $this->info = $info;
 
         return $this;
+    }
+
+    //_______________ special functions _______________
+
+    public function isForgotten(): bool
+    {
+        return !is_null($this->forgottenAt);
     }
 
     /**

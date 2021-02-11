@@ -577,8 +577,15 @@ class User implements UserInterface
         return $this;
     }
 
+    public function getNotForgottenUserContacts()
+    {
+        return $this->userContacts->filter(function (UserContact $userContact) {
+            return !$userContact->isForgotten();
+        });
+    }
+
     public function isContactable(): bool
     {
-        return !$this->getUserContacts()->isEmpty();
+        return !$this->getNotForgottenUserContacts()->isEmpty();
     }
 }

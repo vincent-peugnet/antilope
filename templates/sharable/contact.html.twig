@@ -44,7 +44,6 @@
         <div class="card-header d-flex justify-content-between align-items-center">
 
             <h4 class="card-title">
-                {{ sharableContact.type }} :
                 {{ content_by_type.render(sharableContact.type, sharableContact.content) }}
             </h4>
 
@@ -120,7 +119,6 @@
         <ul>
         {% for userContact in manage.user.userContacts %}
             <li>
-                {{userContact.type}} :
                 {{ content_by_type.render(userContact.type, userContact.content) }}
                 {% if userContact.info %}
                     <span class="badge badge-light">info</span>

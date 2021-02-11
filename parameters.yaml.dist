@@ -8,3 +8,5 @@ parameters:
     app.siteAlert: 'beware of not sharing too much COVID-19, share carefully !'
     app.showHomeStats: false
     app.lastActivityDelay: 1
+    app.forgetDelay: 7
+    app.contactEditDelay: 15

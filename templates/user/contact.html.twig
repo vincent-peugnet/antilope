@@ -16,56 +16,88 @@
 <h1>Contacts</h1>
 
 {% if is_granted('edit', user) %}
+
+<p>You need at least one contact to interact with sharable using contact method > 1.</p>
+
+{% if contactEditDelay > 0 and forgetDelay > 0 %}
+    <p>
+        You can edit contact only during the {{ contactEditDelay }} minutes following it's creation.
+        After this delay, you can start to forget them, but they will stay visible to contacted user during a {{ forgetDelay }} days perdiod.
+    </p>
+{% endif %}
+
+
 <a  class="btn btn-success" href="{{ path('user_contact_add', {id: user.id}) }}"><i class="fas fa-plus-circle"></i> add new contact</a>
+
 {% endif %}
 
 
 
 {% for contact in userContacts %}
 
-<div class="card mt-3">
+{% if is_granted('view', contact) %}
+
+<div class="card mt-3{{ contact.isForgotten ? ' border-danger' : '' }}">
 
     <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="card-title">                
                 {{ content_by_type.render(contact.type, contact.content) }}
             </h5>
+            
+            {% if is_granted('forget', contact) %}
+            <span class="btn-group">
+                <a href="{{ path('user_contact_forget', {id: contact.id}) }}" class="btn btn-danger">
+                    forget
+                </a>
+            {% endif %}
+            {% if is_granted('edit', contact) %}
+                <a href="{{ path('user_contact_edit', {id: contact.id}) }}" class="btn btn-primary">
+                    <i class="fas fa-pen"></i>
+                    edit
+                </a>
+            </span>
+            {% endif %}
 
-            <a href="{{ path('user_contact_edit', {id: user.id, cid: contact.id}) }}" class="btn btn-primary">
-                <i class="fas fa-pen"></i>
-                edit info
-            </a>
+        </div>
+        
+        {% if contact.info %}
+        
+        <div class="card-body">
 
-    </div>
-
-    {% if contact.info %}
-
-    <div class="card-body">
-
-
-        {% if contact.info|length > 500 %}
-            <a class="btn btn-primary" data-toggle="collapse" href="#info_{{ contact.id }}" role="button" aria-expanded="false" aria-controls="info_{{ contact.id }}">
+            
+            {% if contact.info|length > 500 %}
+            <a class="btn btn-light" data-toggle="collapse" href="#info_{{ contact.id }}" role="button" aria-expanded="false" aria-controls="info_{{ contact.id }}">
                 View info
             </a>
             <div class="collapse" id="info_{{ contact.id }}">
                 <pre>{{ contact.info }}</pre>
             </div>
-        {% else %}
+            {% else %}
             <pre>{{ contact.info }}</pre>
-        {% endif %}
-
+            {% endif %}
+            
+            
+        </div>
         
-    </div>
-
     {% endif %}
 </div>
-<p class="text-muted">
-    Created
-    {{ contact.createdAt|ago }}
-    |
-    <i class="fas fa-clock"></i>
-    last edited
-    {{ contact.lastEditedAt|ago }}
-</p>
+{% if contact.isForgotten %}
+    <p class="text-danger">
+        Forgotten
+        {{ contact.forgottenAt|ago }}
+    </p>
+{% else %}
+    <p class="text-muted">
+        Created
+        {{ contact.createdAt|ago }}
+        |
+        <i class="fas fa-clock"></i>
+        last edited
+        {{ contact.lastEditedAt|ago }}
+    </p>
+{% endif %}
+
+{% endif %}
 
 {% endfor %}
 

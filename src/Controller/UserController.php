@@ -31,13 +31,16 @@ use App\Entity\User;
 use App\Entity\UserContact;
 use App\Form\UserContactType;
 use App\Form\UserType;
+use App\Security\Voter\UserContactVoter;
 use App\Security\Voter\UserVoter;
 use App\Service\LevelUp;
 use DateTime;
 use Doctrine\Common\Annotations\Annotation\Required;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -106,7 +109,7 @@ class UserController extends AbstractController
     /**
      * @Route("/user/{id}/contact", name="user_contact", requirements={"id"="\d+"})
      */
-    public function contact(User $user): Response
+    public function contact(User $user, ParameterBagInterface $parameters): Response
     {
         $this->denyAccessUnlessGranted(UserVoter::CONTACT, $user);
 
@@ -116,6 +119,8 @@ class UserController extends AbstractController
         return $this->render('user/contact.html.twig', [
             'user' => $user,
             'userContacts' => $userContacts,
+            'contactEditDelay' => (int) $parameters->get('app.contactEditDelay'),
+            'forgetDelay' => (int) $parameters->get('app.forgetDelay'),
         ]);
     }
 
@@ -124,7 +129,7 @@ class UserController extends AbstractController
      */
     public function contactAdd(User $user, Request $request): Response
     {
-        $this->denyAccessUnlessGranted('edit', $user);
+        $this->denyAccessUnlessGranted(UserVoter::EDIT, $user);
 
         $form = $this->createForm(UserContactType::class, new UserContact());
 
@@ -150,12 +155,13 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/user/{id}/contact/{cid}/edit", name="user_contact_edit", requirements={"uid"="\d+", "cid"="\d+"})
-     * @Entity("userContact", expr="repository.find(cid)")
+     * @Route("/contact/user/{id}/edit", name="user_contact_edit", requirements={"id"="\d+"})
      */
-    public function contactEdit(User $user, UserContact $userContact, Request $request)
+    public function contactEdit(UserContact $userContact, Request $request)
     {
-        $this->denyAccessUnlessGranted('edit', $user);
+        $user = $userContact->getUser();
+        $this->denyAccessUnlessGranted(UserVoter::EDIT, $user);
+        $this->denyAccessUnlessGranted(UserContactVoter::EDIT, $userContact);
 
         $form = $this->createForm(UserContactType::class, $userContact);
 
@@ -177,5 +183,32 @@ class UserController extends AbstractController
             'userContact' => $userContact,
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/contact/user/{id}/forget", name="user_contact_forget", requirements={"id"="\d+"})
+     */
+    public function contactForget(
+        UserContact $userContact,
+        EntityManagerInterface $em,
+        ParameterBagInterface $parameters
+    ) {
+        $user = $userContact->getUser();
+        if ($this->isGranted(UserVoter::EDIT, $user) && $this->isGranted(UserContactVoter::FORGET, $userContact)) {
+            $contactEditDelay = (int) $parameters->get('app.contactEditDelay');
+            if (
+                $userContact->getCreatedAt() > new DateTime("$contactEditDelay minutes ago") ||
+                $user->getInteresteds()->isEmpty()
+            ) {
+                $em->remove($userContact);
+            } else {
+                $userContact->setForgottenAt(new DateTime());
+                $em->persist($userContact);
+            }
+            $em->flush();
+            return $this->redirectToRoute('user_contact', ['id' => $user->getId()]);
+        } else {
+            $this->createAccessDeniedException();
+        }
     }
 }
