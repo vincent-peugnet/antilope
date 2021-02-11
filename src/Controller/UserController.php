@@ -120,7 +120,7 @@ class UserController extends AbstractController
             'user' => $user,
             'userContacts' => $userContacts,
             'contactEditDelay' => (int) $parameters->get('app.contactEditDelay'),
-            'forgetDelay' => (int) $parameters->get('app.forgetDelay'),
+            'contactForgetDelay' => (int) $parameters->get('app.contactForgetDelay'),
         ]);
     }
 
@@ -188,23 +188,27 @@ class UserController extends AbstractController
     /**
      * @Route("/contact/user/{id}/forget", name="user_contact_forget", requirements={"id"="\d+"})
      */
-    public function contactForget(
-        UserContact $userContact,
-        EntityManagerInterface $em,
-        ParameterBagInterface $parameters
-    ) {
+    public function contactForget(UserContact $userContact, EntityManagerInterface $em)
+    {
         $user = $userContact->getUser();
         if ($this->isGranted(UserVoter::EDIT, $user) && $this->isGranted(UserContactVoter::FORGET, $userContact)) {
-            $contactEditDelay = (int) $parameters->get('app.contactEditDelay');
-            if (
-                $userContact->getCreatedAt() > new DateTime("$contactEditDelay minutes ago") ||
-                $user->getInteresteds()->isEmpty()
-            ) {
-                $em->remove($userContact);
-            } else {
-                $userContact->setForgottenAt(new DateTime());
-                $em->persist($userContact);
-            }
+            $userContact->setForgottenAt(new DateTime());
+            $em->persist($userContact);
+            $em->flush();
+            return $this->redirectToRoute('user_contact', ['id' => $user->getId()]);
+        } else {
+            $this->createAccessDeniedException();
+        }
+    }
+
+    /**
+     * @Route("/contact/user/{id}/delete", name="user_contact_delete", requirements={"id"="\d+"})
+     */
+    public function contactDelete(UserContact $userContact, EntityManagerInterface $em)
+    {
+        $user = $userContact->getUser();
+        if ($this->isGranted(UserVoter::EDIT, $user) && $this->isGranted(UserContactVoter::DELETE, $userContact)) {
+            $em->remove($userContact);
             $em->flush();
             return $this->redirectToRoute('user_contact', ['id' => $user->getId()]);
         } else {

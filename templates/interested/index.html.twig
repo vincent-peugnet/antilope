@@ -56,7 +56,7 @@
         
         <ul class="list-group list-group-flush">
             {% for contact in interested.user.userContacts %}
-            <li class="list-group-item">
+            <li class="list-group-item{{ contact.isForgotten ? ' text-danger' : '' }}">
                 {{ content_by_type.render(contact.type, contact.content) }}
                 
             </li>

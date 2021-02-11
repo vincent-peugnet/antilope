@@ -27,6 +27,8 @@
 namespace App\Form;
 
 use App\Entity\Contact;
+use DateTime;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -37,11 +39,23 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ContactType extends AbstractType
 {
+    private int $contactEditDelay;
+
+    public function __construct(ParameterBagInterface $parameters)
+    {
+        $this->contactEditDelay = (int) $parameters->get('app.contactEditDelay');
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $contact = $builder->getData();
         assert(is_subclass_of($contact, Contact::class));
         $new = (is_null($contact->getId()));
+        $edit = (
+            $new ||
+            !$this->contactEditDelay ||
+            $contact->getCreatedAt() > new DateTime($this->contactEditDelay . 'minutes ago')
+        );
 
         $builder
             ->add('type', ChoiceType::class, [
@@ -52,7 +66,7 @@ class ContactType extends AbstractType
             ])
             ->add('content', TextType::class, [
                 'required' => true,
-                'disabled' => !$new,
+                'disabled' => !$edit,
                 'help' => 'Yout phone number, email adress, or wathever you whant to be join with',
             ])
             ->add('info', TextareaType::class, [

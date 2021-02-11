@@ -19,13 +19,19 @@
 
 <p>You need at least one contact to interact with sharable using contact method > 1.</p>
 
-{% if contactEditDelay > 0 and forgetDelay > 0 %}
+{% if contactEditDelay > 0 %}
     <p>
-        You can edit contact only during the {{ contactEditDelay }} minutes following it's creation.
-        After this delay, you can start to forget them, but they will stay visible to contacted user during a {{ forgetDelay }} days perdiod.
+        You can edit and delete contact only during the {{ contactEditDelay }} minutes following it's creation.
     </p>
+
 {% endif %}
 
+{% if contactForgetDelay > 0 %}
+<p>
+    {{ contactEditDelay > 0 ? 'After this delay, y' : 'Y' }}ou can start to forget a contact, but it will stay visible during a {{ contactForgetDelay }} hours period.
+</p>
+
+{% endif %}
 
 <a  class="btn btn-success" href="{{ path('user_contact_add', {id: user.id}) }}"><i class="fas fa-plus-circle"></i> add new contact</a>
 
@@ -44,19 +50,23 @@
                 {{ content_by_type.render(contact.type, contact.content) }}
             </h5>
             
-            {% if is_granted('forget', contact) %}
             <span class="btn-group">
-                <a href="{{ path('user_contact_forget', {id: contact.id}) }}" class="btn btn-danger">
-                    forget
-                </a>
-            {% endif %}
-            {% if is_granted('edit', contact) %}
-                <a href="{{ path('user_contact_edit', {id: contact.id}) }}" class="btn btn-primary">
-                    <i class="fas fa-pen"></i>
-                    edit
-                </a>
+                {% if is_granted('delete', contact) %}
+                    <a href="{{ path('user_contact_delete', {id: contact.id}) }}" class="btn btn-danger">
+                        delete
+                    </a>
+                {% elseif is_granted('forget', contact) %}
+                    <a href="{{ path('user_contact_forget', {id: contact.id}) }}" class="btn btn-danger">
+                        forget
+                    </a>
+                {% endif %}
+                {% if is_granted('edit', contact) %}
+                    <a href="{{ path('user_contact_edit', {id: contact.id}) }}" class="btn btn-primary">
+                        <i class="fas fa-pen"></i>
+                        edit
+                    </a>
+                {% endif %}
             </span>
-            {% endif %}
 
         </div>
         

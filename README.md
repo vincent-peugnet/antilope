@@ -193,6 +193,9 @@ Default global parameters are generated interactively during `composer install` 
 - `app.openRegistration (bool)` Allow free sign up, disable the invite code system
 - `app.userLimit (int)` Max user limit. If this number is reached, registrations are closed
 - `app.invitationDuration (int)` Duration of invite code before it expired (in hours)
+- `app.lastActivityDelay (int)` Time of user lastActivity refresh (in minutes)
+- `app.contactForgetDelay (int)` Time before a contact is not visible anymore (in hours)
+- `app.contactEditDelay (int)` Time before a contact is not editable anymore (in minutes)
 
 ### Administration
 

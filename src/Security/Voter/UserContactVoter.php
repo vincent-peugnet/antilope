@@ -40,18 +40,20 @@ class UserContactVoter extends Voter
     public const VIEW    = 'view';
     public const EDIT    = 'edit';
     public const FORGET  = 'forget';
-    public const REMEBER = 'remember';
+    public const DELETE  = 'delete';
 
-    private int $forgetDelay;
+    private int $contactForgetDelay;
+    private int $contactEditDelay;
 
     public function __construct(ParameterBagInterface $parameters)
     {
-        $this->forgetDelay = (int) $parameters->get('app.forgetDelay');
+        $this->contactForgetDelay = (int) $parameters->get('app.contactForgetDelay');
+        $this->contactEditDelay = (int) $parameters->get('app.contactEditDelay');
     }
 
     protected function supports($attribute, $subject)
     {
-        return in_array($attribute, [self::VIEW, self::EDIT, self::FORGET])
+        return in_array($attribute, [self::VIEW, self::EDIT, self::FORGET, self::DELETE])
             && $subject instanceof \App\Entity\UserContact;
     }
 
@@ -73,6 +75,8 @@ class UserContactVoter extends Voter
                 return $this->canEdit($subject, $user);
             case self::FORGET:
                 return $this->canForget($subject, $user);
+            case self::DELETE:
+                return $this->canDelete($subject, $user);
         }
 
         return false;
@@ -82,10 +86,10 @@ class UserContactVoter extends Voter
     {
         if (!$userContact->isForgotten()) {
             return true;
-        } elseif ($this->forgetDelay === 0) {
+        } elseif ($this->contactForgetDelay === 0) {
             return false;
         } else {
-            return $userContact->getForgottenAt() > new DateTime($this->forgetDelay . ' days ago');
+            return $userContact->getForgottenAt() > new DateTime($this->contactForgetDelay . ' hours ago');
         }
     }
 
@@ -97,5 +101,18 @@ class UserContactVoter extends Voter
     private function canForget(UserContact $userContact, User $user): bool
     {
         return ($this->canEdit($userContact, $user) && $user->getNotForgottenUserContacts()->count() > 1);
+    }
+
+    private function canDelete(UserContact $userContact, User $user): bool
+    {
+        if ($this->canForget($userContact, $user)) {
+            if ($user->getInteresteds()->isEmpty() && $user->getValidations()->isEmpty()) {
+                return true;
+            } else {
+                return $userContact->getCreatedAt() > new DateTime($this->contactEditDelay . 'minutes ago');
+            }
+        } else {
+            return false;
+        }
     }
 }
