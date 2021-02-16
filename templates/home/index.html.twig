@@ -11,7 +11,7 @@
 
     <p class="lead">{{ siteDescription }}</p>
 
-    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
     <p>
         Discover <a href="{{ path('sharable') }}">sharables</a>, or <a href="{{ path('user_edit', {id: app.user.id}) }}">edit your profile</a>.
     </p>
@@ -21,7 +21,7 @@
 
 </div>
 
-{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
 
 
 <div class="card mb-3">
@@ -48,7 +48,7 @@
 
 
 
-{% if is_granted('IS_AUTHENTICATED_FULLY') or showHomeStats %}
+{% if is_granted('IS_AUTHENTICATED_REMEMBERED') or showHomeStats %}
 
 <div class="card mb-3">
 
