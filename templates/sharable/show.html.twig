@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 {% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 {% import "macros/user.html.twig" as userMacro %}
+{% import "macros/contact_method.html.twig" as contact_method %}
 
 
 {% block title %}{{ sharable.name }}{% endblock %}
@@ -154,7 +155,9 @@
                     {% endif %}
                     <li class="list-group-item">
                         <i class="fas fa-address-book"></i>
-                        Contact method: {{ sharable.interestedMethod }}
+                        Contact method:
+                        {{ sharable.interestedMethod }}
+                        {{ contact_method.render( sharable.interestedMethod ) }}
                     </li>
                     <li class="list-group-item">
                         <i class="fas fa-plus-circle"></i>

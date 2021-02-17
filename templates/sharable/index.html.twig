@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+{% import "macros/contact_method.html.twig" as contact_method %}
 
 {% block title %}Sharables{% endblock %}
 
@@ -69,6 +70,9 @@
         <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="card-title">
             <a href="{{ path('sharable_show', {id: sharable.id}) }}">{{ sharable.name }}</a>
+
+            {{ contact_method.render(sharable.interestedMethod) }}
+
         {% if sharable.interesteds|length > 0 %}
         <span title="{{ sharable.interesteds|length }} users are insterested in this sharable" class="badge badge-warning">
             {{ sharable.interesteds|length }}
@@ -92,25 +96,32 @@
         </span>
         {% endif %}
 
+
         {% if sharable.beginAt %}
-            <small title="begin at {{ sharable.beginAt|format_datetime }}">
+            <small title="begin at {{ sharable.beginAt|format_datetime }}" class="text-muted">
                 {% if sharable.beginAt > date() %}
                 <i class="fas fa-clock"></i>
                 begin in {{ sharable.beginAt|ago }}
-                {% else %}
-                <i class="fas fa-play"></i>
+                {% elseif not sharable.endAt %}
+                <i class="fas fa-clock"></i>
                 has begun {{ sharable.beginAt|ago }}
                 {% endif %}
             </small>
         {% endif %}
 
-        {% if sharable.endAt %}
-        {% if sharable.endAt < date() %}
-            end date is passed
-        {% elseif sharable.beginAt and sharable.beginAt < date() %}
-            end in {{ sharable.endAt|ago }}
+        {% if sharable.endAt and ( not sharable.beginAt or sharable.beginAt < date() ) %}
+            <small title="end at {{ sharable.endAt|format_datetime }}" class="text-muted">
+                {% if sharable.endAt < date() %}
+                <span class="text-danger">
+                    <i class="fas fa-flag-checkered"></i>
+                    end date is passed
+                </span>
+                {% else %}
+                <i class="fas fa-hourglass"></i>
+                end in {{ sharable.endAt|ago }}
+                {% endif %}
+            </small>
         {% endif %}
-    {% endif %}
     
         </h5>
         <span title="{{ sharable.createdAt|format_datetime }}">

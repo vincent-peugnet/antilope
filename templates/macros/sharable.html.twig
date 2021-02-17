@@ -1,7 +1,12 @@
 {% macro render(sharable) %}
+{% import "macros/contact_method.html.twig" as contact_method %}
+
     <a href="{{ path('sharable_show', {id: sharable.id}) }}" title="{{ sharable.description }}">
         {{ sharable.name }}
     </a>
+
+    {{ contact_method.render(sharable.interestedMethod) }}
+
     {% if sharable.disabled or not sharable.isAccessible %}
         <span class="badge badge-danger" title="This sharable is disabled">
             <i class="fas fa-ban"></i>
