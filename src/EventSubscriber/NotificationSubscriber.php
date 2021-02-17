@@ -30,6 +30,7 @@ use App\Entity\Manage;
 use App\Entity\User;
 use App\Event\InterestedEvent;
 use App\Event\InvitationEvent;
+use App\Event\ManageEvent;
 use App\Event\UserEvent;
 use App\Event\ValidationEvent;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -58,6 +59,7 @@ class NotificationSubscriber implements EventSubscriberInterface
             UserEvent::USERCLASS_UPDATE => ['onLevelUpdate', -100],
             UserEvent::DISABLED => ['onUserDisabled', -100],
             InvitationEvent::USED => ['onInvitationUsed', -100],
+            ManageEvent::INVITE => ['onManageInvite', -100],
         ];
     }
 
@@ -125,6 +127,17 @@ class NotificationSubscriber implements EventSubscriberInterface
         $subject = "Your invitation have been used by user: $childName";
         $this->emailNotification($parent, $subject, 'invitation_used', [
             'invitation' => $invitation,
+        ]);
+    }
+
+    public function onManageInvite(ManageEvent $event)
+    {
+        $manage = $event->getManage();
+        $user = $manage->getUser();
+        $sharableName = $manage->getSharable()->getName();
+        $subject = "You have been invited to manage a sharable: $sharableName";
+        $this->emailNotification($user, $subject, 'manage_invite', [
+            'manage' => $manage,
         ]);
     }
 

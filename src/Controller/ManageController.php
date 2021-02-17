@@ -28,11 +28,13 @@ namespace App\Controller;
 
 use App\Entity\Manage;
 use App\Entity\Sharable;
+use App\Event\ManageEvent;
 use App\Form\ManageType;
 use App\Repository\InterestedRepository;
 use App\Security\Voter\ManageVoter;
 use App\Security\Voter\SharableVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -43,8 +45,12 @@ class ManageController extends AbstractController
         /**
      * @Route("/sharable/{id}/managers", name="sharable_managers", requirements={"id"="\d+"})
      */
-    public function managers(Sharable $sharable, Request $request, InterestedRepository $interestedRepo): Response
-    {
+    public function managers(
+        Sharable $sharable,
+        Request $request,
+        InterestedRepository $interestedRepo,
+        EventDispatcherInterface $dispatcher
+    ): Response {
         $this->denyAccessUnlessGranted('edit', $sharable);
         $user = $this->getUser();
         $filteredManages = $sharable->getManagedBy()->filter(function (Manage $manage) use ($user) {
@@ -73,6 +79,8 @@ class ManageController extends AbstractController
                 $entityManager->remove($intrested);
             }
             $entityManager->flush();
+
+            $dispatcher->dispatch(new ManageEvent($manage), ManageEvent::INVITE);
 
             return $this->redirectToRoute('sharable_managers', ['id' => $sharable->getId()]);
         }
