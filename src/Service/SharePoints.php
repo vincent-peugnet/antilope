@@ -47,15 +47,14 @@ class SharePoints
     {
         $position = count($this->userClassRepository->findLowerthan($userClass));
         $total = count($this->userClassRepository->findAll());
-        $rank = round($position / $total) * 100;
+        $rank = round($position / $total * 100);
         return (int) $rank;
     }
 
     public function calculate(User $user, Sharable $sharable): int
     {
         $userRank = $this->rank($user->getUserClass());
-        $validations = $sharable->getValidations();
-        $validationCount = count($validations);
+        $validationCount = count($sharable->getValidations());
         $managedBy = $sharable->getManagedBy();
         $managerCount = count($managedBy);
 
