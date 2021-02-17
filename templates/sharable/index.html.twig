@@ -91,6 +91,27 @@
             <i class="fas fa-edit"></i>
         </span>
         {% endif %}
+
+        {% if sharable.beginAt %}
+            <small title="begin at {{ sharable.beginAt|format_datetime }}">
+                {% if sharable.beginAt > date() %}
+                <i class="fas fa-clock"></i>
+                begin in {{ sharable.beginAt|ago }}
+                {% else %}
+                <i class="fas fa-play"></i>
+                has begun {{ sharable.beginAt|ago }}
+                {% endif %}
+            </small>
+        {% endif %}
+
+        {% if sharable.endAt %}
+        {% if sharable.endAt < date() %}
+            end date is passed
+        {% elseif sharable.beginAt and sharable.beginAt < date() %}
+            end in {{ sharable.endAt|ago }}
+        {% endif %}
+    {% endif %}
+    
         </h5>
         <span title="{{ sharable.createdAt|format_datetime }}">
             <small>created {{ sharable.createdAt|ago }}</small>
@@ -108,7 +129,7 @@
             </span>
             </br>
                 Managed by
-                {% for manage in sharable.getConfirmedNotDisabledManagers %}
+                {% for manage in sharable.getConfirmedManagers %}
                     <a href="{{ path('user_show', {id: manage.user.id}) }}">{{ manage.user.username }}</a>
                     {% if not loop.index == loop.last %}
                         {% if loop.index == (loop.length - 1) %}
@@ -118,7 +139,6 @@
                         {% endif %}
                     {% endif %}
                 {% endfor %}
-
         </p>
 
     </div>
