@@ -14,7 +14,6 @@
         "doctrine/doctrine-bundle": "^2.2",
         "doctrine/doctrine-migrations-bundle": "^3.0",
         "doctrine/orm": "^2.8",
-        "easycorp/easyadmin-bundle": "^2",
         "erusev/parsedown": "^1.7",
         "incenteev/composer-parameter-handler": "^2.1",
         "knplabs/knp-time-bundle": "^1.14",
