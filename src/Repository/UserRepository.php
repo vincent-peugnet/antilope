@@ -107,6 +107,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->Where($qb->expr()->eq('m.sharable', $sharable->getId()))
             ->orWhere($qb->expr()->eq('i.sharable', $sharable->getId()))
             ->orWhere($qb->expr()->isNull('uc'))
+            ->orWhere($qb->expr()->eq('u.disabled', 1))
             ->getQuery();
     }
 
