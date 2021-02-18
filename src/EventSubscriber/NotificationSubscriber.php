@@ -94,7 +94,7 @@ class NotificationSubscriber implements EventSubscriberInterface
     {
         $name = $event->getValidation()->getSharable()->getName();
         $managers = $event->getValidation()->getSharable()->getConfirmedNotDisabledManagers();
-        $subject = "You have recieved a validation on your sharable: $name";
+        $subject = "You have received a validation on your sharable: $name";
         foreach ($managers->toArray() as $manage) {
             assert($manage instanceof Manage);
             $this->emailNotification($manage->getUser(), $subject, 'validation_new', [

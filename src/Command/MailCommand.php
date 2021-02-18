@@ -31,8 +31,10 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email as MimeEmail;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Validation;
@@ -41,10 +43,14 @@ class MailCommand extends Command
 {
     protected static $defaultName = 'app:mail';
     private MailerInterface $mailer;
+    private string $emailAddress;
+    private string $siteName;
 
-    public function __construct(MailerInterface $mailer)
+    public function __construct(MailerInterface $mailer, ParameterBagInterface $parameters)
     {
         $this->mailer = $mailer;
+        $this->emailAddress = $parameters->get('app.emailAddress');
+        $this->siteName = $parameters->get('app.siteName');
 
         parent::__construct();
     }
@@ -52,27 +58,27 @@ class MailCommand extends Command
     protected function configure()
     {
         $this
-            ->setDescription('Send a test mail to the given email adress to test email setup')
-            ->addArgument('emailAdress', InputArgument::REQUIRED, 'Email Recipient')
+            ->setDescription('Send a test mail to the given email address to test email setup')
+            ->addArgument('emailAddress', InputArgument::REQUIRED, 'Email Recipient')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $emailAdress = $input->getArgument('emailAdress');
+        $emailAddress = $input->getArgument('emailAddress');
 
         $validator = Validation::createValidator();
 
-        if (count($validator->validate($emailAdress, new Email())) !== 0) {
-            $io->warning("$emailAdress is not a valid email adress");
+        if (count($validator->validate($emailAddress, new Email())) !== 0) {
+            $io->warning("$emailAddress is not a valid email adress");
             return Command::FAILURE;
         }
 
 
         $email = (new MimeEmail())
-            ->from('hello@example.com')
-            ->to($emailAdress)
+            ->from(new Address($this->emailAddress, $this->siteName))
+            ->to($emailAddress)
             ->subject('Test Email from Antilope')
             ->text('Looks like email is well configured !')
             ->html('<p>Looks like email is well configured !</p>');
@@ -84,7 +90,7 @@ class MailCommand extends Command
             return Command::FAILURE;
         }
 
-        $io->success("An Email should have been send to $emailAdress, check tour mailbox !");
+        $io->success("An Email should have been send to $emailAddress, check tour mailbox !");
 
         return Command::SUCCESS;
     }
