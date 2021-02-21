@@ -36,8 +36,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SharableType extends AbstractType
@@ -51,6 +49,9 @@ class SharableType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $sharable = $builder->getData();
+        assert($sharable instanceof Sharable);
+
         $builder
             ->add('name')
             ->add('description')
@@ -59,52 +60,48 @@ class SharableType extends AbstractType
                 'help' => 'Long description, where you can use Markdown <i class="fab fa-markdown"></i>',
                 'help_html' => true,
             ])
-            ->add('responsibility', null, [
-                'help' => 'check this if you feel responsible for the sharable',
-            ])
             ->add('visibleBy', EntityType::class, [
                 'class' => UserClass::class,
                 'choices' => $this->userClassRepository->findAll(),
                 'placeholder' => '',
                 'required' => false,
-                'help' => 'Your sharable will be accessible from this user class',
+                'help' => 'But you can overide this with your own choice if you feel the need',
             ])
             ->add('interestedMethod', ChoiceType::class, [
                 'label' => 'How contact infos are exchanged',
                 'choices' => Sharable::INTERESTED_OPTIONS,
                     // phpcs:ignore Generic.Files.LineLength.TooLong
-                'help' => '1: user don\'t need access any contact infos</br>2: contact infos are automaticaly exchanged</br>3: contact infos are manualy send to interested users</br>4: Only interested user contact infos are send',
+                'help' => '1 <i class="fas fa-lock-open fa-fw"></i> user don\'t need access any contact infos</br>2 <i class="fas fa-bolt fa-fw"></i> contact infos are automaticaly exchanged</br>3 <i class="fas fa-stamp fa-fw"></i> contact infos are manualy send to interested users</br>4 <i class="fas fa-lock fa-fw"></i> Only interested user contact infos are send',
                 'help_html' => true,
+            ])
+            ->add('beginAt', DateTimeType::class, [
+                'widget' => 'single_text',
+                'required'   => false,
+                'help' => 'If what you\'re sharing have a begin date, indicate it',
+            ])
+            ->add('endAt', DateTimeType::class, [
+                'widget' => 'single_text',
+                'required'   => false,
+                'help' => 'If what you\'re sharing have a end date, indicate it',
             ])
         ;
 
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-            /** @var Sharable $sharable */
-            $sharable = $event->getData();
-            $form = $event->getForm();
+        if ($sharable->getId() && !( empty($sharable->getBeginAt()) || $sharable->getBeginAt() > new DateTime())) {
+            $builder->get('beginAt')->setDisabled(true);
+        }
 
-            if (empty($sharable->getBeginAt()) || $sharable->getBeginAt() > new DateTime()) {
-                $form->add('beginAt', DateTimeType::class, [
-                    'widget' => 'single_text',
-                    'required'   => false,
-                    'help' => 'If what you\'re sharing have a begin date, indicate it',
-                ]);
-            }
-            if (empty($sharable->getEndAt()) || $sharable->getEndAt() > new DateTime()) {
-                $form->add('endAt', DateTimeType::class, [
-                    'widget' => 'single_text',
-                    'required'   => false,
-                    'help' => 'If what you\'re sharing have a end date, indicate it',
-                ]);
-            }
+        if ($sharable->getId() && !( empty($sharable->getEndAt()) || $sharable->getEndAt() > new DateTime())) {
+            $builder->get('endAt')->setDisabled(true);
+        }
 
-            if ($sharable->getId() === null) {
-                $form->add('create', SubmitType::class);
-            } else {
-                $form->add('edit', SubmitType::class);
-            }
-        });
+
+        if ($sharable->getId() === null) {
+            $builder->add('create', SubmitType::class);
+        } else {
+            $builder->add('edit', SubmitType::class);
+        }
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void

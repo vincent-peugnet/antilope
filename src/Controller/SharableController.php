@@ -44,8 +44,6 @@ use App\Repository\SharableRepository;
 use App\Repository\UserClassRepository;
 use App\Repository\ValidationRepository;
 use App\Security\Voter\SharableVoter;
-use App\Service\LevelUp;
-use App\Service\SharePoints;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -138,7 +136,7 @@ class SharableController extends AbstractController
     /**
      * @Route("/sharable/{id}/edit", name="sharable_edit", requirements={"id"="\d+"})
      */
-    public function edit(Sharable $sharable, Request $request): Response
+    public function edit(Sharable $sharable, UserClassRepository $userClassRepository, Request $request): Response
     {
         $this->denyAccessUnlessGranted('edit', $sharable);
 
@@ -160,6 +158,7 @@ class SharableController extends AbstractController
         return $this->render('sharable/edit.html.twig', [
             'sharable' => $sharable,
             'form' => $form->createView(),
+            'canAccessUserClass' => $userClassRepository->findBy(['access' => true]),
         ]);
     }
 
@@ -284,7 +283,7 @@ class SharableController extends AbstractController
     /**
      * @Route("/sharable/new", name="sharable_new")
      */
-    public function new(Request $request): Response
+    public function new(UserClassRepository $userClassRepository, Request $request): Response
     {
         $sharable = new Sharable();
 
@@ -312,6 +311,7 @@ class SharableController extends AbstractController
 
         return $this->render('sharable/new.html.twig', [
             'form' => $form->createView(),
+            'canAccessUserClass' => $userClassRepository->findBy(['access' => true]),
         ]);
     }
 }
