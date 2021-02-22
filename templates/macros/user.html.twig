@@ -1,5 +1,8 @@
 {% macro render(user) %}
     <a href="{{ path('user_show', {id: user.id}) }}">
+        {% if user.avatar %}
+        <img class="rounded" src="{{ asset(user.getAvatarPath)|imagine_filter('avatar_25') }}" alt="avatar of user {{ user.username }}">
+        {% endif %}
         {{ user.username }}
     </a>
     <a href="{{ path('userclass_show', {id: user.userClass.id}) }}">

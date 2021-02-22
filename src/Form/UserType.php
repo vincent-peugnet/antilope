@@ -54,6 +54,8 @@ class UserType extends AbstractType
                     'maxSize' => '2M',
                     'mimeTypes' => [
                         'image/jpeg',
+                        'image/png',
+                        'image/gif',
                     ],
                     'mimeTypesMessage' => 'Please upload a JPEG image file',
                 ])

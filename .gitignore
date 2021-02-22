@@ -6,7 +6,7 @@
 /parameters.yaml
 
 # local application files
-/public/img
+/public/uploads
 
 ###> symfony/framework-bundle ###
 /.env.local
@@ -32,3 +32,6 @@
 /.phpcs-cache
 /phpcs.xml
 ###< squizlabs/php_codesniffer ###
+###> liip/imagine-bundle ###
+/public/media/cache/
+###< liip/imagine-bundle ###

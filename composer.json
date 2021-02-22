@@ -17,6 +17,7 @@
         "erusev/parsedown": "^1.7",
         "incenteev/composer-parameter-handler": "^2.1",
         "knplabs/knp-time-bundle": "^1.14",
+        "liip/imagine-bundle": "^2.5",
         "php-parallel-lint/php-parallel-lint": "^1.2",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^5.6",

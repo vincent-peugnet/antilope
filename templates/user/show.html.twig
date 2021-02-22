@@ -16,11 +16,13 @@
 
 <div class="row">
 
-    <div class="col-lg-2">
-        <img style="width: 150px; height: 150px" class="rounded mx-auto" src="{{ asset(user.getAvatarPath) }}" alt="avatar of user {{ user.username }}">
+    {% if user.avatar %}
+    <div class="col-md-auto">
+        <img class="rounded mb-3" src="{{ asset(user.getAvatarPath)|imagine_filter('avatar_200') }}" alt="avatar of user {{ user.username }}">
     </div>
+    {% endif %}
 
-    <div class="col-lg-10"> 
+    <div class="col-md-auto"> 
         <h1>{{ user.username }}</h1>
 
         <div class="btn-group mb-3">
