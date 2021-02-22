@@ -101,7 +101,6 @@ class SharableType extends AbstractType
         } else {
             $builder->add('edit', SubmitType::class);
         }
-
     }
 
     public function configureOptions(OptionsResolver $resolver): void

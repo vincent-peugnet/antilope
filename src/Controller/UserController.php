@@ -33,6 +33,7 @@ use App\Form\UserContactType;
 use App\Form\UserType;
 use App\Security\Voter\UserContactVoter;
 use App\Security\Voter\UserVoter;
+use App\Service\FileUploader;
 use App\Service\LevelUp;
 use DateTime;
 use Doctrine\Common\Annotations\Annotation\Required;
@@ -82,7 +83,7 @@ class UserController extends AbstractController
     /**
      * @Route("/user/{id}/edit", name="user_edit", requirements={"id"="\d+"})
      */
-    public function edit(User $user, Request $request): Response
+    public function edit(User $user, FileUploader $fileUploader, Request $request): Response
     {
         $this->denyAccessUnlessGranted('edit', $user);
 
@@ -92,6 +93,12 @@ class UserController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
+            assert($user instanceof User);
+            $avatarFile = $form->get('avatarFile')->getData();
+            if ($avatarFile) {
+                $avatar = $fileUploader->upload($avatarFile, FileUploader::AVATAR);
+                $user->setAvatar($avatar);
+            }
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);

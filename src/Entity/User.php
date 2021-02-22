@@ -27,6 +27,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use App\Service\FileUploader;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -150,6 +151,11 @@ class User implements UserInterface
      * @ORM\Column(type="boolean")
      */
     private $disabled;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $avatar;
 
     public function __construct()
     {
@@ -531,6 +537,18 @@ class User implements UserInterface
         return $this;
     }
 
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?string $avatar): self
+    {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
     //_______________ special functions _______________
 
     /**
@@ -587,5 +605,10 @@ class User implements UserInterface
     public function isContactable(): bool
     {
         return !$this->getNotForgottenUserContacts()->isEmpty();
+    }
+
+    public function getAvatarPath(): string
+    {
+        return FileUploader::AVATAR . '/' . $this->avatar;
     }
 }

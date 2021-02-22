@@ -31,9 +31,11 @@ use App\Security\Voter\UserVoter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Image;
 
 class UserType extends AbstractType
 {
@@ -44,6 +46,18 @@ class UserType extends AbstractType
 
 
         $builder
+            ->add('avatarFile', FileType::class, [
+                'label' => 'avatar',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => new Image([
+                    'maxSize' => '2M',
+                    'mimeTypes' => [
+                        'image/jpeg',
+                    ],
+                    'mimeTypesMessage' => 'Please upload a JPEG image file',
+                ])
+            ])
             ->add('description', null, [
                 'help' => 'You can use Markdown to describe yourself.',
             ])
