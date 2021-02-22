@@ -50,7 +50,7 @@ class FileUploader
      * @param string $type should be listed in fileUploader constants
      * @return string new name of uploaded file
      */
-    public function upload(UploadedFile $file, string $type, string $customName = ''): string
+    public function upload(UploadedFile $file, string $type): string
     {
         if (!in_array($type, self::TYPES)) {
             throw new UnexpectedValueException('type should be a value in ' . implode(' | ', self::TYPES));

@@ -2,6 +2,11 @@
 liip_imagine:
     # valid drivers options include "gd" or "gmagick" or "imagick"
     driver: "gd"
+    loaders:
+        default:
+            filesystem:
+                data_root:
+                    - '%kernel.project_dir%/%env(LIIP_PUBLIC_PATH)%'
     filter_sets:
         avatar_200:
             filters:

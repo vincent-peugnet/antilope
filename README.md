@@ -226,6 +226,12 @@ DEPLOY_COMPOSER_PATH            # optional
 
 The directory `DEPLOY_DIR` will have to be created on the remote and a `.env.local` file must be created inside with the correct variables.
 
+In order to fix a symlink bug with [Liip Imagine Bundle](https://github.com/liip/LiipImagineBundle), you need to specify:
+
+```
+LIIP_PUBLIC_PATH="../../shared/public"
+```
+
 Development
 -----------
 
