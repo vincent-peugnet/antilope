@@ -68,7 +68,7 @@ return new class extends DefaultDeployer
             // Forward SSH agent to use local keys
             ->useSshAgentForwarding(true)
             // set files as shared between the different deployments
-            ->sharedFilesAndDirs(['.env.local', 'parameters.yaml'])
+            ->sharedFilesAndDirs(['.env.local', 'parameters.yaml', 'public/uploads'])
             // composer is searched using which so don't need the full path
             ->remoteComposerBinaryPath($this->compPath)
             // phpcs:ignore Generic.Files.LineLength.TooLong
