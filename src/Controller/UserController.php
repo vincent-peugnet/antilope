@@ -97,6 +97,9 @@ class UserController extends AbstractController
             $avatarFile = $form->get('avatarFile')->getData();
             if ($avatarFile) {
                 $avatar = $fileUploader->upload($avatarFile, FileUploader::AVATAR);
+                if ($user->getAvatar()) {
+                    $fileUploader->remove($user->getAvatar(), FileUploader::AVATAR);
+                }
                 $user->setAvatar($avatar);
             }
 

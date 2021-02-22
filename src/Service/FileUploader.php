@@ -27,6 +27,7 @@
 namespace App\Service;
 
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use UnexpectedValueException;
@@ -49,7 +50,7 @@ class FileUploader
      * @param string $type should be listed in fileUploader constants
      * @return string new name of uploaded file
      */
-    public function upload(UploadedFile $file, string $type): string
+    public function upload(UploadedFile $file, string $type, string $customName = ''): string
     {
         if (!in_array($type, self::TYPES)) {
             throw new UnexpectedValueException('type should be a value in ' . implode(' | ', self::TYPES));
@@ -62,5 +63,20 @@ class FileUploader
         $file->move($this->targetDirectory . $type, $fileName);
 
         return $fileName;
+    }
+
+    /**
+     * Used to remove an old uploaded file
+     */
+    public function remove(string $fileName, string $type): void
+    {
+        if (!in_array($type, self::TYPES)) {
+            throw new UnexpectedValueException('type should be a value in ' . implode(' | ', self::TYPES));
+        }
+        $fileSystem = new Filesystem();
+        $filePath = $this->targetDirectory . $type . '/' . $fileName;
+        if ($fileSystem->exists($filePath)) {
+            $fileSystem->remove($filePath);
+        }
     }
 }
