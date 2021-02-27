@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
+
+{% block title %}Edit Tag{% endblock %}
+
+{% block content %}
+
+{{ breadcrumbs.render([
+    {'url': url('tag_index'), 'text': 'Tags'},
+    {'text': tag.name},
+    {'text': 'edit'},
+]) }}
+
+<h1>Edit tag</h1>
+
+{{ form(form) }}
+
+{% endblock %}

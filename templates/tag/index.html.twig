@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tags{% endblock %}
+
+{% block content %}
+
+<h1>Tags</h1>
+
+{% if is_granted('create', tag) %}
+    <a href="{{ path('tag_new') }}" class="btn btn-success mb-3"><i class="fas fa-plus"></i> create new tag</a>
+{% endif %}
+
+<div class="overflow-hidden">
+    <table class="table">
+        <thead>
+            <th>Tag</th>
+            <th>Creation</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </thead>
+        <tbody>
+            {% for tag in tags %}
+                <tr>
+                    <td>
+                        {{ tag.name }}
+                    </td>
+                    <td class="text-muted">
+                        created {{ tag.createdAt|ago }}
+                    </td>
+                    <td>
+                        {% if is_granted('edit', tag) %}
+                        <a href="{{ path('tag_edit', {id: tag.id}) }}" class="btn btn-primary"><i class="fas fa-pen"></i></a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if is_granted('delete', tag) %}
+                        <a href="{{ path('tag_delete', {id: tag.id}) }}" class="btn btn-danger"><i class="fas fa-times"></i></a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

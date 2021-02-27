@@ -39,6 +39,14 @@
                         <li class="nav-item">
                             <a class="nav-link{{ route_name == 'sharable' ? ' active' }}" href="{{ path('sharable') }}">sharables</a>
                         </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarToolsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            tools
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarToolsDropdown">
+                                <a class="dropdown-item{{ route_name == 'tag_index' ? ' active' }}" href="{{ path('tag_index') }}">tags</a>
+                            </div>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link{{ route_name == 'user' ? ' active' }}" href="{{ path('user') }}">users</a>
                         </li>
@@ -52,10 +60,10 @@
                             <a class="nav-link{% if route_name == 'user_show' and route_param == app.user.id %} active{% endif %}" href="{{ path('user_show', {id: app.user.id} ) }}">{{ app.user.username }}</a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle{{ route_name == 'account_invitation' ? ' active' }}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarAccountDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             account
                             </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <div class="dropdown-menu" aria-labelledby="navbarAccountDropdown">
                                 <a class="dropdown-item{{ route_name == 'account_invitation' ? ' active' }}" href="{{ path('account_invitation') }}">invitation</a>
                                 <a class="dropdown-item{{ route_name == 'account_settings' ? ' active' }}" href="{{ path('account_settings') }}">settings</a>
                             </div>
