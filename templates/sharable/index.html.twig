@@ -42,6 +42,9 @@
         <div class="col-xs-1">
             {{ form_row(form.order) }}
         </div>
+        <div class="col-sm-2">
+            {{ form_row(form.tags) }}
+        </div>
     </div>
         {{ form_row(form.search) }}
 {{ form_end(form) }}
@@ -138,6 +141,9 @@
             <span class="text-muted">
                 {{ sharable.description }}
             </span>
+            {% for tag in sharable.tags %}
+                <span class="badge badge-pill badge-secondary">{{ tag.name }}</span>
+            {% endfor %}
             </br>
                 Managed by
                 {% for manage in sharable.getConfirmedManagers %}

@@ -159,6 +159,11 @@ class Sharable
      */
     private $sharableContacts;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="sharables")
+     */
+    private $tags;
+
     public function __construct()
     {
         $this->managedBy = new ArrayCollection();
@@ -170,6 +175,7 @@ class Sharable
         $this->interestedMethod = 2;
         $this->interesteds = new ArrayCollection();
         $this->sharableContacts = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -497,5 +503,29 @@ class Sharable
             return $manage->getUser()->isContactable();
         });
         return (!$this->getSharableContacts()->isEmpty() || !$contactableManagers->isEmpty());
+    }
+
+    /**
+     * @return Collection|Tag[]
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): self
+    {
+        $this->tags->removeElement($tag);
+
+        return $this;
     }
 }

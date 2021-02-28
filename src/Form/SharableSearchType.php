@@ -27,6 +27,7 @@
 namespace App\Form;
 
 use App\Entity\SharableSearch;
+use App\Entity\Tag;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Form\Filter\Type\BooleanFilterType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -57,6 +58,12 @@ class SharableSearchType extends AbstractType
             ->add('disabled', CheckboxType::class, [
                 'help' => 'Show disabled sharables',
                 'required' => false,
+            ])
+            ->add('tags', EntityType::class, [
+                'class' => Tag::class,
+                'required' => false,
+                'multiple' => true,
+                'expanded' => true,
             ])
             ->add('managedBy', EntityType::class, [
                 'class' => User::class,

@@ -27,6 +27,9 @@
 namespace App\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Entity\Tag as Tag;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 class SharableSearch
 {
@@ -47,6 +50,11 @@ class SharableSearch
     private $query = '';
 
     private bool $disabled = false;
+
+    /**
+     * @var Collection
+     */
+    private $tags;
 
     /**
      * @var User|null
@@ -71,7 +79,10 @@ class SharableSearch
      */
     private $order = 'DESC';
 
-
+    public function __construct()
+    {
+        $this->tags = new ArrayCollection();
+    }
 
     public static function useSortBy(): array
     {
@@ -106,6 +117,26 @@ class SharableSearch
     {
         $this->disabled = $disabled;
 
+        return $this;
+    }
+
+    public function getTags(): ?Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): self
+    {
+        $this->tags->removeElement($tag);
         return $this;
     }
 

@@ -27,10 +27,13 @@
 namespace App\Form;
 
 use App\Entity\Tag;
+use App\Validator\Tag as ValidatorTag;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class TagType extends AbstractType
 {
@@ -41,7 +44,13 @@ class TagType extends AbstractType
         $submit = $tag->getId() ? 'edit' : 'create';
 
         $builder
-            ->add('name')
+            ->add('name', TextType::class, [
+                'required' => true,
+                'constraints' => [
+                    new NotBlank(),
+                    new ValidatorTag(),
+                ]
+            ])
             ->add('submit', SubmitType::class, [
                 'label' => $submit,
             ])

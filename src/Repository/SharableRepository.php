@@ -77,7 +77,10 @@ class SharableRepository extends ServiceEntityRepository
             ->leftJoin('s.visibleBy', 'uc')
             ->addSelect('uc')
             ->leftJoin('s.validations', 'v')
-            ->addSelect('v');
+            ->addSelect('v')
+            ->leftJoin('s.tags', 't')
+            ->addSelect('t')
+        ;
 
         // Filter Sharables by manager
         // Check if user paranoia level authorize this
@@ -129,6 +132,13 @@ class SharableRepository extends ServiceEntityRepository
             $qb = $qb
                 ->andWhere('s.name LIKE :q')
                 ->setParameter('q', "%{$search->getQuery()}%");
+        }
+
+        if (!$search->getTags()->isEmpty()) {
+            $qb = $qb
+                    ->andWhere('t IN (:tags)')
+                    ->setParameter(':tags', $search->getTags())
+            ;
         }
 
         if (!$search->getDisabled()) {

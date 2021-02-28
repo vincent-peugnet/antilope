@@ -28,6 +28,8 @@ namespace App\Entity;
 
 use App\Repository\TagRepository;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -52,9 +54,20 @@ class Tag
      */
     private $createdAt;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Sharable::class, mappedBy="tags")
+     */
+    private $sharables;
+
     public function __construct()
     {
         $this->createdAt = new DateTime();
+        $this->sharables = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return (string) $this->name;
     }
 
     public function getId(): ?int
@@ -82,6 +95,33 @@ class Tag
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Sharable[]
+     */
+    public function getSharables(): Collection
+    {
+        return $this->sharables;
+    }
+
+    public function addSharable(Sharable $sharable): self
+    {
+        if (!$this->sharables->contains($sharable)) {
+            $this->sharables[] = $sharable;
+            $sharable->addTag($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSharable(Sharable $sharable): self
+    {
+        if ($this->sharables->removeElement($sharable)) {
+            $sharable->removeTag($this);
+        }
 
         return $this;
     }

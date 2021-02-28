@@ -15,6 +15,7 @@
         <thead>
             <th>Tag</th>
             <th>Creation</th>
+            <th>sharables</th>
             <th>Edit</th>
             <th>Delete</th>
         </thead>
@@ -22,10 +23,13 @@
             {% for tag in tags %}
                 <tr>
                     <td>
-                        {{ tag.name }}
+                        <span class="badge badge-pill badge-secondary">{{ tag.name }}</span>
                     </td>
                     <td class="text-muted">
                         created {{ tag.createdAt|ago }}
+                    </td>
+                    <td>
+                        {{ tag.sharables|length }}
                     </td>
                     <td>
                         {% if is_granted('edit', tag) %}

@@ -27,7 +27,9 @@
 namespace App\Form;
 
 use App\Entity\Sharable;
+use App\Entity\Tag;
 use App\Entity\UserClass;
+use App\Repository\TagRepository;
 use App\Repository\UserClassRepository;
 use DateTime;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -41,10 +43,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class SharableType extends AbstractType
 {
     private UserClassRepository $userClassRepository;
+    private TagRepository $tagRepository;
 
-    public function __construct(UserClassRepository $userClassRepository)
+    public function __construct(UserClassRepository $userClassRepository, TagRepository $tagRepository)
     {
         $this->userClassRepository = $userClassRepository;
+        $this->tagRepository = $tagRepository;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -59,6 +63,13 @@ class SharableType extends AbstractType
                 'required' => true,
                 'help' => 'Long description, where you can use Markdown <i class="fab fa-markdown"></i>',
                 'help_html' => true,
+            ])
+            ->add('tags', EntityType::class, [
+                'class' => Tag::class,
+                'choices' => $this->tagRepository->findBy([], ['name' => 'ASC']),
+                'required' => false,
+                'multiple' => true,
+                'expanded' => true,
             ])
             ->add('visibleBy', EntityType::class, [
                 'class' => UserClass::class,
