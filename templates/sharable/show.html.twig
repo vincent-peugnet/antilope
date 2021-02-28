@@ -60,9 +60,9 @@
     <h1>
     {{ sharable.name }}
     </h1>
-        {% for tag in sharable.tags %}
-            <span class="badge badge-pill badge-secondary">{{ tag.name }}</span>
-        {% endfor %}
+    {% for tag in sharable.tags %}
+        <a class="badge badge-pill badge-secondary" href="{{ path('sharable', {'tags[]': tag.id}) }}">{{ tag.name }}</a>
+    {% endfor %}
 
     <p>{{ sharable.description }}</p>
 

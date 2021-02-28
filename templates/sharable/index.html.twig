@@ -16,158 +16,135 @@
 {% endif %}
 
 
-<div class="container">
+<div class="row">
 
-{{ form_start(form) }}
-    {{ form_errors(form) }}
+    <div class="col-md-3">
+        {{ form(form) }}
 
-    <div class="row">
-        <div class="col-sm-3">
-            {{ form_row(form.query) }}
-        </div>
-
-
-        <div class="col-xs-1">
-            {{ form_row(form.disabled) }}
-        </div>
-        <div class="col-sm-2">
-            {{ form_row(form.managedBy) }}
-        </div>
-        <div class="col-sm-2">
-            {{ form_row(form.validatedBy) }}
-        </div>
-        <div class="col-xs-1">
-            {{ form_row(form.sortBy) }}
-        </div>
-        <div class="col-xs-1">
-            {{ form_row(form.order) }}
-        </div>
-        <div class="col-sm-2">
-            {{ form_row(form.tags) }}
-        </div>
     </div>
-        {{ form_row(form.search) }}
-{{ form_end(form) }}
 
-</div>
-
-<div class="alert alert-info">
-{{ total }} sharables founded
-</div>
+    <div class="col-md-9">
 
 
-
-{% for sharable in sharables %}
-
-    {% set border = '' %}
-    {% if sharable in managedSharables %}
-        {% set border = 'border-primary' %}
-    {% elseif sharable in validatedSharables %}
-        {% set border = 'border-success' %}
-    {% elseif sharable in interestedSharables %}
-        {% set border = 'border-warning' %}
-    {% endif %}
+        <div class="alert alert-info">
+        {{ total }} sharables founded
+        </div>
 
 
-    <div class="card {{ border }} mb-3">
-        <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="card-title">
-            <a href="{{ path('sharable_show', {id: sharable.id}) }}">{{ sharable.name }}</a>
 
-            {{ contact_method.render(sharable.interestedMethod) }}
+        {% for sharable in sharables %}
 
-        {% if sharable.interesteds|length > 0 %}
-        <span title="{{ sharable.interesteds|length }} users are insterested in this sharable" class="badge badge-warning">
-            {{ sharable.interesteds|length }}
-            <i class="fas fa-question-circle"></i>
-        </span>
-        {% endif %}
-        {% if sharable.validations|length > 0 %}
-        <span title="{{ sharable.validations|length }} users have validated this sharable" class="badge badge-success">
-            {{ sharable.validations|length }}
-            <i class="fas fa-check-circle"></i></span>
-        {% endif %}
-        {% if sharable.visibleBy %}
-        <span title="accessible by {{ sharable.visibleBy.name }}" class="badge badge-primary">{{ sharable.visibleBy.name }}</span>
-        {% endif %}
-        {% if sharable.disabled or not sharable.isAccessible %}
-        <span class="badge badge-danger" title="This sharable is disabled"><i class="fas fa-ban"></i></span>
-        {% endif %}
-        {% if sharable in managedSharables %}
-        <span title="You manage this sharable" class="badge badge-primary">
-            <i class="fas fa-edit"></i>
-        </span>
-        {% endif %}
+            {% set border = '' %}
+            {% if sharable in managedSharables %}
+                {% set border = 'border-primary' %}
+            {% elseif sharable in validatedSharables %}
+                {% set border = 'border-success' %}
+            {% elseif sharable in interestedSharables %}
+                {% set border = 'border-warning' %}
+            {% endif %}
 
 
-        {% if sharable.beginAt %}
-            <small title="begin at {{ sharable.beginAt|format_datetime }}" class="text-muted">
-                {% if sharable.beginAt > date() %}
-                <i class="fas fa-clock"></i>
-                begin in {{ sharable.beginAt|ago }}
-                {% elseif not sharable.endAt %}
-                <i class="fas fa-clock"></i>
-                has begun {{ sharable.beginAt|ago }}
-                {% endif %}
-            </small>
-        {% endif %}
+            <div class="card {{ border }} mb-3">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title">
+                    <a href="{{ path('sharable_show', {id: sharable.id}) }}">{{ sharable.name }}</a>
 
-        {% if sharable.endAt and ( not sharable.beginAt or sharable.beginAt < date() ) %}
-            <small title="end at {{ sharable.endAt|format_datetime }}" class="text-muted">
-                {% if sharable.endAt < date() %}
-                <span class="text-danger">
-                    <i class="fas fa-flag-checkered"></i>
-                    end date is passed
+                    {{ contact_method.render(sharable.interestedMethod) }}
+
+                {% if sharable.interesteds|length > 0 %}
+                <span title="{{ sharable.interesteds|length }} users are insterested in this sharable" class="badge badge-warning">
+                    {{ sharable.interesteds|length }}
+                    <i class="fas fa-question-circle"></i>
                 </span>
-                {% else %}
-                <i class="fas fa-hourglass"></i>
-                end in {{ sharable.endAt|ago }}
                 {% endif %}
-            </small>
-        {% endif %}
-    
-        </h5>
-        <span title="{{ sharable.createdAt|format_datetime }}">
-            <small>created {{ sharable.createdAt|ago }}</small>
-        </span>
-    </div>
+                {% if sharable.validations|length > 0 %}
+                <span title="{{ sharable.validations|length }} users have validated this sharable" class="badge badge-success">
+                    {{ sharable.validations|length }}
+                    <i class="fas fa-check-circle"></i></span>
+                {% endif %}
+                {% if sharable.visibleBy %}
+                <span title="accessible by {{ sharable.visibleBy.name }}" class="badge badge-primary">{{ sharable.visibleBy.name }}</span>
+                {% endif %}
+                {% if sharable.disabled or not sharable.isAccessible %}
+                <span class="badge badge-danger" title="This sharable is disabled"><i class="fas fa-ban"></i></span>
+                {% endif %}
+                {% if sharable in managedSharables %}
+                <span title="You manage this sharable" class="badge badge-primary">
+                    <i class="fas fa-edit"></i>
+                </span>
+                {% endif %}
 
 
-    <div class="card-body">
-
-
-        
-        <p class="card-subtitle mb-2">
-            <span class="text-muted">
-                {{ sharable.description }}
-            </span>
-            {% for tag in sharable.tags %}
-                <span class="badge badge-pill badge-secondary">{{ tag.name }}</span>
-            {% endfor %}
-            </br>
-                Managed by
-                {% for manage in sharable.getConfirmedManagers %}
-                    <a href="{{ path('user_show', {id: manage.user.id}) }}">{{ manage.user.username }}</a>
-                    {% if not loop.index == loop.last %}
-                        {% if loop.index == (loop.length - 1) %}
-                        and
-                        {% else %}
-                        ,
+                {% if sharable.beginAt %}
+                    <small title="begin at {{ sharable.beginAt|format_datetime }}" class="text-muted">
+                        {% if sharable.beginAt > date() %}
+                        <i class="fas fa-clock"></i>
+                        begin in {{ sharable.beginAt|ago }}
+                        {% elseif not sharable.endAt %}
+                        <i class="fas fa-clock"></i>
+                        has begun {{ sharable.beginAt|ago }}
                         {% endif %}
-                    {% endif %}
-                {% endfor %}
-        </p>
+                    </small>
+                {% endif %}
+
+                {% if sharable.endAt and ( not sharable.beginAt or sharable.beginAt < date() ) %}
+                    <small title="end at {{ sharable.endAt|format_datetime }}" class="text-muted">
+                        {% if sharable.endAt < date() %}
+                        <span class="text-danger">
+                            <i class="fas fa-flag-checkered"></i>
+                            end date is passed
+                        </span>
+                        {% else %}
+                        <i class="fas fa-hourglass"></i>
+                        end in {{ sharable.endAt|ago }}
+                        {% endif %}
+                    </small>
+                {% endif %}
+            
+                </h5>
+                <span title="{{ sharable.createdAt|format_datetime }}">
+                    <small>created {{ sharable.createdAt|ago }}</small>
+                </span>
+            </div>
+
+
+            <div class="card-body">
+
+
+                
+                <p class="card-subtitle mb-2">
+                    <span class="text-muted">
+                        {{ sharable.description }}
+                    </span>
+                    {% for tag in sharable.tags %}
+                        <a class="badge badge-pill badge-secondary" href="{{ path('sharable', {'tags[]': tag.id}) }}">{{ tag.name }}</a>
+                    {% endfor %}
+                    </br>
+                        Managed by
+                        {% for manage in sharable.getConfirmedManagers %}
+                            <a href="{{ path('user_show', {id: manage.user.id}) }}">{{ manage.user.username }}</a>
+                            {% if not loop.index == loop.last %}
+                                {% if loop.index == (loop.length - 1) %}
+                                and
+                                {% else %}
+                                ,
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        {% endfor %}
+
 
     </div>
 
 </div>
-
-
-
-{% endfor %}
-
-
-
 
 
 

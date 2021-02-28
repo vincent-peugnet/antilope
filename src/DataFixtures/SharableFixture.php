@@ -27,6 +27,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Sharable;
+use App\Entity\Tag;
 use App\Entity\User;
 use App\Entity\UserClass;
 use DateTime;
@@ -41,6 +42,7 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
         return [
             UserFixture::class,
             UserClassFixture::class,
+            TagFixtures::class,
         ];
     }
 
@@ -51,6 +53,14 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
         $elite = $userClassRepo->findOneBy(['name' => 'elite']);
         $powerUser = $userClassRepo->findOneBy(['name' => 'power_user']);
 
+        $tagRepo = $manager->getRepository(Tag::class);
+        $help  = $tagRepo->findOneBy(['name' => 'help']);
+        $tool  = $tagRepo->findOneBy(['name' => 'tool']);
+        $place = $tagRepo->findOneBy(['name' => 'place']);
+        $show  = $tagRepo->findOneBy(['name' => 'show']);
+        $game  = $tagRepo->findOneBy(['name' => 'game']);
+
+
         $sharable = new Sharable();
         $sharable->setName('Aide sur les Thinkpads')
             ->setDisabled(false)
@@ -58,6 +68,7 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
             ->setLastEditedAt(new DateTime('2020-03-02'))
             ->setVisibleBy($basicUser)
             ->setResponsibility(true)
+            ->addTag($help)
             ->setDescription('Je peux vous aider à trouver ou réparer des Thinkpads')
             ->setDetails('Les thinkpads sont des appareils souvent utilisés par les entreprises,
                 donc intéressants à trouver sur __le bon coin__.');
@@ -71,6 +82,8 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
             ->setLastEditedAt(new DateTime('2019-11-11'))
             ->setResponsibility(true)
             ->setInterestedMethod(3)
+            ->addTag($help)
+            ->addTag($tool)
             ->setDescription('Je peux voir des trucs avec mon microscope.')
             ->setDetails('Un *petit* microsope, qui saura donner des résultats intéressants.');
         $manager->persist($sharable);
@@ -83,6 +96,7 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
             ->setLastEditedAt(new DateTime('2019-12-12'))
             ->setResponsibility(true)
             ->setInterestedMethod(4)
+            ->addTag($place)
             ->setDescription('Cachette secrète sous la maison familiale.')
             // phpcs:ignore Generic.Files.LineLength.TooLong
             ->setDetails('![](https://www.grottes-musee-de-saulges.com/sites/www.grottes-musee-de-saulges.com/files/styles/edito_paragraphe_1/public/thumbnails/image/margot_salle_des_troglodythes.jpg?itok=DWnszGyz)');
@@ -95,6 +109,7 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
             ->setCreatedAt(new DateTime('2020-08-08'))
             ->setLastEditedAt(new DateTime('2020-09-09'))
             ->setResponsibility(true)
+            ->addTag($place)
             ->setDescription('La bonne vielle maison familiale')
             ->setDetails('- Nombreux couchages
 - ping pong
@@ -109,6 +124,7 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
             ->setLastEditedAt(new DateTime('2020-07-08'))
             ->setResponsibility(true)
             ->setVisibleBy($elite)
+            ->addTag($show)
             ->setDescription('Un concert très privé !')
             ->setDetails('__OHH YEAHH BABY__ que du *bon* son');
         $manager->persist($sharable);
@@ -120,6 +136,7 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
             ->setInterestedMethod(1)
             ->setLastEditedAt(new DateTime('2020-07-08'))
             ->setResponsibility(false)
+            ->addTag($place)
             ->setDescription('Dans la forêt de Bernouille')
             ->setDetails('Ils sont miam miam');
         $manager->persist($sharable);
@@ -133,6 +150,7 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
             ->setLastEditedAt(new DateTime('2020-03-02'))
             ->setBeginAt(new DateTime("yesterday"))
             ->setResponsibility(true)
+            ->addTag($game)
             ->setDescription('like in the movie "Rebel without a Cause" ')
             ->setDetails('We are going to drive at high speed and then jump out at the last time.
                 ![cliff](https://www.gametheory.net/images/popular/Chicken/Rebel1.jpg)');
@@ -147,6 +165,7 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
             ->setBeginAt(new DateTime("tomorrow"))
             ->setLastEditedAt(new DateTime('2020-03-02'))
             ->setResponsibility(true)
+            ->addTag($show)
             ->setDescription('A classic good old Rave illegal Rave Party')
             ->setDetails('You can grab some friends with you');
         $manager->persist($sharable);

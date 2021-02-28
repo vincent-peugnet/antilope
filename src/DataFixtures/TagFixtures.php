@@ -24,33 +24,36 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.txt AGPL-3.0-or-later
  */
 
-namespace App\Validator;
+namespace App\DataFixtures;
 
-use App\Repository\TagRepository;
-use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Component\Validator\Exception\UnexpectedValueException;
+use App\Entity\Tag;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Persistence\ObjectManager;
 
-class TagValidator extends ConstraintValidator
+class TagFixtures extends Fixture
 {
-    private TagRepository $tagRepository;
-
-    public function __construct(TagRepository $tagRepository)
+    public function load(ObjectManager $manager)
     {
-        $this->tagRepository = $tagRepository;
-    }
+        $place = new Tag();
+        $place->setName('place');
+        $manager->persist($place);
 
-    public function validate($value, Constraint $constraint)
-    {
-        assert($constraint instanceof Tag);
-        if (null === $value || '' === $value) {
-            throw new UnexpectedValueException($value, 'string');
-        }
+        $game = new Tag();
+        $game->setName('game');
+        $manager->persist($game);
 
-        if ($this->tagRepository->findBy(['name' => $value])) {
-            $this->context->buildViolation($constraint->messageAlReadyExist)
-                ->setParameter('{{ value }}', $value)
-                ->addViolation();
-        }
+        $help = new Tag();
+        $help->setName('help');
+        $manager->persist($help);
+
+        $tool = new Tag();
+        $tool->setName('tool');
+        $manager->persist($tool);
+
+        $show = new Tag();
+        $show->setName('show');
+        $manager->persist($show);
+
+        $manager->flush();
     }
 }
