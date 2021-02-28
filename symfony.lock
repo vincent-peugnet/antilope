@@ -629,6 +629,9 @@
     "twig/markdown-extra": {
         "version": "v3.1.1"
     },
+    "twig/string-extra": {
+        "version": "v3.3.0"
+    },
     "twig/twig": {
         "version": "v3.1.1"
     },

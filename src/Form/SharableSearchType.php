@@ -49,7 +49,7 @@ class SharableSearchType extends AbstractType
         $default = new SharableSearch();
         $builder
             ->add('query', SearchType::class, [
-                'label' => 'Search',
+                'label' => false,
                 'required' => false,
                 'attr' => [
                     'placeholder' => 'search in Sharables names',
@@ -60,6 +60,7 @@ class SharableSearchType extends AbstractType
                 'required' => false,
             ])
             ->add('tags', EntityType::class, [
+                'label' => false,
                 'class' => Tag::class,
                 'required' => false,
                 'multiple' => true,
@@ -68,12 +69,14 @@ class SharableSearchType extends AbstractType
             ->add('managedBy', EntityType::class, [
                 'class' => User::class,
                 'required' => false,
-                'label' => 'Managed by',
+                'label' => false,
+                'placeholder' => 'managed by...',
             ])
             ->add('validatedBy', EntityType::class, [
                 'class' => User::class,
                 'required' => false,
-                'label' => 'Validated by',
+                'label' => false,
+                'placeholder' => 'validated by...'
             ])
             ->add('sortBy', ChoiceType::class, [
                 'choices' => SharableSearch::SORT_BY,

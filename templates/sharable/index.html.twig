@@ -11,14 +11,15 @@
 
 
 
-{% if is_granted('create', sharable) %}
-    <a class="btn btn-success btn-lg btn-block mb-3" href="{{ path('sharable_new') }}"><i class="fas fa-plus-circle"></i> create new sharable</a>
-{% endif %}
-
 
 <div class="row">
 
     <div class="col-md-3">
+
+        {% if is_granted('create', sharable) %}
+        <a class="btn btn-success btn-lg btn-block mb-3" href="{{ path('sharable_new') }}"><i class="fas fa-plus-circle"></i> create new sharable</a>
+        {% endif %}
+
         {{ form(form) }}
 
     </div>
@@ -27,8 +28,18 @@
 
 
         <div class="alert alert-info">
-        {{ total }} sharables founded
+            {{ total }} sharables founded
         </div>
+        {% if not app.user.userclass.access %}
+        <div class="alert alert-warning">
+            Your user class:
+            <a class="badge badge-primary" href="{{ path('userclass_show', {id: app.user.userClass.id}) }}">
+                {{ app.user.userClass.name }}
+            </a>
+            cannot access sharable.
+            You can only see sharable that have specified access from lower or equal user class.
+        </div>
+        {% endif %}
 
 
 
@@ -63,7 +74,9 @@
                     <i class="fas fa-check-circle"></i></span>
                 {% endif %}
                 {% if sharable.visibleBy %}
-                <span title="accessible by {{ sharable.visibleBy.name }}" class="badge badge-primary">{{ sharable.visibleBy.name }}</span>
+                <span title="accessible from {{ sharable.visibleBy.name }}" class="badge badge-primary">
+                    ≥ {{ sharable.visibleBy.name }}
+                </span>
                 {% endif %}
                 {% if sharable.disabled or not sharable.isAccessible %}
                 <span class="badge badge-danger" title="This sharable is disabled"><i class="fas fa-ban"></i></span>

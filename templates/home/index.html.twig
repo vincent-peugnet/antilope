@@ -1,5 +1,6 @@
 {% extends 'base.html.twig' %}
 {% import "macros/user.html.twig" as userMacro %}
+{% import 'macros/sharable.html.twig' as sharable %}
 
 {% block title %}Home{% endblock %}
 
@@ -13,7 +14,13 @@
 
     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
     <p>
-        Discover <a href="{{ path('sharable') }}">sharables</a>, or <a href="{{ path('user_edit', {id: app.user.id}) }}">edit your profile</a>.
+        Hi {{ app.user.username }} !
+    </p>
+    <p>
+        On this community network, you can <a href="{{ path('sharable_new') }}">create</a> or <a href="{{ path('sharable') }}">discover</a> sharables.
+        </br>
+        Take some time to read the <a href="{{ path('rule_index') }}">rules</a> and check how <a href="{{ path('userclass') }}">user class</a> are made.
+        Then you can finish to <a href="{{ path('user_edit', {id: app.user.id}) }}">edit your profile</a>.
     </p>
     {% endif %}
 
@@ -21,68 +28,99 @@
 
 </div>
 
-{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+
+<div class="row">
+    
+    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+    <div class="col-md-8">
 
 
-<div class="card mb-3">
-
-    <div class="card-header">
-        <h3 class="card-title">Last active users</h3>
-    </div>
-
-    <div class="card-body">
-        <ul class="list-group list-group-flush">
-            {% for user in activeUsers %}
-            <li class="list-group-item">
-                {{ userMacro.render(user) }}
-                <small>last seen {{ user.lastActivity|ago }}</small>
-            </li>
-            {% endfor %}
-        </ul>
-
-    </div>
-
-</div>
-
-{% endif %}
-
-
-
-{% if is_granted('IS_AUTHENTICATED_REMEMBERED') or showHomeStats %}
-
-<div class="card mb-3">
-
-    <div class="card-header">
-
-        <div class="card-title">
-        <h3>Stats</h3>
+        <div class="card mb-3">
+            <div class="card-header">
+                <h3 class="card-title">Last active users</h3>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    {% for user in activeUsers %}
+                    <li class="list-group-item">
+                        {{ userMacro.render(user) }}
+                        <small class="text-muted">last seen {{ user.lastActivity|ago }}</small>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
-    </div>
 
-    <div class="card-body">
+        <div class="card mb-3">
+            <div class="card-header">
+                <h3 class="card-title">
+                    Last validations</h3>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    {% for validation in lastValidations %}
+                    <li class="list-group-item">
+                        <i class="fas fa-check-circle text-success"></i>
+                        {{ validation.message|u.truncate(50, '...', false) }}
+                        </br>
+                        on
+                        {{ sharable.render(validation.sharable) }}
+                        by
+                        <a href="{{ path('user_show', {id: validation.user.id}) }}">
+                            {{ validation.user.username }}
+                        </a>
+                        <small class="text-muted">
+                            {{ validation.sendAt|ago }}
+                        </small>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
 
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-                Sharables : {{ sharableCount }}
-            </li>
-            <li class="list-group-item">
-                Validations : {{ validationCount }}
-            </li>
-            <li class="list-group-item">
-                Users : {{ userCount }}
-            </li>
-            <li class="list-group-item">
-                Users limit : {{ userLimit }}
-            </li>
-            <li class="list-group-item">
-                Registrations : {{ openRegistration ? 'open' : 'invite only' }}
-            </li>
-        </ul>
+        
     </div>
+    {% endif %}
+
+
+
+    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') or showHomeStats %}
+    <div class="col-md-4">
+
+
+        <div class="card mb-3">
+            <div class="card-header">
+
+                <div class="card-title">
+                <h3>Stats</h3>
+                </div>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        Sharables : {{ sharableCount }}
+                    </li>
+                    <li class="list-group-item">
+                        Validations : {{ validationCount }}
+                    </li>
+                    <li class="list-group-item">
+                        Users : {{ userCount }}
+                    </li>
+                    <li class="list-group-item">
+                        Users limit : {{ userLimit }}
+                    </li>
+                    <li class="list-group-item">
+                        Registrations : {{ openRegistration ? 'open' : 'invite only' }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+    {% endif %}
 
 </div>
 
-{% endif %}
 
 
 

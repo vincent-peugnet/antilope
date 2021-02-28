@@ -51,6 +51,7 @@ class HomeController extends AbstractController
             'openRegistration' => $this->getParameter('app.openRegistration'),
             'showHomeStats' => $this->getParameter('app.showHomeStats'),
             'activeUsers' => $userRepository->findRecentlyActive(60),
+            'lastValidations' => $validationRepository->findBy([], ['sendAt' => 'DESC'], 5),
         ]);
     }
 }

@@ -267,7 +267,7 @@
 
         <h3>Validation messages received</h3>
 
-    {% for validation in sharable.validations %}
+    {% for validation in sharable.validations|reverse %}
 
     {% if validation.message %}
     

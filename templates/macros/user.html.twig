@@ -5,8 +5,8 @@
         {% endif %}
         {{ user.username }}
     </a>
-    <a href="{{ path('userclass_show', {id: user.userClass.id}) }}">
-        <span class="badge badge-primary">{{ user.userClass.name }}</span>
+    <a class="badge badge-primary" href="{{ path('userclass_show', {id: user.userClass.id}) }}">
+        {{ user.userClass.name }}
     </a>
     <span class="badge badge-light">{{ user.shareScore }}</span>
     {% if user.isDisabled %}
