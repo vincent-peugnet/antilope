@@ -26,7 +26,7 @@
 
 
         <div class="alert alert-info">
-            {{ total }} sharables founded
+            {{ total }} sharables found
         </div>
         {% if not app.user.userclass.access %}
         <div class="alert alert-warning">
@@ -150,14 +150,18 @@
                     </br>
                         Managed by
                         {% for manage in sharable.getConfirmedManagers %}
-                            {{ userMacro.render(manage.user, 1) }}
-                            {% if not loop.index == loop.last %}
-                                {% if loop.index == (loop.length - 1) %}
-                                and
-                                {% else %}
-                                ,
-                                {% endif %}
+                            {% if manage.anonymous %}
+                                <em class="text-muted">anonymous</em>
+                            {% else %}
+                                {{ userMacro.render(manage.user, 1) }}
                             {% endif %}
+                                {% if not loop.index == loop.last %}
+                                    {% if loop.index == (loop.length - 1) %}
+                                    and
+                                    {% else %}
+                                    ,
+                                    {% endif %}
+                                {% endif %}
                         {% endfor %}
                 </p>
 

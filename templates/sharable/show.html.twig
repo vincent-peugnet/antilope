@@ -231,7 +231,11 @@
                 {% for manage in sharable.getConfirmedManagers %}
 
                     <li class="list-group-item">
-                        {{ userMacro.render(manage.user) }}
+                        {% if manage.anonymous %}
+                            <em class="text-muted">anonymous</em>
+                        {% else %}
+                            {{ userMacro.render(manage.user, 2) }}
+                        {% endif %}
                     </li>
 
                 {% endfor %}

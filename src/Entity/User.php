@@ -574,6 +574,18 @@ class User implements UserInterface
     }
 
     /**
+     * Get confirmed not anonymous managed list
+     *
+     * @return Collection|Manage[]
+     */
+    public function getConfirmedOnymousManages(): Collection
+    {
+        return $this->manages->filter(function (Manage $manage) {
+            return $manage->getConfirmed() && !$manage->isAnonymous();
+        });
+    }
+
+    /**
      * @return bool if user is admin
      */
     public function isAdmin(): bool

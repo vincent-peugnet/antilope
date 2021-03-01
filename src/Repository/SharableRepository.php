@@ -85,12 +85,14 @@ class SharableRepository extends ServiceEntityRepository
         // Filter Sharables by manager
         // Check if user paranoia level authorize this
         if ($search->getManagedBy() !== null) {
-            $userRepo = $this->getEntityManager()->getRepository(User::class);
-            $manager = $userRepo->find($search->getManagedBy());
+            $manager = $search->getManagedBy();
 
             if ($this->security->isGranted(UserVoter::VIEW_SHARABLES, $manager)) {
                 $qb->andWhere('m.user = :mid')
-                ->setParameter('mid', $manager->getId());
+                    ->setParameter('mid', $manager->getId());
+                if ($manager !== $user) {
+                    $qb->andWhere('m.anonymous = 0');
+                }
             } else {
                 return [];
             }
