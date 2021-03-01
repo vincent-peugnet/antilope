@@ -38,13 +38,21 @@ class ManageVoter extends Voter
     public const CONFIRM      = 'confirm';
     public const HIDE_CONTACT = 'hide_contact';
     public const SHOW_CONTACT = 'show_contact';
+    public const ANONYMOUS    = 'anonymous';
+    public const ONYMOUS      = 'onymous';
 
     protected function supports($attribute, $subject)
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, [self::REMOVE, self::CONFIRM, self::HIDE_CONTACT, self::SHOW_CONTACT])
-            && $subject instanceof \App\Entity\Manage;
+        return in_array($attribute, [
+            self::REMOVE,
+            self::CONFIRM,
+            self::HIDE_CONTACT,
+            self::SHOW_CONTACT,
+            self::ANONYMOUS,
+            self::ONYMOUS,
+            ]) && $subject instanceof \App\Entity\Manage;
     }
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
@@ -67,12 +75,16 @@ class ManageVoter extends Voter
                 return $this->canHideContact($manage, $user);
             case self::SHOW_CONTACT:
                 return $this->canShowContact($manage, $user);
+            case self::ANONYMOUS:
+                return $this->canAnonymous($manage, $user);
+            case self::ONYMOUS:
+                return $this->canOnymous($manage, $user);
         }
 
         return false;
     }
 
-    public function canRemove(Manage $manage, User $user): bool
+    private function canRemove(Manage $manage, User $user): bool
     {
         $sharable = $manage->getSharable();
         if ($manage->getUser() === $user) {
@@ -93,12 +105,12 @@ class ManageVoter extends Voter
         }
     }
 
-    public function canConfirm(Manage $manage, User $user): bool
+    private function canConfirm(Manage $manage, User $user): bool
     {
         return ($manage->getUser() === $user && !$manage->getConfirmed());
     }
 
-    public function canHideContact(Manage $manage, User $user): bool
+    private function canHideContact(Manage $manage, User $user): bool
     {
         $sharable = $manage->getSharable();
         return (
@@ -111,13 +123,23 @@ class ManageVoter extends Voter
         );
     }
 
-    public function canShowContact(Manage $manage, User $user): bool
+    private function canShowContact(Manage $manage, User $user): bool
     {
         return (
             $this->isConfirmedManager($manage, $user) &&
             !$manage->isContactable() &&
             !$user->getUserContacts()->isEmpty()
         );
+    }
+
+    private function canAnonymous(Manage $manage, User $user): bool
+    {
+        return ($manage->getUser() === $user && !$manage->isAnonymous());
+    }
+
+    private function canOnymous(Manage $manage, User $user): bool
+    {
+        return ($manage->getUser() === $user && $manage->isAnonymous());
     }
 
     private function isConfirmedManager(Manage $manage, User $user): bool

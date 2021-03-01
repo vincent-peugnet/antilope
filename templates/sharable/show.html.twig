@@ -216,11 +216,13 @@
 
         <div class="card mb-3">
 
-            <div class="card-header">
+            <div class="card-header d-flex justify-content-between align-items-center">
 
-                <div class="card-title">
-                    <h4>Managed by</h4>
-                </div>
+                <h4 class="card-title">Managed by</h4>
+
+                {% if is_granted('edit', sharable) %}
+                <a class="btn btn-primary" href="{{ path('sharable_managers', {id: sharable.id}) }}"><i class="fas fa-pen"></i></a>
+                {% endif %}
             </div>
 
             <div class="card-body">
@@ -234,11 +236,6 @@
 
                 {% endfor %}
                 </ul>
-
-
-                {% if is_granted('edit', sharable) %}
-                <a class="btn btn-primary" href="{{ path('sharable_managers', {id: sharable.id}) }}">edit managers</a>
-                {% endif %}
 
             </div>
         </div>

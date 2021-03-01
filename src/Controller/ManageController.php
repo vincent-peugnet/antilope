@@ -33,6 +33,7 @@ use App\Form\ManageType;
 use App\Repository\InterestedRepository;
 use App\Security\Voter\ManageVoter;
 use App\Security\Voter\SharableVoter;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -152,5 +153,29 @@ class ManageController extends AbstractController
         $entityManager->persist($manage);
         $entityManager->flush();
         return $this->redirectToRoute('sharable_show', ['id' => $manage->getSharable()->getId()]);
+    }
+
+    /**
+     * @Route("/manage/{id}/anonymous", name="manage_anonymous", requirements={"id"="\d+"})
+     */
+    public function anonymous(Manage $manage, EntityManagerInterface $em): Response
+    {
+        $this->denyAccessUnlessGranted(ManageVoter::ANONYMOUS, $manage);
+        $manage->setAnonymous(true);
+        $em->persist($manage);
+        $em->flush();
+        return $this->redirectToRoute('sharable_managers', ['id' => $manage->getSharable()->getId()]);
+    }
+
+    /**
+     * @Route("/manage/{id}/onymous", name="manage_onymous", requirements={"id"="\d+"})
+     */
+    public function onymous(Manage $manage, EntityManagerInterface $em): Response
+    {
+        $this->denyAccessUnlessGranted(ManageVoter::ONYMOUS, $manage);
+        $manage->setAnonymous(false);
+        $em->persist($manage);
+        $em->flush();
+        return $this->redirectToRoute('sharable_managers', ['id' => $manage->getSharable()->getId()]);
     }
 }

@@ -69,11 +69,17 @@ class Manage
      */
     private $confirmed;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $anonymous;
+
     public function __construct()
     {
         $this->createdAt = new DateTime();
         $this->contactable = false;
         $this->confirmed = true;
+        $this->anonymous = false;
     }
 
     public function getId(): ?int
@@ -137,6 +143,18 @@ class Manage
     public function setConfirmed(bool $confirmed): self
     {
         $this->confirmed = $confirmed;
+
+        return $this;
+    }
+
+    public function isAnonymous(): ?bool
+    {
+        return $this->anonymous;
+    }
+
+    public function setAnonymous(bool $anonymous): self
+    {
+        $this->anonymous = $anonymous;
 
         return $this;
     }

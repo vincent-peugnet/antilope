@@ -12,8 +12,30 @@
 {{ breadcrumbs.render([
     {'url': url('sharable'), 'text': 'Sharables'},
     {'url': url('sharable_show', {id: sharable.id}), 'text': sharable.name},
-    {'text': 'set Managers'},
+    {'text': 'edit managers'},
 ]) }}
+
+<div class="btn-group">
+
+    {% if is_granted('remove', userManage) %}
+    <a class="btn btn-danger" href="{{ path('manage_remove', {id: userManage.id }) }}">
+        <i class="fas fa-times-circle"></i>
+        quit management
+    </a>
+    {% else %}
+    <a class="btn btn-danger disabled">
+        <i class="fas fa-times-circle"></i>
+        quit management
+    </a>
+    {% endif %}
+    
+    {% if is_granted('anonymous', userManage) %}
+        <a class="btn btn-primary" href="{{ path('manage_anonymous', {id: userManage.id}) }}"><i class="fas fa-mask"></i> become anonymous</a>
+    {% elseif is_granted('onymous', userManage) %}
+        <a class="btn btn-primary" href="{{ path('manage_onymous', {id: userManage.id}) }}"><i class="fas fa-mask"></i> become onymous</a>
+    {% endif %}
+    
+</div>
 
 <h1>Managers</h1>
 
@@ -21,10 +43,17 @@
 {% for manage in sharable.managedBy %}
     <li class="list-group-item">
 
-    {{ userMacro.render(manage.user) }}
-    <span class="badge badge-light">{{ manage.confirmed ? 'confirmed' : 'invited' }}</span>
-    <span class="ml-auto"><small>added {{ manage.createdAt|ago }}</small></span>
-
+        {{ userMacro.render(manage.user) }}
+        {% if not manage.confirmed %}
+            <span class="badge badge-warning">invited</span>
+        {% endif %}
+        {% if manage.anonymous %}
+            <span class="badge badge-dark border">
+                <i class="fas fa-mask"></i>
+                anonymous
+            </span>
+        {% endif %}
+        <span class="ml-auto"><small>added {{ manage.createdAt|ago }}</small></span>
 
     </li>
 {% endfor %}
@@ -45,26 +74,6 @@
         <div class="alert alert-warning">Beware, once you've invited managers, you can't remove them.</div>
 
         {{ form(form) }}
-
-    </div>
-</div>
-
-<div class="card mt-3">
-
-    <div class="card-header">
-
-        <div class="card-title">
-            <h5>Remove manager</h5>
-        </div>
-    </div>
-
-    <div class="card-body">
-
-        {% if is_granted('remove', userManage) %}
-            <a class="btn btn-primary" href="{{ path('manage_remove', {id: userManage.id }) }}">remove myself from managers</a>
-        {% else %}
-            <p>You cannot remove yourself from managers for now.</p>
-        {% endif %}
 
     </div>
 </div>
