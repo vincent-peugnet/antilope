@@ -1,5 +1,6 @@
 {% extends 'base.html.twig' %}
 {% import "macros/contact_method.html.twig" as contact_method %}
+{% import "macros/user.html.twig" as userMacro %}
 
 {% block title %}Sharables{% endblock %}
 
@@ -8,9 +9,6 @@
 {% endblock %}
 
 {% block content %}
-
-
-
 
 <div class="row">
 
@@ -56,68 +54,85 @@
 
 
             <div class="card {{ border }} mb-3">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="card-title">
-                    <a href="{{ path('sharable_show', {id: sharable.id}) }}">{{ sharable.name }}</a>
+                <div
+                    class="card-header d-flex justify-content-between align-items-center bg-image"
+                    {% if sharable.cover %}
+                        style="
+                            background-image:  linear-gradient(to right, rgba(0, 0, 0, 0.692), rgba(0, 0, 0, 0.233)), url('{{ asset(sharable.getCoverPath)|imagine_filter('cover_823')}}');
+                            background-size: cover;
+                            background-position: center;
+                            height: 100px;
+                            width: 100%;
+                        "
+                    {% endif %}
+                >
+                <span>                    
+                  
+                    <h4>
+                        <strong>
+                            <a class="text-white" href="{{ path('sharable_show', {id: sharable.id}) }}">
+                                {{ sharable.name }}
+                            </a>
+                        </strong>
+                    </h4>
+                    <h5>
+                        {{ contact_method.render(sharable.interestedMethod) }}
 
-                    {{ contact_method.render(sharable.interestedMethod) }}
-
-                {% if sharable.interesteds|length > 0 %}
-                <span title="{{ sharable.interesteds|length }} users are insterested in this sharable" class="badge badge-warning">
-                    {{ sharable.interesteds|length }}
-                    <i class="fas fa-question-circle"></i>
-                </span>
-                {% endif %}
-                {% if sharable.validations|length > 0 %}
-                <span title="{{ sharable.validations|length }} users have validated this sharable" class="badge badge-success">
-                    {{ sharable.validations|length }}
-                    <i class="fas fa-check-circle"></i></span>
-                {% endif %}
-                {% if sharable.visibleBy %}
-                <span title="accessible from {{ sharable.visibleBy.name }}" class="badge badge-primary">
-                    ≥ {{ sharable.visibleBy.name }}
-                </span>
-                {% endif %}
-                {% if sharable.disabled or not sharable.isAccessible %}
-                <span class="badge badge-danger" title="This sharable is disabled"><i class="fas fa-ban"></i></span>
-                {% endif %}
-                {% if sharable in managedSharables %}
-                <span title="You manage this sharable" class="badge badge-primary">
-                    <i class="fas fa-edit"></i>
-                </span>
-                {% endif %}
-
-
-                {% if sharable.beginAt %}
-                    <small title="begin at {{ sharable.beginAt|format_datetime }}" class="text-muted">
-                        {% if sharable.beginAt > date() %}
-                        <i class="fas fa-clock"></i>
-                        begin in {{ sharable.beginAt|ago }}
-                        {% elseif not sharable.endAt %}
-                        <i class="fas fa-clock"></i>
-                        has begun {{ sharable.beginAt|ago }}
-                        {% endif %}
-                    </small>
-                {% endif %}
-
-                {% if sharable.endAt and ( not sharable.beginAt or sharable.beginAt < date() ) %}
-                    <small title="end at {{ sharable.endAt|format_datetime }}" class="text-muted">
-                        {% if sharable.endAt < date() %}
-                        <span class="text-danger">
-                            <i class="fas fa-flag-checkered"></i>
-                            end date is passed
+                        {% if sharable.interesteds|length > 0 %}
+                        <span title="{{ sharable.interesteds|length }} users are insterested in this sharable" class="badge badge-warning">
+                            {{ sharable.interesteds|length }}
+                            <i class="fas fa-question-circle"></i>
                         </span>
-                        {% else %}
-                        <i class="fas fa-hourglass"></i>
-                        end in {{ sharable.endAt|ago }}
                         {% endif %}
-                    </small>
-                {% endif %}
-            
-                </h5>
-                <span title="{{ sharable.createdAt|format_datetime }}">
-                    <small>created {{ sharable.createdAt|ago }}</small>
+                        {% if sharable.validations|length > 0 %}
+                        <span title="{{ sharable.validations|length }} users have validated this sharable" class="badge badge-success">
+                            {{ sharable.validations|length }}
+                            <i class="fas fa-check-circle"></i></span>
+                        {% endif %}
+                        {% if sharable.visibleBy %}
+                        <span title="accessible from {{ sharable.visibleBy.name }}" class="badge badge-primary">
+                            ≥ {{ sharable.visibleBy.name }}
+                        </span>
+                        {% endif %}
+                        {% if sharable.disabled or not sharable.isAccessible %}
+                        <span class="badge badge-danger" title="This sharable is disabled"><i class="fas fa-ban"></i></span>
+                        {% endif %}
+
+                        {% if sharable.beginAt %}
+                            <small title="begin at {{ sharable.beginAt|format_datetime }}" class="text-muted">
+                                {% if sharable.beginAt > date() %}
+                                <i class="fas fa-clock"></i>
+                                begin in {{ sharable.beginAt|ago }}
+                                {% elseif not sharable.endAt %}
+                                <i class="fas fa-clock"></i>
+                                has begun {{ sharable.beginAt|ago }}
+                                {% endif %}
+                            </small>
+                        {% endif %}
+
+                        {% if sharable.endAt and ( not sharable.beginAt or sharable.beginAt < date() ) %}
+                            <small title="end at {{ sharable.endAt|format_datetime }}" class="text-muted">
+                                {% if sharable.endAt < date() %}
+                                <span class="text-danger">
+                                    <i class="fas fa-flag-checkered"></i>
+                                    end date is passed
+                                </span>
+                                {% else %}
+                                <i class="fas fa-hourglass"></i>
+                                end in {{ sharable.endAt|ago }}
+                                {% endif %}
+                            </small>
+                        {% endif %}
+                    </h5>
                 </span>
+            
+                <div class="btn-group">
+                    {% if is_granted('edit', sharable) %}
+                    <a class="btn btn-primary" href="{{ path('sharable_edit', {id: sharable.id}) }}">
+                        <i class="fas fa-pen"></i>
+                    </a>
+                    {% endif %}
+                </div>
             </div>
 
 
@@ -135,7 +150,7 @@
                     </br>
                         Managed by
                         {% for manage in sharable.getConfirmedManagers %}
-                            <a href="{{ path('user_show', {id: manage.user.id}) }}">{{ manage.user.username }}</a>
+                            {{ userMacro.render(manage.user, 1) }}
                             {% if not loop.index == loop.last %}
                                 {% if loop.index == (loop.length - 1) %}
                                 and
@@ -146,6 +161,9 @@
                         {% endfor %}
                 </p>
 
+                <small title="{{ sharable.createdAt|format_datetime }}" class="text-muted">
+                    created {{ sharable.createdAt|ago }}
+                </small>
             </div>
 
         </div>

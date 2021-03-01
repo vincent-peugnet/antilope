@@ -1,15 +1,17 @@
-{% macro render(user) %}
+{% macro render(user, size = 2) %}
     <a href="{{ path('user_show', {id: user.id}) }}">
-        {% if user.avatar %}
+        {% if user.avatar and size >= 1 %}
         <img class="rounded" src="{{ asset(user.getAvatarPath)|imagine_filter('avatar_25') }}" alt="avatar of user {{ user.username }}">
         {% endif %}
         {{ user.username }}
     </a>
-    <a class="badge badge-primary" href="{{ path('userclass_show', {id: user.userClass.id}) }}">
-        {{ user.userClass.name }}
-    </a>
-    <span class="badge badge-light">{{ user.shareScore }}</span>
-    {% if user.isDisabled %}
+    {% if size >= 2 %}
+        <a class="badge badge-primary" href="{{ path('userclass_show', {id: user.userClass.id}) }}">
+            {{ user.userClass.name }}
+        </a>
+        <span class="badge badge-light">{{ user.shareScore }}</span>
+        {% if user.isDisabled %}
         <span class="badge badge-danger" title="This user is disabled"><i class="fas fa-ban"></i></span>
+        {% endif %}
     {% endif %}
 {% endmacro %}

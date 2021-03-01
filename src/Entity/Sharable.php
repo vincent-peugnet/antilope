@@ -27,6 +27,7 @@
 namespace App\Entity;
 
 use App\Repository\SharableRepository;
+use App\Service\FileUploader;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -163,6 +164,11 @@ class Sharable
      * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="sharables")
      */
     private $tags;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $cover;
 
     public function __construct()
     {
@@ -444,6 +450,42 @@ class Sharable
         return $this;
     }
 
+    /**
+     * @return Collection|Tag[]
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): self
+    {
+        $this->tags->removeElement($tag);
+
+        return $this;
+    }
+
+    public function getCover(): ?string
+    {
+        return $this->cover;
+    }
+
+    public function setCover(?string $cover): self
+    {
+        $this->cover = $cover;
+
+        return $this;
+    }
+
     //_______________ special functions _______________
 
     /**
@@ -505,27 +547,8 @@ class Sharable
         return (!$this->getSharableContacts()->isEmpty() || !$contactableManagers->isEmpty());
     }
 
-    /**
-     * @return Collection|Tag[]
-     */
-    public function getTags(): Collection
+    public function getCoverPath(): string
     {
-        return $this->tags;
-    }
-
-    public function addTag(Tag $tag): self
-    {
-        if (!$this->tags->contains($tag)) {
-            $this->tags[] = $tag;
-        }
-
-        return $this;
-    }
-
-    public function removeTag(Tag $tag): self
-    {
-        $this->tags->removeElement($tag);
-
-        return $this;
+        return FileUploader::COVER . '/' . $this->cover;
     }
 }

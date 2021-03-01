@@ -57,7 +57,7 @@ class UserType extends AbstractType
                         'image/png',
                         'image/gif',
                     ],
-                    'mimeTypesMessage' => 'Please upload a JPEG image file',
+                    'mimeTypesMessage' => 'Please upload a JPEG, PNG or GIF image file',
                 ])
             ])
             ->add('description', null, [

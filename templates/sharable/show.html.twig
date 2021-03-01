@@ -57,36 +57,50 @@
         </div>
     {% endif %}
 
-    <h1>
-    {{ sharable.name }}
-    </h1>
-    {% for tag in sharable.tags %}
-        <a class="badge badge-pill badge-secondary" href="{{ path('sharable', {'tags[]': tag.id}) }}">{{ tag.name }}</a>
-    {% endfor %}
+    <div
+        class="bg-image mb-3 p-3 rounded"
+        {% if sharable.cover %}
+            style="
+                background-image:  linear-gradient(to right, rgba(0, 0, 0, 0.692), rgba(0, 0, 0, 0.233)), url('{{ asset(sharable.getCoverPath)|imagine_filter('cover_1140') }}');
+                background-size: cover;
+                background-position: center;
+                width: 100%;
+            "
+        {% endif %}
+    >
 
-    <p>{{ sharable.description }}</p>
+        <h1>
+            {{ sharable.name }}
+        </h1>
 
-    <div class="btn-group mb-3">
-            
-        {% if is_granted('edit', sharable) %}
-        <a class="btn btn-primary" href="{{ path('sharable_edit', {id: sharable.id}) }}"><i class="fas fa-pen"></i> edit</a>
-        {% endif %}
-        {% if is_granted('contact', sharable) %}
-        <a class="btn btn-primary" href="{{ path('sharable_contact', {id: sharable.id}) }}"><i class="fas fa-address-book"></i> contacts</a>
-        {% endif %}
-        {% if is_granted('interested', sharable) %}
-        <a class="btn btn-warning" href="{{ path('sharable_interested', {id: sharable.id}) }}"><i class="fas fa-eye"></i> view interested</a>
-        {% endif %}  
-        {% if is_granted('interest', sharable) %}
-        <a class="btn btn-warning" href="{{ path('sharable_interest', {id: sharable.id}) }}"><i class="fas fa-question-circle"></i> interested</a>
-        {% endif %}
-        {% if is_granted('validate', sharable) %}
-        <a class="btn btn-success" href="{{ path('sharable_validate', {id: sharable.id}) }}"><i class="fas fa-check-circle"></i> validate</a>
-        {% endif %}            
-        {% if is_granted('edit', sharable) and not sharable.getDisabled %}
-        <a class="btn btn-danger" href="{{ path('sharable_activation', {id: sharable.id}) }}"><i class="fas fa-times-circle"></i> disable</a>
-        {% endif %}
+        {% for tag in sharable.tags %}
+            <a class="badge badge-pill badge-secondary" href="{{ path('sharable', {'tags[]': tag.id}) }}">{{ tag.name }}</a>
+        {% endfor %}
 
+        <p>{{ sharable.description }}</p>
+
+        <div class="btn-group mb-3">
+                
+            {% if is_granted('edit', sharable) %}
+            <a class="btn btn-primary" href="{{ path('sharable_edit', {id: sharable.id}) }}"><i class="fas fa-pen"></i> edit</a>
+            {% endif %}
+            {% if is_granted('contact', sharable) %}
+            <a class="btn btn-primary" href="{{ path('sharable_contact', {id: sharable.id}) }}"><i class="fas fa-address-book"></i> contacts</a>
+            {% endif %}
+            {% if is_granted('interested', sharable) %}
+            <a class="btn btn-warning" href="{{ path('sharable_interested', {id: sharable.id}) }}"><i class="fas fa-eye"></i> view interested</a>
+            {% endif %}  
+            {% if is_granted('interest', sharable) %}
+            <a class="btn btn-warning" href="{{ path('sharable_interest', {id: sharable.id}) }}"><i class="fas fa-question-circle"></i> interested</a>
+            {% endif %}
+            {% if is_granted('validate', sharable) %}
+            <a class="btn btn-success" href="{{ path('sharable_validate', {id: sharable.id}) }}"><i class="fas fa-check-circle"></i> validate</a>
+            {% endif %}            
+            {% if is_granted('edit', sharable) and not sharable.getDisabled %}
+            <a class="btn btn-danger" href="{{ path('sharable_activation', {id: sharable.id}) }}"><i class="fas fa-times-circle"></i> disable</a>
+            {% endif %}
+
+        </div>
 
     </div>
 

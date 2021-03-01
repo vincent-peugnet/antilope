@@ -44,6 +44,7 @@ use App\Repository\SharableRepository;
 use App\Repository\UserClassRepository;
 use App\Repository\ValidationRepository;
 use App\Security\Voter\SharableVoter;
+use App\Service\FileUploader;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -136,8 +137,12 @@ class SharableController extends AbstractController
     /**
      * @Route("/sharable/{id}/edit", name="sharable_edit", requirements={"id"="\d+"})
      */
-    public function edit(Sharable $sharable, UserClassRepository $userClassRepository, Request $request): Response
-    {
+    public function edit(
+        Sharable $sharable,
+        UserClassRepository $userClassRepository,
+        FileUploader $fileUploader,
+        Request $request
+    ): Response {
         $this->denyAccessUnlessGranted('edit', $sharable);
 
         $form = $this->createForm(SharableType::class, $sharable);
@@ -146,6 +151,17 @@ class SharableController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $sharable = $form->getData();
+            assert($sharable instanceof Sharable);
+
+            $coverFile = $form->get('coverFile')->getData();
+            if ($coverFile) {
+                $cover = $fileUploader->upload($coverFile, FileUploader::COVER);
+                if ($sharable->getCover()) {
+                    $fileUploader->remove($sharable->getCover(), FileUploader::COVER);
+                }
+                $sharable->setCover($cover);
+            }
+
             $sharable->setLastEditedAt(new DateTime());
 
             $entityManager = $this->getDoctrine()->getManager();

@@ -37,7 +37,7 @@
 
         <div class="card mb-3">
             <div class="card-header">
-                <h3 class="card-title">Last active users</h3>
+                <h3 class="card-title">Currently active users</h3>
             </div>
             <div class="card-body">
                 <ul class="list-group list-group-flush">
@@ -61,14 +61,15 @@
                     {% for validation in lastValidations %}
                     <li class="list-group-item">
                         <i class="fas fa-check-circle text-success"></i>
-                        {{ validation.message|u.truncate(50, '...', false) }}
+                        <em>
+                            {{ validation.message|u.truncate(50, '...', false) }}
+                        </em>
                         </br>
                         on
                         {{ sharable.render(validation.sharable) }}
                         by
-                        <a href="{{ path('user_show', {id: validation.user.id}) }}">
-                            {{ validation.user.username }}
-                        </a>
+                        {{ userMacro.render(validation.user, 1) }}
+                        </br>
                         <small class="text-muted">
                             {{ validation.sendAt|ago }}
                         </small>

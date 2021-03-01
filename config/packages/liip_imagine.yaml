@@ -9,12 +9,31 @@ liip_imagine:
                     - '%kernel.project_dir%/%env(LIIP_PUBLIC_PATH)%'
     filter_sets:
         avatar_200:
+            quality: 70
+            format:  jpg
             filters:
                 fixed:
                     width:  200
                     height: 200
         avatar_25:
+            quality: 70
+            format:  jpg
             filters:
                 fixed:
                     width:  25
                     height: 25
+        cover_823:
+            quality: 50
+            format:  jpg
+            filters:
+                fixed:
+                    width:  823
+                    height: 400
+        cover_1140:
+            quality: 70
+            format:  jpg
+            filters:
+                fixed:
+                    width:  1140
+                    height: 500
+

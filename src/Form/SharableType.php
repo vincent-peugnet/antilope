@@ -36,9 +36,11 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Image;
 
 class SharableType extends AbstractType
 {
@@ -58,6 +60,20 @@ class SharableType extends AbstractType
 
         $builder
             ->add('name')
+            ->add('coverFile', FileType::class, [
+                'label' => 'cover',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => new Image([
+                    'maxSize' => '2M',
+                    'mimeTypes' => [
+                        'image/jpeg',
+                        'image/png',
+                        'image/gif',
+                    ],
+                    'mimeTypesMessage' => 'Please upload a JPEG, PNG or GIF image file',
+                ])
+            ])
             ->add('description')
             ->add('details', null, [
                 'required' => true,
@@ -66,7 +82,6 @@ class SharableType extends AbstractType
             ])
             ->add('tags', EntityType::class, [
                 'class' => Tag::class,
-                'choices' => $this->tagRepository->findBy([], ['name' => 'ASC']),
                 'required' => false,
                 'multiple' => true,
                 'expanded' => true,
