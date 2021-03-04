@@ -16,6 +16,11 @@
 
 {{ form_start(form) }}
     {{ form_row(form.name) }}
+    {{ form_row(form.coverFile, {
+        attr: {
+            'placeholder': 'Select an cover image'
+        }
+    }) }}
     {{ form_row(form.description) }}
     {{ form_row(form.details) }}
 

@@ -299,7 +299,10 @@ class SharableController extends AbstractController
     /**
      * @Route("/sharable/new", name="sharable_new")
      */
-    public function new(UserClassRepository $userClassRepository, Request $request): Response
+    public function new(
+        UserClassRepository $userClassRepository,
+        FileUploader $fileUploader,
+        Request $request): Response
     {
         $sharable = new Sharable();
 
@@ -310,6 +313,16 @@ class SharableController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $sharable = $form->getData();
+            assert($sharable instanceof Sharable);
+
+            $coverFile = $form->get('coverFile')->getData();
+            if ($coverFile) {
+                $cover = $fileUploader->upload($coverFile, FileUploader::COVER);
+                if ($sharable->getCover()) {
+                    $fileUploader->remove($sharable->getCover(), FileUploader::COVER);
+                }
+                $sharable->setCover($cover);
+            }
 
             $manage = new Manage();
             $manage->setSharable($sharable)
