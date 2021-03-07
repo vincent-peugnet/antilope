@@ -67,6 +67,11 @@ class SharableSearch
     private $validatedBy = null;
 
     /**
+     * @var User|null
+     */
+    private $bookmarkedBy = null;
+
+    /**
      * @var string|null
      * @Assert\Choice(callback="useSortBy")
 
@@ -160,6 +165,18 @@ class SharableSearch
     public function setValidatedBy(?User $validatedBy): self
     {
         $this->validatedBy = $validatedBy;
+
+        return $this;
+    }
+
+    public function getBookmarkedBy(): ?User
+    {
+        return $this->bookmarkedBy;
+    }
+
+    public function setBookmarkedBy(?User $bookmarkedBy)
+    {
+        $this->bookmarkedBy = $bookmarkedBy;
 
         return $this;
     }

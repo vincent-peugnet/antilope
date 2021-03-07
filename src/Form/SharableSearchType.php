@@ -69,14 +69,20 @@ class SharableSearchType extends AbstractType
             ->add('managedBy', EntityType::class, [
                 'class' => User::class,
                 'required' => false,
-                'label' => false,
+                'label' => 'Managed by',
                 'placeholder' => 'managed by...',
             ])
             ->add('validatedBy', EntityType::class, [
                 'class' => User::class,
                 'required' => false,
-                'label' => false,
+                'label' => 'Validated by',
                 'placeholder' => 'validated by...'
+            ])
+            ->add('bookmarkedBy', EntityType::class, [
+                'class' => User::class,
+                'required' => false,
+                'label' => 'Bookmarked by',
+                'placeholder' => 'Bookmarked by...'
             ])
             ->add('sortBy', ChoiceType::class, [
                 'choices' => SharableSearch::SORT_BY,

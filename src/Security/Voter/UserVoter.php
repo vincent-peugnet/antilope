@@ -39,19 +39,27 @@ class UserVoter extends Voter
 {
     public const PARANOIA = [
         0 => [],
-        1 => [self::VIEW_INTERESTEDS],
-        2 => [self::VIEW_INTERESTEDS, self::VIEW_VALIDATIONS],
-        3 => [self::VIEW_INTERESTEDS, self::VIEW_VALIDATIONS, self::VIEW_SHARABLES],
-        4 => [self::VIEW_INTERESTEDS, self::VIEW_VALIDATIONS, self::VIEW_SHARABLES, self::VIEW_STATS],
+        1 => [self::VIEW_BOOKMARKS],
+        2 => [self::VIEW_BOOKMARKS, self::VIEW_INTERESTEDS],
+        3 => [self::VIEW_BOOKMARKS, self::VIEW_INTERESTEDS, self::VIEW_VALIDATIONS],
+        4 => [self::VIEW_BOOKMARKS, self::VIEW_INTERESTEDS, self::VIEW_VALIDATIONS, self::VIEW_SHARABLES],
+        5 => [
+            self::VIEW_BOOKMARKS,
+            self::VIEW_INTERESTEDS,
+            self::VIEW_VALIDATIONS,
+            self::VIEW_SHARABLES,
+            self::VIEW_STATS
+        ],
     ];
 
-    public const VIEW_STATS = 'view_stats';
+    public const VIEW_STATS       = 'view_stats';
+    public const VIEW_BOOKMARKS   = 'view_bookmarks';
     public const VIEW_INTERESTEDS = 'view_interesteds';
     public const VIEW_VALIDATIONS = 'view_validations';
-    public const VIEW_SHARABLES = 'view_sharables';
-    public const VIEW     = 'view';
-    public const EDIT     = 'edit';
-    public const CONTACT = 'contact';
+    public const VIEW_SHARABLES   = 'view_sharables';
+    public const VIEW             = 'view';
+    public const EDIT             = 'edit';
+    public const CONTACT          = 'contact';
 
     /** @var EntityManagerInterface $em */
     private $em;
@@ -78,10 +86,11 @@ class UserVoter extends Voter
         return in_array($attribute, [
             self::EDIT,
             self::VIEW,
+            self::VIEW_BOOKMARKS,
+            self::VIEW_INTERESTEDS,
             self::VIEW_VALIDATIONS,
             self::VIEW_SHARABLES,
             self::VIEW_STATS,
-            self::VIEW_INTERESTEDS,
             self::CONTACT,
             ])
             && $subject instanceof \App\Entity\User;
@@ -105,6 +114,8 @@ class UserVoter extends Voter
                 return $this->canEdit($user, $userProfile);
             case self::VIEW:
                 return $this->canView($user, $userProfile);
+            case self::VIEW_BOOKMARKS:
+                return $this->canViewSpecific($user, $userProfile, self::VIEW_BOOKMARKS);
             case self::VIEW_INTERESTEDS:
                 return $this->canViewSpecific($user, $userProfile, self::VIEW_INTERESTEDS);
             case self::VIEW_VALIDATIONS:

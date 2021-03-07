@@ -26,6 +26,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Bookmark;
 use App\Entity\Interested;
 use App\Entity\Manage;
 use App\Entity\SharableSearch;
@@ -38,6 +39,7 @@ use App\Form\SharableContactType;
 use App\Form\SharableSearchType;
 use App\Form\SharableType;
 use App\Form\ValidationType;
+use App\Repository\BookmarkRepository;
 use App\Repository\InterestedRepository;
 use App\Repository\ManageRepository;
 use App\Repository\SharableRepository;
@@ -46,6 +48,7 @@ use App\Repository\ValidationRepository;
 use App\Security\Voter\SharableVoter;
 use App\Service\FileUploader;
 use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -84,6 +87,9 @@ class SharableController extends AbstractController
         $managedSharables = $user->getManages()->map(function (Manage $manage) {
             return $manage->getSharable();
         });
+        $bookmarkedSharables = $user->getBookmarks()->map(function (Bookmark $bookmark) {
+            return $bookmark->getSharable();
+        });
 
         return $this->render('sharable/index.html.twig', [
             'sharables' => $sharables,
@@ -93,6 +99,8 @@ class SharableController extends AbstractController
             'validatedSharables' => $validatedSharables,
             'interestedSharables' => $interestedSharables,
             'managedSharables' => $managedSharables,
+            'bookmarkedSharables' => $bookmarkedSharables,
+            'search' => $search,
         ]);
     }
 
@@ -103,7 +111,8 @@ class SharableController extends AbstractController
         Sharable $sharable,
         InterestedRepository $interestedRepository,
         ValidationRepository $validationRepository,
-        ManageRepository $manageRepository
+        ManageRepository $manageRepository,
+        BookmarkRepository $bookmarkRepository
     ) {
         $this->denyAccessUnlessGranted(SharableVoter::VIEW, $sharable);
 
@@ -124,11 +133,17 @@ class SharableController extends AbstractController
             'sharable' => $sharable->getId()
         ]);
 
+        $bookmarked = $bookmarkRepository->findOneBy([
+            'user' => $user->getId(),
+            'sharable' => $sharable->getId()
+        ]);
+
         return $this->render('sharable/show.html.twig', [
             'sharable' => $sharable,
             'interested' => $interested,
             'validated' => $validated,
             'manage' => $manage,
+            'bookmarked' => $bookmarked,
         ]);
     }
 
@@ -287,10 +302,33 @@ class SharableController extends AbstractController
      */
     public function activation(Sharable $sharable): Response
     {
-        $this->denyAccessUnlessGranted('edit', $sharable);
+        $this->denyAccessUnlessGranted(SharableVoter::EDIT, $sharable);
         $em = $this->getDoctrine()->getManager();
         $sharable->setDisabled($sharable->getDisabled() ? false : true);
         $em->persist($sharable);
+        $em->flush();
+
+        return $this->redirectToRoute('sharable_show', ['id' => $sharable->getId()]);
+    }
+
+    /**
+     * @Route("/sharable/{id}/bookmark", name="sharable_bookmark", requirements={"id"="\d+"})
+     */
+    public function bookmark(
+        Sharable $sharable,
+        BookmarkRepository $bookmarkRepository,
+        EntityManagerInterface $em
+    ): Response {
+        $this->denyAccessUnlessGranted(SharableVoter::VIEW, $sharable);
+        $bookmark = $bookmarkRepository->findOneBy(['user' => $this->getUser(), 'sharable' => $sharable]);
+        if (!is_null($bookmark)) {
+            $em->remove($bookmark);
+        } else {
+            $bookmark = new Bookmark();
+            $bookmark->setSharable($sharable)
+                ->setUser($this->getUser());
+            $em->persist($bookmark);
+        }
         $em->flush();
 
         return $this->redirectToRoute('sharable_show', ['id' => $sharable->getId()]);
@@ -302,8 +340,8 @@ class SharableController extends AbstractController
     public function new(
         UserClassRepository $userClassRepository,
         FileUploader $fileUploader,
-        Request $request): Response
-    {
+        Request $request
+    ): Response {
         $sharable = new Sharable();
 
         $this->denyAccessUnlessGranted('create', $sharable);

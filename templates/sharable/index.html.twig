@@ -27,7 +27,17 @@
 
         <div class="alert alert-info">
             {{ total }} sharables found
+            {% if search.managedBy %}
+            managed by {{ userMacro.render(search.managedBy, 1) }}
+            {% endif %}
+            {% if search.validatedBy %}
+            validated by {{ userMacro.render(search.validatedBy, 1) }}
+            {% endif %}
+            {% if search.bookmarkedBy %}
+            bookmarked by {{ userMacro.render(search.bookmarkedBy, 1) }}
+            {% endif %}
         </div>
+
         {% if not app.user.userclass.access %}
         <div class="alert alert-warning">
             Your user class:
@@ -50,6 +60,8 @@
                 {% set border = 'border-success' %}
             {% elseif sharable in interestedSharables %}
                 {% set border = 'border-warning' %}
+            {% elseif sharable in bookmarkedSharables %}
+                {% set border = 'border-light' %}
             {% endif %}
 
 
@@ -73,6 +85,11 @@
                             <a class="text-white" href="{{ path('sharable_show', {id: sharable.id}) }}">
                                 {{ sharable.name }}
                             </a>
+                            {% if sharable in bookmarkedSharables %}
+                            <small class="text-muted" title="You have bookmarked this sharable">
+                                <i class="fas fa-bookmark"></i>
+                            </small>
+                            {% endif %}
                         </strong>
                     </h4>
                     <h5>

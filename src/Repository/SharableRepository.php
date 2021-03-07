@@ -34,7 +34,6 @@ use App\Security\Voter\UserVoter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Security;
 
@@ -46,8 +45,6 @@ use Symfony\Component\Security\Core\Security;
  */
 class SharableRepository extends ServiceEntityRepository
 {
-
-    public const PAGINATOR_PER_PAGE = 5;
 
     private Security $security;
 
@@ -78,6 +75,8 @@ class SharableRepository extends ServiceEntityRepository
             ->addSelect('uc')
             ->leftJoin('s.validations', 'v')
             ->addSelect('v')
+            ->leftJoin('s.bookmarks', 'b')
+            ->addSelect('b')
             ->leftJoin('s.tags', 't')
             ->addSelect('t')
         ;
@@ -102,11 +101,24 @@ class SharableRepository extends ServiceEntityRepository
         // Check if user paranoia level authorize this
         if ($search->getValidatedBy() !== null) {
             $userRepo = $this->getEntityManager()->getRepository(User::class);
-            $manager = $userRepo->find($search->getValidatedBy());
+            $valUser = $userRepo->find($search->getValidatedBy());
 
-            if ($this->security->isGranted(UserVoter::VIEW_VALIDATIONS, $manager)) {
+            if ($this->security->isGranted(UserVoter::VIEW_VALIDATIONS, $valUser)) {
                 $qb->andWhere('v.user = :vid')
-                ->setParameter('vid', $manager->getId());
+                    ->setParameter('vid', $valUser->getId());
+            } else {
+                return [];
+            }
+        }
+
+        // Filter Sharables by BookmarkedBy
+        if (!is_null($search->getBookmarkedBy())) {
+            // $userRepo = $this->getEntityManager()->getRepository(User::class);
+            // $bookUser = $userRepo->find($search->getBookmarkedBy());
+
+            if ($this->security->isGranted(UserVoter::VIEW_BOOKMARKS, $search->getBookmarkedBy())) {
+                $qb->andWhere('b.user = :bid')
+                    ->setParameter('bid', $search->getBookmarkedBy());
             } else {
                 return [];
             }

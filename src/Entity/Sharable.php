@@ -170,6 +170,11 @@ class Sharable
      */
     private $cover;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Bookmark::class, mappedBy="sharable", orphanRemoval=true)
+     */
+    private $bookmarks;
+
     public function __construct()
     {
         $this->managedBy = new ArrayCollection();
@@ -182,6 +187,7 @@ class Sharable
         $this->interesteds = new ArrayCollection();
         $this->sharableContacts = new ArrayCollection();
         $this->tags = new ArrayCollection();
+        $this->bookmarks = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -550,5 +556,35 @@ class Sharable
     public function getCoverPath(): string
     {
         return FileUploader::COVER . '/' . $this->cover;
+    }
+
+    /**
+     * @return Collection|Bookmark[]
+     */
+    public function getBookmarks(): Collection
+    {
+        return $this->bookmarks;
+    }
+
+    public function addBookmark(Bookmark $bookmark): self
+    {
+        if (!$this->bookmarks->contains($bookmark)) {
+            $this->bookmarks[] = $bookmark;
+            $bookmark->setSharable($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBookmark(Bookmark $bookmark): self
+    {
+        if ($this->bookmarks->removeElement($bookmark)) {
+            // set the owning side to null (unless already changed)
+            if ($bookmark->getSharable() === $this) {
+                $bookmark->setSharable(null);
+            }
+        }
+
+        return $this;
     }
 }

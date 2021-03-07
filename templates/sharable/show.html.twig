@@ -18,6 +18,17 @@
 
 <div class="container-fluid p-0">
 
+    {% if bookmarked %}
+        <div class="alert alert-light">
+            <i class="fas fa-bookmark"></i> 
+            ou have bookmarked this sharable
+            {% if is_granted('view', sharable) %}
+            <a href="{{ path('sharable_bookmark', {id:sharable.id}) }}">
+                <i class="fas fa-times"></i> unbookmark
+            </a>
+            {% endif %}
+        </div>
+    {% endif %}
     {% if manage %}
         <div class="alert alert-primary"><i class="fas fa-wrench"></i>
         {% if manage.confirmed %}
@@ -98,6 +109,13 @@
             {% endif %}            
             {% if is_granted('edit', sharable) and not sharable.getDisabled %}
             <a class="btn btn-danger" href="{{ path('sharable_activation', {id: sharable.id}) }}"><i class="fas fa-times-circle"></i> disable</a>
+            {% endif %}
+            {% if is_granted('view', sharable) %}
+            {% if not bookmarked %}
+            <a class="btn btn-light" href="{{ path('sharable_bookmark', {id:sharable.id}) }}">
+                <i class="fas fa-bookmark"></i> bookmark
+            </a>
+            {% endif %}
             {% endif %}
 
         </div>

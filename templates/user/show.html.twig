@@ -34,6 +34,15 @@
             {% if is_granted('edit', user) %}
             <a class="btn btn-primary" href="{{ path('user_edit', {id: user.id}) }}"><i class="fas fa-pen"></i> edit</a>
             {% endif %}
+
+            {% if is_granted('view_bookmarks', user) %}
+            <a class="btn btn-light" href="{{ path('sharable', {bookmarkedBy: user.id}) }}">
+                <i class="fas fa-bookmark"></i> bookmarks
+                <span class="badge badge-secondary">
+                    {{ user.bookmarks|length }}
+                </span>
+            </a>
+            {% endif %}
         
         </div>
 

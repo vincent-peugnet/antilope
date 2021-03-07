@@ -31,6 +31,7 @@ use App\Entity\User;
 use App\Entity\UserContact;
 use App\Form\UserContactType;
 use App\Form\UserType;
+use App\Repository\BookmarkRepository;
 use App\Security\Voter\UserContactVoter;
 use App\Security\Voter\UserVoter;
 use App\Service\FileUploader;
@@ -68,7 +69,7 @@ class UserController extends AbstractController
      */
     public function show(User $user, LevelUp $levelUp): Response
     {
-        $this->denyAccessUnlessGranted('view', $user);
+        $this->denyAccessUnlessGranted(UserVoter::VIEW, $user);
 
         if ($user === $this->getUser()) {
             $user = $levelUp->checkUpdate($user);
@@ -85,7 +86,7 @@ class UserController extends AbstractController
      */
     public function edit(User $user, FileUploader $fileUploader, Request $request): Response
     {
-        $this->denyAccessUnlessGranted('edit', $user);
+        $this->denyAccessUnlessGranted(UserVoter::EDIT, $user);
 
 
         $form = $this->createForm(UserType::class, $user);

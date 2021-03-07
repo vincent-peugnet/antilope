@@ -75,7 +75,7 @@ class UserType extends AbstractType
                     }
                 ),
                 // phpcs:ignore Generic.Files.LineLength.TooLong
-                'help' => '0 all users can see your profile</br>1 hide interested</br>2 hide interested, validations</br>3 hide interested, validations, sharables</br>4 hide interested, validations, sharables, stats',
+                'help' => '0 all users can see your profile</br>1 hide bookmarks</br>2 hide bookmarks, interested</br>3 hide bookmarks, interested, validations</br>4 hide bookmarks, interested, validations, sharables</br>5 hide bookmarks, interested, validations, sharables, stats',
                 'help_html' => true,
             ])
             ->add('edit', SubmitType::class)
