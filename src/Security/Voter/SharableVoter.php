@@ -243,7 +243,11 @@ class SharableVoter extends Voter
 
     private function canQuestion(Sharable $sharable, User $user): bool
     {
-        return ($this->canView($sharable, $user) && !$this->canEdit($sharable, $user));
+        return (
+            $this->canView($sharable, $user) &&
+            !$this->canEdit($sharable, $user) &&
+            !$this->alreadyValidated($sharable, $user)
+        );
     }
 
     //________________________________
