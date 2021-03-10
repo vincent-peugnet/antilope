@@ -18,17 +18,6 @@
 
 <div class="container-fluid p-0">
 
-    {% if bookmarked %}
-        <div class="alert alert-light">
-            <i class="fas fa-bookmark"></i> 
-            ou have bookmarked this sharable
-            {% if is_granted('view', sharable) %}
-            <a href="{{ path('sharable_bookmark', {id:sharable.id}) }}">
-                <i class="fas fa-times"></i> unbookmark
-            </a>
-            {% endif %}
-        </div>
-    {% endif %}
     {% if manage %}
         <div class="alert alert-primary"><i class="fas fa-wrench"></i>
         {% if manage.confirmed %}
@@ -82,6 +71,11 @@
 
         <h1 {{ sharable.cover ? 'class="text-white"' : '' }}>
             {{ sharable.name }}
+            {% if bookmarked %}
+            <small class="text-muted" title="You have bookmarked this sharable">
+                <i class="fas fa-bookmark"></i>
+            </small>
+            {% endif %}
         </h1>
 
         {% for tag in sharable.tags %}
@@ -98,7 +92,7 @@
             {% if is_granted('contact', sharable) %}
             <a class="btn btn-primary" href="{{ path('sharable_contact', {id: sharable.id}) }}"><i class="fas fa-address-book"></i> contacts</a>
             {% endif %}
-            {% if is_granted('interested', sharable) %}
+            {% if is_granted('interested', sharable) and sharable.interesteds|length > 0 %}
             <a class="btn btn-warning" href="{{ path('sharable_interested', {id: sharable.id}) }}"><i class="fas fa-eye"></i> view interested</a>
             {% endif %}  
             {% if is_granted('interest', sharable) %}
@@ -110,12 +104,14 @@
             {% if is_granted('edit', sharable) and not sharable.getDisabled %}
             <a class="btn btn-danger" href="{{ path('sharable_activation', {id: sharable.id}) }}"><i class="fas fa-times-circle"></i> disable</a>
             {% endif %}
-            {% if is_granted('view', sharable) %}
             {% if not bookmarked %}
             <a class="btn btn-light" href="{{ path('sharable_bookmark', {id:sharable.id}) }}">
                 <i class="fas fa-bookmark"></i> bookmark
             </a>
-            {% endif %}
+            {% else %}
+            <a class="btn btn-light" href="{{ path('sharable_bookmark', {id:sharable.id}) }}">
+                <i class="far fa-bookmark"></i> unbookmark
+            </a>
             {% endif %}
 
         </div>
