@@ -69,7 +69,29 @@
 <a class="btn btn-success mb-3" href="{{ path('userclass_new', {id: userClass.id}) }}"><i class="fas fa-plus"></i> create new user class</a>
 {% endif %}
 
+<h3>How to get an higher user class ?</h3>
 
+<p>
+    By filling the next user class requirements.
+    It may be based on
+    <strong>share score</strong>,
+    <strong>account age</strong>,
+    <strong>validations given</strong>,
+    or <strong>email verification</strong>.
+</p>
+
+<h3>How is the <em>share score</em> calculated ?</h3>
+
+<p>
+    You win share points each time a sharable you're managing is validated by some user.
+    The amount of points earned this way may vary depending on:
+</p>
+
+<ul>
+    <li>validating user class (higher user rank give more points)</li>
+    <li>the amount of validation already given for this sharable (first validations give more points)</li>
+    <li>divided by the number of managers</li>
+</ul>
 
 
 {% endblock %}
