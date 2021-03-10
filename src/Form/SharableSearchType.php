@@ -56,6 +56,8 @@ class SharableSearchType extends AbstractType
                 ],
             ])
             ->add('disabled', CheckboxType::class, [
+                'label' => 'disabled <span class="badge badge-danger"><i class="fas fa-ban"></i></span>',
+                'label_html' => true,
                 'help' => 'Show disabled sharables',
                 'required' => false,
             ])

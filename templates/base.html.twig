@@ -17,6 +17,7 @@
     <body>
         {% set route_name = app.request.attributes.get('_route') %}
         {% set route_param = app.request.attributes.get('_route_params')|join %}
+        {% import "macros/user.html.twig" as userMacro %}
 
 
 
@@ -56,18 +57,6 @@
                         <li class="nav-item">
                             <a class="nav-link{% if route_name == 'rule_index' %} active{% endif %}" href="{{ path('rule_index') }}">rules</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link{% if route_name == 'user_show' and route_param == app.user.id %} active{% endif %}" href="{{ path('user_show', {id: app.user.id} ) }}">{{ app.user.username }}</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarAccountDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            account
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarAccountDropdown">
-                                <a class="dropdown-item{{ route_name == 'account_invitation' ? ' active' }}" href="{{ path('account_invitation') }}">invitation</a>
-                                <a class="dropdown-item{{ route_name == 'account_settings' ? ' active' }}" href="{{ path('account_settings') }}">settings</a>
-                            </div>
-                        </li>
 
                     </ul>
                     {% endif %}
@@ -75,9 +64,47 @@
                     <ul class="navbar-nav ml-auto">
 
                         {% if app.user %}
-                        <li class="nav-item">
-                            <a class="nav-link d-flex" href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt"></i> logout</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarProfileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {{ app.user.username }}
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarProfileDropdown">
+                                <div class="m-3">
+                                    {{ userMacro.render(app.user) }}
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item{{ route_name == 'user_show' and route_param == app.user.id ? ' active' }}" href="{{ path('user_show', {id: app.user.id} ) }}">
+                                    <i class="fas fa-user fa-fw"></i>
+                                    your profile
+                                </a>
+                                <a class="dropdown-item {{ route_name == 'sharable' and app.request.get('bookmarkedBy') == app.user.id ? ' active' }}" href="{{ path('sharable', {bookmarkedBy: app.user.id, disabled: 1}) }}">
+                                    <i class="fas fa-bookmark fa-fw"></i> bookmarks
+                                    <span class="badge badge-secondary">
+                                        {{ app.user.bookmarks|length }}
+                                    </span>
+                                </a>
+                                <a class="dropdown-item {{ route_name == 'sharable' and app.request.get('managedBy') == app.user.id ? ' active' }}" href="{{ path('sharable', {managedBy: app.user.id, disabled: 1}) }}">
+                                    <i class="fas fa-edit fa-fw"></i> managed
+                                    <span class="badge badge-secondary">
+                                        {{ app.user.manages|length }}
+                                    </span>
+                                </a>
+                                <a class="dropdown-item{{ route_name == 'account_invitation' ? ' active' }}" href="{{ path('account_invitation') }}">
+                                    <i class="fas fa-envelope-open fa-fw"></i> invitation
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item{{ route_name == 'account_settings' ? ' active' }}" href="{{ path('account_settings') }}">
+                                    <i class="fas fa-cog fa-fw"></i>
+                                    settings
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item " href="{{ path('app_logout') }}">
+                                    <i class="fas fa-sign-out-alt fa-fw"></i> logout
+                                </a>
+
+                            </div>
                         </li>
+
                         {% else %}
 
 

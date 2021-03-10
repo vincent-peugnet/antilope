@@ -31,18 +31,6 @@
     {% endif %}
 </div>
 
-<div class="btn-group mb-3">
-
-    {% if is_granted('edit', userClass) %}
-    <a class="btn btn-primary" href="{{ path('userclass_edit', {id: userClass.id}) }}"><i class="fas fa-pen"></i> edit</a>
-    {% endif %}
-
-    {% if is_granted('delete', userClass) %}
-    <a class="btn btn-danger" href="{{ path('userclass_delete', {id: userClass.id}) }}"><i class="fas fa-times"></i> delete</a>
-    {% endif %}
-
-</div>
-
 <div class="row">
 
 
@@ -145,6 +133,7 @@
 </div>
 
 <div class="row">
+
     <div class="col">
 
         <h4>Stats</h4>
@@ -163,6 +152,22 @@
             </br>
             Last edited {{ userClass.lastEditedAt|ago }}
         </div>
+    </div>
+    <div class="col">
+        
+        
+        <div class="btn-group mb-3">
+        
+            {% if is_granted('edit', userClass) %}
+            <a class="btn btn-primary" href="{{ path('userclass_edit', {id: userClass.id}) }}"><i class="fas fa-pen"></i> edit</a>
+            {% endif %}
+        
+            {% if is_granted('delete', userClass) %}
+            <a class="btn btn-danger" href="{{ path('userclass_delete', {id: userClass.id}) }}"><i class="fas fa-times"></i> delete</a>
+            {% endif %}
+        
+        </div>
+
     </div>
 </div>
 
