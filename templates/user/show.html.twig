@@ -127,6 +127,10 @@
                         <i class="fas fa-edit"></i>
                         Managed sharables: {{ user.manages|length }}
                     </li>
+                    <li class="list-group-item">
+                        <i class="fas fa-comments"></i>
+                        Questions asked: {{ user.questions|length }}
+                    </li>
                     <li class="list-group-item list-group-item-success">
                         <i class="fas fa-check-circle"></i>
                         Validations given: {{ user.validations|length }}
@@ -180,11 +184,11 @@
 
                 {% if is_granted('view', manage.sharable) %}
 
+                    {% if not manage.anonymous or user == app.user %}
                     <li class="list-group-item">
-                        {% if not manage.anonymous or user == app.user %}
                         {{ sharable.render(manage.sharable) }}
-                        {% endif %}
                     </li>
+                    {% endif %}
                 
                 {% endif %}
 

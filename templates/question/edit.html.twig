@@ -2,7 +2,7 @@
 {% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 {% import "macros/user.html.twig" as userMacro %}
 
-{% block title %}Answer a question{% endblock %}
+{% block title %}Edit a question{% endblock %}
 
 {% block content %}
 
@@ -10,12 +10,13 @@
 {{ breadcrumbs.render([
     {'url': url('sharable'), 'text': 'Sharables'},
     {'url': url('sharable_show', {id: question.sharable.id}), 'text': question.sharable.name},
-    {'text': 'answer'},
+    {'text': 'question'},
 ]) }}
 
-    <h1>Answer</h1>
+    <h1>Question</h1>
 
-    <p>{{ question.text }}</p>
+
+    <h3>Answer</h3>
 
     {{ form(form) }}
 

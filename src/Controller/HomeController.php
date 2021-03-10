@@ -27,6 +27,7 @@
 namespace App\Controller;
 
 use App\Entity\Sharable;
+use App\Repository\QuestionRepository;
 use App\Repository\SharableRepository;
 use App\Repository\UserRepository;
 use App\Repository\ValidationRepository;
@@ -42,12 +43,14 @@ class HomeController extends AbstractController
     public function index(
         SharableRepository $sharableRepository,
         UserRepository $userRepository,
-        ValidationRepository $validationRepository
+        ValidationRepository $validationRepository,
+        QuestionRepository $questionRepository
     ): Response {
         return $this->render('home/index.html.twig', [
             'userCount' => $userRepository->count([]),
             'sharableCount' => $sharableRepository->count([]),
             'validationCount' => $validationRepository->count([]),
+            'questionCount' => $questionRepository->count([]),
             'userLimit' => $this->getParameter('app.userLimit'),
             'openRegistration' => $this->getParameter('app.openRegistration'),
             'showHomeStats' => $this->getParameter('app.showHomeStats'),

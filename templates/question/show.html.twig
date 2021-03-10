@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
+{% import "macros/user.html.twig" as userMacro %}
+
+{% block title %}Answer a question{% endblock %}
+
+{% block content %}
+
+
+{{ breadcrumbs.render([
+    {'url': url('sharable'), 'text': 'Sharables'},
+    {'url': url('sharable_show', {id: question.sharable.id}), 'text': question.sharable.name},
+    {'text': 'question'},
+]) }}
+
+    <h1>Question</h1>
+
+    <p>{{ question.text }}</p>
+
+    {% for answer in question.answers %}
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5>
+                {{ userMacro.render(answer.user, 1) }}
+            </h5>
+            <small class="text-muted">
+                {{ answer.createdAt|ago }}
+            </small>
+        </div>
+        <div class="card-body">
+            <p>{{ answer.text }}</p>
+        </div>
+    </div>
+    {% endfor %}
+
+    <h3>Answer</h3>
+
+    {{ form(form) }}
+
+
+{% endblock %}

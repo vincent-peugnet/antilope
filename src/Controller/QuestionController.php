@@ -29,6 +29,7 @@ namespace App\Controller;
 use App\Entity\Answer;
 use App\Entity\Question;
 use App\Form\AnswerType;
+use App\Form\QuestionType;
 use App\Security\Voter\QuestionVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -39,9 +40,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class QuestionController extends AbstractController
 {
     /**
-     * @Route("/question/{id}/answer", name="answer", requirements={"id"="\d+"})
+     * @Route("/question/{id}/show", name="question_show", requirements={"id"="\d+"})
      */
-    public function answer(Question $question, Request $request, EntityManagerInterface $em): Response
+    public function show(Question $question, Request $request, EntityManagerInterface $em): Response
     {
         $this->denyAccessUnlessGranted(QuestionVoter::ANSWER, $question);
 
@@ -58,9 +59,44 @@ class QuestionController extends AbstractController
             return $this->redirectToRoute('sharable_show', ['id' => $question->getSharable()->getId()]);
         }
 
-        return $this->render('question/answer.html.twig', [
+        return $this->render('question/show.html.twig', [
             'question' => $question,
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/question/{id}/delete", name="question_delete", requirements={"id"="\d+"})
+     */
+    public function delete(Question $question, EntityManagerInterface $em): Response
+    {
+        $this->denyAccessUnlessGranted(QuestionVoter::DELETE, $question);
+        $em->remove($question);
+        $em->flush();
+        return $this->redirectToRoute('sharable_show', ['id' => $question->getSharable()->getId()]);
+    }
+
+    /**
+     * @Route("/question/{id}/edit", name="question_edit", requirements={"id"="\d+"})
+     */
+    public function edit(Question $question, Request $request, EntityManagerInterface $em): Response
+    {
+        $this->denyAccessUnlessGranted(QuestionVoter::EDIT, $question);
+
+        $form = $this->createForm(QuestionType::class, $question);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $question = $form->getData();
+            assert($question instanceof Question);
+            $em->persist($question);
+            $em->flush();
+            return $this->redirectToRoute('sharable_show', ['id' => $question->getSharable()->getId()]);
+        }
+
+        return $this->render('question/edit.html.twig', [
+            'question' => $question,
+            'form' => $form->createView(),
+        ]);
+
     }
 }

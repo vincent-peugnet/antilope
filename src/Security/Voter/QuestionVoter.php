@@ -29,6 +29,7 @@ namespace App\Security\Voter;
 use App\Entity\Question;
 use App\Entity\User;
 use App\Repository\ValidationRepository;
+use DateTime;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -36,6 +37,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 class QuestionVoter extends Voter
 {
     public const DELETE = 'delete';
+    public const EDIT = 'edit';
     public const ANSWER = 'answer';
 
     private AuthorizationCheckerInterface $authorization;
@@ -51,7 +53,7 @@ class QuestionVoter extends Voter
 
     protected function supports($attribute, $subject)
     {
-        return in_array($attribute, [self::DELETE, self::ANSWER])
+        return in_array($attribute, [self::DELETE, self::ANSWER, self::EDIT])
             && $subject instanceof \App\Entity\Question;
     }
 
@@ -67,6 +69,8 @@ class QuestionVoter extends Voter
         switch ($attribute) {
             case self::DELETE:
                 return $this->canDelete($subject, $user);
+            case self::EDIT:
+                return $this->canEdit($subject, $user);
             case self::ANSWER:
                 return $this->canAnswer($subject, $user);
         }
@@ -104,6 +108,14 @@ class QuestionVoter extends Voter
             if (!is_null($validation)) {
                 return true;
             }
+        }
+        return false;
+    }
+
+    public function canEdit(Question $question, User $user): bool
+    {
+        if ($question->getUser() === $user && $question->getAnswers()->isEmpty()) {
+            return ($question->getCreatedAt() > new DateTime('6 hours ago'));
         }
         return false;
     }
