@@ -1,11 +1,12 @@
 {% extends 'base.html.twig' %}
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
+{% set next = app.user.userClass.next == userClass %}
 
 {% block title %}{{ userClass.name }}{% endblock %}
 
 {% block content %}
 
 
-{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 
 {{ breadcrumbs.render([
     {'url': url('userclass'), 'text': 'User Classes'},
@@ -36,7 +37,9 @@
         <div class="card mb-3">
 
             <div class="card-header">
-                <h3 class="card-title">Privileges</h3>
+                <h3 class="card-title">
+                    Privileges
+                </h3>
             </div>
 
             <div class="card-body">
@@ -86,22 +89,26 @@
     
                 <ul class="list-group list-group-flush">
                     {% if userClass.shareScoreReq %}
-                    <li class="list-group-item">
+                    {% set shareScore = next and app.user.shareScore >= userClass.shareScoreReq %}
+                    <li class="list-group-item{{ shareScore ? ' list-group-item-success' : '' }}">
                     Share Score : <span class="badge badge-light">{{ userClass.shareScoreReq }}</span>
                     </li>
                     {% endif %}
                     {% if userClass.accountAgeReq %}
-                    <li class="list-group-item">
+                    {% set accountAge = next and app.user.createdAt <= date('-' ~ userClass.accountAgeReq ~ 'days') %}
+                    <li class="list-group-item {{ accountAge ? ' list-group-item-success' : '' }}">
                     Account Age : {{ userClass.accountAgeReq }} days
                     </li>
                     {% endif %}
                     {% if userClass.validatedReq %}
-                    <li class="list-group-item">
+                    {% set validated = next and app.user.validations|length >= userClass.validatedReq %}
+                    <li class="list-group-item{{ validated ? ' list-group-item-success' : '' }}">
                     Validations given : {{ userClass.validatedReq }}
                     </li>
                     {% endif %}
                     {% if userClass.verifiedReq %}
-                    <li class="list-group-item">
+                    {% set verified = next and app.user.verified %}
+                    <li class="list-group-item{{ verified ? ' list-group-item-success' : '' }}">
                     The user email adress need to be verified
                     </li>
                     {% endif %}
@@ -131,15 +138,15 @@
 
 
                 {% if userClass.prev %}
-                <a class="btn btn-primary" href="{{ path('userclass_show', {id: userClass.prev.id}) }}">previous</a>
+                <a class="btn btn-primary" href="{{ path('userclass_show', {id: userClass.prev.id}) }}"><i class="fas fa-angle-left"></i> previous</a>
                 {% else %}
-                <a class="btn btn-primary disabled">previous</a>
+                <a class="btn btn-primary disabled"><i class="fas fa-angle-left"></i> previous</a>
                 {% endif %}
 
                 {% if userClass.next %}
-                <a class="btn btn-primary" href="{{ path('userclass_show', {id: userClass.next.id}) }}">next</a>
+                <a class="btn btn-primary" href="{{ path('userclass_show', {id: userClass.next.id}) }}">next <i class="fas fa-angle-right"></i></a>
                 {% else %}
-                <a class="btn btn-primary disabled">next</a>
+                <a class="btn btn-primary disabled">next <i class="fas fa-angle-right"></i></a>
                 {% endif %}
 
                 </div>
@@ -147,6 +154,11 @@
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                         {{ userClass.users|length }} users
+                        {% if app.user.userclass == userClass %}
+                            <span class="badge badge-info">
+                                including you
+                            </span>
+                        {% endif %}
                     </li>
                     <li class="list-group-item">
                         {{ userClass.sharables|length }} sharables

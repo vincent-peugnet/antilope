@@ -82,7 +82,7 @@
                   
                     <h4>
                         <strong>
-                            <a class="text-white" href="{{ path('sharable_show', {id: sharable.id}) }}">
+                            <a {{ sharable.cover ? 'class="text-white"' : '' }} href="{{ path('sharable_show', {id: sharable.id}) }}">
                                 {{ sharable.name }}
                             </a>
                             {% if sharable in bookmarkedSharables %}

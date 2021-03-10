@@ -16,6 +16,18 @@
 
 <h1>Profile edit</h1>
 
-{{ form(form) }}
+
+{{ form_start(form) }}
+    {{ form_row(form.avatarFile) }}
+    {{ form_row(form.description) }}
+
+    <div class="alert alert-secondary">
+        Maximum paranoïa level is defined by your current user class:
+        <span class="badge badge-primary">{{ app.user.userClass.name }}</span>
+    </div>
+
+
+    {{ form_row(form.paranoia) }}
+{{ form_end(form) }}
 
 {% endblock %}

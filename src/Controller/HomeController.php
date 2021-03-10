@@ -26,6 +26,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Sharable;
 use App\Repository\SharableRepository;
 use App\Repository\UserRepository;
 use App\Repository\ValidationRepository;
@@ -52,6 +53,7 @@ class HomeController extends AbstractController
             'showHomeStats' => $this->getParameter('app.showHomeStats'),
             'activeUsers' => $userRepository->findRecentlyActive(60),
             'lastValidations' => $validationRepository->findBy([], ['sendAt' => 'DESC'], 5),
+            'sharable' => new Sharable(),
         ]);
     }
 }

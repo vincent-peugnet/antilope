@@ -1,69 +1,74 @@
 {% extends 'base.html.twig' %}
+{% set uc = app.user.userclass %}
 
 
 {% block content %}
 
 <h1>User Classes</h1>
 
-    {% if is_granted('create', userClass) %}
-    <a class="btn btn-success mb-3" href="{{ path('userclass_new', {id: userClass.id}) }}"><i class="fas fa-plus"></i> create new user class</a>
+<h3>My class</h3>
+
+<p>
+
+    Your current user class is:
+    <a href="{{ path('userclass_show', {id: uc.id}) }}" class="badge badge-primary">
+        {{ uc.name }}
+    </a>
+    {% if uc.next %}
+        next user class is
+        <a href="{{ path('userclass_show', {id: uc.next.id}) }}" class="badge badge-primary">{{ uc.next.name }}</a>
     {% endif %}
+    
+</p>
 
-
-{% for userClass in userClasses %}
-
-
-<div class="card mb-3">
-
-    <div class="card-header">
-
-        <div class="card-title">
-        <h3>{{ userClass.name }}</h3>
-        </div>
-    </div>
-
-    <div class="card-body">
-
-        <ul class="list-group">
-            {% if userClass.share %}
-            <li class="list-group-item">
-                can create sharables
-            </li>
+<h3>User Classes</h3>
+    
+    <table class="table">
+    <thead>
+        <th>name</th>
+        <th>create</th>
+        <th>access</th>
+        <th>invite</th>
+        <th>users</th>
+        {% if is_granted('edit', userClass) %}
+            <th>
+                edit
+            </th>
+        {% endif %}
+    </thead>
+    <tbody class="table-hover">
+        {% for userClass in userClasses %}
+        <tr {{ userClass == app.user.userClass ? 'class="table-info"' : '' }}>
+            <td>
+                <a class="btn btn-primary" href="{{ path('userclass_show', {id: userClass.id}) }}">{{ userClass.name }}</a>
+            </td>
+            <td>
+                {{ userClass.share ? '<i class="fas fa-check"></i>' : '' }}
+            </td>
+            <td>
+                {{ userClass.access ? '<i class="fas fa-check"></i>' : '' }}
+            </td>
+            <td>
+                {{ userClass.canInvite ? '<i class="fas fa-check"></i>' : '' }}
+            </td>
+            <td>
+                {{ userClass.users|length }}
+            </td>
+            {% if is_granted('edit', userClass) %}
+            <td>
+                <a class="btn btn-primary" href="{{ path('userclass_edit', {id: userClass.id}) }}"><i class="fas fa-pen"></i></a>
+            </td>
             {% endif %}
-            {% if userClass.access %}
-            <li class="list-group-item">
-                can access sharables
-            </li>
-            {% endif %}
-            {% if userClass.canInvite %}
-                {% if userClass.inviteFrequency == 0 %}
-                <li class="list-group-item">
-                    can invite people without limitation
-                </li>
-                {% else %}
-                <li class="list-group-item">
-                    can invite one user every {{ userClass.inviteFrequency }} days
-                </li>
-                {% endif %}
-            {% endif %}
-            <li class="list-group-item">
-                maximum paranoïa level : {{ userClass.maxParanoia }}
-            </li>
-            {% if userClass.maxInactivity %}
-                <li class="list-group-item">
-                    Account is disabled after {{ userClass.maxInactivity }} days of inactivity.
-                </li>
-            {% endif %}
-        </ul>
-
-        <a class="btn btn-primary" href="{{ path('userclass_show', {id: userClass.id}) }}">details</a>
-
-    </div>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
 
-</div>
+{% if is_granted('create', userClass) %}
+<a class="btn btn-success mb-3" href="{{ path('userclass_new', {id: userClass.id}) }}"><i class="fas fa-plus"></i> create new user class</a>
+{% endif %}
 
-{% endfor %}
 
 
 

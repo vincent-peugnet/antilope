@@ -80,7 +80,7 @@
         {% endif %}
     >
 
-        <h1>
+        <h1 {{ sharable.cover ? 'class="text-white"' : '' }}>
             {{ sharable.name }}
         </h1>
 
@@ -88,7 +88,7 @@
             <a class="badge badge-pill badge-secondary" href="{{ path('sharable', {'tags[]': tag.id}) }}">{{ tag.name }}</a>
         {% endfor %}
 
-        <p>{{ sharable.description }}</p>
+        <p class="text-break">{{ sharable.description }}</p>
 
         <div class="btn-group mb-3">
                 

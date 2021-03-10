@@ -29,15 +29,19 @@
 
     <div class="card-body">
 
-    <p>Actual email adress: <code>{{ app.user.email }}</code></p>
+        <p>Actual email adress: <code>{{ app.user.email }}</code></p>
 
-    {% if not app.user.isVerified %}
+        <div class="text-info mb-3">
+            This email address is never visible, it's only for notification purposes or lost password.
+        </div>
 
-    <a class="btn btn-primary" href="{{ path('email_send') }}">Send email verification</a>
+        {% if not app.user.isVerified %}
 
-    {% endif %}
+        <a class="btn btn-primary" href="{{ path('email_send') }}">Send email verification</a>
 
-    <a class="btn btn-primary" href="{{ path('email_edit') }}">Change Email adress</a>
+        {% endif %}
+
+        <a class="btn btn-primary" href="{{ path('email_edit') }}">Change Email adress</a>
 
 
     </div>
