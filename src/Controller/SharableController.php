@@ -35,6 +35,7 @@ use App\Entity\Sharable;
 use App\Entity\SharableContact;
 use App\Entity\User;
 use App\Entity\Validation;
+use App\Event\QuestionEvent;
 use App\Event\ValidationEvent;
 use App\Form\QuestionType;
 use App\Form\SharableContactType;
@@ -115,6 +116,7 @@ class SharableController extends AbstractController
         ValidationRepository $validationRepository,
         ManageRepository $manageRepository,
         BookmarkRepository $bookmarkRepository,
+        EventDispatcherInterface $dispatcher,
         EntityManagerInterface $em,
         Request $request
     ): Response {
@@ -132,6 +134,8 @@ class SharableController extends AbstractController
             $question->setSharable($sharable);
             $em->persist($question);
             $em->flush();
+
+            $dispatcher->dispatch(new QuestionEvent($question), QuestionEvent::NEW);
 
             return $this->redirectToRoute('sharable_show', ['id' => $sharable->getId()]);
         }

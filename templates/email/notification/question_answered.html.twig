@@ -1,0 +1,32 @@
+{% extends "email/notification/base.html.twig" %}
+
+{% block content %}
+
+<p>
+    Your question on sharable:
+    <a href="{{ url('sharable_show', {id: question.sharable.id}) }}">{{ question.sharable.name }}</a>
+    has been answered.
+</p>
+
+<h3>Question</h3>
+<p>
+    <em>
+        {{ question.text }}
+    </em>
+</p>
+
+
+<ul>
+    {% for answer in question.answers|reverse %}
+    <li>
+        <a href="{{ url('user_show', {id: answer.user.id}) }}">{{ answer.user.username }}</a>:
+        <p>
+            <em>
+                {{ answer.text }}
+            </em>
+        </p>
+    </li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

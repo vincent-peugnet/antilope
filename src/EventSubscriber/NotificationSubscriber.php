@@ -31,6 +31,7 @@ use App\Entity\User;
 use App\Event\InterestedEvent;
 use App\Event\InvitationEvent;
 use App\Event\ManageEvent;
+use App\Event\QuestionEvent;
 use App\Event\UserEvent;
 use App\Event\ValidationEvent;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -60,6 +61,8 @@ class NotificationSubscriber implements EventSubscriberInterface
             UserEvent::DISABLED => ['onUserDisabled', -100],
             InvitationEvent::USED => ['onInvitationUsed', -100],
             ManageEvent::INVITE => ['onManageInvite', -100],
+            QuestionEvent::NEW => ['onQuestionNew', -100],
+            QuestionEvent::ANSWERED => ['onQuestionAnswered', -100],
         ];
     }
 
@@ -138,6 +141,30 @@ class NotificationSubscriber implements EventSubscriberInterface
         $subject = "You have been invited to manage a sharable: $sharableName";
         $this->emailNotification($user, $subject, 'manage_invite', [
             'manage' => $manage,
+        ]);
+    }
+
+    public function onQuestionNew(QuestionEvent $event)
+    {
+        $sharable = $event->getQuestion()->getSharable();
+        $name = $sharable->getName();
+        $managers = $sharable->getConfirmedNotDisabledManagers();
+        $subject = "You have a question on your sharable: $name";
+        foreach ($managers->toArray() as $manage) {
+            assert($manage instanceof Manage);
+            $this->emailNotification($manage->getUser(), $subject, 'question_new', [
+                'question' => $event->getQuestion(),
+            ]);
+        }
+    }
+
+    public function onQuestionAnswered(QuestionEvent $event)
+    {
+        $user = $event->getQuestion()->getUser();
+        $name = $event->getQuestion()->getSharable()->getName();
+        $subject = "Your question on sharable: $name has been answered!";
+        $this->emailNotification($user, $subject, 'question_answered', [
+            'question' => $event->getQuestion(),
         ]);
     }
 

@@ -1,0 +1,20 @@
+{% extends "email/notification/base.html.twig" %}
+
+{% block content %}
+
+<p>
+    <a href="{{ url('user_show', {id: question.user.id}) }}">{{ question.user.username }}</a>
+    asked a question on your sharable:
+    <a href="{{ url('sharable_show', {id: question.sharable.id}) }}">{{ question.sharable.name }}</a>.
+</p>
+
+<h3>Question</h3>
+<p>
+    <em>
+        {{ question.text }}
+    </em>
+</p>
+
+<a href="{{ url('question_show', {id: question.id}) }}">answer it!</a>
+
+{% endblock %}

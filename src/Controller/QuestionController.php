@@ -28,11 +28,13 @@ namespace App\Controller;
 
 use App\Entity\Answer;
 use App\Entity\Question;
+use App\Event\QuestionEvent;
 use App\Form\AnswerType;
 use App\Form\QuestionType;
 use App\Security\Voter\QuestionVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -42,8 +44,12 @@ class QuestionController extends AbstractController
     /**
      * @Route("/question/{id}/show", name="question_show", requirements={"id"="\d+"})
      */
-    public function show(Question $question, Request $request, EntityManagerInterface $em): Response
-    {
+    public function show(
+        Question $question,
+        Request $request,
+        EventDispatcherInterface $dispatcher,
+        EntityManagerInterface $em
+    ): Response {
         $this->denyAccessUnlessGranted(QuestionVoter::ANSWER, $question);
 
         $form = $this->createForm(AnswerType::class);
@@ -56,6 +62,9 @@ class QuestionController extends AbstractController
             $answer->setQuestion($question);
             $em->persist($answer);
             $em->flush();
+
+            $dispatcher->dispatch(new QuestionEvent($question), QuestionEvent::ANSWERED);
+
             return $this->redirectToRoute('sharable_show', ['id' => $question->getSharable()->getId()]);
         }
 
@@ -97,6 +106,5 @@ class QuestionController extends AbstractController
             'question' => $question,
             'form' => $form->createView(),
         ]);
-
     }
 }
