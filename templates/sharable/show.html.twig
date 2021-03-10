@@ -293,6 +293,33 @@
 
 <div class="row">
     <div class="col-lg-6">
+        <h3>Questions & Answers</h3>
+
+        {% if is_granted('question', sharable) %}
+            {{ form( questionForm ) }}
+        {% endif %}
+
+        {% for question in sharable.questions|reverse %}
+            <div class="card mt-3">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title">
+                        By
+                        {{ userMacro.render(question.user) }}
+                    </h5>
+                    <small class="text-muted">
+                        {{ question.createdAt|ago }}
+                    </small>
+                </div>
+                <div class="card-body">
+                    <p>
+                        {{ question.text }}
+                    </p>
+                </div>
+            </div>
+        {% endfor %}
+        
+    </div>
+    <div class="col-lg-6">
 
         <h3>Validation messages received</h3>
 
@@ -303,7 +330,8 @@
     <div class="card mt-3">
         <div class="card-header d-flex justify-content-between align-items-center">
             
-            <h5 class="card-title">By
+            <h5 class="card-title">
+                By
                 {{ userMacro.render(validation.user) }}
             </h5>
             <small class="text-muted">

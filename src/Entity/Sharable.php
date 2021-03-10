@@ -60,12 +60,12 @@ class Sharable
 
     /**
      * @ORM\Column(type="string", length=64)
+     * @Assert\NotBlank
      * @Assert\Length(
      *     min = 2,
      *     max = 64,
      *     minMessage = "name at least {{ limit }} characters long",
      *     maxMessage = "name cannot be longer than {{ limit }} characters",
-     *     allowEmptyString = false
      * )
      */
     private $name;
@@ -104,12 +104,12 @@ class Sharable
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      * @Assert\Length(
      *     min = 5,
      *     max = 255,
      *     minMessage = "description should be at least {{ limit }} characters long",
      *     maxMessage = "description cannot be longer than {{ limit }} characters",
-     *     allowEmptyString = false
      * )
      */
     private $description;
@@ -175,6 +175,11 @@ class Sharable
      */
     private $bookmarks;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Question::class, mappedBy="sharable", orphanRemoval=true)
+     */
+    private $questions;
+
     public function __construct()
     {
         $this->managedBy = new ArrayCollection();
@@ -188,6 +193,7 @@ class Sharable
         $this->sharableContacts = new ArrayCollection();
         $this->tags = new ArrayCollection();
         $this->bookmarks = new ArrayCollection();
+        $this->questions = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -582,6 +588,36 @@ class Sharable
             // set the owning side to null (unless already changed)
             if ($bookmark->getSharable() === $this) {
                 $bookmark->setSharable(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Question[]
+     */
+    public function getQuestions(): Collection
+    {
+        return $this->questions;
+    }
+
+    public function addQuestion(Question $question): self
+    {
+        if (!$this->questions->contains($question)) {
+            $this->questions[] = $question;
+            $question->setSharable($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuestion(Question $question): self
+    {
+        if ($this->questions->removeElement($question)) {
+            // set the owning side to null (unless already changed)
+            if ($question->getSharable() === $this) {
+                $question->setSharable(null);
             }
         }
 

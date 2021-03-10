@@ -29,12 +29,14 @@ namespace App\Controller;
 use App\Entity\Bookmark;
 use App\Entity\Interested;
 use App\Entity\Manage;
+use App\Entity\Question;
 use App\Entity\SharableSearch;
 use App\Entity\Sharable;
 use App\Entity\SharableContact;
 use App\Entity\User;
 use App\Entity\Validation;
 use App\Event\ValidationEvent;
+use App\Form\QuestionType;
 use App\Form\SharableContactType;
 use App\Form\SharableSearchType;
 use App\Form\SharableType;
@@ -112,11 +114,27 @@ class SharableController extends AbstractController
         InterestedRepository $interestedRepository,
         ValidationRepository $validationRepository,
         ManageRepository $manageRepository,
-        BookmarkRepository $bookmarkRepository
-    ) {
+        BookmarkRepository $bookmarkRepository,
+        EntityManagerInterface $em,
+        Request $request
+    ): Response {
         $this->denyAccessUnlessGranted(SharableVoter::VIEW, $sharable);
 
         $user = $this->getUser();
+        assert($user instanceof User);
+        $questionForm = $this->createForm(QuestionType::class);
+
+        $questionForm->handleRequest($request);
+        if ($questionForm->isSubmitted() && $questionForm->isValid()) {
+            $question = $questionForm->getData();
+            assert($question instanceof Question);
+            $question->setUser($this->getUser());
+            $question->setSharable($sharable);
+            $em->persist($question);
+            $em->flush();
+
+            return $this->redirectToRoute('sharable_show', ['id' => $sharable->getId()]);
+        }
 
         $interested = $interestedRepository->findOneBy([
             'user' => $user->getId(),
@@ -144,6 +162,7 @@ class SharableController extends AbstractController
             'validated' => $validated,
             'manage' => $manage,
             'bookmarked' => $bookmarked,
+            'questionForm' => $questionForm->createView(),
         ]);
     }
 

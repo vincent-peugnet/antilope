@@ -51,6 +51,7 @@ class SharableVoter extends Voter
     public const INTEREST   = 'interest';
     public const INTERESTED = 'interested';
     public const CONTACT    = 'contact';
+    public const QUESTION   = 'question';
 
     private UserClassRepository $userClassRepository;
     private InterestedRepository $interestedRepository;
@@ -81,6 +82,7 @@ class SharableVoter extends Voter
             self::INTEREST,
             self::INTERESTED,
             self::CONTACT,
+            self::QUESTION,
         ])
             && $subject instanceof \App\Entity\Sharable;
     }
@@ -113,6 +115,8 @@ class SharableVoter extends Voter
                 return $this->canViewInterested($sharable, $user);
             case self::CONTACT:
                 return $this->canViewContact($sharable, $user);
+            case self::QUESTION:
+                return $this->canQuestion($sharable, $user);
         }
 
         return false;
@@ -237,6 +241,12 @@ class SharableVoter extends Voter
         );
     }
 
+    private function canQuestion(Sharable $sharable, User $user): bool
+    {
+        return ($this->canView($sharable, $user) && !$this->canEdit($sharable, $user));
+    }
+
+    //________________________________
 
     private function passedBegin(Sharable $sharable): bool
     {
