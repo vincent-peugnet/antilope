@@ -1,19 +1,19 @@
 {% macro render(method) %}
 
     {% if method == 1 %}
-    <span class="badge badge-light" title="No need to contact">
+    <span class="badge badge-secondary" title="No need to contact">
         <i class="fas fa-lock-open"></i>
     </span>
     {% elseif method == 2 %}
-    <span class="badge badge-light" title="Automatic contact exchange">
+    <span class="badge badge-secondary" title="Automatic contact exchange">
         <i class="fas fa-bolt"></i>
     </span>
     {% elseif method == 3 %}
-    <span class="badge badge-light" title="Manual contact exchange">
+    <span class="badge badge-secondary" title="Manual contact exchange">
         <i class="fas fa-stamp"></i>
     </span>
     {% elseif method == 4 %}
-    <span class="badge badge-light" title="Only managers can access your contact infos">
+    <span class="badge badge-secondary" title="Only managers can access your contact infos">
         <i class="fas fa-lock"></i>
     </span>
     {% else %}

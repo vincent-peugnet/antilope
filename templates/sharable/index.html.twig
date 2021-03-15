@@ -106,6 +106,12 @@
                             {{ sharable.validations|length }}
                             <i class="fas fa-check-circle"></i></span>
                         {% endif %}
+                        {% if sharable.questions|length > 0 %}
+                            <span class="badge badge-light">
+                                {{ sharable.questions|length }}
+                                <i class="fas fa-comment"></i>
+                            </span>
+                        {% endif %}
                         {% if sharable.visibleBy %}
                         <span title="accessible from {{ sharable.visibleBy.name }}" class="badge badge-primary">
                             ≥ {{ sharable.visibleBy.name }}
