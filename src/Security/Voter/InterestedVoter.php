@@ -42,7 +42,8 @@ class InterestedVoter extends Voter
 
     private AuthorizationCheckerInterface $authorization;
 
-    public function __construct(AuthorizationCheckerInterface $authorization) {
+    public function __construct(AuthorizationCheckerInterface $authorization)
+    {
         $this->authorization = $authorization;
     }
 
