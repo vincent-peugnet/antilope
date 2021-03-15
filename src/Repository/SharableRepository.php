@@ -77,6 +77,8 @@ class SharableRepository extends ServiceEntityRepository
             ->addSelect('v')
             ->leftJoin('s.bookmarks', 'b')
             ->addSelect('b')
+            ->leftJoin('s.interesteds', 'i')
+            ->addSelect('i')
             ->leftJoin('s.tags', 't')
             ->addSelect('t')
         ;
@@ -113,12 +115,19 @@ class SharableRepository extends ServiceEntityRepository
 
         // Filter Sharables by BookmarkedBy
         if (!is_null($search->getBookmarkedBy())) {
-            // $userRepo = $this->getEntityManager()->getRepository(User::class);
-            // $bookUser = $userRepo->find($search->getBookmarkedBy());
-
             if ($this->security->isGranted(UserVoter::VIEW_BOOKMARKS, $search->getBookmarkedBy())) {
                 $qb->andWhere('b.user = :bid')
                     ->setParameter('bid', $search->getBookmarkedBy());
+            } else {
+                return [];
+            }
+        }
+
+        // Filter Sharables by InterestedBy
+        if (!is_null($search->getInterestedBy())) {
+            if ($this->security->isGranted(UserVoter::VIEW_INTERESTEDS, $search->getInterestedBy())) {
+                $qb->andWhere('i.user = :iid')
+                    ->setParameter('iid', $search->getInterestedBy());
             } else {
                 return [];
             }

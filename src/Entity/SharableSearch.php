@@ -72,9 +72,13 @@ class SharableSearch
     private $bookmarkedBy = null;
 
     /**
+     * @var User|null
+     */
+    private $interestedBy = null;
+
+    /**
      * @var string|null
      * @Assert\Choice(callback="useSortBy")
-
      */
     private $sortBy = 'id';
 
@@ -174,9 +178,21 @@ class SharableSearch
         return $this->bookmarkedBy;
     }
 
-    public function setBookmarkedBy(?User $bookmarkedBy)
+    public function setBookmarkedBy(?User $bookmarkedBy): self
     {
         $this->bookmarkedBy = $bookmarkedBy;
+
+        return $this;
+    }
+
+    public function getInterestedBy(): ?User
+    {
+        return $this->interestedBy;
+    }
+
+    public function setInterestedBy(?User $user): self
+    {
+        $this->interestedBy = $user;
 
         return $this;
     }

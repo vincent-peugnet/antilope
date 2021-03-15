@@ -98,7 +98,7 @@ class SharableController extends AbstractController
             'sharables' => $sharables,
             'sharable' => new Sharable(),
             'total' => count($sharables),
-            'form' => $form->createView(),
+            'searchForm' => $form->createView(),
             'validatedSharables' => $validatedSharables,
             'interestedSharables' => $interestedSharables,
             'managedSharables' => $managedSharables,

@@ -4,10 +4,6 @@
 
 {% block title %}Sharables{% endblock %}
 
-{% block stylesheets %}
-<link rel="stylesheet" href="/assets/css/search.css">
-{% endblock %}
-
 {% block content %}
 
 <div class="row">
@@ -18,7 +14,28 @@
         <a class="btn btn-success btn-lg btn-block mb-3" href="{{ path('sharable_new') }}"><i class="fas fa-plus-circle"></i> create new sharable</a>
         {% endif %}
 
-        {{ form(form) }}
+        
+        {{ form_start(searchForm) }}
+            {{ form_row(searchForm.query) }}
+            {{ form_row(searchForm.disabled) }}
+            {{ form_row(searchForm.tags) }}
+
+            <div class="d-none d-md-block">
+                {{ form_row(searchForm.managedBy) }}
+                {{ form_row(searchForm.bookmarkedBy) }}
+                {{ form_row(searchForm.validatedBy) }}
+                {{ form_row(searchForm.interestedBy) }}
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(searchForm.sortBy) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(searchForm.order) }}
+                </div>
+            </div>
+        {{ form_end(searchForm) }}
 
     </div>
 
@@ -35,6 +52,9 @@
             {% endif %}
             {% if search.bookmarkedBy %}
             bookmarked by {{ userMacro.render(search.bookmarkedBy, 1) }}
+            {% endif %}
+            {% if search.interestedBy %}
+            that interest {{ userMacro.render(search.interestedBy, 1) }}
             {% endif %}
         </div>
 

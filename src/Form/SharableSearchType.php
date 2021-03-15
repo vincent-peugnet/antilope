@@ -86,6 +86,12 @@ class SharableSearchType extends AbstractType
                 'label' => 'Bookmarked by',
                 'placeholder' => 'Bookmarked by...'
             ])
+            ->add('interestedBy', EntityType::class, [
+                'class' => User::class,
+                'required' => false,
+                'label' => 'Is interested',
+                'placeholder' => 'is interested...'
+            ])
             ->add('sortBy', ChoiceType::class, [
                 'choices' => SharableSearch::SORT_BY,
                 'empty_data' => $default->getSortBy(),

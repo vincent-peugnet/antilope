@@ -80,6 +80,20 @@
                                         {{ app.user.bookmarks|length }}
                                     </span>
                                 </a>
+                                <a class="dropdown-item {{ route_name == 'sharable' and app.request.get('interestedBy') == app.user.id ? ' active' }}" href="{{ path('sharable', {interestedBy: app.user.id, disabled: 1}) }}">
+                                    <i class="fas fa-question-circle"></i>
+                                    interests
+                                    <span class="badge badge-secondary">
+                                        {{ app.user.interesteds|length }}
+                                    </span>
+                                </a>
+                                <a class="dropdown-item {{ route_name == 'sharable' and app.request.get('validatedBy') == app.user.id ? ' active' }}" href="{{ path('sharable', {validatedBy: app.user.id, disabled: 1}) }}">
+                                    <i class="fas fa-check-circle"></i>
+                                    validated
+                                    <span class="badge badge-secondary">
+                                        {{ app.user.validations|length }}
+                                    </span>
+                                </a>
                                 <a class="dropdown-item {{ route_name == 'sharable' and app.request.get('managedBy') == app.user.id ? ' active' }}" href="{{ path('sharable', {managedBy: app.user.id, disabled: 1}) }}">
                                     <i class="fas fa-edit fa-fw"></i> managed
                                     <span class="badge badge-secondary">
