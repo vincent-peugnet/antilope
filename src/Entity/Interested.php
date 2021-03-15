@@ -74,9 +74,15 @@ class Interested
      */
     private $message;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $lastEditedAt;
+
     public function __construct()
     {
         $this->createdAt = new DateTime();
+        $this->lastEditedAt = new DateTime();
         $this->reviewed = false;
     }
 
@@ -141,6 +147,18 @@ class Interested
     public function setMessage(?string $message): self
     {
         $this->message = $message;
+
+        return $this;
+    }
+
+    public function getLastEditedAt(): ?\DateTimeInterface
+    {
+        return $this->lastEditedAt;
+    }
+
+    public function setLastEditedAt(?\DateTimeInterface $lastEditedAt): self
+    {
+        $this->lastEditedAt = $lastEditedAt;
 
         return $this;
     }

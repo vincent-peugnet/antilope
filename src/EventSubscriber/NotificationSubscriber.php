@@ -77,8 +77,7 @@ class NotificationSubscriber implements EventSubscriberInterface
         foreach ($managers->toArray() as $manage) {
             assert($manage instanceof Manage);
             $this->emailNotification($manage->getUser(), $subject, 'interested_new', [
-                'interestedUser' => $interestedUser,
-                'sharable' => $manage->getSharable(),
+                'interested' => $event->getInterested(),
             ]);
         }
     }

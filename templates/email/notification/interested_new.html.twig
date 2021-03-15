@@ -3,25 +3,37 @@
 {% block content %}
 
 <p>
-    <a href="{{ url('user_show', {id: interestedUser.id}) }}">{{ interestedUser.username }}</a>
+    <a href="{{ url('user_show', {id: interested.user.id}) }}">{{ interested.user.username }}</a>
     is interested in your sharable:
-    <a href="{{ url('sharable_show', {id: sharable.id}) }}">{{ sharable.name }}</a>.
+    <a href="{{ url('sharable_show', {id: interested.sharable.id}) }}">{{ interested.sharable.name }}</a>.
 </p>
 
+{% if interested.message %}
+
+    <h4>And left a message</h4>
+
+    <blockquote>
+        <p>
+            {{ interested.message }}    
+        </p>
+    </blockquote>
+
+{% endif %}
+
 <p>
-    {% if sharable.interestedMethod == 2 %}
+    {% if interested.sharable.interestedMethod == 2 %}
     As your sharable contact method is automatic (2),
-    <a href="{{ url('user_show', {id: interestedUser.id}) }}">{{ interestedUser.username }}</a>
+    <a href="{{ url('user_show', {id: interested.user.id}) }}">{{ interested.user.username }}</a>
     can now access the sharable contact infos and you can see this user contacts.
-    {% elseif sharable.interestedMethod == 3 %}
+    {% elseif interested.sharable.interestedMethod == 3 %}
     As your sharable contact method is manual (3),
     You can now review
-    <a href="{{ url('user_show', {id: interestedUser.id}) }}">{{ interestedUser.username }}</a>
+    <a href="{{ url('user_show', {id: interested.user.id}) }}">{{ interested.user.username }}</a>
     interest to allow this user access sharable contact infos.
-    {% elseif sharable.interestedMethod == 4 %}
+    {% elseif interested.sharable.interestedMethod == 4 %}
     As your sharable contact method is never (4),
     You can access
-    <a href="{{ url('user_show', {id: interestedUser.id}) }}">{{ interestedUser.username }}</a>
+    <a href="{{ url('user_show', {id: interested.user.id}) }}">{{ interested.user.username }}</a>
     contact infos and contact this user when you want.
     {% endif %}
 </p>

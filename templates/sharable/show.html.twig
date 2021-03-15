@@ -40,6 +40,21 @@
             {% if sharable.interestedMethod == 3 %}
                 {{ interested.reviewed ? 'Managers are now sharing contact infos with you.' : 'You need to wait for managers approval before accessing contact infos' }}
             {% endif %}
+            <div class="btn-group">
+
+                {% if is_granted('edit', interested) %}
+                <a class="btn btn-primary" href="{{ path('interested_edit', {id: interested.id}) }}">
+                    <i class="fas fa-pen"></i>
+                    edit
+                </a>
+                {% endif %}
+                {% if is_granted('delete', interested) %}
+                <a class="btn btn-danger" href="{{ path('interested_delete', {id: interested.id}) }}">
+                    <i class="fas fa-times"></i>
+                    delete
+                </a>
+                {% endif %}
+            </div>
         </div>
     {% endif %}
 

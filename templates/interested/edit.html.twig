@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
+
+
+{% block title %}{{ interested.sharable.name }}{% endblock %}
+
+
+
+{% block content %}
+
+
+{{ breadcrumbs.render([
+    {'url': url('sharable'), 'text': 'Sharables'},
+    {'url': url('sharable_show', {id: interested.sharable.id}), 'text': interested.sharable.name},
+    {'text': 'Interested'},
+]) }}
+<h1>{{ interested.sharable.name }}</h1>
+
+<h2>Interested</h2>
+
+{{ form(form) }}
+
+
+
+{% endblock %}

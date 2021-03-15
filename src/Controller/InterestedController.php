@@ -31,7 +31,10 @@ use App\Entity\Sharable;
 use App\Event\InterestedEvent;
 use App\Form\InterestedType;
 use App\Repository\InterestedRepository;
+use App\Security\Voter\InterestedVoter;
 use App\Security\Voter\SharableVoter;
+use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -106,5 +109,38 @@ class InterestedController extends AbstractController
         }
 
         return $this->redirectToRoute('sharable_interested', ['id' => $sharable->getId()]);
+    }
+
+    /**
+     * @Route("/interested/{id}/edit", name="interested_edit", requirements={"id"="\d+"})
+     */
+    public function edit(Interested $interested, Request $request, EntityManagerInterface $em): Response
+    {
+        $this->denyAccessUnlessGranted(InterestedVoter::EDIT, $interested);
+        $form = $this->createForm(InterestedType::class, $interested);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $interested = $form->getData();
+            $interested->setLastEditedAt(new DateTime());
+            $em->persist($interested);
+            $em->flush();
+            return $this->redirectToRoute('sharable_show', ['id' => $interested->getSharable()->getId()]);
+        }
+
+        return $this->render('interested/edit.html.twig', [
+            'interested' => $interested,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/interested/{id}/delete", name="interested_delete", requirements={"id"="\d+"})
+     */
+    public function delete(Interested $interested, EntityManagerInterface $em)
+    {
+        $this->denyAccessUnlessGranted(InterestedVoter::DELETE, $interested);
+        $em->remove($interested);
+        $em->flush();
+        return $this->redirectToRoute('sharable_show', ['id' => $interested->getSharable()->getId()]);
     }
 }
