@@ -64,7 +64,9 @@ class InterestedController extends AbstractController
     {
         $this->denyAccessUnlessGranted(SharableVoter::INTEREST, $sharable);
 
-        $form = $this->createForm(InterestedType::class, new Interested());
+        $interested = new Interested();
+        $interested->setSharable($sharable);
+        $form = $this->createForm(InterestedType::class, $interested);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $interested = $form->getData();

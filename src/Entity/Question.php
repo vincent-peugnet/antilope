@@ -69,7 +69,7 @@ class Question
      *     min = 10,
      *     max = 512,
      *     minMessage = "Question should be at least {{ limit }} characters long",
-     *     maxMessage = "Question should be longer than {{ limit }} characters",
+     *     maxMessage = "Question should not be longer than {{ limit }} characters",
      * )
      */
     private $text;

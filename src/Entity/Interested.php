@@ -29,6 +29,7 @@ namespace App\Entity;
 use App\Repository\InterestedRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=InterestedRepository::class)
@@ -63,6 +64,15 @@ class Interested
      * @ORM\Column(type="boolean")
      */
     private $reviewed;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @Assert\Length(
+     *     max = 512,
+     *     maxMessage = "Message should not be longer than {{ limit }} characters",
+     * )
+     */
+    private $message;
 
     public function __construct()
     {
@@ -119,6 +129,18 @@ class Interested
     public function setReviewed(bool $reviewed): self
     {
         $this->reviewed = $reviewed;
+
+        return $this;
+    }
+
+    public function getMessage(): ?string
+    {
+        return $this->message;
+    }
+
+    public function setMessage(?string $message): self
+    {
+        $this->message = $message;
 
         return $this;
     }
