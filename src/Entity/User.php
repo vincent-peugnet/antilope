@@ -567,42 +567,6 @@ class User implements UserInterface
         return $this;
     }
 
-    //_______________ special functions _______________
-
-    /**
-     * @return Collection|Sharable[] ArrayCollection of Sharable objects
-     */
-    public function getInterestedSharables(): Collection
-    {
-        return $this->interesteds->map(function (Interested $interested) {
-            return $interested->getSharable();
-        });
-    }
-
-    /**
-     * Get Real Managed list
-     *
-     * @return Collection|Manage[]
-     */
-    public function getConfirmedManages(): Collection
-    {
-        return $this->manages->filter(function (Manage $manage) {
-            return $manage->getConfirmed();
-        });
-    }
-
-    /**
-     * Get confirmed not anonymous managed list
-     *
-     * @return Collection|Manage[]
-     */
-    public function getConfirmedOnymousManages(): Collection
-    {
-        return $this->manages->filter(function (Manage $manage) {
-            return $manage->getConfirmed() && !$manage->isAnonymous();
-        });
-    }
-
     /**
      * @return bool if user is admin
      */
@@ -623,18 +587,6 @@ class User implements UserInterface
         }
 
         return $this;
-    }
-
-    public function getNotForgottenUserContacts()
-    {
-        return $this->userContacts->filter(function (UserContact $userContact) {
-            return !$userContact->isForgotten();
-        });
-    }
-
-    public function isContactable(): bool
-    {
-        return !$this->getNotForgottenUserContacts()->isEmpty();
     }
 
     public function getAvatarPath(): string
@@ -730,5 +682,65 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+    //_______________ special functions _______________
+
+    /**
+     * @return Collection|Sharable[] ArrayCollection of Sharable objects
+     */
+    public function getInterestedSharables(): Collection
+    {
+        return $this->interesteds->map(function (Interested $interested) {
+            return $interested->getSharable();
+        });
+    }
+
+    /**
+     * Get Real Managed list
+     *
+     * @return Collection|Manage[]
+     */
+    public function getConfirmedManages(): Collection
+    {
+        return $this->manages->filter(function (Manage $manage) {
+            return $manage->getConfirmed();
+        });
+    }
+
+    /**
+     * Get invitations to manage sharables
+     *
+     * @return Collection|Manage[]
+     */
+    public function getUnconfirmedManages(): Collection
+    {
+        return $this->manages->filter(function (Manage $manage) {
+            return !$manage->getConfirmed();
+        });
+    }
+
+    /**
+     * Get confirmed not anonymous managed list
+     *
+     * @return Collection|Manage[]
+     */
+    public function getConfirmedOnymousManages(): Collection
+    {
+        return $this->manages->filter(function (Manage $manage) {
+            return $manage->getConfirmed() && !$manage->isAnonymous();
+        });
+    }
+
+    public function getNotForgottenUserContacts()
+    {
+        return $this->userContacts->filter(function (UserContact $userContact) {
+            return !$userContact->isForgotten();
+        });
+    }
+
+    public function isContactable(): bool
+    {
+        return !$this->getNotForgottenUserContacts()->isEmpty();
     }
 }

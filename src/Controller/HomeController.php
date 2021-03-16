@@ -27,6 +27,7 @@
 namespace App\Controller;
 
 use App\Entity\Sharable;
+use App\Repository\InterestedRepository;
 use App\Repository\QuestionRepository;
 use App\Repository\SharableRepository;
 use App\Repository\UserRepository;
@@ -44,8 +45,15 @@ class HomeController extends AbstractController
         SharableRepository $sharableRepository,
         UserRepository $userRepository,
         ValidationRepository $validationRepository,
-        QuestionRepository $questionRepository
+        QuestionRepository $questionRepository,
+        InterestedRepository $interestedRepository
     ): Response {
+        $user = $this->getUser();
+        if (!is_null($user)) {
+            $interesteds = $interestedRepository->findByUserManaging($user, 5);
+        } else {
+            $interesteds = [];
+        }
         return $this->render('home/index.html.twig', [
             'userCount' => $userRepository->count([]),
             'sharableCount' => $sharableRepository->count([]),
@@ -57,6 +65,7 @@ class HomeController extends AbstractController
             'activeUsers' => $userRepository->findRecentlyActive(60),
             'lastValidations' => $validationRepository->findBy([], ['sendAt' => 'DESC'], 5),
             'sharable' => new Sharable(),
+            'interesteds' => $interesteds,
         ]);
     }
 }

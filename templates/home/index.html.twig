@@ -1,24 +1,58 @@
 {% extends 'base.html.twig' %}
 {% import "macros/user.html.twig" as userMacro %}
-{% import 'macros/sharable.html.twig' as sharable %}
+{% import 'macros/sharable.html.twig' as sharableMacro %}
 
 {% block title %}Home{% endblock %}
 
 {% block content %}
 
-<div class="jumbotron">
 
-    <h1 class="display-4">{{ siteName }}</h1>
+<div class="row">
 
-    <p class="lead">{{ siteDescription }}</p>
+    <div class="col-lg-4">
+        
+        <h1 class="display-5">{{ siteName }}</h1>
+        
+        <p class="lead">{{ siteDescription }}</p>
 
+        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+        <p>
+            Hi {{ app.user.username }} !
+        </p>
+        {% endif %}
+    </div>
+    
     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-    <p>
-        Hi {{ app.user.username }} !
-    </p>
+        <div class="col-lg-8 overflow-auto mb-3">
+            {% for manage in app.user.getUnconfirmedManages|reverse %}
+            <div class="alert border border-primary">
+                <a class="btn btn-primary mr-1" href="{{ path('sharable_show', {id: manage.sharable.id}) }}">
+                    <i class="fas fa-user-plus"></i>
+                </a>
+                You've been invited to manage {{ sharableMacro.render(manage.sharable) }}.
+                <div class="btn-group">
+                    <a class="btn btn-secondary" href="{{ path('manage_confirm', {id: manage.id}) }}"><i class="fas fa-check"></i> confirm</a>
+                    <a class="btn btn-secondary" href="{{ path('manage_remove', {id: manage.id}) }}"><i class="fas fa-times"></i> refuse</a>
+                </div>
+                <small class="text-muted">{{ manage.createdAt|ago }}</small>
+            </div>
+            {% endfor %}
+            {% for interested in interesteds %}
+            <div class="alert border border-warning">
+                <a class="btn btn-warning mr-1" title="view interested users" href="{{ path('sharable_interested', {id: interested.sharable.id}) }}">
+                    <i class="fas fa-question-circle"></i>
+                </a>
+                {{ userMacro.render(interested.user, 1) }} is interested in your sharable {{ sharableMacro.render(interested.sharable) }}
+                <small class="text-muted">{{ interested.createdAt|ago }}</small>
+            </div>
+            {% endfor %}
+            {% if interesteds|length >= 4 %}
+                <a href="">view all...</a>
+            {% endif %}
+        </div>
     {% endif %}
-
 </div>
+
 
 
 <div class="row">
@@ -58,7 +92,7 @@
 
                             {{ userMacro.render(validation.user, 1) }}
                             <i class="fas fa-check-circle"></i>
-                            {{ sharable.render(validation.sharable) }}
+                            {{ sharableMacro.render(validation.sharable) }}
 
                             {% if validation.message %}
                                 <div class="p-2 mt-2 bg-success rounded text-truncate">

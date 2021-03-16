@@ -90,7 +90,8 @@ class SharableRepository extends ServiceEntityRepository
 
             if ($this->security->isGranted(UserVoter::VIEW_SHARABLES, $manager)) {
                 $qb->andWhere('m.user = :mid')
-                    ->setParameter('mid', $manager->getId());
+                    ->setParameter('mid', $manager->getId())
+                    ->andWhere('m.confirmed = 1');
                 if ($manager !== $user) {
                     $qb->andWhere('m.anonymous = 0');
                 }

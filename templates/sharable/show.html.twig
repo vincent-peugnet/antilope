@@ -119,15 +119,16 @@
             {% if is_granted('edit', sharable) and not sharable.getDisabled %}
             <a class="btn btn-danger" href="{{ path('sharable_activation', {id: sharable.id}) }}"><i class="fas fa-times-circle"></i> disable</a>
             {% endif %}
-            {% if not bookmarked %}
             <a class="btn btn-light" href="{{ path('sharable_bookmark', {id:sharable.id}) }}">
+                {% if not bookmarked %}
                 <i class="far fa-bookmark"></i> bookmark
-            </a>
-            {% else %}
-            <a class="btn btn-light" href="{{ path('sharable_bookmark', {id:sharable.id}) }}">
+                {% else %}
                 <i class="fas fa-bookmark"></i> unbookmark
+                {% endif %}
+                <span class="badge badge-secondary">
+                    {{ sharable.bookmarks|length }}
+                </span>
             </a>
-            {% endif %}
 
         </div>
 

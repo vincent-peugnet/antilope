@@ -27,6 +27,7 @@
 namespace App\Repository;
 
 use App\Entity\Interested;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -43,22 +44,24 @@ class InterestedRepository extends ServiceEntityRepository
         parent::__construct($registry, Interested::class);
     }
 
-    // /**
-    //  * @return Interested[] Returns an array of Interested objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Interested[] Returns an array of Interested objects
+     */
+    public function findByUserManaging(User $user, int $limit = null): array
     {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('i.id', 'ASC')
-            ->setMaxResults(10)
+        $qb = $this->createQueryBuilder('i')
+            ->leftJoin('i.sharable', 's')
+            ->addSelect('s')
+            ->leftJoin('s.managedBy', 'm')
+            ->addSelect('m')
+            ->andWhere('m.user = :val')
+            ->setParameter('val', $user)
+            ->orderBy('i.createdAt', 'DESC')
+            ->setMaxResults($limit)
             ->getQuery()
-            ->getResult()
         ;
+        return $qb->getResult();
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?Interested

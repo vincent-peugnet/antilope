@@ -167,7 +167,11 @@ class SharableVoter extends Voter
 
     private function canViewInterested(Sharable $sharable, User $user): bool
     {
-        return ($this->canEdit($sharable, $user) && $sharable->getInterestedMethod() > 1);
+        return (
+            $this->canEdit($sharable, $user) &&
+            $sharable->getInterestedMethod() > 1 &&
+            !$sharable->getInteresteds()->isEmpty()
+        );
     }
 
     private function canViewContact(Sharable $sharable, User $user): bool

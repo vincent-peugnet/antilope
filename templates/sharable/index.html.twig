@@ -20,7 +20,7 @@
             {{ form_row(searchForm.disabled) }}
             {{ form_row(searchForm.tags) }}
 
-            <div class="d-none d-md-block">
+            <div class="d-none">
                 {{ form_row(searchForm.managedBy) }}
                 {{ form_row(searchForm.bookmarkedBy) }}
                 {{ form_row(searchForm.validatedBy) }}
@@ -168,14 +168,21 @@
                         {% endif %}
                     </h5>
                 </span>
-            
-                <div class="btn-group">
-                    {% if is_granted('edit', sharable) %}
-                    <a class="btn btn-primary" href="{{ path('sharable_edit', {id: sharable.id}) }}">
-                        <i class="fas fa-pen"></i>
+                {% if is_granted('edit', sharable) %}
+                <div class="dropleft show">
+                    <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-cog"></i>
                     </a>
-                    {% endif %}
+                  
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="{{ path('sharable_edit', {id: sharable.id}) }}"> <i class="fas fa-pen"></i> edit</a>
+                        {% if is_granted('interested', sharable) %}
+                        <a class="dropdown-item bg-warning" href="{{ path('sharable_interested', {id: sharable.id}) }}"><i class="fas fa-eye"></i> see interesteds</a>
+                        {% endif %}
+                        <a class="dropdown-item" href="{{ path('sharable_managers', {id: sharable.id}) }}"><i class="fas fa-user-edit"></i> edit managers</a>
+                    </div>
                 </div>
+                {% endif %}
             </div>
 
 
