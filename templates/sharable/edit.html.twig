@@ -36,3 +36,16 @@
 
 
 {% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-markdown/2.10.0/css/bootstrap-markdown.min.css" integrity="sha512-CUHPfvm73R8lgOyl0oyhnGfM5RlGV7yRyj98ZeX3/cBsLLuSVRaqKHhahj6B04H3Q63jZcQHHZZXIonj03eUzQ==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="{{ asset('/bootstrap-markdown.css') }}" />
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-markdown/2.10.0/js/bootstrap-markdown.min.js" integrity="sha512-24rJoYUaUxwg8u20GPTT7kfEdhhx2rksnoRssbLLC73nWrifdvCqX0vVrGFqz3635DMvjeXeE1aCUXDtqHh2DQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/2.0.1/marked.min.js" integrity="sha512-pjhyz9DR7D4w90mc3iiAjhSRSmVrF3egxvfbOO6948qG0GACeOVpnP+xWEm7ihN5m1rg8tEHKRBhRrYEGhIR6Q==" crossorigin="anonymous"></script>
+{% endblock %}
+

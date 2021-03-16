@@ -1,0 +1,6 @@
+/* fix for bootstrap-markdown, see https://github.com/refactory-id/bootstrap-markdown/issues/213#issuecomment-538313880 */
+
+.fa-header::before { content: "\f1dc"; }
+.fa-picture-o::before { content:"\f03e"; }
+.md-header .btn-default { color: #333; }
+.md-preview { color: #333; }

@@ -79,6 +79,12 @@ class SharableType extends AbstractType
                 'required' => true,
                 'help' => 'Long description, where you can use Markdown <i class="fab fa-markdown"></i>',
                 'help_html' => true,
+                'attr' => [
+                    'data-provide' => 'markdown',
+                    'data-iconlibrary' => 'fa',
+                    'data-resize' => 'vertical',
+                    'data-fullscreen' => '{enable: false}',
+                ],
             ])
             ->add('tags', EntityType::class, [
                 'class' => Tag::class,
