@@ -4,6 +4,10 @@
 
 /* fixes for bootstrap 4 and current theme */
 .md-editor { border-radius: 0.25rem; }
-textarea.md-input, .md-preview { padding: 0.375rem 0.75rem; }
+.md-input, .md-preview { padding: 0.375rem 0.75rem; !important }
 .md-header .btn-default { color: #444; }
 .md-preview { color: #444; }
+
+/* fix for image max width */
+.md-preview { width: 100% !important; }
+.md-preview img { max-width: 100%; }
