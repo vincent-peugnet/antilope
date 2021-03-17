@@ -1,0 +1,6 @@
+/* fix blockquote styles */
+blockquote {
+    padding: 0 0.5rem;
+    color: var(--gray);
+    border-left: .2rem solid var(--gray);
+}
