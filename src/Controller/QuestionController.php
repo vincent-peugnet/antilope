@@ -31,6 +31,7 @@ use App\Entity\Question;
 use App\Event\QuestionEvent;
 use App\Form\AnswerType;
 use App\Form\QuestionType;
+use App\Repository\QuestionRepository;
 use App\Security\Voter\QuestionVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -42,6 +43,16 @@ use Symfony\Component\Routing\Annotation\Route;
 class QuestionController extends AbstractController
 {
     /**
+     * @Route("/question", name="question")
+     */
+    public function index(QuestionRepository $questionRepository)
+    {
+        return $this->render('question/index.html.twig', [
+            'questions' => $questionRepository->findAllVisible($this->getUser()),
+        ]);
+    }
+
+    /**
      * @Route("/question/{id}/show", name="question_show", requirements={"id"="\d+"})
      */
     public function show(
@@ -50,7 +61,7 @@ class QuestionController extends AbstractController
         EventDispatcherInterface $dispatcher,
         EntityManagerInterface $em
     ): Response {
-        $this->denyAccessUnlessGranted(QuestionVoter::ANSWER, $question);
+        $this->denyAccessUnlessGranted(QuestionVoter::VIEW, $question);
 
         $form = $this->createForm(AnswerType::class);
 

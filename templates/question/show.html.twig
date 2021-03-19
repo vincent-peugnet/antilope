@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 {% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 {% import "macros/user.html.twig" as userMacro %}
+{% import "macros/sharable.html.twig" as sharableMacro %}
+{% import "macros/ago.html.twig" as agoMacro %}
 
 {% block title %}Answer a question{% endblock %}
 
@@ -8,34 +10,53 @@
 
 
 {{ breadcrumbs.render([
-    {'url': url('sharable'), 'text': 'Sharables'},
-    {'url': url('sharable_show', {id: question.sharable.id}), 'text': question.sharable.name},
-    {'text': 'question'},
+    {'url': url('question'), 'text': 'Questions'},
+    {'text': question.text|u.truncate(40, '...', false)},
 ]) }}
+    <h5>
+        {{ userMacro.render(question.user, 2) }}
+        >
+        {{ sharableMacro.render(question.sharable) }}
+        <small>
+            {{ agoMacro.render(question.createdAt, true) }}
+        </small>
 
-    <h1>Question</h1>
+    </h5>
+    <div class="jumbotron">
+        
+        <h4>{{ question.text }}</h4>
 
-    <p>{{ question.text }}</p>
-
-    {% for answer in question.answers %}
-    <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h5>
-                {{ userMacro.render(answer.user, 1) }}
-            </h5>
-            <small class="text-muted">
-                {{ answer.createdAt|ago }}
-            </small>
-        </div>
-        <div class="card-body">
-            <p>{{ answer.text }}</p>
-        </div>
     </div>
-    {% endfor %}
 
-    <h3>Answer</h3>
+        
+        
+    {% if question.answers|length > 0 %}
+        <h3>Answers</h3>
+        
+        {% for answer in question.answers %}
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5>
+                    {{ userMacro.render(answer.user, 2) }}
+                </h5>
+                <small>
+                    {{ agoMacro.render(answer.createdAt, true) }}
+                </small>
+            </div>
+            <div class="card-body">
+                <p>{{ answer.text }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
 
-    {{ form(form) }}
+    <h3>Your Answer</h3>
+
+    {% if is_granted('answer', question) %}
+        {{ form(form) }}
+    {% else %}
+        <p>Only sharable managers and user who validated the sharable can answer to questions.</p>        
+    {% endif %}
 
 
 {% endblock %}

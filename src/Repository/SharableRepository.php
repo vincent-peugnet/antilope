@@ -59,11 +59,14 @@ class SharableRepository extends ServiceEntityRepository
     /**
      * List all sharable based on user Class and visibleBy setting on the sharables
      *
-     * @param UserClass[] $visibleBy Collection of UserClass
      * @param User $user the actual user
      */
-    public function getFilteredSharables(SharableSearch $search, array $visibleBy, User $user): array
+    public function getFilteredSharables(SharableSearch $search, User $user): array
     {
+        $userClassRepository = $this->getEntityManager()->getRepository(UserClass::class);
+        assert($userClassRepository instanceof UserClassRepository);
+        $visibleBy = $userClassRepository->findLowerthan($user->getUserClass());
+
         $visibleByIds = array_map(function (UserClass $userClass) {
             return $userClass->getId();
         }, $visibleBy);

@@ -36,6 +36,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class QuestionVoter extends Voter
 {
+    public const VIEW = 'view';
     public const DELETE = 'delete';
     public const EDIT = 'edit';
     public const ANSWER = 'answer';
@@ -53,7 +54,7 @@ class QuestionVoter extends Voter
 
     protected function supports($attribute, $subject)
     {
-        return in_array($attribute, [self::DELETE, self::ANSWER, self::EDIT])
+        return in_array($attribute, [self::DELETE, self::ANSWER, self::EDIT, self::VIEW])
             && $subject instanceof \App\Entity\Question;
     }
 
@@ -67,6 +68,8 @@ class QuestionVoter extends Voter
 
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
+            case self::VIEW:
+                return $this->canView($subject, $user);
             case self::DELETE:
                 return $this->canDelete($subject, $user);
             case self::EDIT:
@@ -76,6 +79,14 @@ class QuestionVoter extends Voter
         }
 
         return false;
+    }
+
+    private function canView(Question $question, User $user): bool
+    {
+        return $this->authorization->isGranted(
+            SharableVoter::VIEW,
+            $question->getSharable()
+        );
     }
 
     private function canDelete(Question $question, User $user): bool

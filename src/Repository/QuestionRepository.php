@@ -27,6 +27,8 @@
 namespace App\Repository;
 
 use App\Entity\Question;
+use App\Entity\User;
+use App\Entity\UserClass;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -43,22 +45,49 @@ class QuestionRepository extends ServiceEntityRepository
         parent::__construct($registry, Question::class);
     }
 
-    // /**
-    //  * @return Question[] Returns an array of Question objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Question[] Returns an array of Question objects
+     */
+    public function findAllVisible(User $user)
     {
-        return $this->createQueryBuilder('q')
-            ->andWhere('q.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('q.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
+        $userClassRepository = $this->getEntityManager()->getRepository(UserClass::class);
+        assert($userClassRepository instanceof UserClassRepository);
+        $visibleBy = $userClassRepository->findLowerthan($user->getUserClass());
+
+        $visibleByIds = array_map(function (UserClass $userClass) {
+            return $userClass->getId();
+        }, $visibleBy);
+
+        $qb = $this->createQueryBuilder('q')
+            ->leftJoin('q.sharable', 's')
+            ->leftJoin('s.managedBy', 'm')
         ;
+
+        // Work, but there may be a better way to do this including a lot of joins
+        if ($user->getUserClass()->getAccess()) {
+            $qb->andwhere(
+                $qb->expr()->orX(
+                    $qb->expr()->in('s.visibleBy', $visibleByIds),
+                    $qb->expr()->isNull('s.visibleBy'),
+                    $qb->expr()->eq('m.user', $user->getId())
+                )
+            );
+        } else {
+            $qb->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->in('s.visibleBy', $visibleByIds),
+                    $qb->expr()->eq('m.user', $user->getId())
+                )
+            );
+        }
+
+        $qb
+            ->orderBy('q.id', 'DESC')
+            ->setMaxResults(10)
+        ;
+
+        return $qb->getQuery()->getResult();
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?Question

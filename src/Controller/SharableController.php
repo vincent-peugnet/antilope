@@ -65,12 +65,10 @@ class SharableController extends AbstractController
      */
     public function index(
         Request $request,
-        SharableRepository $sharableRepository,
-        UserClassRepository $userClassRepository
+        SharableRepository $sharableRepository
     ): Response {
         /** @var User $user */
         $user = $this->getUser();
-        $visibleBy = $userClassRepository->findLowerthan($user->getUserClass());
 
         $search = new SharableSearch();
 
@@ -79,7 +77,7 @@ class SharableController extends AbstractController
         /** @var SharableSearch $search */
         $search = $form->getData();
 
-        $sharables = $sharableRepository->getFilteredSharables($search, $visibleBy, $user);
+        $sharables = $sharableRepository->getFilteredSharables($search, $user);
 
         $validatedSharables = $user->getValidations()->map(function (Validation $validation) {
             return $validation->getSharable();

@@ -1,0 +1,13 @@
+{% macro render(dateTime, clock = false, muted = true) %}
+    <span
+        {% if muted %}
+            class="text-muted"
+        {% endif %}
+        title="{{ dateTime|format_datetime }}"
+    >
+        {% if clock %}
+            <i class="fas fa-clock"></i>
+        {% endif %}
+        {{ dateTime|ago }}
+    </span>
+{% endmacro %}
