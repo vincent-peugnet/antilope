@@ -74,6 +74,11 @@ class UserClass
     private bool $canInvite = false;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $canQuestion = false;
+
+    /**
      * @ORM\Column(type="smallint")
      * @Assert\Choice(callback={"App\Security\Voter\UserVoter", "getParanoiaLevels"})
      */
@@ -423,6 +428,18 @@ class UserClass
     public function setMaxInactivity(int $maxInactivity): self
     {
         $this->maxInactivity = $maxInactivity;
+
+        return $this;
+    }
+
+    public function getCanQuestion(): ?bool
+    {
+        return $this->canQuestion;
+    }
+
+    public function setCanQuestion(bool $canQuestion): self
+    {
+        $this->canQuestion = $canQuestion;
 
         return $this;
     }

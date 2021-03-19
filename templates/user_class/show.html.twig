@@ -58,6 +58,11 @@
                         can access sharables
                     </li>
                     {% endif %}
+                    {% if userClass.canQuestion %}
+                        <li class="list-group-item">
+                            can ask questions on sharables
+                        </li>
+                    {% endif %}
                     {% if userClass.canInvite %}
                         {% if userClass.inviteFrequency == 0 %}
                         <li class="list-group-item">

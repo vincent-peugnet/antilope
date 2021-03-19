@@ -251,6 +251,7 @@ class SharableVoter extends Voter
             $this->canView($sharable, $user) &&
             !$sharable->getDisabled() &&
             $sharable->isAccessible() &&
+            $user->getUserClass()->getCanQuestion() &&
             !$this->canEdit($sharable, $user) &&
             !$this->alreadyValidated($sharable, $user)
         );

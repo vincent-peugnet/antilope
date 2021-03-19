@@ -71,6 +71,7 @@ class UserClassType extends AbstractType
             ->add('name')
             ->add('share')
             ->add('access')
+            ->add('canQuestion')
             ->add('canInvite')
             ->add('maxInactivity')
             ->add('maxParanoia', ChoiceType::class, [
