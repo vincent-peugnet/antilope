@@ -44,8 +44,6 @@ class SharableSearchType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $sharableSearch = $builder->getData();
-        assert($sharableSearch instanceof SharableSearch);
         $default = new SharableSearch();
         $builder
             ->add('query', SearchType::class, [

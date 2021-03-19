@@ -28,8 +28,10 @@ namespace App\Controller;
 
 use App\Entity\Answer;
 use App\Entity\Question;
+use App\Entity\QuestionSearch;
 use App\Event\QuestionEvent;
 use App\Form\AnswerType;
+use App\Form\QuestionSearchType;
 use App\Form\QuestionType;
 use App\Repository\QuestionRepository;
 use App\Security\Voter\QuestionVoter;
@@ -45,10 +47,18 @@ class QuestionController extends AbstractController
     /**
      * @Route("/question", name="question")
      */
-    public function index(QuestionRepository $questionRepository)
+    public function index(QuestionRepository $questionRepository, Request $request)
     {
+        $search = new QuestionSearch();
+        $form = $this->createForm(QuestionSearchType::class, $search);
+        $form->handleRequest($request);
+        $search = $form->getData();
+        assert($search instanceof QuestionSearch);
+        $questions = $questionRepository->findAllVisible($this->getUser(), $search);
+
         return $this->render('question/index.html.twig', [
-            'questions' => $questionRepository->findAllVisible($this->getUser()),
+            'searchForm' => $form->createView(),
+            'questions' => $questions,
         ]);
     }
 
@@ -110,7 +120,7 @@ class QuestionController extends AbstractController
             assert($question instanceof Question);
             $em->persist($question);
             $em->flush();
-            return $this->redirectToRoute('sharable_show', ['id' => $question->getSharable()->getId()]);
+            return $this->redirectToRoute('question_show', ['id' => $question->getId()]);
         }
 
         return $this->render('question/edit.html.twig', [

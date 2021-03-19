@@ -27,6 +27,7 @@
 namespace App\Repository;
 
 use App\Entity\Question;
+use App\Entity\QuestionSearch;
 use App\Entity\User;
 use App\Entity\UserClass;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -48,7 +49,7 @@ class QuestionRepository extends ServiceEntityRepository
     /**
      * @return Question[] Returns an array of Question objects
      */
-    public function findAllVisible(User $user)
+    public function findAllVisible(User $user, QuestionSearch $search)
     {
         $userClassRepository = $this->getEntityManager()->getRepository(UserClass::class);
         assert($userClassRepository instanceof UserClassRepository);
@@ -81,8 +82,33 @@ class QuestionRepository extends ServiceEntityRepository
             );
         }
 
+        if (!is_null($search->getSharable())) {
+            $qb->andWhere(
+                $qb->expr()->eq('q.sharable', $search->getSharable()->getId())
+            );
+        }
+
+        if (!is_null($search->getUser())) {
+            $qb->andWhere(
+                $qb->expr()->eq('q.user', $search->getUser()->getId())
+            );
+        }
+
+        if (!empty($search->getQuery())) {
+            $qb = $qb
+                ->andWhere('q.text LIKE :q')
+                ->setParameter('q', "%{$search->getQuery()}%");
+        }
+
+        if ($search->getOnlyNotAnswered()) {
+            $qb = $qb->leftJoin('q.answers', 'a')
+                ->andWhere(
+                    $qb->expr()->isNull('a.question')
+                );
+        }
+
         $qb
-            ->orderBy('q.id', 'DESC')
+            ->orderBy('q.' . $search->getSortBy(), $search->getOrder())
             ->setMaxResults(10)
         ;
 

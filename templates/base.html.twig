@@ -104,6 +104,12 @@
                                         {{ app.user.getConfirmedManages|length }}
                                     </span>
                                 </a>
+                                <a class="dropdown-item {{ route_name == 'question' and app.request.get('user') == app.user.id ? ' active' }}" href="{{ path('question', {user: app.user.id}) }}">
+                                    <i class="fas fa-comment fa-fw"></i> questions
+                                    <span class="badge badge-secondary">
+                                        {{ app.user.questions|length }}
+                                    </span>
+                                </a>
                                 <a class="dropdown-item{{ route_name == 'account_invitation' ? ' active' }}" href="{{ path('account_invitation') }}">
                                     <i class="fas fa-envelope-open fa-fw"></i> invitation
                                 </a>

@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 {% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 {% import "macros/user.html.twig" as userMacro %}
+{% import "macros/sharable.html.twig" as sharableMacro %}
 
 {% block title %}Edit a question{% endblock %}
 
@@ -8,15 +9,14 @@
 
 
 {{ breadcrumbs.render([
-    {'url': url('sharable'), 'text': 'Sharables'},
-    {'url': url('sharable_show', {id: question.sharable.id}), 'text': question.sharable.name},
-    {'text': 'question'},
+    {'url': url('question'), 'text': 'Questions'},
+    {'url': url('question_show', {id: question.id}), 'text': question.text|u.truncate(40, '...', false)},
+    {'text': 'edit'},
 ]) }}
 
-    <h1>Question</h1>
+    <h1>Edit question</h1>
 
-
-    <h3>Answer</h3>
+    <h5>on {{ sharableMacro.render(question.sharable) }}</h5>
 
     {{ form(form) }}
 

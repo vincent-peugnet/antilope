@@ -4,47 +4,56 @@
 {% import "macros/sharable.html.twig" as sharableMacro %}
 {% import "macros/ago.html.twig" as agoMacro %}
 
-{% block title %}Answer a question{% endblock %}
+{% block title %}Questions{% endblock %}
 
 {% block content %}
 
-    <h1>Questions</h1>
-
-    {% for question in questions %}
-    <div class="card mb-3">
-        <div class="card-header">            
-            <h5 class="card-title">
-                {{ userMacro.render(question.user) }}
-                >
-                {{ sharableMacro.render(question.sharable) }}
-                <small>
-                    {{ agoMacro.render(question.createdAt) }}
-                </small>
-            </h5>
+    <div class="row">
+        <div class="col-md-3">
+            {{ form(searchForm) }}
         </div>
-        <div class="card-body">
 
-            <p>{{ question.text }}</p>
+        <div class="col-md-9">
+
             
+            {% for question in questions %}
+            <div class="card mb-3">
+                <div class="card-header">            
+                    <h5 class="card-title">
+                        {{ userMacro.render(question.user) }}
+                        >
+                        {{ sharableMacro.render(question.sharable) }}
+                        <small>
+                            {{ agoMacro.render(question.createdAt) }}
+                        </small>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    
+                    <p>{{ question.text }}</p>
+                    
+                    
+                    {% if is_granted('answer', question) %}
+                    <a href="{{ path('question_show', {id: question.id}) }}" class="btn btn-primary">
+                        answer !
+                        <span class="badge badge-secondary">
+                            {{ question.answers|length }}
+                        </span>
+                    </a>
+                    {% else %}
+                    <a href="{{ path('question_show', {id: question.id}) }}" class="btn btn-light">
+                        answers
+                        <span class="badge badge-secondary">
+                            {{ question.answers|length }}
+                        </span>
+                    </a>
+                    {% endif %}
+                </div>
+                
+            </div>
+            {% endfor %}
         
-            {% if is_granted('answer', question) %}
-            <a href="{{ path('question_show', {id: question.id}) }}" class="btn btn-primary">
-                answer !
-                <span class="badge badge-secondary">
-                    {{ question.answers|length }}
-                </span>
-            </a>
-            {% else %}
-            <a href="{{ path('question_show', {id: question.id}) }}" class="btn btn-light">
-                answers
-                <span class="badge badge-secondary">
-                    {{ question.answers|length }}
-                </span>
-            </a>
-            {% endif %}
         </div>
-        
     </div>
-    {% endfor %}
-
 {% endblock %}
+        

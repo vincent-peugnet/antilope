@@ -50,6 +50,13 @@
         {% endfor %}
     {% endif %}
 
+    {% if is_granted('edit', question) %}
+        <a class="btn btn-primary" href="{{ path('question_edit', {id: question.id}) }}">
+            <i class="fas fa-pen"></i>
+            edit
+        </a>
+    {% endif %}
+
     <h3>Your Answer</h3>
 
     {% if is_granted('answer', question) %}
