@@ -1,10 +1,10 @@
 /* fixes for font awesome 5, see https://github.com/refactory-id/bootstrap-markdown/issues/213#issuecomment-538313880 */
 .fa-header::before { content: "\f1dc"; }
-.fa-picture-o::before { content:"\f03e"; }
+.fa-picture-o::before { content: "\f03e"; }
 
 /* fixes for bootstrap 4 and current theme */
 .md-editor { border-radius: 0.25rem; }
-.md-input, .md-preview { padding: 0.375rem 0.75rem; !important }
+.md-input, .md-preview { padding: 0.375rem 0.75rem !important; }
 .md-header .btn-default { color: #444; }
 .md-preview { color: #444; }
 
