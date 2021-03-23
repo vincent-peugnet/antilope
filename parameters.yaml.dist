@@ -10,3 +10,5 @@ parameters:
     app.lastActivityDelay: 1
     app.contactForgetDelay: 7
     app.contactEditDelay: 15
+    app.minTag: 0
+    app.maxTag: 0

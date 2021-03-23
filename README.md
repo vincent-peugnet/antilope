@@ -196,6 +196,8 @@ Default global parameters are generated interactively during `composer install` 
 - `app.lastActivityDelay (int)` Time of user lastActivity refresh (in minutes)
 - `app.contactForgetDelay (int)` Time before a contact is not visible anymore (in hours)
 - `app.contactEditDelay (int)` Time before a contact is not editable anymore (in minutes)
+- `app.minTag (int)` Minimum number of tag per sharable (0 is none)
+- `app.maxTag (int)` Maximum number of tag per sharable (0 is none)
 
 ### Administration
 

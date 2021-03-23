@@ -31,6 +31,7 @@ use App\Entity\Tag;
 use App\Entity\UserClass;
 use App\Repository\TagRepository;
 use App\Repository\UserClassRepository;
+use App\Validator\TagCount;
 use DateTime;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -62,6 +63,7 @@ class SharableType extends AbstractType
             ->add('name')
             ->add('coverFile', FileType::class, [
                 'label' => 'cover',
+                'help' => 'Jpeg, Png or Gif of maximum 2Mo',
                 'mapped' => false,
                 'required' => false,
                 'constraints' => new Image([
@@ -91,6 +93,7 @@ class SharableType extends AbstractType
                 'required' => false,
                 'multiple' => true,
                 'expanded' => true,
+                'constraints' => [new TagCount()],
             ])
             ->add('visibleBy', EntityType::class, [
                 'class' => UserClass::class,

@@ -39,4 +39,4 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/(sharable|user|userclass|account|manage|rule), roles: IS_AUTHENTICATED_REMEMBERED }
+        - { path: ^/(sharable|user|tag|question|userclass|account|manage|rule), roles: IS_AUTHENTICATED_REMEMBERED }
