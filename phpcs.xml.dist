@@ -8,7 +8,7 @@
     <arg name="basepath" value="."/>
     <arg name="cache" value=".phpcs-cache"/>
     <arg name="colors"/>
-    <arg name="extensions" value="php"/>
+    <arg name="extensions" value="php,css"/>
     <arg name="parallel" value="75" />
     <arg value="p" />
 
@@ -31,5 +31,13 @@
 
     <!-- Add some rules -->
     <rule ref="Generic.Metrics.NestingLevel"></rule>
+
+    <!-- CSS rules -->
+    <rule ref="Squiz.CSS.Indentation"></rule>
+    <rule ref="Squiz.CSS.MissingColon"></rule>
+    <rule ref="Squiz.CSS.ColonSpacing"></rule>
+    <rule ref="Squiz.CSS.SemicolonSpacing"></rule>
+    <rule ref="Squiz.CSS.LowercaseStyleDefinition"></rule>
+    <rule ref="Squiz.CSS.DisallowMultipleStyleDefinitions"></rule>
 
 </ruleset>
