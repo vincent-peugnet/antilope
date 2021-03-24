@@ -29,7 +29,7 @@ namespace App\Form;
 use App\Entity\Interested;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -41,8 +41,9 @@ class InterestedType extends AbstractType
         assert($interested instanceof Interested);
 
         if ($interested->getSharable()->getInterestedMethod() > 1) {
-            $builder->add('message', TextareaType::class, [
+            $builder->add('message', TextType::class, [
                 'label' => 'Message',
+                'required' => false,
                 'help' => 'You can add a message if you want',
             ]);
         }

@@ -29,12 +29,14 @@ namespace App\Controller;
 use App\Entity\Answer;
 use App\Entity\Question;
 use App\Entity\QuestionSearch;
+use App\Entity\Sharable;
 use App\Event\QuestionEvent;
 use App\Form\AnswerType;
 use App\Form\QuestionSearchType;
 use App\Form\QuestionType;
 use App\Repository\QuestionRepository;
 use App\Security\Voter\QuestionVoter;
+use App\Security\Voter\SharableVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -126,6 +128,38 @@ class QuestionController extends AbstractController
         return $this->render('question/edit.html.twig', [
             'question' => $question,
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/sharable/{id}/ask", name="question_new", requirements={"id"="\d+"})
+     */
+    public function new(
+        Sharable $sharable,
+        Request $request,
+        EntityManagerInterface $em,
+        EventDispatcherInterface $dispatcher
+    ): Response {
+        $this->denyAccessUnlessGranted(SharableVoter::QUESTION, $sharable);
+        $form = $this->createForm(QuestionType::class);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $question = $form->getData();
+            assert($question instanceof Question);
+            $question->setUser($this->getUser());
+            $question->setSharable($sharable);
+            $em->persist($question);
+            $em->flush();
+
+            $dispatcher->dispatch(new QuestionEvent($question), QuestionEvent::NEW);
+
+            return $this->redirectToRoute('sharable_show', ['id' => $sharable->getId()]);
+        }
+
+        return $this->render('question/new.html.twig', [
+            'form' => $form->createView(),
+            'sharable' => $sharable,
         ]);
     }
 }

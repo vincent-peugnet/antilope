@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
+{% import "macros/user.html.twig" as userMacro %}
+{% import "macros/sharable.html.twig" as sharableMacro %}
+
+{% block title %}Ask a question{% endblock %}
+
+{% block content %}
+
+
+{{ breadcrumbs.render([
+    {'url': url('sharable'), 'text': 'Sharables'},
+    {'url': url('sharable_show', {id: sharable.id}), 'text': sharable.name},
+    {'text': 'ask a question'},
+]) }}
+
+    <h1>Ask a question</h1>
+
+    <h5>on {{ sharableMacro.render(sharable) }}</h5>
+
+    {{ form(form) }}
+
+
+{% endblock %}

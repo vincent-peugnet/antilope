@@ -50,12 +50,19 @@
         {% endfor %}
     {% endif %}
 
-    {% if is_granted('edit', question) %}
+    <div class="btn-group mb-3">
+        {% if is_granted('edit', question) %}
         <a class="btn btn-primary" href="{{ path('question_edit', {id: question.id}) }}">
             <i class="fas fa-pen"></i>
             edit
         </a>
-    {% endif %}
+        {% endif %}
+        {% if is_granted('delete', question) %}
+        <a href="{{ path('question_delete', {id: question.id}) }}" class="btn btn-danger">
+            <i class="fas fa-times-circle"></i> delete question
+        </a>
+        {% endif %}
+    </div>
 
     <h3>Your Answer</h3>
 

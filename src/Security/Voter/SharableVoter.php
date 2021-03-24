@@ -169,8 +169,7 @@ class SharableVoter extends Voter
     {
         return (
             $this->canEdit($sharable, $user) &&
-            $sharable->getInterestedMethod() > 1 &&
-            !$sharable->getInteresteds()->isEmpty()
+            $sharable->getInterestedMethod() > 1
         );
     }
 
@@ -214,7 +213,6 @@ class SharableVoter extends Voter
         if (
             $sharable->isAccessible() &&
             !$sharable->getDisabled() &&
-            $this->passedBegin($sharable) &&
             $this->passedBegin($sharable) &&
             !$this->alreadyValidated($sharable, $user)
         ) {

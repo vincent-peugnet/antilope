@@ -113,30 +113,12 @@ class SharableController extends AbstractController
         InterestedRepository $interestedRepository,
         ValidationRepository $validationRepository,
         ManageRepository $manageRepository,
-        BookmarkRepository $bookmarkRepository,
-        EventDispatcherInterface $dispatcher,
-        EntityManagerInterface $em,
-        Request $request
+        BookmarkRepository $bookmarkRepository
     ): Response {
         $this->denyAccessUnlessGranted(SharableVoter::VIEW, $sharable);
 
         $user = $this->getUser();
         assert($user instanceof User);
-        $questionForm = $this->createForm(QuestionType::class);
-
-        $questionForm->handleRequest($request);
-        if ($questionForm->isSubmitted() && $questionForm->isValid()) {
-            $question = $questionForm->getData();
-            assert($question instanceof Question);
-            $question->setUser($this->getUser());
-            $question->setSharable($sharable);
-            $em->persist($question);
-            $em->flush();
-
-            $dispatcher->dispatch(new QuestionEvent($question), QuestionEvent::NEW);
-
-            return $this->redirectToRoute('sharable_show', ['id' => $sharable->getId()]);
-        }
 
         $interested = $interestedRepository->findOneBy([
             'user' => $user->getId(),
@@ -164,7 +146,6 @@ class SharableController extends AbstractController
             'validated' => $validated,
             'manage' => $manage,
             'bookmarked' => $bookmarked,
-            'questionForm' => $questionForm->createView(),
         ]);
     }
 
@@ -262,6 +243,7 @@ class SharableController extends AbstractController
     public function validate(
         Sharable $sharable,
         Request $request,
+        InterestedRepository $interestedRepository,
         EventDispatcherInterface $dispatcher
     ): Response {
         $this->denyAccessUnlessGranted('validate', $sharable);
@@ -282,12 +264,9 @@ class SharableController extends AbstractController
 
             $dispatcher->dispatch(new ValidationEvent($validation), ValidationEvent::NEW);
 
-            // remove the interest after validation
-            $interesteds = $user->getInteresteds()->filter(function (Interested $interested) use ($sharable) {
-                return $interested->getSharable() === $sharable;
-            });
-            if (!$interesteds->isEmpty()) {
-                $entityManager->remove($interesteds->first());
+            $interested = $interestedRepository->findOneBy(['user' => $user, 'sharable' => $sharable]);
+            if (!is_null($interested)) {
+                $entityManager->remove($interested);
             }
 
             $entityManager->flush();

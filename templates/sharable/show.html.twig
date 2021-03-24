@@ -18,42 +18,13 @@
 
 <div class="container-fluid p-0">
 
-    {% if manage %}
+    {% if manage and not manage.confirmed %}
         <div class="alert alert-primary"><i class="fas fa-wrench"></i>
-        {% if manage.confirmed %}
-            You are managing this Sharable.
-            {% else %}
             You've been invited to manage this Sharable.
 
             <div class="btn-group">
                 <a class="btn btn-secondary" href="{{ path('manage_confirm', {id: manage.id}) }}"><i class="fas fa-check"></i> confirm</a>
                 <a class="btn btn-secondary" href="{{ path('manage_remove', {id: manage.id}) }}"><i class="fas fa-times"></i> refuse</a>
-            </div>
-        {% endif %}
-        </div>
-    {% elseif validated %}
-        <div class="alert alert-success"><i class="fas fa-check-circle"></i> You have validated this Sharable.</div>
-    {% elseif interested %}
-        <div class="alert alert-warning">
-            <i class="fas fa-question-circle"></i>
-            You are interested in this Sharable.
-            {% if sharable.interestedMethod == 3 %}
-                {{ interested.reviewed ? 'Managers are now sharing contact infos with you.' : 'You need to wait for managers approval before accessing contact infos' }}
-            {% endif %}
-            <div class="btn-group">
-
-                {% if is_granted('edit', interested) %}
-                <a class="btn btn-primary" href="{{ path('interested_edit', {id: interested.id}) }}">
-                    <i class="fas fa-pen"></i>
-                    edit
-                </a>
-                {% endif %}
-                {% if is_granted('delete', interested) %}
-                <a class="btn btn-danger" href="{{ path('interested_delete', {id: interested.id}) }}">
-                    <i class="fas fa-times"></i>
-                    delete
-                </a>
-                {% endif %}
             </div>
         </div>
     {% endif %}
@@ -84,41 +55,10 @@
         {% endif %}
     >
 
-        <h1 {{ sharable.cover ? 'class="text-white"' : '' }}>
-            {{ sharable.name }}
-            {% if bookmarked %}
-            <small class="text-muted" title="You have bookmarked this sharable">
-                <i class="fas fa-bookmark"></i>
-            </small>
-            {% endif %}
-        </h1>
-
-        {% for tag in sharable.tags %}
-            <a class="badge badge-pill badge-secondary" href="{{ path('sharable', {'tags[]': tag.id}) }}">{{ tag.name }}</a>
-        {% endfor %}
-
-        <p class="text-break">{{ sharable.description }}</p>
-
-        <div class="btn-group mb-3">
-                
-            {% if is_granted('edit', sharable) %}
-            <a class="btn btn-primary" href="{{ path('sharable_edit', {id: sharable.id}) }}"><i class="fas fa-pen"></i> edit</a>
-            {% endif %}
-            {% if is_granted('contact', sharable) %}
-            <a class="btn btn-primary" href="{{ path('sharable_contact', {id: sharable.id}) }}"><i class="fas fa-address-book"></i> contacts</a>
-            {% endif %}
-            {% if is_granted('interested', sharable) and sharable.interesteds|length > 0 %}
-            <a class="btn btn-warning" href="{{ path('sharable_interested', {id: sharable.id}) }}"><i class="fas fa-eye"></i> view interested</a>
-            {% endif %}  
-            {% if is_granted('interest', sharable) %}
-            <a class="btn btn-warning" href="{{ path('sharable_interest', {id: sharable.id}) }}"><i class="fas fa-question-circle"></i> interested</a>
-            {% endif %}
-            {% if is_granted('validate', sharable) %}
-            <a class="btn btn-success" href="{{ path('sharable_validate', {id: sharable.id}) }}"><i class="fas fa-check-circle"></i> validate</a>
-            {% endif %}            
-            {% if is_granted('edit', sharable) and not sharable.getDisabled %}
-            <a class="btn btn-danger" href="{{ path('sharable_activation', {id: sharable.id}) }}"><i class="fas fa-times-circle"></i> disable</a>
-            {% endif %}
+        <h1 class="d-flex justify-content-between align-items-center{{ sharable.cover ? ' text-white' : '' }}">
+            <span>
+                {{ sharable.name }}
+            </span>
             <a class="btn btn-light" href="{{ path('sharable_bookmark', {id:sharable.id}) }}">
                 {% if not bookmarked %}
                 <i class="far fa-bookmark"></i> bookmark
@@ -129,8 +69,71 @@
                     {{ sharable.bookmarks|length }}
                 </span>
             </a>
+        </h1>
 
-        </div>
+        {% for tag in sharable.tags %}
+            <a class="badge badge-pill badge-secondary" href="{{ path('sharable', {'tags[]': tag.id}) }}">{{ tag.name }}</a>
+        {% endfor %}
+
+        <p class="text-break">{{ sharable.description }}</p>
+
+        {% if not manage %}
+            <div>
+                <div class="btn-group mr-3">
+                    <a
+                        class="btn btn-warning {{ not is_granted('interest', sharable) ? 'disabled' : '' }}"
+                        {% if is_granted('interest', sharable) %}
+                            href="{{ path('sharable_interest', {id: sharable.id}) }}"
+                        {% endif %}
+                    >
+                        <i class="fas fa-question-circle"></i>
+                        {% if interested %}
+                            you're already interested
+                        {% else %}
+                            I'm interested    
+                        {% endif %}
+                        <span class="badge badge-secondary">
+                            {{ sharable.interesteds|length }}
+                        </span>
+                    </a>
+                    {% if interested %}
+                        <button type="button" class="btn btn-warning dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu">
+                            {% if is_granted('edit', interested) %}
+                            <a class="dropdown-item" href="{{ path('interested_edit', {id: interested.id}) }}">
+                                <i class="fas fa-pen"></i>
+                                edit message
+                            </a>
+                            {% endif %}
+                            {% if is_granted('delete', interested) %}
+                            <a class="dropdown-item" href="{{ path('interested_delete', {id: interested.id}) }}">
+                                <i class="fas fa-times"></i>
+                                cancel
+                            </a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+                <a
+                class="btn btn-success {{ not is_granted('validate', sharable) ? 'disabled' : '' }}"
+                    {% if is_granted('validate', sharable) %}
+                        href="{{ path('sharable_validate', {id: sharable.id}) }}"
+                    {% endif %}            
+                >
+                    <i class="fas fa-check-circle"></i>
+                    {% if validated %}
+                        you've already validated
+                    {% else %}
+                        validate
+                    {% endif %}
+                    <span class="badge badge-secondary">
+                        {{ sharable.validations|length }}
+                    </span>
+                </a>
+            </div>
+        {% endif %}
 
     </div>
 
@@ -138,148 +141,47 @@
 
 <div class="row">
 
-    <div class="col-lg-8">
-
-        <div class="card mb-3">
-
-            <div class="card-header">
-
-                <div class="card-title">
-                    <h4>
-                    Details
-                    </h4>
-
-                </div>
-            </div>
-
-            <div class="card-body">
-
-                <style>
-                    #description img { max-width: 100%; }               
-                </style>
-
-                <div id="description">
-                {{ sharable.details|markdown_to_html }}
-                </div>
-            </div>
-        </div>
-
-
-    <h3>
-        Questions & Answers
-        {% if is_granted('edit', sharable) %}
-        <a class="btn btn-danger disabled">disable</a>
-        {% endif %}
-    </h3>
-
-    {% if is_granted('question', sharable) %}
-        {{ form( questionForm ) }}
-    {% endif %}
-
-    {% for question in sharable.questions|reverse %}
-        <div class="card mb-3">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="card-title">
-                    {{ userMacro.render(question.user) }}
-                </h5>
-                <small class="text-muted">
-                    {{ question.createdAt|ago }}
-                </small>
-            </div>
-            <div class="card-body">
-                <p>
-                    {{ question.text }}
-                </p>
-                {% for answer in question.answers %}
-                    <div class="m-2">
-                        {{ userMacro.render(answer.user, 1) }}
-                        <small class="text-muted">
-                            {{ answer.createdAt|ago }}
-                        </small>
-                        <p>{{ answer.text }}</p>
-                    </div>
-                {% endfor %}
-            </div>
-            <div class="card-footer">
-                <div class="btn-group">
-                    {% if is_granted('answer', question) %}
-                    <a href="{{ path('question_show', {id: question.id}) }}" class="btn btn-primary">
-                        <i class="fas fa-reply"></i> answer
-                    </a>
-                    {% endif %}
-                    {% if is_granted('edit', question) %}
-                    <a href="{{ path('question_edit', {id: question.id}) }}" class="btn btn-primary">
-                        <i class="fas fa-pen"></i> edit
-                    </a>
-                    {% endif %}
-                    {% if is_granted('delete', question) %}
-                    <a href="{{ path('question_delete', {id: question.id}) }}" class="btn btn-danger">
-                        <i class="fas fa-times-circle"></i> delete
-                    </a>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    {% endfor %}
-
-
-    <h3>Validation messages received</h3>
-            
-    {% for validation in sharable.validations|reverse %}
-
-        {% if validation.message %}
-        
-        <div class="card mb-3">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                
-                <h5 class="card-title">
-                    By
-                    {{ userMacro.render(validation.user) }}
-                </h5>
-                <small class="text-muted">
-                    {{ validation.sendAt|ago }}
-                </small>
-            </div>
-            <div class="card-body bg-success">
-                
-                <p>{{ validation.message }}</p>
-                
-                
-                
-            </div>
-            
-            
-        </div>
-        {% endif %}
-    
-    {% endfor %}
-
-    </div>
 
     <div class="col-lg-4">
 
         <div class="card mb-3">
 
-            <div class="card-header">
+            <div class="card-header d-flex justify-content-between align-items-center">
 
-                <div class="card-title">
-                    <h4>Infos</h4>
-                </div>
+                    <h4 class="card-title">Infos</h4>
+
+                    {% if is_granted('edit', sharable) %}
+                        <a class="btn btn-primary" href="{{ path('sharable_edit', {id: sharable.id}) }}">
+                            <i class="fas fa-pen"></i>
+                        </a>
+                    {% endif %}
             </div>
 
             <div class="card-body">
+                <a
+                    class="btn btn-primary btn-block d-flex justify-content-between align-items-center {{ not is_granted('contact', sharable) ? 'disabled' : '' }}"
+                    {% if is_granted('contact', sharable) %}
+                        href="{{ path('sharable_contact', {id: sharable.id}) }}"
+                    {% endif %}
+                    
+                    >
+                    <i class="fas fa-address-book"></i> contacts
+                    {{ contact_method.render( sharable.interestedMethod ) }}
+                </a>
+                {% if is_granted('interested', sharable) %}
+                <a
+                    class="btn btn-block btn-warning d-flex justify-content-between align-items-center"
+                    href="{{ path('sharable_interested', {id: sharable.id}) }}"
+                >
+                    <i class="fas fa-eye"></i>
+                    view interested
+                    <span class="badge badge-secondary">
+                        {{ sharable.interesteds|length }}
+                    </span>
+                </a>
+                {% endif %}
 
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item list-group-item-success">
-                        <i class="fas fa-check-circle"></i>
-                        {{ sharable.validations|length }} validations
-                    </li>
-                    {% if sharable.interestedmethod > 1 %}
-                    <li class="list-group-item list-group-item-warning">
-                        <i class="fas fa-question-circle"></i>
-                        {{ sharable.interesteds|length }} interested
-                    </li>
-                    {% endif %}
                     {% if sharable.visibleBy %}
                     <li class="list-group-item">
                         <i class="fas fa-eye"></i>
@@ -326,6 +228,12 @@
                         disabled
                     </li>
                     {% endif %}
+
+                    {% if is_granted('edit', sharable) and not sharable.getDisabled %}
+                    <a class="btn btn-block btn-danger" href="{{ path('sharable_activation', {id: sharable.id}) }}">
+                        <i class="fas fa-times-circle"></i> disable this sharable
+                    </a>
+                    {% endif %}
                 </ul>
 
             </div>
@@ -341,7 +249,9 @@
                 <h4 class="card-title">Managed by</h4>
 
                 {% if is_granted('edit', sharable) %}
-                <a class="btn btn-primary" href="{{ path('sharable_managers', {id: sharable.id}) }}"><i class="fas fa-pen"></i></a>
+                <a class="btn btn-primary" href="{{ path('sharable_managers', {id: sharable.id}) }}">
+                    <i class="fas fa-user-edit"></i>
+                </a>
                 {% endif %}
             </div>
 
@@ -363,36 +273,134 @@
 
             </div>
         </div>
+    </div>
 
-
+    <div class="col-lg-8">
 
         <div class="card mb-3">
 
-            <div class="card-header">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="card-title">
+                    Details
+                    </h4>
 
-                <div class="card-title">
-                    <h4>Validations</h4>
-                </div>
+                    {% if is_granted('edit', sharable) %}
+                        <a class="btn btn-primary" href="{{ path('sharable_edit', {id: sharable.id}) }}">
+                            <i class="fas fa-pen"></i>
+                        </a>
+                    {% endif %}
             </div>
 
             <div class="card-body">
 
-                <ul class="list-group list-group-flush">
-                {% for validation in sharable.validations %}
+                <style>
+                    #description img { max-width: 100%; }               
+                </style>
 
-                    <li class="list-group-item">
-
-                        {{ userMacro.render(validation.user) }}
-
-                    </li>
-
-                {% endfor %}
-                </ul>
-
-                <a href="{{ path('sharable_validation', {id: sharable.id}) }}" class="btn btn-primary">view validations</a>
-
+                <div id="description">
+                {{ sharable.details|markdown_to_html }}
+                </div>
             </div>
         </div>
+
+
+        <h3>
+            Questions & Answers
+        </h3>
+
+        {% if is_granted('question', sharable) %}
+            <a href="{{ path('question_new', { id: sharable.id}) }}" class="btn btn-success mb-3">
+                <i class="fas fa-comment"></i>
+                ask a question
+            </a>
+        {% endif %}
+
+        {% for question in sharable.questions|reverse %}
+            <div class="card mb-3">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title">
+                        {{ userMacro.render(question.user) }}
+                    </h5>
+                    <small class="text-muted">
+                        {{ question.createdAt|ago }}
+                    </small>
+                </div>
+                <div class="card-body">
+                    <p>
+                        {{ question.text }}
+                    </p>
+                    {% for answer in question.answers %}
+                        <div class="m-2">
+                            {{ userMacro.render(answer.user, 1) }}
+                            <small class="text-muted">
+                                {{ answer.createdAt|ago }}
+                            </small>
+                            <p>{{ answer.text }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="card-footer">
+                    <div class="btn-group">
+                        {% if is_granted('answer', question) %}
+                        <a href="{{ path('question_show', {id: question.id}) }}" class="btn btn-primary">
+                            <i class="fas fa-reply"></i> answer
+                        </a>
+                        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu">
+                            {% if is_granted('delete', question) %}
+                            <a href="{{ path('question_delete', {id: question.id}) }}" class="dropdown-item bg-danger">
+                                <i class="fas fa-times-circle"></i> delete question
+                            </a>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                        {% if is_granted('edit', question) %}
+                        <a href="{{ path('question_edit', {id: question.id}) }}" class="btn btn-primary">
+                            <i class="fas fa-pen"></i> edit
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        <a href="{{ path('question', {sharable: sharable.id}) }}" class="btn btn-sm btn-secondary mb-3">view all questions</a>
+
+
+        <h3>Validation messages received</h3>
+                
+        {% for validation in sharable.validations|reverse %}
+
+            {% if validation.message %}
+            
+            <div class="card mb-3">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    
+                    <h5 class="card-title">
+                        By
+                        {{ userMacro.render(validation.user) }}
+                    </h5>
+                    <small class="text-muted">
+                        {{ validation.sendAt|ago }}
+                    </small>
+                </div>
+                <div class="card-body bg-success">
+                    
+                    <p>{{ validation.message }}</p>
+                    
+                    
+                    
+                </div>
+            
+                
+                
+            </div>
+            {% endif %}
+            
+            {% endfor %}
+        
+        <a href="{{ path('sharable_validation', {id: sharable.id}) }}" class="btn btn-sm btn-secondary">view all validations</a>
     </div>
 </div>
 

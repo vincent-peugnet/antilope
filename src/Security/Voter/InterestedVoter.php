@@ -81,6 +81,14 @@ class InterestedVoter extends Voter
 
     private function canDelete(Interested $interested, User $user): bool
     {
-        return $this->canEdit($interested, $user) && $interested->getCreatedAt() < new DateTime('1 day ago');
+        if ($this->canEdit($interested, $user)) {
+            if ($interested->getSharable()->getInterestedMethod() === 4) {
+                return true;
+            }
+            if ($interested->getSharable()->getInterestedMethod() === 3) {
+                return !$interested->getReviewed();
+            }
+        }
+        return false;
     }
 }
