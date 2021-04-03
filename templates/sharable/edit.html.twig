@@ -1,6 +1,5 @@
 {% extends 'base.html.twig' %}
 
-
 {% block title %}{{ sharable.name }}{% endblock %}
 
 {% block content %}
@@ -15,25 +14,7 @@
 
 <h1>Sharable edit</h1>
 
-
-{{ form_start(form) }}
-    {{ form_row(form.name) }}
-    {{ form_row(form.coverFile) }}
-    {{ form_row(form.description) }}
-    {{ form_row(form.details) }}
-    {{ form_row(form.tags) }}
-
-    <div class="alert alert-secondary">
-        Currently sharable are visible by those user classes:
-        {% for userClass in canAccessUserClass %}
-            <span class="badge badge-primary">{{ userClass.name }}</span>
-        {% endfor %}
-    </div>
-
-    {{ form_row(form.visibleBy) }}
-    {{ form_row(form.interestedMethod) }}
-{{ form_end(form) }}
-
+{% include "sharable/form.html.twig" %}
 
 {% endblock %}
 
@@ -49,4 +30,3 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-markdown/2.10.0/js/bootstrap-markdown.min.js" integrity="sha512-24rJoYUaUxwg8u20GPTT7kfEdhhx2rksnoRssbLLC73nWrifdvCqX0vVrGFqz3635DMvjeXeE1aCUXDtqHh2DQ==" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/2.0.1/marked.min.js" integrity="sha512-pjhyz9DR7D4w90mc3iiAjhSRSmVrF3egxvfbOO6948qG0GACeOVpnP+xWEm7ihN5m1rg8tEHKRBhRrYEGhIR6Q==" crossorigin="anonymous"></script>
 {% endblock %}
-

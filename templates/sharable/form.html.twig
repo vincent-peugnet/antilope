@@ -1,0 +1,51 @@
+{{ form_start(form) }}
+
+
+<fieldset class="p-3 border border-secondary rounded mb-3">
+    <h4>Infos</h4>
+
+    {{ form_row(form.name) }}
+    {{ form_row(form.coverFile, {
+        attr: {
+            'placeholder': 'Select an cover image'
+        }
+    }) }}
+    {{ form_row(form.description) }}
+    {{ form_row(form.details) }}
+    {{ form_row(form.tags) }}
+
+</fieldset>
+
+<fieldset class="p-3 border border-secondary rounded mb-3">
+
+    <h4 class="d-inline-block">Visibility</h4>
+    <p>
+        By default, sharables are visible by those user classes:
+        {% for userClass in canAccessUserClass %}
+        <span class="badge badge-primary">{{ userClass.name }}</span>
+        {% endfor %}
+    </p>
+    {% if not app.user.userClass.canSetVisibleBy %}
+        <div class="alert alert-secondary">
+            Beccause of your user class <span class="badge badge-primary">{{ app.user.userClass.name }}</span>,
+            you cannot change this setting.
+        </div>
+    {% endif %}
+
+    {{ form_row(form.visibleBy) }}
+</fieldset>
+
+<fieldset class="p-3 border border-secondary rounded mb-3">
+    <h4>Contact method</h4>
+
+    {{ form_row(form.interestedMethod) }}
+
+</fieldset>
+
+<fieldset class="p-3 border border-secondary rounded mb-3">
+    <h4>Date and time</h4>
+    {{ form_row(form.beginAt) }}
+    {{ form_row(form.endAt) }}
+</fieldset>
+
+{{ form_end(form) }}

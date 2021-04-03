@@ -79,6 +79,11 @@ class UserClass
     private $canQuestion = false;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $canSetVisibleBy = false;
+
+    /**
      * @ORM\Column(type="smallint")
      * @Assert\Choice(callback={"App\Security\Voter\UserVoter", "getParanoiaLevels"})
      */
@@ -167,6 +172,7 @@ class UserClass
         $this->shareScoreReq = 0;
         $this->accountAgeReq = 0;
         $this->validatedReq = 0;
+        $this->manageReq = 0;
         $this->verifiedReq = false;
         $this->createdAt = new DateTime();
         $this->lastEditedAt = $this->createdAt;
@@ -457,6 +463,18 @@ class UserClass
     public function setManageReq(int $manageReq): self
     {
         $this->manageReq = $manageReq;
+
+        return $this;
+    }
+
+    public function getCanSetVisibleBy(): ?bool
+    {
+        return $this->canSetVisibleBy;
+    }
+
+    public function setCanSetVisibleBy(bool $canSetVisibleBy): self
+    {
+        $this->canSetVisibleBy = $canSetVisibleBy;
 
         return $this;
     }

@@ -164,8 +164,12 @@ class SharableController extends AbstractController
     ): Response {
         $this->denyAccessUnlessGranted('edit', $sharable);
 
-        $form = $this->createForm(SharableType::class, $sharable);
+        $user = $this->getUser();
+        assert($user instanceof User);
 
+        $form = $this->createForm(SharableType::class, $sharable, [
+            'disableVisibleBy' => !$user->getUserClass()->getCanSetVisibleBy(),
+        ]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -355,7 +359,12 @@ class SharableController extends AbstractController
 
         $this->denyAccessUnlessGranted('create', $sharable);
 
-        $form = $this->createForm(SharableType::class, $sharable);
+        $user = $this->getUser();
+        assert($user instanceof User);
+
+        $form = $this->createForm(SharableType::class, $sharable, [
+            'disableVisibleBy' => !$user->getUserClass()->getCanSetVisibleBy(),
+        ]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

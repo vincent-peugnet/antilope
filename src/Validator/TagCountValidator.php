@@ -55,13 +55,13 @@ class TagCountValidator extends ConstraintValidator
             throw new UnexpectedValueException($value, 'Collection');
         }
 
-        if ($this->min && count($value) <= $this->min) {
+        if ($this->min && count($value) < $this->min) {
             $this->context->buildViolation($constraint->minMessage)
                 ->setParameter('{{ min }}', (string) $this->min)
                 ->addViolation();
         }
 
-        if ($this->max && count($value) >= $this->max) {
+        if ($this->max && count($value) > $this->max) {
             $this->context->buildViolation($constraint->maxMessage)
                 ->setParameter('{{ max }}', (string) $this->max)
                 ->addViolation();

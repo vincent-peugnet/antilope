@@ -78,6 +78,9 @@ class UserClassType extends AbstractType
             ->add('canQuestion', null, [
                 'label' => 'can ask questions',
             ])
+            ->add('canSetVisibleBy', null, [
+                'label' => 'can set visibleBy parameter',
+            ])
             ->add('canInvite', null, [
                 'label' => 'can invite users',
             ])

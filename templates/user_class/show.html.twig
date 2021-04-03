@@ -63,6 +63,11 @@
                             can ask questions on sharables
                         </li>
                     {% endif %}
+                    {% if userClass.canSetVisibleBy %}
+                        <li class="list-group-item">
+                            can set <em>visible by</em> parameter on sharables
+                        </li>
+                    {% endif %}
                     {% if userClass.canInvite %}
                         {% if userClass.inviteFrequency == 0 %}
                         <li class="list-group-item">

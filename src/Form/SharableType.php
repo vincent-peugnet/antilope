@@ -28,6 +28,7 @@ namespace App\Form;
 
 use App\Entity\Sharable;
 use App\Entity\Tag;
+use App\Entity\User;
 use App\Entity\UserClass;
 use App\Repository\TagRepository;
 use App\Repository\UserClassRepository;
@@ -58,6 +59,7 @@ class SharableType extends AbstractType
     {
         $sharable = $builder->getData();
         assert($sharable instanceof Sharable);
+        $disableVisibleBy = (bool) $options['disableVisibleBy'];
 
         $builder
             ->add('name')
@@ -100,7 +102,9 @@ class SharableType extends AbstractType
                 'choices' => $this->userClassRepository->findAll(),
                 'placeholder' => '',
                 'required' => false,
-                'help' => 'But you can overide this with your own choice if you feel the need',
+                // phpcs:ignore Generic.Files.LineLength.TooLong
+                'help' => 'This will indicate the user class from which user could access this sharable. This will override the the default behavior.',
+                'disabled' => $disableVisibleBy,
             ])
             ->add('interestedMethod', ChoiceType::class, [
                 'label' => 'How contact infos are exchanged',
@@ -142,6 +146,9 @@ class SharableType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Sharable::class,
+            'disableVisibleBy' => true,
         ]);
+
+        $resolver->setAllowedTypes('disableVisibleBy', 'bool');
     }
 }
