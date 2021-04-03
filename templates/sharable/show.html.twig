@@ -229,7 +229,7 @@
                     </li>
                     {% endif %}
 
-                    {% if is_granted('edit', sharable) and not sharable.getDisabled %}
+                    {% if is_granted('edit', sharable) and not sharable.disabled %}
                     <a class="btn btn-block btn-danger" href="{{ path('sharable_activation', {id: sharable.id}) }}">
                         <i class="fas fa-times-circle"></i> disable this sharable
                     </a>

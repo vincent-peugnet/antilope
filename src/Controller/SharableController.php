@@ -35,7 +35,9 @@ use App\Entity\Sharable;
 use App\Entity\SharableContact;
 use App\Entity\User;
 use App\Entity\Validation;
+use App\Event\ManageEvent;
 use App\Event\QuestionEvent;
+use App\Event\SharableEvent;
 use App\Event\ValidationEvent;
 use App\Form\QuestionType;
 use App\Form\SharableContactType;
@@ -300,11 +302,17 @@ class SharableController extends AbstractController
     /**
      * @Route("/sharable/{id}/activation", name="sharable_activation", requirements={"id"="\d+"})
      */
-    public function activation(Sharable $sharable): Response
+    public function activation(Sharable $sharable, EventDispatcherInterface $dispatcher): Response
     {
         $this->denyAccessUnlessGranted(SharableVoter::EDIT, $sharable);
         $em = $this->getDoctrine()->getManager();
-        $sharable->setDisabled($sharable->getDisabled() ? false : true);
+        if ($sharable->isDisabled()) {
+            $sharable->setDisabled(false);
+            $dispatcher->dispatch(new SharableEvent($sharable), SharableEvent::ENABLE);
+        } else {
+            $sharable->setDisabled(true);
+            $dispatcher->dispatch(new SharableEvent($sharable), SharableEvent::DISABLE);
+        }
         $em->persist($sharable);
         $em->flush();
 
@@ -340,6 +348,7 @@ class SharableController extends AbstractController
     public function new(
         UserClassRepository $userClassRepository,
         FileUploader $fileUploader,
+        EventDispatcherInterface $dispatcher,
         Request $request
     ): Response {
         $sharable = new Sharable();
@@ -366,6 +375,8 @@ class SharableController extends AbstractController
             $manage->setSharable($sharable)
                 ->setUser($this->getUser())
                 ->setContactable(true);
+
+            $dispatcher->dispatch(new ManageEvent($manage), ManageEvent::NEW);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($sharable);

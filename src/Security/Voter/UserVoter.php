@@ -170,7 +170,7 @@ class UserVoter extends Voter
 
             //TODO check if sharable end is passed
             $filteredSharables = $sharables->filter(function (Sharable $sharable) {
-                return ($sharable->getInterestedMethod() > 1 && !$sharable->getDisabled() && $sharable->isAccessible());
+                return ($sharable->getInterestedMethod() > 1 && !$sharable->isDisabled() && $sharable->isAccessible());
             });
             return !$filteredSharables->isEmpty();
         }
@@ -182,7 +182,7 @@ class UserVoter extends Voter
             //TODO check if sharable end is passed
             $filteredSharables = $sharables->filter(function (Sharable $sharable) use ($user) {
                 if (
-                    $sharable->getDisabled() ||
+                    $sharable->isDisabled() ||
                     !$sharable->isAccessible() ||
                     $sharable->getInterestedMethod() === 1 ||
                     $sharable->getInterestedMethod() === 4 ||

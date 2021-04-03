@@ -145,13 +145,14 @@ class ManageController extends AbstractController
     /**
      * @Route("/manage/{id}/confirm", name="manage_confirm", requirements={"id"="\d+"})
      */
-    public function confirmManage(Manage $manage): Response
+    public function confirmManage(Manage $manage, EventDispatcherInterface $dispatcher): Response
     {
         $this->denyAccessUnlessGranted(ManageVoter::CONFIRM, $manage);
         $manage->setConfirmed(true);
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($manage);
         $entityManager->flush();
+        $dispatcher->dispatch(new ManageEvent($manage), ManageEvent::CONFIRM);
         return $this->redirectToRoute('sharable_show', ['id' => $manage->getSharable()->getId()]);
     }
 

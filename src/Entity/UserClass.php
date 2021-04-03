@@ -152,6 +152,11 @@ class UserClass
      */
     private $maxInactivity;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $manageReq;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -440,6 +445,18 @@ class UserClass
     public function setCanQuestion(bool $canQuestion): self
     {
         $this->canQuestion = $canQuestion;
+
+        return $this;
+    }
+
+    public function getManageReq(): ?int
+    {
+        return $this->manageReq;
+    }
+
+    public function setManageReq(int $manageReq): self
+    {
+        $this->manageReq = $manageReq;
 
         return $this;
     }

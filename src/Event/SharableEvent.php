@@ -26,24 +26,23 @@
 
 namespace App\Event;
 
-use App\Entity\Manage;
+use App\Entity\Sharable;
 use Symfony\Contracts\EventDispatcher\Event;
 
-class ManageEvent extends Event
+class SharableEvent extends Event
 {
-    private Manage $manage;
+    private Sharable $sharable;
 
-    public const INVITE = "manage.invitation";
-    public const NEW = "manage.new";
-    public const CONFIRM = "manage.confirm";
+    public const ENABLE = "sharable.enable";
+    public const DISABLE = "sharable.disabled";
 
-    public function __construct(Manage $manage)
+    public function __construct(Sharable $sharable)
     {
-        $this->manage = $manage;
+        $this->sharable = $sharable;
     }
 
-    public function getManage(): Manage
+    public function getSharable(): Sharable
     {
-        return $this->manage;
+        return $this->sharable;
     }
 }

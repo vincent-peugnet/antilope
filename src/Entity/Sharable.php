@@ -186,7 +186,7 @@ class Sharable
         $this->validations = new ArrayCollection();
         $this->createdAt = new DateTime();
         $this->lastEditedAt = new DateTime();
-        $this->disabled = true;
+        $this->disabled = false;
         $this->responsibility = true;
         $this->interestedMethod = 2;
         $this->interesteds = new ArrayCollection();
@@ -254,7 +254,7 @@ class Sharable
         return $this;
     }
 
-    public function getDisabled(): ?bool
+    public function isDisabled(): ?bool
     {
         return $this->disabled;
     }

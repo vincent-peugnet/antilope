@@ -708,6 +708,16 @@ class User implements UserInterface
         });
     }
 
+    public function getConfirmedEnabledManages(): Collection
+    {
+        return $this->manages->filter(function (Manage $manage) {
+            return (
+                $manage->getConfirmed() &&
+                !$manage->getSharable()->isDisabled()
+            );
+        });
+    }
+
     /**
      * Get invitations to manage sharables
      *

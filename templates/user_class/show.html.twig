@@ -99,28 +99,34 @@
     
                 <ul class="list-group list-group-flush">
                     {% if userClass.shareScoreReq %}
-                    {% set shareScore = app.user.shareScore >= userClass.shareScoreReq %}
-                    <li class="list-group-item{{ shareScore ? ' list-group-item-success' : ' text-danger' }}">
-                    Share Score : <span class="badge badge-light">{{ userClass.shareScoreReq }}</span>
-                    </li>
+                        {% set shareScore = app.user.shareScore >= userClass.shareScoreReq %}
+                        <li class="list-group-item{{ shareScore ? ' list-group-item-success' : ' text-danger' }}">
+                            Share Score : <span class="badge badge-light">{{ userClass.shareScoreReq }}</span>
+                        </li>
                     {% endif %}
                     {% if userClass.accountAgeReq %}
-                    {% set accountAge = app.user.createdAt <= date('-' ~ userClass.accountAgeReq ~ 'days') %}
-                    <li class="list-group-item {{ accountAge ? ' list-group-item-success' : ' text-danger' }}">
-                    Account Age : {{ userClass.accountAgeReq }} days
-                    </li>
+                        {% set accountAge = app.user.createdAt <= date('-' ~ userClass.accountAgeReq ~ 'days') %}
+                        <li class="list-group-item {{ accountAge ? ' list-group-item-success' : ' text-danger' }}">
+                            Account Age : {{ userClass.accountAgeReq }} days
+                        </li>
                     {% endif %}
                     {% if userClass.validatedReq %}
-                    {% set validated = app.user.validations|length >= userClass.validatedReq %}
-                    <li class="list-group-item{{ validated ? ' list-group-item-success' : ' text-danger' }}">
-                    Validations given : {{ userClass.validatedReq }}
-                    </li>
+                        {% set validated = app.user.validations|length >= userClass.validatedReq %}
+                        <li class="list-group-item{{ validated ? ' list-group-item-success' : ' text-danger' }}">
+                            Validations given : {{ userClass.validatedReq }}
+                        </li>
+                    {% endif %}
+                    {% if userClass.manageReq %}
+                        {% set managed = app.user.getConfirmedEnabledManages|length >= userClass.manageReq %}
+                        <li class="list-group-item{{ managed ? ' list-group-item-success' : ' text-danger' }}">
+                            Managed sharables : {{ userClass.manageReq }}
+                        </li>
                     {% endif %}
                     {% if userClass.verifiedReq %}
-                    {% set verified = app.user.verified %}
-                    <li class="list-group-item{{ verified ? ' list-group-item-success' : ' text-danger' }}">
-                    The user email adress need to be verified
-                    </li>
+                        {% set verified = app.user.verified %}
+                        <li class="list-group-item{{ verified ? ' list-group-item-success' : ' text-danger' }}">
+                            The user email adress need to be verified
+                        </li>
                     {% endif %}
                 </ul>
 

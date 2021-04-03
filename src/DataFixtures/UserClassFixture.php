@@ -44,6 +44,7 @@ class UserClassFixture extends Fixture
             ->setShareScoreReq(5000)
             ->setAccountAgeReq(42)
             ->setValidatedReq(3)
+            ->setManageReq(5)
             ->setName('elite');
         $manager->persist($elite);
 
@@ -58,6 +59,7 @@ class UserClassFixture extends Fixture
             ->setShareScoreReq(1000)
             ->setAccountAgeReq(21)
             ->setValidatedReq(1)
+            ->setManageReq(3)
             ->setName('power_user');
         $manager->persist($powerUser);
 
@@ -73,12 +75,29 @@ class UserClassFixture extends Fixture
             ->setShareScoreReq(300)
             ->setAccountAgeReq(7)
             ->setValidatedReq(0)
+            ->setManageReq(1)
             ->setName('member');
+        $manager->persist($member);
+
+        $babyMember = new UserClass();
+        $member
+            ->setNext($member)
+            ->setAccess(true)
+            ->setShare(true)
+            ->setCanInvite(false)
+            ->setInviteFrequency(0)
+            ->setMaxInactivity(90)
+            ->setMaxParanoia(2)
+            ->setShareScoreReq(0)
+            ->setAccountAgeReq(0)
+            ->setValidatedReq(0)
+            ->setManageReq(1)
+            ->setName('baby_member');
         $manager->persist($member);
 
         $basicUser = new UserClass();
         $basicUser
-            ->setNext($member)
+            ->setNext($babyMember)
             ->setAccess(false)
             ->setShare(true)
             ->setCanInvite(false)

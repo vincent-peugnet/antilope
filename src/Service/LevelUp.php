@@ -81,6 +81,7 @@ class LevelUp
                 $this->shareScore($user, $userClass) &&
                 $this->accountAge($user, $userClass) &&
                 $this->validated($user, $userClass) &&
+                $this->manage($user, $userClass) &&
                 $this->verified($user, $userClass)
             ) {
                 $user->setUserClass($userClass);
@@ -103,6 +104,7 @@ class LevelUp
             !$this->shareScore($user, $userClass) ||
             !$this->accountAge($user, $userClass) ||
             !$this->validated($user, $userClass) ||
+            !$this->manage($user, $userClass) ||
             !$this->verified($user, $userClass)
         ) {
             $userClass = $user->getUserClass()->getPrev();
@@ -129,6 +131,11 @@ class LevelUp
     private function validated(User $user, UserClass $userClass): bool
     {
         return (count($user->getValidations()) >= $userClass->getValidatedReq());
+    }
+
+    private function manage(User $user, UserClass $userClass): bool
+    {
+        return (count($user->getConfirmedEnabledManages()) >= $userClass->getManageReq());
     }
 
     private function verified(User $user, UserClass $userClass): bool

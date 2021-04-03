@@ -150,7 +150,7 @@ class SharableVoter extends Voter
         }
         if (
             $sharable->isAccessible() &&
-            !$sharable->getDisabled() &&
+            !$sharable->isDisabled() &&
             $sharable->getInterestedMethod() > 1 &&
             $sharable->isContactable() &&
             $this->canView($sharable, $user) &&
@@ -184,7 +184,7 @@ class SharableVoter extends Voter
         $interested = $this->alreadyInterested($sharable, $user);
         if (
             $sharable->isAccessible() &&
-            !$sharable->getDisabled() &&
+            !$sharable->isDisabled() &&
             $interested &&
             !$this->alreadyValidated($sharable, $user)
         ) {
@@ -212,7 +212,7 @@ class SharableVoter extends Voter
 
         if (
             $sharable->isAccessible() &&
-            !$sharable->getDisabled() &&
+            !$sharable->isDisabled() &&
             $this->passedBegin($sharable) &&
             !$this->alreadyValidated($sharable, $user)
         ) {
@@ -247,7 +247,7 @@ class SharableVoter extends Voter
     {
         return (
             $this->canView($sharable, $user) &&
-            !$sharable->getDisabled() &&
+            !$sharable->isDisabled() &&
             $sharable->isAccessible() &&
             $user->getUserClass()->getCanQuestion() &&
             !$this->canEdit($sharable, $user) &&

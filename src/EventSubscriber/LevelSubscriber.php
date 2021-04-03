@@ -26,6 +26,10 @@
 
 namespace App\EventSubscriber;
 
+use App\Entity\Manage;
+use App\Entity\User;
+use App\Event\ManageEvent;
+use App\Event\SharableEvent;
 use App\Event\UserEvent;
 use App\Event\ShareScoreEvent;
 use App\Event\ValidationEvent;
@@ -52,28 +56,52 @@ class LevelSubscriber implements EventSubscriberInterface
         return [
             ShareScoreEvent::UPDATE => 'onShareScoreUpdate',
             ValidationEvent::NEW => ['onValidationNew', -10],
+            SharableEvent::ENABLE => 'onSharableEnable',
+            SharableEvent::DISABLE => 'onSharableEnable',
+            ManageEvent::NEW => 'onManageNew',
+            ManageEvent::CONFIRM => 'onManageNew',
         ];
     }
 
     public function onShareScoreUpdate(ShareScoreEvent $event): void
     {
         $user = $event->getUser();
-        $change = $this->levelUp->check($user);
-        if ($change) {
-            $this->em->persist($user);
-            $this->em->flush();
-            $this->dispatcher->dispatch(new UserEvent($user), UserEvent::USERCLASS_UPDATE);
-        }
+        $this->check($user);
     }
 
     public function onValidationNew(ValidationEvent $event): void
     {
         $user = $event->getValidation()->getUser();
+        $this->check($user);
+    }
+
+    public function onSharableEnable(SharableEvent $sharableEvent): void
+    {
+        $manages = $sharableEvent->getSharable()->getConfirmedManagers();
+        $users = $manages->map(function (Manage $manage) {
+            return $manage->getUser();
+        });
+        foreach ($users as $user) {
+            assert($user instanceof User);
+            $this->check($user);
+        }
+    }
+
+    public function onManageNew(ManageEvent $manageEvent): void
+    {
+        $user = $manageEvent->getManage()->getUser();
+        $this->check($user);
+    }
+
+    private function check(User $user): bool
+    {
         $change = $this->levelUp->check($user);
+
         if ($change) {
             $this->em->persist($user);
             $this->em->flush();
             $this->dispatcher->dispatch(new UserEvent($user), UserEvent::USERCLASS_UPDATE);
         }
+        return $change;
     }
 }

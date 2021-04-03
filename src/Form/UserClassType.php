@@ -69,19 +69,45 @@ class UserClassType extends AbstractType
 
         $builder
             ->add('name')
-            ->add('share')
-            ->add('access')
-            ->add('canQuestion')
-            ->add('canInvite')
-            ->add('maxInactivity')
+            ->add('share', null, [
+                'label' => 'can create sharables',
+            ])
+            ->add('access', null, [
+                'label' => 'can access sharables',
+            ])
+            ->add('canQuestion', null, [
+                'label' => 'can ask questions',
+            ])
+            ->add('canInvite', null, [
+                'label' => 'can invite users',
+            ])
+            ->add('maxInactivity', null, [
+                'help' => 'inactivity allowed before account is disabled (in days)',
+            ])
             ->add('maxParanoia', ChoiceType::class, [
                 'choices' => UserVoter::getParanoiaLevels(),
             ])
-            ->add('inviteFrequency')
-            ->add('shareScoreReq')
-            ->add('accountAgeReq')
-            ->add('validatedReq')
-            ->add('verifiedReq')
+            ->add('inviteFrequency', null, [
+                'help' => 'Time before allowing next invitation (in days)',
+            ])
+            ->add('shareScoreReq', null, [
+                'label' => 'Share Score Requirement',
+            ])
+            ->add('accountAgeReq', null, [
+                'label' => 'Account Age Requirement',
+                'help' => 'in days',
+            ])
+            ->add('manageReq', null, [
+                'label' => 'Managed sharables Requirement',
+                'help' => 'disabled sharables does not count',
+            ])
+            ->add('validatedReq', null, [
+                'label' => 'Validation given Requirement',
+                'help' => 'number of validation send by the user',
+            ])
+            ->add('verifiedReq', null, [
+                'label' => 'Email verification Requirement',
+            ])
         ;
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
