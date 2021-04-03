@@ -109,7 +109,6 @@ class QuestionRepository extends ServiceEntityRepository
 
         $qb
             ->orderBy('q.' . $search->getSortBy(), $search->getOrder())
-            ->setMaxResults(10)
         ;
 
         return $qb->getQuery()->getResult();

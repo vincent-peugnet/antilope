@@ -16,6 +16,16 @@
         <div class="col-md-9">
 
             
+        <div class="alert alert-info">
+            {{ questions|length }} questions found
+            {% if search.user %}
+            asked by {{ userMacro.render(search.user, 1) }}
+            {% endif %}
+            {% if search.sharable %}
+            on {{ sharableMacro.render(search.sharable, 1) }}
+            {% endif %}
+        </div>
+
             {% for question in questions %}
             <div class="card mb-3">
                 <div class="card-header">            
@@ -32,22 +42,35 @@
                     
                     <p>{{ question.text }}</p>
                     
+                    <div class="btn-group">
+
+                        {% if is_granted('answer', question) %}
+                        <a href="{{ path('question_show', {id: question.id}) }}" class="btn btn-primary">
+                            answer !
+                            <span class="badge badge-secondary">
+                                {{ question.answers|length }}
+                            </span>
+                        </a>
+                        {% else %}
+                            <a href="{{ path('question_show', {id: question.id}) }}" class="btn btn-light">
+                            answers
+                            <span class="badge badge-secondary">
+                                {{ question.answers|length }}
+                            </span>
+                        </a>
+                        {% endif %}
                     
-                    {% if is_granted('answer', question) %}
-                    <a href="{{ path('question_show', {id: question.id}) }}" class="btn btn-primary">
-                        answer !
-                        <span class="badge badge-secondary">
-                            {{ question.answers|length }}
-                        </span>
-                    </a>
-                    {% else %}
-                    <a href="{{ path('question_show', {id: question.id}) }}" class="btn btn-light">
-                        answers
-                        <span class="badge badge-secondary">
-                            {{ question.answers|length }}
-                        </span>
-                    </a>
-                    {% endif %}
+                        {% if is_granted('edit', question) %}
+                        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="{{ path('question_edit', {id: question.id}) }}" class="dropdown-item">
+                                <i class="fas fa-pen"></i> edit
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
                 </div>
                 
             </div>

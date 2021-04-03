@@ -125,9 +125,6 @@ class QuestionVoter extends Voter
 
     public function canEdit(Question $question, User $user): bool
     {
-        if ($question->getUser() === $user && $question->getAnswers()->isEmpty()) {
-            return ($question->getCreatedAt() > new DateTime('6 hours ago'));
-        }
-        return false;
+        return $question->getUser() === $user && $question->getAnswers()->isEmpty();
     }
 }

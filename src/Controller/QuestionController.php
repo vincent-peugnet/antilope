@@ -61,6 +61,7 @@ class QuestionController extends AbstractController
         return $this->render('question/index.html.twig', [
             'searchForm' => $form->createView(),
             'questions' => $questions,
+            'search' => $search,
         ]);
     }
 
