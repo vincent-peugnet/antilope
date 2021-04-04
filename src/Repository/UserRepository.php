@@ -28,6 +28,7 @@ namespace App\Repository;
 
 use App\Entity\Sharable;
 use App\Entity\User;
+use App\Entity\UserSearch;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -136,6 +137,38 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->andWhere('u.disabled = 0')
             ->getQuery()
             ->getResult();
+    }
+
+    public function filter(UserSearch $search)
+    {
+        $qb = $this->createQueryBuilder('u')
+        ;
+
+        if (!is_null($search->getQuery())) {
+            if (!empty($search->getQuery())) {
+                $qb = $qb
+                    ->andWhere('u.username LIKE :q')
+                    ->setParameter('q', "%{$search->getQuery()}%");
+            }
+        }
+
+        if (!is_null($search->getUserClass())) {
+            $qb = $qb
+                ->andWhere('u.userClass = :uc')
+                ->setParameter('uc', $search->getUserClass()->getId());
+        }
+
+        if (!$search->getDisabled()) {
+            $qb = $qb
+                ->andWhere('u.disabled = :d')
+                ->setParameter('d', $search->getDisabled());
+        }
+
+        if ($search->getSortBy() && $search->getOrder()) {
+            $qb->orderBy('u.' . $search->getSortBy(), $search->getOrder());
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
     /*

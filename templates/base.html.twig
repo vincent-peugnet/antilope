@@ -38,6 +38,12 @@
                         <li class="nav-item">
                             <a class="nav-link{{ route_name == 'sharable' ? ' active' }}" href="{{ path('sharable') }}">sharables</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link{{ route_name == 'user' ? ' active' }}" href="{{ path('user') }}">users</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link{{ route_name == 'question' ? ' active' }}" href="{{ path('question') }}">questions</a>
+                        </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarToolsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             tools
@@ -45,12 +51,6 @@
                             <div class="dropdown-menu" aria-labelledby="navbarToolsDropdown">
                                 <a class="dropdown-item{{ route_name == 'tag_index' ? ' active' }}" href="{{ path('tag_index') }}">tags</a>
                             </div>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link{{ route_name == 'question' ? ' active' }}" href="{{ path('question') }}">questions</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link{{ route_name == 'user' ? ' active' }}" href="{{ path('user') }}">users</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link{{ route_name == 'userclass' ? ' active' }}" href="{{ path('userclass') }}">user classes</a>

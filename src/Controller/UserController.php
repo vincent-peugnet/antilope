@@ -29,9 +29,12 @@ namespace App\Controller;
 use App\Entity\Sharable;
 use App\Entity\User;
 use App\Entity\UserContact;
+use App\Entity\UserSearch;
 use App\Form\UserContactType;
+use App\Form\UserSearchType;
 use App\Form\UserType;
 use App\Repository\BookmarkRepository;
+use App\Repository\UserRepository;
 use App\Security\Voter\UserContactVoter;
 use App\Security\Voter\UserVoter;
 use App\Service\FileUploader;
@@ -52,14 +55,22 @@ class UserController extends AbstractController
     /**
      * @Route("/user", name="user")
      */
-    public function index(): Response
+    public function index(UserRepository $userRepository, Request $request): Response
     {
-        $repository = $this->getDoctrine()->getRepository(User::class);
-        $users = $repository->findAll();
+        $search = new UserSearch();
+        $form = $this->createForm(UserSearchType::class, $search);
 
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $search = $form->getData();
+        }
+
+        $users = $userRepository->filter($search);
 
         return $this->render('user/index.html.twig', [
             'users' => $users,
+            'form' => $form->createView(),
+            'search' => $search,
         ]);
     }
 

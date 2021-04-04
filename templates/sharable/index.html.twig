@@ -18,6 +18,8 @@
         {{ form_start(searchForm) }}
             {{ form_row(searchForm.query) }}
             {{ form_row(searchForm.disabled) }}
+
+            <h5>Tags</h5>
             {{ form_row(searchForm.tags) }}
 
             <div class="d-none d-md-block">
@@ -59,6 +61,9 @@
             {% endif %}
             {% if search.visibleBy %}
             visible by <a href="{{ path('userclass_show', {id: search.visibleBy.id}) }}" class="badge badge-primary">{{ search.visibleBy }}</a>
+            {% endif %}
+            {% if search.disabled %}
+                including <span class="badge badge-danger"><i class="fas fa-ban"></i> disabled</span>
             {% endif %}
         </div>
 
