@@ -161,7 +161,9 @@
     </span>
     {% endif %}
     </br>
-    {{ userClass.sharables|length }} sharables
+    <a href="{{ path('sharable', {visibleBy: userClass.id}) }}">
+        {{ userClass.sharables|length }} sharables
+    </a>
 
         <div class="text-muted">
             Created {{ userClass.createdAt|ago }}

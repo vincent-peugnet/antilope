@@ -25,6 +25,7 @@
                 {{ form_row(searchForm.bookmarkedBy) }}
                 {{ form_row(searchForm.validatedBy) }}
                 {{ form_row(searchForm.interestedBy) }}
+                {{ form_row(searchForm.visibleBy) }}
             </div>
 
             <div class="row">
@@ -55,6 +56,9 @@
             {% endif %}
             {% if search.interestedBy %}
             that interest {{ userMacro.render(search.interestedBy, 1) }}
+            {% endif %}
+            {% if search.visibleBy %}
+            visible by <a href="{{ path('userclass_show', {id: search.visibleBy.id}) }}" class="badge badge-primary">{{ search.visibleBy }}</a>
             {% endif %}
         </div>
 

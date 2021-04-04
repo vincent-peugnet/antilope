@@ -137,6 +137,12 @@ class SharableRepository extends ServiceEntityRepository
             }
         }
 
+        // Filter Sharables by VisibleBy
+        if (!is_null($search->getVisibleBy())) {
+            $qb->andWhere('s.visibleBy = :uc')
+                ->setParameter('uc', $search->getVisibleBy());
+        }
+
         // Work, but there may be a better way to do this including a lot of joins
         if ($user->getUserClass()->getAccess()) {
             $qb->andwhere(

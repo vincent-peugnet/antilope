@@ -29,6 +29,7 @@ namespace App\Form;
 use App\Entity\SharableSearch;
 use App\Entity\Tag;
 use App\Entity\User;
+use App\Entity\UserClass;
 use EasyCorp\Bundle\EasyAdminBundle\Form\Filter\Type\BooleanFilterType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -89,6 +90,12 @@ class SharableSearchType extends AbstractType
                 'required' => false,
                 'label' => 'Is interested',
                 'placeholder' => 'is interested...'
+            ])
+            ->add('visibleBy', EntityType::class, [
+                'class' => UserClass::class,
+                'required' => false,
+                'label' => 'Visible By',
+                'placeholder' => 'Visible by...'
             ])
             ->add('sortBy', ChoiceType::class, [
                 'choices' => SharableSearch::SORT_BY,

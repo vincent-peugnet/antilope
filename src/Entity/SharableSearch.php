@@ -77,6 +77,11 @@ class SharableSearch
     private $interestedBy = null;
 
     /**
+     * @var UserClass|null
+     */
+    private $visibleBy = null;
+
+    /**
      * @var string|null
      * @Assert\Choice(callback="useSortBy")
      */
@@ -193,6 +198,18 @@ class SharableSearch
     public function setInterestedBy(?User $user): self
     {
         $this->interestedBy = $user;
+
+        return $this;
+    }
+
+    public function getVisibleBy(): ?UserClass
+    {
+        return $this->visibleBy;
+    }
+
+    public function setVisibleBy(?UserClass $visibleBy): self
+    {
+        $this->visibleBy = $visibleBy;
 
         return $this;
     }
