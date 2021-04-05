@@ -34,6 +34,7 @@ class UserSearch
     public const SORT_BY = [
         'id' => 'id',
         'name' => 'username',
+        'share score' => 'shareScore',
         'account age' => 'createdAt',
         'last activity' => 'lastActivity',
     ];

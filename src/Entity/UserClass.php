@@ -478,4 +478,16 @@ class UserClass
 
         return $this;
     }
+
+    // ____________ special functions
+
+    /**
+     * @return Collection|User[] List of all not disabled users
+     */
+    public function getNotDisabledUsers(): Collection
+    {
+        return $this->users->filter(function (User $user) {
+            return !$user->isDisabled();
+        });
+    }
 }

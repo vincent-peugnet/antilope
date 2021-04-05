@@ -155,7 +155,7 @@
         <h4>Stats</h4>
     
         <a href="{{ path('user', {userClass: userClass.id}) }}">
-            {{ userClass.users|length }} users
+            {{ userClass.getNotDisabledUsers|length }} users
         </a>
     {% if app.user.userclass == userClass %}
     <span class="badge badge-info">

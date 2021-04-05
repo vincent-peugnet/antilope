@@ -9,7 +9,7 @@
 
 <div class="row">
 
-    <div class="col-lg-4">
+    <div class="col-lg-5">
         
         <h1 class="display-5">{{ siteName }}</h1>
         
@@ -23,7 +23,7 @@
     </div>
     
     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-        <div class="col-lg-8 overflow-auto mb-3">
+        <div class="col-lg-7 overflow-auto mb-3">
             {% for manage in app.user.getUnconfirmedManages|reverse %}
             <div class="alert border border-primary">
                 <a class="btn btn-primary mr-1" href="{{ path('sharable_show', {id: manage.sharable.id}) }}">
@@ -37,18 +37,6 @@
                 <small class="text-muted">{{ manage.createdAt|ago }}</small>
             </div>
             {% endfor %}
-            {% for interested in interesteds %}
-            <div class="alert border border-warning">
-                <a class="btn btn-warning mr-1" title="view interested users" href="{{ path('sharable_interested', {id: interested.sharable.id}) }}">
-                    <i class="fas fa-question-circle"></i>
-                </a>
-                {{ userMacro.render(interested.user, 1) }} is interested in your sharable {{ sharableMacro.render(interested.sharable) }}
-                <small class="text-muted">{{ interested.createdAt|ago }}</small>
-            </div>
-            {% endfor %}
-            {% if interesteds|length >= 4 %}
-                <a href="">view all...</a>
-            {% endif %}
         </div>
     {% endif %}
 </div>
