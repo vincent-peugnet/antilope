@@ -30,10 +30,15 @@ crossorigin=""/>
     integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
     crossorigin="">
 </script>
+<script src="https://unpkg.com/Leaflet.Deflate/dist/L.Deflate.js"></script>
 
 <script>
 
     var map = L.map('map').setView([51.505, -0.09], 5);
+
+
+    const features = L.deflate({minSize: 25})
+    features.addTo(map);
     
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -41,9 +46,20 @@ crossorigin=""/>
 
 
     {% for sharable in sharables %}
-        L.marker([{{ sharable.latitude }}, {{ sharable.longitude }}]).addTo(map)
-        .bindPopup('<a href="{{ path('sharable_show', {id: sharable.id}) }}">{{ sharable.name }}</a>')
-        .openPopup();
+        {% if sharable.radius %}
+            var circle{{ sharable.id }} = L.circle([{{ sharable.latitude|number_format(3, '.') }}, {{ sharable.longitude|number_format(3, '.') }}], {
+                color: 'red',
+                fillColor: '#f03',
+                fillOpacity: 0.5,
+                radius: {{ sharable.radius }}
+            }).addTo(map)
+            .bindPopup('<a href="{{ path('sharable_show', {id: sharable.id}) }}">{{ sharable.name }}</a>')
+            .addTo(features);
+        {% else %}
+            L.marker([{{ sharable.latitude }}, {{ sharable.longitude }}]).addTo(map)
+            .bindPopup('<a href="{{ path('sharable_show', {id: sharable.id}) }}">{{ sharable.name }}</a>')
+            .openPopup();
+        {% endif %}
     {% endfor %}
 </script>
 

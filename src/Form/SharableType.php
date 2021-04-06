@@ -134,6 +134,11 @@ class SharableType extends AbstractType
                     'step' => 0.0000001,
                 ],
             ])
+            ->add('radius', ChoiceType::class, [
+                'help' => 'you can anonymise your location using a circle instead of point',
+                'choices' => Sharable::RADIUS_OPTIONS,
+                'required' => true,
+            ])
             ->add('beginAt', DateTimeType::class, [
                 'widget' => 'single_text',
                 'required'   => false,

@@ -47,9 +47,20 @@ class Sharable
         '4 Never' => 4,
     ];
 
+    public const RADIUS_OPTIONS = [
+        'No radius' => 0,
+        '250m' => 250,
+        '5km' => 5000,
+    ];
+
     public static function interestedOptionsValues()
     {
         return array_values(self::INTERESTED_OPTIONS);
+    }
+
+    public static function radiusOptionsValues()
+    {
+        return array_values(self::RADIUS_OPTIONS);
     }
 
     /**
@@ -201,6 +212,12 @@ class Sharable
      */
     private $longitude;
 
+    /**
+     * @ORM\Column(type="smallint")
+     * @Assert\Choice(callback="radiusOptionsValues")
+     */
+    private $radius;
+
     public function __construct()
     {
         $this->managedBy = new ArrayCollection();
@@ -215,12 +232,108 @@ class Sharable
         $this->tags = new ArrayCollection();
         $this->bookmarks = new ArrayCollection();
         $this->questions = new ArrayCollection();
+        $this->radius = 0;
     }
 
     public function __toString(): string
     {
         return (string) $this->name;
     }
+
+    //_______________ special functions _______________
+
+    /**
+     * Get the Users that validated the Sharable
+     *
+     * @return Collection|User[]
+     */
+    public function getValidatedBy(): Collection
+    {
+        return $this->validations->map(function (Validation $validation) {
+            return $validation->getUser();
+        });
+    }
+
+    /**
+     * Get all manage relation object that allow contact
+     *
+     * @return Collection|Manage[]
+     */
+    public function getContactableManagers(): Collection
+    {
+        return $this->getManagedBy()->filter(function (Manage $manage) {
+            return ($manage->isContactable() && $manage->getConfirmed() && !$manage->getUser()->isDisabled());
+        });
+    }
+
+    /**
+     * Get all manage relation object that have confirmed
+     *
+     * @return Collection|Manage[]
+     */
+    public function getConfirmedManagers(): Collection
+    {
+        return $this->getManagedBy()->filter(function (Manage $manage) {
+            return $manage->getConfirmed();
+        });
+    }
+
+    /**
+     * @return Collection|Manage[] Collection of Manage objects
+     */
+    public function getConfirmedNotDisabledManagers(): Collection
+    {
+        return $this->getManagedBy()->filter(function (Manage $manage) {
+            return ($manage->getConfirmed() && !$manage->getUser()->isDisabled());
+        });
+    }
+
+    public function isAccessible(): bool
+    {
+        return ($this->getConfirmedNotDisabledManagers()->count() > 0);
+    }
+
+    public function isContactable(): bool
+    {
+        $contactableManagers = $this->getConfirmedNotDisabledManagers()->filter(function (Manage $manage) {
+            return $manage->getUser()->isContactable();
+        });
+        return (!$this->getSharableContacts()->isEmpty() || !$contactableManagers->isEmpty());
+    }
+
+    public function getCoverPath(): string
+    {
+        return FileUploader::COVER . '/' . $this->cover;
+    }
+
+    public function isGeo(): bool
+    {
+        return (!is_null($this->latitude) && !is_null($this->longitude));
+    }
+
+    // _______________ callbacks _____________________
+
+
+    /**
+     * @Assert\Callback
+     */
+    public function validate(ExecutionContextInterface $context, $payload)
+    {
+        if (!is_null($this->latitude) && is_null($this->longitude)) {
+            $context->buildViolation('You should include both latitude and longitude')
+                ->atPath('longitude')
+                ->addViolation();
+        }
+
+        if (!is_null($this->longitude) && is_null($this->latitude)) {
+            $context->buildViolation('You should include both latitude and longitude')
+                ->atPath('latitude')
+                ->addViolation();
+        }
+    }
+
+    // _______________ setters and getters  _____________________
+
 
     public function getId(): ?int
     {
@@ -603,95 +716,15 @@ class Sharable
         return $this;
     }
 
-    //_______________ special functions _______________
-
-    /**
-     * Get the Users that validated the Sharable
-     *
-     * @return Collection|User[]
-     */
-    public function getValidatedBy(): Collection
+    public function getRadius(): ?int
     {
-        return $this->validations->map(function (Validation $validation) {
-            return $validation->getUser();
-        });
+        return $this->radius;
     }
 
-    /**
-     * Get all manage relation object that allow contact
-     *
-     * @return Collection|Manage[]
-     */
-    public function getContactableManagers(): Collection
+    public function setRadius(int $radius): self
     {
-        return $this->getManagedBy()->filter(function (Manage $manage) {
-            return ($manage->isContactable() && $manage->getConfirmed() && !$manage->getUser()->isDisabled());
-        });
-    }
+        $this->radius = $radius;
 
-    /**
-     * Get all manage relation object that have confirmed
-     *
-     * @return Collection|Manage[]
-     */
-    public function getConfirmedManagers(): Collection
-    {
-        return $this->getManagedBy()->filter(function (Manage $manage) {
-            return $manage->getConfirmed();
-        });
-    }
-
-    /**
-     * @return Collection|Manage[] Collection of Manage objects
-     */
-    public function getConfirmedNotDisabledManagers(): Collection
-    {
-        return $this->getManagedBy()->filter(function (Manage $manage) {
-            return ($manage->getConfirmed() && !$manage->getUser()->isDisabled());
-        });
-    }
-
-    public function isAccessible(): bool
-    {
-        return ($this->getConfirmedNotDisabledManagers()->count() > 0);
-    }
-
-    public function isContactable(): bool
-    {
-        $contactableManagers = $this->getConfirmedNotDisabledManagers()->filter(function (Manage $manage) {
-            return $manage->getUser()->isContactable();
-        });
-        return (!$this->getSharableContacts()->isEmpty() || !$contactableManagers->isEmpty());
-    }
-
-    public function getCoverPath(): string
-    {
-        return FileUploader::COVER . '/' . $this->cover;
-    }
-
-    public function isGeo(): bool
-    {
-        return (!is_null($this->latitude) && !is_null($this->longitude));
-    }
-
-    // _______________ callbacks _____________________
-
-
-    /**
-     * @Assert\Callback
-     */
-    public function validate(ExecutionContextInterface $context, $payload)
-    {
-        if (!is_null($this->latitude) && is_null($this->longitude)) {
-            $context->buildViolation('You should include both latitude and longitude')
-                ->atPath('longitude')
-                ->addViolation();
-        }
-
-        if (!is_null($this->longitude) && is_null($this->latitude)) {
-            $context->buildViolation('You should include both latitude and longitude')
-                ->atPath('latitude')
-                ->addViolation();
-        }
+        return $this;
     }
 }

@@ -46,11 +46,14 @@
     <h4>Location</h4>
     <p>You can specify a location for this sharable. This will place your sharable on the map.</p>
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-4">
             {{ form_row(form.latitude) }}
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-4">
             {{ form_row(form.longitude) }}
+        </div>
+        <div class="col-sm-4">
+            {{ form_row(form.radius) }}
         </div>
     </div>
 </fieldset>
