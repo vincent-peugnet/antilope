@@ -16,6 +16,8 @@
     {% elseif type == 'address' %}
         <i class="fas fa-map-marker-alt"></i>
         {{type}}: {{ content }}
+    {% elseif type == 'matrix' %}
+        <a href="matrix:u/{{ content|trim('@') }}">{{ content }}</a>
     {% else %}
         {{type}}: {{ content }}
     {% endif %}

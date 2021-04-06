@@ -1,7 +1,15 @@
 {% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+crossorigin=""/>
+{% endblock %}
+
 {% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 {% import "macros/contact_method.html.twig" as contact_method %}
 {% import "macros/user.html.twig" as userMacro %}
+{% import "macros/sharable.html.twig" as sharableMacro %}
 
 {% block title %}Map of sharables{% endblock %}
 
@@ -11,5 +19,33 @@
     {'url': url('sharable'), 'text': 'Sharables'},
     {'text': 'Map'},
 ]) }}
+
+<div id="map" style="height: 500px;"></div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+ <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin="">
+</script>
+
+<script>
+
+    var map = L.map('map').setView([51.505, -0.09], 5);
+    
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+
+    {% for sharable in sharables %}
+        L.marker([{{ sharable.latitude }}, {{ sharable.longitude }}]).addTo(map)
+        .bindPopup('<a href="{{ path('sharable_show', {id: sharable.id}) }}">{{ sharable.name }}</a>')
+        .openPopup();
+    {% endfor %}
+</script>
+
 
 {% endblock %}

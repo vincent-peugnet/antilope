@@ -684,13 +684,13 @@ class Sharable
     {
         if (!is_null($this->latitude) && is_null($this->longitude)) {
             $context->buildViolation('You should include both latitude and longitude')
-                ->atPath('latitude')
+                ->atPath('longitude')
                 ->addViolation();
         }
 
         if (!is_null($this->longitude) && is_null($this->latitude)) {
             $context->buildViolation('You should include both latitude and longitude')
-                ->atPath('longitude')
+                ->atPath('latitude')
                 ->addViolation();
         }
     }

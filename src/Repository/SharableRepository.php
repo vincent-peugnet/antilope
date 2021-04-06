@@ -58,10 +58,10 @@ class SharableRepository extends ServiceEntityRepository
 
     /**
      * List all sharable based on user Class and visibleBy setting on the sharables
-     *
      * @param User $user the actual user
+     * @param bool $geo return only sharable that have coordinates
      */
-    public function getFilteredSharables(SharableSearch $search, User $user): array
+    public function getFilteredSharables(SharableSearch $search, User $user, bool $geo = false): array
     {
         $userClassRepository = $this->getEntityManager()->getRepository(UserClass::class);
         assert($userClassRepository instanceof UserClassRepository);
@@ -85,6 +85,16 @@ class SharableRepository extends ServiceEntityRepository
             ->leftJoin('s.tags', 't')
             ->addSelect('t')
         ;
+
+        // Filter sharable that have coordinates
+        if ($geo) {
+            $qb->andWhere(
+                $qb->expr()->andX(
+                    $qb->expr()->isNotNull('s.latitude'),
+                    $qb->expr()->isNotNull('s.longitude')
+                )
+            );
+        }
 
         // Filter Sharables by manager
         // Check if user paranoia level authorize this

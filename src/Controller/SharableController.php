@@ -351,9 +351,11 @@ class SharableController extends AbstractController
      */
     public function map(SharableRepository $sharableRepository)
     {
-        $sharables = $sharableRepository->findAll();
+        $sharables = $sharableRepository->getFilteredSharables(new SharableSearch(), $this->getUser(), true);
 
-        return $this->render('sharable/map.html.twig');
+        return $this->render('sharable/map.html.twig', [
+            'sharables' => $sharables,
+        ]);
     }
 
     /**
