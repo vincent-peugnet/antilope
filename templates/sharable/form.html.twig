@@ -43,9 +43,29 @@
 </fieldset>
 
 <fieldset class="p-3 border border-secondary rounded mb-3">
+    <h4>Location</h4>
+    <p>You can specify a location for this sharable. This will place your sharable on the map.</p>
+    <div class="row">
+        <div class="col-sm-6">
+            {{ form_row(form.latitude) }}
+        </div>
+        <div class="col-sm-6">
+            {{ form_row(form.longitude) }}
+        </div>
+    </div>
+</fieldset>
+
+<fieldset class="p-3 border border-secondary rounded mb-3">
     <h4>Date and time</h4>
-    {{ form_row(form.beginAt) }}
-    {{ form_row(form.endAt) }}
+
+    <div class="row">
+        <div class="col-sm-6">
+            {{ form_row(form.beginAt) }}
+        </div>
+        <div class="col-sm-6">
+            {{ form_row(form.endAt) }}
+        </div>
+    </div>
 </fieldset>
 
 {{ form_end(form) }}

@@ -33,6 +33,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * @ORM\Entity(repositoryClass=SharableRepository::class)
@@ -179,6 +180,26 @@ class Sharable
      * @ORM\OneToMany(targetEntity=Question::class, mappedBy="sharable", orphanRemoval=true)
      */
     private $questions;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     * @Assert\Range(
+     *      min = -90,
+     *      max =  90,
+     *      notInRangeMessage = "Latitude must be between {{ min }} and {{ max }}",
+     * )
+     */
+    private $latitude;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     * @Assert\Range(
+     *      min = -180,
+     *      max =  180,
+     *      notInRangeMessage = "Longitude must be between {{ min }} and {{ max }}",
+     * )
+     */
+    private $longitude;
 
     public function __construct()
     {
@@ -498,6 +519,90 @@ class Sharable
         return $this;
     }
 
+    /**
+     * @return Collection|Bookmark[]
+     */
+    public function getBookmarks(): Collection
+    {
+        return $this->bookmarks;
+    }
+
+    public function addBookmark(Bookmark $bookmark): self
+    {
+        if (!$this->bookmarks->contains($bookmark)) {
+            $this->bookmarks[] = $bookmark;
+            $bookmark->setSharable($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBookmark(Bookmark $bookmark): self
+    {
+        if ($this->bookmarks->removeElement($bookmark)) {
+            // set the owning side to null (unless already changed)
+            if ($bookmark->getSharable() === $this) {
+                $bookmark->setSharable(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Question[]
+     */
+    public function getQuestions(): Collection
+    {
+        return $this->questions;
+    }
+
+    public function addQuestion(Question $question): self
+    {
+        if (!$this->questions->contains($question)) {
+            $this->questions[] = $question;
+            $question->setSharable($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuestion(Question $question): self
+    {
+        if ($this->questions->removeElement($question)) {
+            // set the owning side to null (unless already changed)
+            if ($question->getSharable() === $this) {
+                $question->setSharable(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getLatitude(): ?float
+    {
+        return $this->latitude;
+    }
+
+    public function setLatitude(?float $latitude): self
+    {
+        $this->latitude = $latitude;
+
+        return $this;
+    }
+
+    public function getLongitude(): ?float
+    {
+        return $this->longitude;
+    }
+
+    public function setLongitude(?float $longitude): self
+    {
+        $this->longitude = $longitude;
+
+        return $this;
+    }
+
     //_______________ special functions _______________
 
     /**
@@ -564,63 +669,29 @@ class Sharable
         return FileUploader::COVER . '/' . $this->cover;
     }
 
-    /**
-     * @return Collection|Bookmark[]
-     */
-    public function getBookmarks(): Collection
+    public function isGeo(): bool
     {
-        return $this->bookmarks;
+        return (!is_null($this->latitude) && !is_null($this->longitude));
     }
 
-    public function addBookmark(Bookmark $bookmark): self
-    {
-        if (!$this->bookmarks->contains($bookmark)) {
-            $this->bookmarks[] = $bookmark;
-            $bookmark->setSharable($this);
-        }
+    // _______________ callbacks _____________________
 
-        return $this;
-    }
-
-    public function removeBookmark(Bookmark $bookmark): self
-    {
-        if ($this->bookmarks->removeElement($bookmark)) {
-            // set the owning side to null (unless already changed)
-            if ($bookmark->getSharable() === $this) {
-                $bookmark->setSharable(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
-     * @return Collection|Question[]
+     * @Assert\Callback
      */
-    public function getQuestions(): Collection
+    public function validate(ExecutionContextInterface $context, $payload)
     {
-        return $this->questions;
-    }
-
-    public function addQuestion(Question $question): self
-    {
-        if (!$this->questions->contains($question)) {
-            $this->questions[] = $question;
-            $question->setSharable($this);
+        if (!is_null($this->latitude) && is_null($this->longitude)) {
+            $context->buildViolation('You should include both latitude and longitude')
+                ->atPath('latitude')
+                ->addViolation();
         }
 
-        return $this;
-    }
-
-    public function removeQuestion(Question $question): self
-    {
-        if ($this->questions->removeElement($question)) {
-            // set the owning side to null (unless already changed)
-            if ($question->getSharable() === $this) {
-                $question->setSharable(null);
-            }
+        if (!is_null($this->longitude) && is_null($this->latitude)) {
+            $context->buildViolation('You should include both latitude and longitude')
+                ->atPath('longitude')
+                ->addViolation();
         }
-
-        return $this;
     }
 }

@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
+{% import "macros/contact_method.html.twig" as contact_method %}
+{% import "macros/user.html.twig" as userMacro %}
+
+{% block title %}Map of sharables{% endblock %}
+
+{% block content %}
+
+{{ breadcrumbs.render([
+    {'url': url('sharable'), 'text': 'Sharables'},
+    {'text': 'Map'},
+]) }}
+
+{% endblock %}

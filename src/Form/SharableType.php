@@ -39,6 +39,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -112,6 +113,26 @@ class SharableType extends AbstractType
                     // phpcs:ignore Generic.Files.LineLength.TooLong
                 'help' => '1 <i class="fas fa-lock-open fa-fw"></i> user don\'t need access any contact infos</br>2 <i class="fas fa-bolt fa-fw"></i> contact infos are automaticaly exchanged</br>3 <i class="fas fa-stamp fa-fw"></i> contact infos are manualy send to interested users</br>4 <i class="fas fa-lock fa-fw"></i> Only interested user contact infos are send',
                 'help_html' => true,
+            ])
+            ->add('latitude', NumberType::class, [
+                'html5' => true,
+                'scale' => 7,
+                'required' => false,
+                'attr' => [
+                    'min' => -90,
+                    'max' => 90,
+                    'step' => 0.0000001,
+                ],
+            ])
+            ->add('longitude', NumberType::class, [
+                'html5' => true,
+                'scale' => 7,
+                'required' => false,
+                'attr' => [
+                    'min' => -90,
+                    'max' => 90,
+                    'step' => 0.0000001,
+                ],
             ])
             ->add('beginAt', DateTimeType::class, [
                 'widget' => 'single_text',

@@ -347,6 +347,16 @@ class SharableController extends AbstractController
     }
 
     /**
+     * @Route("/sharable/map", name="sharable_map")
+     */
+    public function map(SharableRepository $sharableRepository)
+    {
+        $sharables = $sharableRepository->findAll();
+
+        return $this->render('sharable/map.html.twig');
+    }
+
+    /**
      * @Route("/sharable/new", name="sharable_new")
      */
     public function new(
