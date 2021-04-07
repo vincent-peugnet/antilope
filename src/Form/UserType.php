@@ -62,6 +62,12 @@ class UserType extends AbstractType
             ])
             ->add('description', null, [
                 'help' => 'You can use Markdown to describe yourself.',
+                'attr' => [
+                    'data-provide' => 'markdown',
+                    'data-iconlibrary' => 'fa',
+                    'data-resize' => 'vertical',
+                    'data-fullscreen' => '{enable: false}',
+                ],
             ])
             ->add('paranoia', ChoiceType::class, [
                 'label' => 'Paranoïa level',
