@@ -80,7 +80,7 @@ class UserClassFixture extends Fixture
         $manager->persist($member);
 
         $babyMember = new UserClass();
-        $member
+        $babyMember
             ->setNext($member)
             ->setAccess(true)
             ->setShare(true)
@@ -93,7 +93,7 @@ class UserClassFixture extends Fixture
             ->setValidatedReq(0)
             ->setManageReq(1)
             ->setName('baby_member');
-        $manager->persist($member);
+        $manager->persist($babyMember);
 
         $basicUser = new UserClass();
         $basicUser
