@@ -1,4 +1,13 @@
 {% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+{% if sharable.isGeo %}
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin=""/>
+        {% endif %}
+    {% endblock %}
+
 {% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 {% import "macros/user.html.twig" as userMacro %}
 {% import "macros/contact_method.html.twig" as contact_method %}
@@ -202,12 +211,14 @@
                     {% if sharable.isGeo %}
                         <li class="list-group-item">
                             <i class="fas fa-map-marker-alt"></i> Geo
+                            {% if is_granted('contact', sharable) %}
                             <a
-                                href="https://www.google.com/maps/search/?api=1&query={{ sharable.latitude|number_format(7, '.') }},{{ sharable.longitude|number_format(7, '.') }}"
+                                href="geo:{{ sharable.latitude|number_format(7, '.') }},{{ sharable.longitude|number_format(7, '.') }}"
                                 target="_blank"
                             >
                                 open in maps
                             </a>
+                            {% endif %}
                         </li>
                     {% endif %}
                     {% if sharable.beginAt %}
@@ -307,6 +318,10 @@
                 </div>
             </div>
         </div>
+
+        {% if sharable.isGeo %}
+            <div id="map" style="height: 250px;" class="mb-3"></div>
+        {% endif %}
 
 
         <h3>
@@ -411,3 +426,40 @@
 
 
 {% endblock %}
+
+
+{% block javascripts %}
+{% if sharable.isGeo %}
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin="">
+        </script>
+
+        <script>
+
+            var map = L.map('map').setView([{{ sharable.latitude|number_format(3, '.') }}, {{ sharable.longitude|number_format(3, '.') }}], 9);
+
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+
+            {% if sharable.radius %}
+                var circle{{ sharable.id }} = L.circle([{{ sharable.latitude|number_format(3, '.') }}, {{ sharable.longitude|number_format(3, '.') }}], {
+                    color: 'red',
+                    fillColor: '#f03',
+                    fillOpacity: 0.5,
+                    radius: {{ sharable.radius }}
+                }).addTo(map)
+                .bindPopup('<a href="{{ path('sharable_show', {id: sharable.id}) }}">{{ sharable.name }}</a>')
+                .addTo(features);
+            {% else %}
+                L.marker([{{ sharable.latitude }}, {{ sharable.longitude }}]).addTo(map)
+                .bindPopup('<a href="{{ path('sharable_show', {id: sharable.id}) }}">{{ sharable.name }}</a>')
+                .openPopup();
+            {% endif %}
+
+        </script>
+{% endif %}
+    {% endblock %}
