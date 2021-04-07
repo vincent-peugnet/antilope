@@ -76,7 +76,7 @@ class InterestedVoter extends Voter
 
     private function canEdit(Interested $interested, User $user): bool
     {
-        return ($interested->getUser() === $user && !$user->isDisabled());
+        return ($interested->getUser() === $user && !$user->isDisabled() && !$interested->getReviewed());
     }
 
     private function canDelete(Interested $interested, User $user): bool

@@ -288,6 +288,9 @@ class Sharable
         });
     }
 
+    /**
+     * @return bool True if at least one confirmed not disabled manager
+     */
     public function isAccessible(): bool
     {
         return ($this->getConfirmedNotDisabledManagers()->count() > 0);

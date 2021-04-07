@@ -105,7 +105,7 @@
                             {{ sharable.interesteds|length }}
                         </span>
                     </a>
-                    {% if interested %}
+                    {% if interested and ( is_granted('edit', interested) or is_granted('delete', interested) ) %}
                         <button type="button" class="btn btn-warning dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
@@ -167,6 +167,23 @@
             </div>
 
             <div class="card-body">
+                {% if not is_granted('contact', sharable) %}
+                    <span tabindex="0" data-toggle="tooltip" title="
+                    {% if sharable.disabled or not sharable.isAccessible %}
+                        You cant interact with this sharable as it's disabled
+                    {% elseif sharable.interestedMethod == 1 %}
+                        You don't need any contact infos to acces this sharable  
+                    {% elseif validated %}
+                        As you have already validated this sharable, you don't need contact infos anymore  
+                    {% elseif sharable.interestedMethod == 4 %}
+                        This sharable will never gibe you contact infos
+                    {% elseif not interested %}
+                        You need to be interested in this sharable to access contact infos
+                    {% elseif sharable.interestedMethod == 3 %}
+                        You need to wait for managers approval to access sharable contact infos
+                    {% endif %}
+                    ">
+                {% endif %}
                 <a
                     class="btn btn-primary btn-block d-flex justify-content-between align-items-center {{ not is_granted('contact', sharable) ? 'disabled' : '' }}"
                     {% if is_granted('contact', sharable) %}
@@ -177,6 +194,7 @@
                     <i class="fas fa-address-book"></i> contacts
                     {{ contact_method.render( sharable.interestedMethod ) }}
                 </a>
+                {% if not is_granted('contact', sharable) %}</span>{% endif %}
                 {% if is_granted('interested', sharable) %}
                 <a
                     class="btn btn-block btn-warning d-flex justify-content-between align-items-center"
@@ -211,12 +229,12 @@
                     {% if sharable.isGeo %}
                         <li class="list-group-item">
                             <i class="fas fa-map-marker-alt"></i> Geo
-                            {% if is_granted('contact', sharable) %}
+                            {% if is_granted('geo', sharable) %}
                             <a
                                 href="geo:{{ sharable.latitude|number_format(7, '.') }},{{ sharable.longitude|number_format(7, '.') }}"
                                 target="_blank"
                             >
-                                open in maps
+                                open a map
                             </a>
                             {% endif %}
                         </li>
@@ -429,37 +447,37 @@
 
 
 {% block javascripts %}
-{% if sharable.isGeo %}
-        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-        crossorigin="">
-        </script>
+    {% if sharable.isGeo %}
+            <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin="">
+            </script>
 
-        <script>
+            <script>
 
-            var map = L.map('map').setView([{{ sharable.latitude|number_format(3, '.') }}, {{ sharable.longitude|number_format(3, '.') }}], 9);
-
-
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
+                var map = L.map('map').setView([{{ sharable.latitude|number_format(3, '.') }}, {{ sharable.longitude|number_format(3, '.') }}], 9);
 
 
-            {% if sharable.radius %}
-                var circle{{ sharable.id }} = L.circle([{{ sharable.latitude|number_format(3, '.') }}, {{ sharable.longitude|number_format(3, '.') }}], {
-                    color: 'red',
-                    fillColor: '#f03',
-                    fillOpacity: 0.5,
-                    radius: {{ sharable.radius }}
-                }).addTo(map)
-                .bindPopup('<a href="{{ path('sharable_show', {id: sharable.id}) }}">{{ sharable.name }}</a>')
-                .addTo(features);
-            {% else %}
-                L.marker([{{ sharable.latitude }}, {{ sharable.longitude }}]).addTo(map)
-                .bindPopup('<a href="{{ path('sharable_show', {id: sharable.id}) }}">{{ sharable.name }}</a>')
-                .openPopup();
-            {% endif %}
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
 
-        </script>
-{% endif %}
-    {% endblock %}
+
+                {% if sharable.radius and not is_granted('geo', sharable) %}
+                    var circle{{ sharable.id }} = L.circle([{{ sharable.latitude|number_format(3, '.') }}, {{ sharable.longitude|number_format(3, '.') }}], {
+                        color: 'red',
+                        fillColor: '#f03',
+                        fillOpacity: 0.5,
+                        radius: {{ sharable.radius }}
+                    }).addTo(map)
+                    .bindPopup('<a href="{{ path('sharable_show', {id: sharable.id}) }}">{{ sharable.name }}</a>')
+                    .addTo(features);
+                {% else %}
+                    L.marker([{{ sharable.latitude }}, {{ sharable.longitude }}]).addTo(map)
+                    .bindPopup('<a href="{{ path('sharable_show', {id: sharable.id}) }}">{{ sharable.name }}</a>')
+                    .openPopup();
+                {% endif %}
+
+            </script>
+    {% endif %}
+{% endblock %}

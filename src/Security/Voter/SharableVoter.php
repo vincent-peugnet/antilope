@@ -52,6 +52,7 @@ class SharableVoter extends Voter
     public const INTERESTED = 'interested';
     public const CONTACT    = 'contact';
     public const QUESTION   = 'question';
+    public const GEO        = 'geo';
 
     private UserClassRepository $userClassRepository;
     private InterestedRepository $interestedRepository;
@@ -83,6 +84,7 @@ class SharableVoter extends Voter
             self::INTERESTED,
             self::CONTACT,
             self::QUESTION,
+            self::GEO,
         ])
             && $subject instanceof \App\Entity\Sharable;
     }
@@ -117,6 +119,8 @@ class SharableVoter extends Voter
                 return $this->canViewContact($sharable, $user);
             case self::QUESTION:
                 return $this->canQuestion($sharable, $user);
+            case self::GEO:
+                return $this->canViewGeo($sharable, $user);
         }
 
         return false;
@@ -189,6 +193,33 @@ class SharableVoter extends Voter
             !$this->alreadyValidated($sharable, $user)
         ) {
             assert($interested instanceof Interested);
+            switch ($sharable->getInterestedMethod()) {
+                case 2:
+                    return true;
+                case 3:
+                    return ($interested->getReviewed());
+                default:
+                    return false;
+            }
+        }
+        return false;
+    }
+
+    private function canViewGeo(Sharable $sharable, User $user): bool
+    {
+        if (!$this->canView($sharable, $user)) {
+            return false;
+        }
+        if ($sharable->getInterestedMethod() === 1) {
+            return true;
+        }
+        $interested = $this->alreadyInterested($sharable, $user);
+        if (
+            $sharable->isAccessible() &&
+            !$sharable->isDisabled() &&
+            !is_null($interested) &&
+            !$this->alreadyValidated($sharable, $user)
+        ) {
             switch ($sharable->getInterestedMethod()) {
                 case 2:
                     return true;

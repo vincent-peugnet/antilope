@@ -397,12 +397,12 @@ class SharableController extends AbstractController
                 ->setUser($this->getUser())
                 ->setContactable(true);
 
-            $dispatcher->dispatch(new ManageEvent($manage), ManageEvent::NEW);
-
             $em = $this->getDoctrine()->getManager();
             $em->persist($sharable);
             $em->persist($manage);
             $em->flush();
+
+            $dispatcher->dispatch(new ManageEvent($manage), ManageEvent::NEW);
 
             return $this->redirectToRoute('sharable_show', ['id' => $sharable->getId()]);
         }
