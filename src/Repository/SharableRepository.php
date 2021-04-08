@@ -172,9 +172,13 @@ class SharableRepository extends ServiceEntityRepository
         }
 
         if (!empty($search->getQuery())) {
-            $qb = $qb
-                ->andWhere('s.name LIKE :q')
-                ->setParameter('q', "%{$search->getQuery()}%");
+            $qb->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->like('s.name', $qb->expr()->literal('%' . $search->getQuery() . '%')),
+                    $qb->expr()->like('s.description', $qb->expr()->literal('%' . $search->getQuery() . '%')),
+                    $qb->expr()->like('s.details', $qb->expr()->literal('%' . $search->getQuery() . '%'))
+                )
+            );
         }
 
         if (!$search->getTags()->isEmpty()) {
