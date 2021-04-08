@@ -18,6 +18,7 @@
     <file>src/</file>
     <file>tests/</file>
     <file>standards/</file>
+    <file>translations</file>
 
     <!-- Include the whole PSR12 standard -->
     <rule ref="PSR12"></rule>
@@ -27,10 +28,14 @@
         <exclude-pattern>*/config/*</exclude-pattern>
         <exclude-pattern>*/public/*</exclude-pattern>
         <exclude-pattern>*/tests/*</exclude-pattern>
+        <exclude-pattern>*/translations/*</exclude-pattern>
     </rule>
 
     <!-- Add some rules -->
     <rule ref="Generic.Metrics.NestingLevel"></rule>
+    <rule ref="Generic.Files.LineLength">
+        <exclude-pattern>*/translations/*</exclude-pattern>
+    </rule>
 
     <!-- CSS rules -->
     <rule ref="Squiz.CSS.Indentation"></rule>

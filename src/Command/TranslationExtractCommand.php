@@ -37,7 +37,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class TranslationExtractCommand extends Command
 {
     protected static $defaultName = 'translation:extract';
-    protected const FORMAT = 'po';
+    protected const FORMAT = 'php';
     public const DOMAIN = 'messages';
     public const LOCALES = [
         'en',
