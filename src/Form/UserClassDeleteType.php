@@ -33,6 +33,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\TranslatableMessage;
 
 class UserClassDeleteType extends AbstractType
 {
@@ -58,14 +59,14 @@ class UserClassDeleteType extends AbstractType
                     'mapped' => false,
                     'choices' => $choices,
                     'required' => true,
-                    'label' => 'Target user class for sharables',
+                    'label' => new TranslatableMessage('Target user class for sharables'),
                     'help' => 'Select the new user class for sharables that where accessible by this user class'
                 ])
             ;
         }
         $builder
             ->add('delete', SubmitType::class, [
-                'label' => 'delete user class',
+                'label' => new TranslatableMessage('delete user class'),
                 'attr' => [
                     'class' => 'btn-danger',
                 ]

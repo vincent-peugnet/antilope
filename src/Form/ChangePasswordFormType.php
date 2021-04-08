@@ -31,6 +31,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\TranslatableMessage;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -53,10 +54,10 @@ class ChangePasswordFormType extends AbstractType
                             'max' => 4096,
                         ]),
                     ],
-                    'label' => 'New password',
+                    'label' => new TranslatableMessage('New password'),
                 ],
                 'second_options' => [
-                    'label' => 'Repeat Password',
+                    'label' => new TranslatableMessage('Repeat Password'),
                 ],
                 'invalid_message' => 'The password fields must match.',
                 // Instead of being set onto the object directly,

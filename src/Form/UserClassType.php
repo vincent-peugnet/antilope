@@ -39,6 +39,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\TranslatableMessage;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class UserClassType extends AbstractType
@@ -59,7 +60,7 @@ class UserClassType extends AbstractType
         if (is_null($userClass->getId())) {
             $builder->add('next', EntityType::class, [
                 'class' => UserClass::class,
-                'label' => 'Next user class',
+                'label' => new TranslatableMessage('Next user class'),
                 'choices' => $this->userClassRepository->findAll(),
                 'placeholder' => 'none',
                 'help' => 'Your user class will be placed before the selected one.',
@@ -70,19 +71,19 @@ class UserClassType extends AbstractType
         $builder
             ->add('name')
             ->add('share', null, [
-                'label' => 'can create sharables',
+                'label' => new TranslatableMessage('can create sharables'),
             ])
             ->add('access', null, [
-                'label' => 'can access sharables',
+                'label' => new TranslatableMessage('can access sharables'),
             ])
             ->add('canQuestion', null, [
-                'label' => 'can ask questions',
+                'label' => new TranslatableMessage('can ask questions'),
             ])
             ->add('canSetVisibleBy', null, [
-                'label' => 'can set visibleBy parameter',
+                'label' => new TranslatableMessage('can set visibleBy parameter'),
             ])
             ->add('canInvite', null, [
-                'label' => 'can invite users',
+                'label' => new TranslatableMessage('can invite users'),
             ])
             ->add('maxInactivity', null, [
                 'help' => 'inactivity allowed before account is disabled (in days)',
@@ -94,22 +95,22 @@ class UserClassType extends AbstractType
                 'help' => 'Time before allowing next invitation (in days)',
             ])
             ->add('shareScoreReq', null, [
-                'label' => 'Share Score Requirement',
+                'label' => new TranslatableMessage('Share Score Requirement'),
             ])
             ->add('accountAgeReq', null, [
-                'label' => 'Account Age Requirement',
+                'label' => new TranslatableMessage('Account Age Requirement'),
                 'help' => 'in days',
             ])
             ->add('manageReq', null, [
-                'label' => 'Managed sharables Requirement',
+                'label' => new TranslatableMessage('Managed sharables Requirement'),
                 'help' => 'disabled sharables does not count',
             ])
             ->add('validatedReq', null, [
-                'label' => 'Validation given Requirement',
+                'label' => new TranslatableMessage('Validation given Requirement'),
                 'help' => 'number of validation send by the user',
             ])
             ->add('verifiedReq', null, [
-                'label' => 'Email verification Requirement',
+                'label' => new TranslatableMessage('Email verification Requirement'),
             ])
         ;
 

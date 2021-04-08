@@ -40,6 +40,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\TranslatableMessage;
 
 class SharableSearchType extends AbstractType
 {
@@ -55,7 +56,8 @@ class SharableSearchType extends AbstractType
                 ],
             ])
             ->add('disabled', CheckboxType::class, [
-                'label' => 'disabled <span class="badge badge-danger"><i class="fas fa-ban"></i></span>',
+                // phpcs:ignore Generic.Files.LineLength.TooLong
+                'label' => new TranslatableMessage('disabled <span class="badge badge-danger"><i class="fas fa-ban"></i></span>'),
                 'label_html' => true,
                 'help' => 'Show disabled sharables',
                 'required' => false,
@@ -70,31 +72,31 @@ class SharableSearchType extends AbstractType
             ->add('managedBy', EntityType::class, [
                 'class' => User::class,
                 'required' => false,
-                'label' => 'Managed by',
+                'label' => new TranslatableMessage('Managed by'),
                 'placeholder' => 'managed by...',
             ])
             ->add('validatedBy', EntityType::class, [
                 'class' => User::class,
                 'required' => false,
-                'label' => 'Validated by',
+                'label' => new TranslatableMessage('Validated by'),
                 'placeholder' => 'validated by...'
             ])
             ->add('bookmarkedBy', EntityType::class, [
                 'class' => User::class,
                 'required' => false,
-                'label' => 'Bookmarked by',
+                'label' => new TranslatableMessage('Bookmarked by'),
                 'placeholder' => 'Bookmarked by...'
             ])
             ->add('interestedBy', EntityType::class, [
                 'class' => User::class,
                 'required' => false,
-                'label' => 'Is interested',
+                'label' => new TranslatableMessage('Is interested'),
                 'placeholder' => 'is interested...'
             ])
             ->add('visibleBy', EntityType::class, [
                 'class' => UserClass::class,
                 'required' => false,
-                'label' => 'Visible By',
+                'label' => new TranslatableMessage('Visible By'),
                 'placeholder' => 'Visible by...'
             ])
             ->add('sortBy', ChoiceType::class, [
@@ -106,7 +108,7 @@ class SharableSearchType extends AbstractType
                 'empty_data' => $default->getOrder(),
             ])
             ->add('search', SubmitType::class, [
-                'label' => '<i class="fas fa-search"></i> Search',
+                'label' => new TranslatableMessage('<i class="fas fa-search"></i> Search'),
                 'label_html' => true,
             ])
         ;

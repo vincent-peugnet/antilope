@@ -35,6 +35,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\TranslatableMessage;
 use Symfony\Component\Validator\Constraints\Image;
 
 class UserType extends AbstractType
@@ -47,7 +48,7 @@ class UserType extends AbstractType
 
         $builder
             ->add('avatarFile', FileType::class, [
-                'label' => 'avatar',
+                'label' => new TranslatableMessage('Avatar'),
                 'mapped' => false,
                 'required' => false,
                 'constraints' => new Image([
@@ -61,6 +62,7 @@ class UserType extends AbstractType
                 ])
             ])
             ->add('description', null, [
+                'label' => new TranslatableMessage('Description'),
                 'help' => 'You can use Markdown to describe yourself.',
                 'attr' => [
                     'data-provide' => 'markdown',
@@ -70,7 +72,7 @@ class UserType extends AbstractType
                 ],
             ])
             ->add('paranoia', ChoiceType::class, [
-                'label' => 'Paranoïa level',
+                'label' => new TranslatableMessage('Paranoïa level'),
                 'choice_loader' => new CallbackChoiceLoader(
                     function () use ($user) {
                         return array_slice(
