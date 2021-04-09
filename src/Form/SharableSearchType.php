@@ -30,6 +30,8 @@ use App\Entity\SharableSearch;
 use App\Entity\Tag;
 use App\Entity\User;
 use App\Entity\UserClass;
+use App\Repository\UserRepository;
+use App\Security\Voter\UserVoter;
 use EasyCorp\Bundle\EasyAdminBundle\Form\Filter\Type\BooleanFilterType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -43,8 +45,18 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SharableSearchType extends AbstractType
 {
+    private UserRepository $userRepository;
+
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $user = $options['user'];
+        assert($user instanceof User);
+
         $default = new SharableSearch();
         $builder
             ->add('query', SearchType::class, [
@@ -69,24 +81,28 @@ class SharableSearchType extends AbstractType
             ])
             ->add('managedBy', EntityType::class, [
                 'class' => User::class,
+                'choices' => $this->userRepository->filterByView(UserVoter::VIEW_SHARABLES, $user),
                 'required' => false,
                 'label' => 'Managed by',
                 'placeholder' => 'managed by...',
             ])
             ->add('validatedBy', EntityType::class, [
                 'class' => User::class,
+                'choices' => $this->userRepository->filterByView(UserVoter::VIEW_VALIDATIONS, $user),
                 'required' => false,
                 'label' => 'Validated by',
                 'placeholder' => 'validated by...'
             ])
             ->add('bookmarkedBy', EntityType::class, [
                 'class' => User::class,
+                'choices' => $this->userRepository->filterByView(UserVoter::VIEW_BOOKMARKS, $user),
                 'required' => false,
                 'label' => 'Bookmarked by',
                 'placeholder' => 'Bookmarked by...'
             ])
             ->add('interestedBy', EntityType::class, [
                 'class' => User::class,
+                'choices' => $this->userRepository->filterByView(UserVoter::VIEW_INTERESTEDS, $user),
                 'required' => false,
                 'label' => 'Is interested',
                 'placeholder' => 'is interested...'
@@ -118,7 +134,10 @@ class SharableSearchType extends AbstractType
             'data_class' => SharableSearch::class,
             'method' => 'GET',
             'csrf_protection' => false,
+            'user' => false,
         ]);
+
+        $resolver->setAllowedTypes('user', User::class);
     }
 
     public function getBlockPrefix()

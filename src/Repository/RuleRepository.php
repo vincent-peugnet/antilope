@@ -28,6 +28,7 @@ namespace App\Repository;
 
 use App\Entity\Rule;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -41,6 +42,14 @@ class RuleRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Rule::class);
+    }
+
+    /**
+     * @return Query looking for all rules sorted by ID ASC
+     */
+    public function findAllQuery(): Query
+    {
+        return $this->createQueryBuilder('r')->orderBy('r.id', 'ASC')->getQuery();
     }
 
     // /**

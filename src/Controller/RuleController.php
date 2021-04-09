@@ -31,6 +31,7 @@ use App\Form\RuleType;
 use App\Repository\RuleRepository;
 use App\Security\Voter\RuleVoter;
 use DateTime;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,10 +45,18 @@ class RuleController extends AbstractController
     /**
      * @Route("/", name="rule_index", methods={"GET"})
      */
-    public function index(RuleRepository $ruleRepository): Response
+    public function index(RuleRepository $ruleRepository, PaginatorInterface $paginator, Request $request): Response
     {
+        $rulesPagination = $paginator->paginate(
+            $ruleRepository->findAllQuery(),
+            $request->query->getInt('page', 1),
+            $this->getParameter('app.resultPerPage')
+        );
+
+        $rulesPagination->setCustomParameters(['align' => 'center']);
+
         return $this->render('rule/index.html.twig', [
-            'rules' => $ruleRepository->findAll(),
+            'rulesPagination' => $rulesPagination,
         ]);
     }
 

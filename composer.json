@@ -16,6 +16,7 @@
         "doctrine/orm": "^2.8",
         "erusev/parsedown": "^1.7",
         "incenteev/composer-parameter-handler": "^2.1",
+        "knplabs/knp-paginator-bundle": "^5.4",
         "knplabs/knp-time-bundle": "^1.14",
         "liip/imagine-bundle": "^2.5",
         "php-parallel-lint/php-parallel-lint": "^1.2",

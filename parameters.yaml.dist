@@ -12,3 +12,4 @@ parameters:
     app.contactEditDelay: 15
     app.minTag: 0
     app.maxTag: 0
+    app.resultPerPage: 25

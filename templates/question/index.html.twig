@@ -17,7 +17,7 @@
 
             
         <div class="alert alert-info">
-            {{ questions|length }} questions found
+            {{ questionsPagination.getTotalItemCount }} questions found
             {% if search.user %}
             asked by {{ userMacro.render(search.user, 1) }}
             {% endif %}
@@ -26,7 +26,7 @@
             {% endif %}
         </div>
 
-            {% for question in questions %}
+            {% for question in questionsPagination %}
             <div class="card mb-3">
                 <div class="card-header">            
                     <h5 class="card-title">
@@ -76,6 +76,11 @@
             </div>
             {% endfor %}
         
+
+            <div class="navigation">
+                {{ knp_pagination_render(questionsPagination) }}
+            </div>
+
         </div>
     </div>
 {% endblock %}
