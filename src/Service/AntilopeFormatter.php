@@ -34,7 +34,7 @@ class AntilopeFormatter extends MessageFormatter
     protected const NAME = 'name';
     protected const GENDER = 'gender';
     protected const DEFAULT = [
-        self::NAME => 'shareable',
+        self::NAME => 'sharable',
         self::GENDER => 'neuter',
     ];
     protected $params;

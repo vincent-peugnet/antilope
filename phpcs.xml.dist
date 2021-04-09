@@ -34,6 +34,7 @@
     <!-- Add some rules -->
     <rule ref="Generic.Metrics.NestingLevel"></rule>
     <rule ref="Generic.Arrays.ArrayIndent"></rule>
+    <rule ref="Squiz.Arrays.ArrayDeclaration.SpaceAfterKeyword"></rule>
     <rule ref="Generic.Files.LineLength">
         <exclude-pattern>*/translations/*</exclude-pattern>
     </rule>

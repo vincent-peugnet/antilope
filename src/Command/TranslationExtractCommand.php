@@ -33,6 +33,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Translation\MessageCatalogueInterface;
 
 class TranslationExtractCommand extends Command
 {
@@ -65,14 +66,25 @@ class TranslationExtractCommand extends Command
         ];
         $end = $input->getOption('all') ? sizeof(self::LOCALES) : 1;
         for ($i = 0; $i < $end; $i++) {
-            $args['locale'] = self::LOCALES[$i];
+            $locale = self::LOCALES[$i];
+            $args['locale'] = $locale;
             $code = $updateCmd->run(new ArrayInput($args), new NullOutput());
             if ($code == Command::FAILURE) {
-                array_push($failures, self::LOCALES[$i]);
+                array_push($failures, $locale);
+            } else {
+                $file = sprintf(
+                    'translations/%s%s.%s.%s',
+                    self::DOMAIN,
+                    MessageCatalogueInterface::INTL_DOMAIN_SUFFIX,
+                    $locale,
+                    self::FORMAT
+                );
+                exec("vendor/bin/phpcbf $file");
             }
         }
         if (sizeof($failures) === 0) {
-            $io->success('The translations have been correcty extracted');
+            // phpcs:ignore Generic.Files.LineLength
+            $io->success('The translations have been correcty extracted. Edit the new values and remove the untranslated ones.');
             return Command::SUCCESS;
         } else {
             $vars = implode(', ', $failures);
