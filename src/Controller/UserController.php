@@ -43,6 +43,7 @@ use DateTime;
 use Doctrine\Common\Annotations\Annotation\Required;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -55,7 +56,7 @@ class UserController extends AbstractController
     /**
      * @Route("/user", name="user")
      */
-    public function index(UserRepository $userRepository, Request $request): Response
+    public function index(UserRepository $userRepository, Request $request, PaginatorInterface $paginator): Response
     {
         $search = new UserSearch();
         $form = $this->createForm(UserSearchType::class, $search);
@@ -65,10 +66,15 @@ class UserController extends AbstractController
             $search = $form->getData();
         }
 
-        $users = $userRepository->filter($search);
+        $usersPagination = $paginator->paginate(
+            $userRepository->filterQuery($search),
+            $request->query->getInt('page', 1),
+            $this->getParameter('app.resultPerPage')
+        );
+        $usersPagination->setCustomParameters(['align' => 'center']);
 
         return $this->render('user/index.html.twig', [
-            'users' => $users,
+            'usersPagination' => $usersPagination,
             'form' => $form->createView(),
             'search' => $search,
         ]);

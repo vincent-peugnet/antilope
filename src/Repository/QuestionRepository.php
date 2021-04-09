@@ -31,6 +31,7 @@ use App\Entity\QuestionSearch;
 use App\Entity\User;
 use App\Entity\UserClass;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -47,9 +48,9 @@ class QuestionRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Question[] Returns an array of Question objects
+     * @return Query filtering Question objects
      */
-    public function findAllVisible(User $user, QuestionSearch $search)
+    public function filterQuery(User $user, QuestionSearch $search): Query
     {
         $userClassRepository = $this->getEntityManager()->getRepository(UserClass::class);
         assert($userClassRepository instanceof UserClassRepository);
@@ -111,7 +112,7 @@ class QuestionRepository extends ServiceEntityRepository
             ->orderBy('q.' . $search->getSortBy(), $search->getOrder())
         ;
 
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery();
     }
 
     /*

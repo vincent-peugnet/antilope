@@ -16,7 +16,7 @@
                 </tr>
             </thead>
             <tbody>
-            {% for rule in rules %}
+            {% for rule in rulesPagination %}
                 <tr>
                     <td>
                         <h3>
@@ -48,6 +48,12 @@
             </tbody>
         </table>
     </div>
+
+
+    <div class="navigation">
+        {{ knp_pagination_render(rulesPagination) }}
+    </div>
+
     {% if app.user.isAdmin %}
         <a href="{{ path('rule_new') }}" class="btn btn-success"><i class="fas fa-plus"></i> Create new</a>
     {% endif %}

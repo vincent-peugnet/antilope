@@ -29,6 +29,7 @@ namespace App\Repository;
 use App\Entity\Sharable;
 use App\Entity\User;
 use App\Entity\UserSearch;
+use App\Security\Voter\UserVoter;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -139,7 +140,10 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getResult();
     }
 
-    public function filter(UserSearch $search)
+    /**
+     * @return Query filtering users objects
+     */
+    public function filterQuery(UserSearch $search): Query
     {
         $qb = $this->createQueryBuilder('u')
         ;
@@ -168,7 +172,37 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             $qb->orderBy('u.' . $search->getSortBy(), $search->getOrder());
         }
 
+        return $qb->getQuery();
+    }
+
+    /**
+     * @param string $view as listed in UserVoter constants
+     * @return User[] That allow the specific view
+     */
+    public function filterByView(string $view, User $user): array
+    {
+        $paranoiaLevels = $this->checkParanoia($view);
+        $qb = $this->createQueryBuilder('u');
+        $qb->where(
+            $qb->expr()->in('u.paranoia', $paranoiaLevels)
+        )->orWhere(
+            $qb->expr()->eq('u.id', $user->getId())
+        );
         return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @return int[] array of int representing paranoia levels allowing view
+     */
+    private function checkParanoia(string $view): array
+    {
+        $levels = [];
+        foreach (UserVoter::PARANOIA as $paranoiaLevel => $views) {
+            if (!in_array($view, $views)) {
+                $levels[] = $paranoiaLevel;
+            }
+        }
+        return $levels;
     }
 
     /*

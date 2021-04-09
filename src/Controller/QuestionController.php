@@ -38,6 +38,7 @@ use App\Repository\QuestionRepository;
 use App\Security\Voter\QuestionVoter;
 use App\Security\Voter\SharableVoter;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,18 +50,23 @@ class QuestionController extends AbstractController
     /**
      * @Route("/question", name="question")
      */
-    public function index(QuestionRepository $questionRepository, Request $request)
+    public function index(QuestionRepository $questionRepository, Request $request, PaginatorInterface $paginator)
     {
         $search = new QuestionSearch();
         $form = $this->createForm(QuestionSearchType::class, $search);
         $form->handleRequest($request);
         $search = $form->getData();
         assert($search instanceof QuestionSearch);
-        $questions = $questionRepository->findAllVisible($this->getUser(), $search);
+        $questionsPagination = $paginator->paginate(
+            $questionRepository->filterQuery($this->getUser(), $search),
+            $request->query->getInt('page', 1),
+            $this->getParameter('app.resultPerPage')
+        );
+        $questionsPagination->setCustomParameters(['align' => 'center']);
 
         return $this->render('question/index.html.twig', [
             'searchForm' => $form->createView(),
-            'questions' => $questions,
+            'questionsPagination' => $questionsPagination,
             'search' => $search,
         ]);
     }

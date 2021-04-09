@@ -76,6 +76,7 @@ class QuestionSearchType extends AbstractType
             'data_class' => QuestionSearch::class,
             'method' => 'GET',
             'csrf_protection' => false,
+            'allow_extra_fields' => true,
         ]);
     }
 

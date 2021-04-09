@@ -59,7 +59,13 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\Regex(
      *  pattern = "/^[a-z0-9A-Z]+(?:-[a-z0-9A-Z]+)*$/",
-     *  message = "pseudo should only contain a-z, A-Z, 0-9 separated only by - or _"
+     *  message = "User name should only contain a-z, A-Z, 0-9 separated only by - or _"
+     * )
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 30,
+     *      minMessage = "Your user name must be at least {{ limit }} characters long",
+     *      maxMessage = "Your user name cannot be longer than {{ limit }} characters"
      * )
      */
     private $username;

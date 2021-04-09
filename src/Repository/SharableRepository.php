@@ -34,6 +34,7 @@ use App\Security\Voter\UserVoter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Security;
 
@@ -55,13 +56,23 @@ class SharableRepository extends ServiceEntityRepository
         $this->security = $security;
     }
 
-
     /**
-     * List all sharable based on user Class and visibleBy setting on the sharables
+     * Query all sharable based on user Class and visibleBy setting on the sharables
      * @param User $user the actual user
      * @param bool $geo return only sharable that have coordinates
      */
     public function getFilteredSharables(SharableSearch $search, User $user, bool $geo = false): array
+    {
+        return $this->getFilteredSharablesQuery($search, $user, $geo)->getResult();
+    }
+
+
+    /**
+     * Query all sharable based on user Class and visibleBy setting on the sharables
+     * @param User $user the actual user
+     * @param bool $geo return only sharable that have coordinates
+     */
+    public function getFilteredSharablesQuery(SharableSearch $search, User $user, bool $geo = false): Query
     {
         $userClassRepository = $this->getEntityManager()->getRepository(UserClass::class);
         assert($userClassRepository instanceof UserClassRepository);
@@ -100,51 +111,31 @@ class SharableRepository extends ServiceEntityRepository
         // Check if user paranoia level authorize this
         if ($search->getManagedBy() !== null) {
             $manager = $search->getManagedBy();
-
-            if ($this->security->isGranted(UserVoter::VIEW_SHARABLES, $manager)) {
-                $qb->andWhere('m.user = :mid')
-                    ->setParameter('mid', $manager->getId())
-                    ->andWhere('m.confirmed = 1');
-                if ($manager !== $user) {
-                    $qb->andWhere('m.anonymous = 0');
-                }
-            } else {
-                return [];
+            $qb->andWhere('m.user = :mid')
+                ->setParameter('mid', $manager->getId())
+                ->andWhere('m.confirmed = 1');
+            if ($manager !== $user) {
+                $qb->andWhere('m.anonymous = 0');
             }
         }
 
         // Filter Sharables by validatedBy
         // Check if user paranoia level authorize this
         if ($search->getValidatedBy() !== null) {
-            $userRepo = $this->getEntityManager()->getRepository(User::class);
-            $valUser = $userRepo->find($search->getValidatedBy());
-
-            if ($this->security->isGranted(UserVoter::VIEW_VALIDATIONS, $valUser)) {
                 $qb->andWhere('v.user = :vid')
-                    ->setParameter('vid', $valUser->getId());
-            } else {
-                return [];
-            }
+                    ->setParameter('vid', $search->getValidatedBy());
         }
 
         // Filter Sharables by BookmarkedBy
         if (!is_null($search->getBookmarkedBy())) {
-            if ($this->security->isGranted(UserVoter::VIEW_BOOKMARKS, $search->getBookmarkedBy())) {
-                $qb->andWhere('b.user = :bid')
-                    ->setParameter('bid', $search->getBookmarkedBy());
-            } else {
-                return [];
-            }
+            $qb->andWhere('b.user = :bid')
+                ->setParameter('bid', $search->getBookmarkedBy());
         }
 
         // Filter Sharables by InterestedBy
         if (!is_null($search->getInterestedBy())) {
-            if ($this->security->isGranted(UserVoter::VIEW_INTERESTEDS, $search->getInterestedBy())) {
-                $qb->andWhere('i.user = :iid')
-                    ->setParameter('iid', $search->getInterestedBy());
-            } else {
-                return [];
-            }
+            $qb->andWhere('i.user = :iid')
+                ->setParameter('iid', $search->getInterestedBy());
         }
 
         // Filter Sharables by VisibleBy
@@ -197,10 +188,8 @@ class SharableRepository extends ServiceEntityRepository
         if ($search->getSortBy() && $search->getOrder()) {
             $qb->orderBy('s.' . $search->getSortBy(), $search->getOrder());
         }
-        $result = $qb->getQuery()
-        ->getResult();
 
-        return $result;
+        return $qb->getQuery();
     }
 
 

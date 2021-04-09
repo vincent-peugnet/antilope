@@ -51,9 +51,11 @@ use App\Repository\SharableRepository;
 use App\Repository\UserClassRepository;
 use App\Repository\ValidationRepository;
 use App\Security\Voter\SharableVoter;
+use App\Security\Voter\UserVoter;
 use App\Service\FileUploader;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -67,19 +69,38 @@ class SharableController extends AbstractController
      */
     public function index(
         Request $request,
-        SharableRepository $sharableRepository
+        SharableRepository $sharableRepository,
+        PaginatorInterface $paginator
     ): Response {
         /** @var User $user */
         $user = $this->getUser();
 
-        $search = new SharableSearch();
-
-        $form = $this->createForm(SharableSearchType::class, $search);
+        $form = $this->createForm(SharableSearchType::class, new SharableSearch(), [
+            'user' => $this->getUser(),
+        ]);
         $form->handleRequest($request);
         /** @var SharableSearch $search */
         $search = $form->getData();
 
-        $sharables = $sharableRepository->getFilteredSharables($search, $user);
+        if ($search->getManagedBy()) {
+            $this->denyAccessUnlessGranted(UserVoter::VIEW_SHARABLES, $search->getManagedBy());
+        }
+        if ($search->getBookmarkedBy()) {
+            $this->denyAccessUnlessGranted(UserVoter::VIEW_BOOKMARKS, $search->getBookmarkedBy());
+        }
+        if ($search->getValidatedBy()) {
+            $this->denyAccessUnlessGranted(UserVoter::VIEW_VALIDATIONS, $search->getValidatedBy());
+        }
+        if ($search->getInterestedBy()) {
+            $this->denyAccessUnlessGranted(UserVoter::VIEW_INTERESTEDS, $search->getInterestedBy());
+        }
+
+        $sharablesPagination = $paginator->paginate(
+            $sharableRepository->getFilteredSharablesQuery($search, $user),
+            $request->query->getInt('page', 1),
+            $this->getParameter('app.resultPerPage')
+        );
+        $sharablesPagination->setCustomParameters(['align' => 'center']);
 
         $validatedSharables = $user->getValidations()->map(function (Validation $validation) {
             return $validation->getSharable();
@@ -95,9 +116,8 @@ class SharableController extends AbstractController
         });
 
         return $this->render('sharable/index.html.twig', [
-            'sharables' => $sharables,
+            'sharablesPagination' => $sharablesPagination,
             'sharable' => new Sharable(),
-            'total' => count($sharables),
             'searchForm' => $form->createView(),
             'validatedSharables' => $validatedSharables,
             'interestedSharables' => $interestedSharables,

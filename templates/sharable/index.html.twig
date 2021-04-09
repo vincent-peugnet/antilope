@@ -46,7 +46,7 @@
 
 
         <div class="alert alert-info">
-            {{ total }} sharables found
+            {{ sharablesPagination.getTotalItemCount }} sharables found
             {% if search.managedBy %}
             managed by {{ userMacro.render(search.managedBy, 1) }}
             {% endif %}
@@ -80,7 +80,7 @@
 
 
 
-        {% for sharable in sharables %}
+        {% for sharable in sharablesPagination %}
 
             {% set border = '' %}
             {% if sharable in managedSharables %}
@@ -235,6 +235,9 @@
 
         {% endfor %}
 
+        <div class="navigation">
+            {{ knp_pagination_render(sharablesPagination) }}
+        </div>
 
     </div>
 
