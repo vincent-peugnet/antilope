@@ -4,7 +4,9 @@ parameters:
     app.invitationDuration: 24
     app.siteName: 'Antilope'
     app.sharableNames:
-        en: sharable
+        en:
+            name: shareable
+            gender: neuter
     app.emailAddress: 'noreply@antilope.net'
     app.siteDescription: 'A sharable Network'
     app.siteAlert: 'beware of not sharing too much COVID-19, share carefully !'

@@ -31,7 +31,21 @@ use Symfony\Component\Translation\Formatter\MessageFormatter;
 
 class AntilopeFormatter extends MessageFormatter
 {
-    private $params;
+    protected const NAME = 'name';
+    protected const GENDER = 'gender';
+    protected const DEFAULT = [
+        self::NAME => 'shareable',
+        self::GENDER => 'neuter',
+    ];
+    protected $params;
+
+    /**
+     * Checks if the locale is correctly defined.
+     */
+    protected static function localeExists(array $names, string $locale): bool
+    {
+        return !empty($names[$locale]) && !empty($names[$locale][self::NAME] && !empty($names[$locale][self::GENDER]));
+    }
 
     public function __construct(ParameterBagInterface $params)
     {
@@ -41,14 +55,15 @@ class AntilopeFormatter extends MessageFormatter
 
     public function formatIntl(string $message, string $locale, array $parameters = []): string
     {
-        $sharableNames = $this->params->get('app.sharableNames');
-        $sharableName = 'sharable';
-        if (!empty($sharableNames[$locale])) {
-            $sharableName = $sharableNames[$locale];
-        } elseif (!empty($sharableNames['en'])) {
-            $sharableName = $sharableNames['en'];
+        $names = $this->params->get('app.sharableNames');
+        $name = self::DEFAULT;
+        if (self::localeExists($names, $locale)) {
+            $name = $names[$locale];
+        } elseif (self::localeExists($names, 'en')) {
+            $name = $names['en'];
         }
-        $parameters['{s}'] = $sharableName;
+        $parameters['{s}']        = $name[self::NAME];
+        $parameters['{s_gender}'] = $name[self::GENDER];
         return parent::formatIntl($message, $locale, $parameters);
     }
 }
