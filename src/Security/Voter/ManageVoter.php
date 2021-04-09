@@ -52,7 +52,7 @@ class ManageVoter extends Voter
             self::SHOW_CONTACT,
             self::ANONYMOUS,
             self::ONYMOUS,
-            ]) && $subject instanceof \App\Entity\Manage;
+        ]) && $subject instanceof \App\Entity\Manage;
     }
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
