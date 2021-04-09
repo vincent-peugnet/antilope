@@ -34,16 +34,15 @@ use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class TranslationCheckCommand extends Command
+class TranslationMissingCommand extends Command
 {
-    protected static $defaultName = 'translation:check';
+    protected static $defaultName = 'translation:missing';
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
-            ->setDescription('Checks translation files')
-            ->addOption('all', 'a', InputOption::VALUE_NONE, 'Check all locales')
-        ;
+            ->setDescription('Looks translation files for missing strings')
+            ->addOption('all', 'a', InputOption::VALUE_NONE, 'Check all locales');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -55,23 +54,25 @@ class TranslationCheckCommand extends Command
             '--only-missing' => true,
         ];
         $failures = [];
-        $end = $input->getOption('all') ? sizeof(TranslationExtractCommand::LOCALES) : 1;
-        for ($i = 0; $i < $end; $i++) {
-            $args['locale'] = TranslationExtractCommand::LOCALES[$i];
+        $locales = $input->getOption('all')
+            ? TranslationExtractCommand::LOCALES
+            : [TranslationExtractCommand::LOCALES[0]];
+        foreach ($locales as $locale) {
+            $args['locale'] = $locale;
             $out = new BufferedOutput();
             $returnCodes[] = $debugCmd->run(new ArrayInput($args), $out);
             $content = $out->fetch();
             if (str_contains($content, 'missing')) {
-                $failures[] = TranslationExtractCommand::LOCALES[$i];
+                $failures[] = $locale;
             }
             $io->write($content);
         }
         if (sizeof($failures) === 0) {
-            $io->success('The translations are up to date');
+            $io->success('The translations are up to date.');
             return Command::SUCCESS;
         } else {
-            $vars = implode(', ', $failures);
-            $io->error("Some translations are not up to date: $vars. Run 'translation:extract' and correct the values");
+            $l = implode(', ', $failures);
+            $io->error("Some translations are not up to date: $l. Run 'translation:extract' and correct the values.");
             return Command::FAILURE;
         }
     }

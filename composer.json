@@ -115,7 +115,8 @@
             "@php bin/console --ansi lint:container",
             "@php bin/console --ansi lint:twig templates",
             "@php bin/console --ansi lint:yaml config",
-            "@php bin/console --ansi translation:check",
+            "@php bin/console --ansi lint:icu",
+            "@php bin/console --ansi translation:missing",
             "@php bin/console --ansi doctrine:schema:validate --skip-sync"
         ],
         "fix": [

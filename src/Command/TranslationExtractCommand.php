@@ -45,12 +45,11 @@ class TranslationExtractCommand extends Command
         'fr',
     ];
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Extracts translation files')
-            ->addOption('all', 'a', InputOption::VALUE_NONE, 'Extract all locales')
-        ;
+            ->addOption('all', 'a', InputOption::VALUE_NONE, 'Extract all locales');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -73,9 +72,8 @@ class TranslationExtractCommand extends Command
                 array_push($failures, $locale);
             } else {
                 $file = sprintf(
-                    'translations/%s%s.%s.%s',
+                    'translations/%s*.%s.%s',
                     self::DOMAIN,
-                    MessageCatalogueInterface::INTL_DOMAIN_SUFFIX,
                     $locale,
                     self::FORMAT
                 );
@@ -87,8 +85,8 @@ class TranslationExtractCommand extends Command
             $io->success('The translations have been correcty extracted. Edit the new values and remove the untranslated ones.');
             return Command::SUCCESS;
         } else {
-            $vars = implode(', ', $failures);
-            $io->error("Some translations have been incorrectly extracted: $vars");
+            $locales = implode(', ', $failures);
+            $io->error("Some translations have been incorrectly extracted: $locales.");
             return Command::FAILURE;
         }
     }
