@@ -49,8 +49,10 @@ class TranslationMissingCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $debugCmd = $this->getApplication()->find('debug:translation');
+        $domain = TranslationExtractCommand::DOMAIN;
+        $format = TranslationExtractCommand::FORMAT;
         $args = [
-            '--domain' => TranslationExtractCommand::DOMAIN,
+            '--domain' => $domain,
             '--only-missing' => true,
         ];
         $failures = [];
@@ -64,8 +66,15 @@ class TranslationMissingCommand extends Command
             $content = $out->fetch();
             if (str_contains($content, 'missing')) {
                 $failures[] = $locale;
+                $io->writeln("<error> ERROR </error> in translations/$domain+intl-icu.$locale.$format");
+                $matches = [];
+                preg_match_all("/^\\s*missing\\s+(fallback\\s+)?$domain\\s+([^\\s].+)\\s{3}.*$/Um", $content, $matches);
+                foreach ($matches[2] as $line) {
+                    $str = var_export($line, true);
+                    $io->writeln("missing: $str");
+                }
+                $io->writeln('');
             }
-            $io->write($content);
         }
         if (sizeof($failures) === 0) {
             $io->success('The translations are up to date.');

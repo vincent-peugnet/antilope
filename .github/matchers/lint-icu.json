@@ -1,0 +1,17 @@
+{
+    "problemMatcher": [
+        {
+            "owner": "lint-icu",
+            "fileLocation": "absolute",
+            "pattern": [
+                {
+                    "regexp": "^\\s(ERROR)\\s+in\\s+([^\\s]+\\.php)\\((\\d+)\\):\\s+(.+)$",
+                    "severity": 1,
+                    "file": 2,
+                    "line": 3,
+                    "message": 4
+                }
+            ]
+        }
+    ]
+}

@@ -38,7 +38,7 @@ use Symfony\Component\Translation\MessageCatalogueInterface;
 class TranslationExtractCommand extends Command
 {
     protected static $defaultName = 'translation:extract';
-    protected const FORMAT = 'php';
+    public const FORMAT = 'php';
     public const DOMAIN = 'messages';
     public const LOCALES = [
         'en',
