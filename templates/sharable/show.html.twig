@@ -89,22 +89,32 @@
         {% if not manage %}
             <div>
                 <div class="btn-group mr-3">
+                    {% if not is_granted('interest', sharable) %}
+                        <span tabindex="0" data-toggle="tooltip" title="
+                        {% if interested %}
+                            You are already interested
+                        {% elseif sharable.interestedMethod == 1 %}
+                            You don't need to be interested as this sharable does not need contact info
+                        {% elseif validated %}
+                            You have already validated the sharable
+                        {% elseif not app.user.isContactable %}
+                            You need to have at least one contact info
+                        {% endif %}
+                        ">
+                    {% endif %}
                     <a
                         class="btn btn-warning {{ not is_granted('interest', sharable) ? 'disabled' : '' }}"
                         {% if is_granted('interest', sharable) %}
                             href="{{ path('sharable_interest', {id: sharable.id}) }}"
                         {% endif %}
                     >
-                        <i class="fas fa-question-circle"></i>
-                        {% if interested %}
-                            you're already interested
-                        {% else %}
+                        <i class="{{ interested ? 'fas' : 'far' }} fa-question-circle"></i>
                             I'm interested    
-                        {% endif %}
                         <span class="badge badge-secondary">
                             {{ sharable.interesteds|length }}
                         </span>
                     </a>
+                    {{ is_granted('interest', sharable) ? '' : '</span>' }}
                     {% if interested and ( is_granted('edit', interested) or is_granted('delete', interested) ) %}
                         <button type="button" class="btn btn-warning dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="sr-only">Toggle Dropdown</span>
@@ -125,22 +135,28 @@
                         </div>
                     {% endif %}
                 </div>
+                {% if not is_granted('validate', sharable) %}
+                    <span tabindex="0" data-toggle="tooltip" title="
+                    {% if validated %}
+                        you have already validated
+                    {% elseif not interested %}
+                        You need to be interested and contact manager(s) in order to validate it.
+                    {% endif %}
+                    ">
+                {% endif %}
                 <a
                 class="btn btn-success {{ not is_granted('validate', sharable) ? 'disabled' : '' }}"
                     {% if is_granted('validate', sharable) %}
                         href="{{ path('sharable_validate', {id: sharable.id}) }}"
                     {% endif %}            
                 >
-                    <i class="fas fa-check-circle"></i>
-                    {% if validated %}
-                        you've already validated
-                    {% else %}
+                    <i class="{{ validated ? 'fas' : 'far' }} fa-check-circle"></i>
                         validate
-                    {% endif %}
                     <span class="badge badge-secondary">
                         {{ sharable.validations|length }}
                     </span>
                 </a>
+                {{ is_granted('validate', sharable) ? '' : '</span>' }}
             </div>
         {% endif %}
 

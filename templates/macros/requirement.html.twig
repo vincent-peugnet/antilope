@@ -1,0 +1,9 @@
+{% macro render(name, filled) %}
+
+
+<li class="list-group-item{{ filled ? ' list-group-item-success' : ' text-danger' }}">
+    {{ filled ? '<i class="far fa-check-square"></i>' : '<i class="far fa-square"></i>' }}
+    Share Score : <span class="badge badge-light">{{ userClass.shareScoreReq }}</span>
+</li>
+
+{% endmacro %}

@@ -6,18 +6,15 @@
 
 <h1>User Classes</h1>
 
-<h3>My class</h3>
+Currently you're a <a class="badge badge-primary" href="{{ path('userclass_show', {id: app.user.userClass.id}) }}">{{ app.user.userClass.name }}</a>,
+{% if app.user.userClass.next %}
+    but you can progress if you fill the requirements of the <a href="{{ path('userclass_show', {id: app.user.userClass.next.id}) }}">next user class</a>.
+{% endif %}
 
 <p>
-
-    Your current user class is:
-    <a href="{{ path('userclass_show', {id: uc.id}) }}" class="badge badge-primary">
-        {{ uc.name }}
-    </a>
-    {% if uc.next %}
-        next user class is
-        <a href="{{ path('userclass_show', {id: uc.next.id}) }}" class="badge badge-primary">{{ uc.next.name }}</a>
-    {% endif %}
+    <div class="alert alert-secondary">
+        Select an user class for requirements and complete description.
+    </div>
     
 </p>
 

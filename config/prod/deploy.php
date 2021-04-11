@@ -42,12 +42,12 @@ use EasyCorp\Bundle\EasyDeployBundle\Deployer\DefaultDeployer;
 return new class extends DefaultDeployer
 {
 
-    protected String $branch = 'main';
+    protected string $branch = 'main';
     protected bool $isApache = false;
-    protected String $compPath = 'composer';
-    protected String $compFlags = '--no-interaction --quiet';
-    protected String $compInstallFlags = '--no-dev --prefer-dist';
-    protected String $compScriptsFlags = '--no-scripts && composer post-scripts';
+    protected string $compPath = 'composer';
+    protected string $compFlags = '--no-interaction --quiet';
+    protected string $compInstallFlags = '--no-dev --prefer-dist';
+    protected string $compScriptsFlags = '--no-scripts && composer post-scripts';
 
     public function __construct()
     {

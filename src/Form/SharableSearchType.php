@@ -63,7 +63,7 @@ class SharableSearchType extends AbstractType
                 'label' => false,
                 'required' => false,
                 'attr' => [
-                    'placeholder' => 'search in Sharables names',
+                    'placeholder' => 'search',
                 ],
             ])
             ->add('disabled', CheckboxType::class, [

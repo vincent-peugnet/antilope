@@ -106,30 +106,35 @@
                     {% if userClass.shareScoreReq %}
                         {% set shareScore = app.user.shareScore >= userClass.shareScoreReq %}
                         <li class="list-group-item{{ shareScore ? ' list-group-item-success' : ' text-danger' }}">
+                            {{ shareScore ? '<i class="far fa-check-square"></i>' : '<i class="far fa-square"></i>' }}
                             Share Score : <span class="badge badge-light">{{ userClass.shareScoreReq }}</span>
                         </li>
                     {% endif %}
                     {% if userClass.accountAgeReq %}
                         {% set accountAge = app.user.createdAt <= date('-' ~ userClass.accountAgeReq ~ 'days') %}
                         <li class="list-group-item {{ accountAge ? ' list-group-item-success' : ' text-danger' }}">
+                            {{ accountAge ? '<i class="far fa-check-square"></i>' : '<i class="far fa-square"></i>' }}
                             Account Age : {{ userClass.accountAgeReq }} days
                         </li>
                     {% endif %}
                     {% if userClass.validatedReq %}
                         {% set validated = app.user.validations|length >= userClass.validatedReq %}
                         <li class="list-group-item{{ validated ? ' list-group-item-success' : ' text-danger' }}">
+                            {{ validated ? '<i class="far fa-check-square"></i>' : '<i class="far fa-square"></i>' }}
                             Validations given : {{ userClass.validatedReq }}
                         </li>
                     {% endif %}
                     {% if userClass.manageReq %}
                         {% set managed = app.user.getConfirmedEnabledManages|length >= userClass.manageReq %}
                         <li class="list-group-item{{ managed ? ' list-group-item-success' : ' text-danger' }}">
+                            {{ managed ? '<i class="far fa-check-square"></i>' : '<i class="far fa-square"></i>' }}
                             Managed sharables : {{ userClass.manageReq }}
                         </li>
                     {% endif %}
                     {% if userClass.verifiedReq %}
                         {% set verified = app.user.verified %}
                         <li class="list-group-item{{ verified ? ' list-group-item-success' : ' text-danger' }}">
+                            {{ verified ? '<i class="far fa-check-square"></i>' : '<i class="far fa-square"></i>' }}
                             The user email adress need to be verified
                         </li>
                     {% endif %}

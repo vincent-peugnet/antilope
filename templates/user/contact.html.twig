@@ -17,20 +17,32 @@
 
 {% if is_granted('edit', user) %}
 
-<p>You need at least one contact to interact with sharable using contact method > 1.</p>
-
-{% if contactEditDelay > 0 %}
-    <p>
-        You can edit and delete contact only during the {{ contactEditDelay }} minutes following it's creation.
-    </p>
-
-{% endif %}
-
-{% if contactForgetDelay > 0 %}
-<p>
-    {{ contactEditDelay > 0 ? 'After this delay, y' : 'Y' }}ou can start to forget a contact, but it will stay visible during a {{ contactForgetDelay }} hours period.
+<p class="text-info">
+    Contacts are some infos that could help people to reach you.
+    <strong>They are not public</strong>,
+    but when you are interested in a sharable, your contact infos are send to the managers.
 </p>
 
+{% if not app.user.isContactable %}
+    <div class="alert alert-secondary">
+        You need at least one contact to interact with sharable that need a contact exchange.
+    </div>
+{% else %}
+
+
+    {% if contactEditDelay > 0 %}
+        <p>
+            You can edit and delete contact only during the {{ contactEditDelay }} minutes following it's creation.
+        </p>
+
+    {% endif %}
+
+    {% if contactForgetDelay > 0 %}
+    <p>
+        {{ contactEditDelay > 0 ? 'After this delay, y' : 'Y' }}ou can start to forget a contact, but it will stay visible during a {{ contactForgetDelay }} hours period.
+    </p>
+
+    {% endif %}
 {% endif %}
 
 <a  class="btn btn-success" href="{{ path('user_contact_add', {id: user.id}) }}"><i class="fas fa-plus-circle"></i> add new contact</a>
