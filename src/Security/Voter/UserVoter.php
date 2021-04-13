@@ -92,8 +92,7 @@ class UserVoter extends Voter
             self::VIEW_SHARABLES,
             self::VIEW_STATS,
             self::CONTACT,
-            ])
-            && $subject instanceof \App\Entity\User;
+        ]) && $subject instanceof \App\Entity\User;
     }
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool

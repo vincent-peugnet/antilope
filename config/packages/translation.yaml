@@ -1,6 +1,7 @@
 framework:
-    default_locale: en
+    default_locale: '%env(DEFAULT_LOCALE)%'
     translator:
+        formatter: App\Service\AntilopeFormatter
         default_path: '%kernel.project_dir%/translations'
         fallbacks:
             - en

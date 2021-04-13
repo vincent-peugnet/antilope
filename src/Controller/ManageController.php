@@ -43,7 +43,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ManageController extends AbstractController
 {
 
-        /**
+    /**
      * @Route("/sharable/{id}/managers", name="sharable_managers", requirements={"id"="\d+"})
      */
     public function managers(
@@ -71,8 +71,10 @@ class ManageController extends AbstractController
             $manage->setConfirmed(false);
 
             $intrested = $interestedRepo->findOneBy(
-                ['user' => $manage->getUser()->getId(),
-                'sharable' => $sharable->getId()]
+                [
+                    'user' => $manage->getUser()->getId(),
+                    'sharable' => $sharable->getId(),
+                ]
             );
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($manage);

@@ -32,6 +32,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\TranslatableMessage;
 
 class InterestedType extends AbstractType
 {
@@ -42,7 +43,7 @@ class InterestedType extends AbstractType
 
         if ($interested->getSharable()->getInterestedMethod() > 1) {
             $builder->add('message', TextType::class, [
-                'label' => 'Message',
+                'label' => new TranslatableMessage('Message'),
                 'required' => false,
                 'help' => 'You can add a message if you want',
             ]);
@@ -50,7 +51,7 @@ class InterestedType extends AbstractType
 
         $builder
             ->add('submit', SubmitType::class, [
-                'label' => 'I\'m interested',
+                'label' => new TranslatableMessage('I\'m interested'),
             ])
         ;
     }

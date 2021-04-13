@@ -35,6 +35,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\TranslatableMessage;
 
 class UserSearchType extends AbstractType
 {
@@ -49,7 +50,8 @@ class UserSearchType extends AbstractType
                 'required' => false,
             ])
             ->add('disabled', CheckboxType::class, [
-                'label' => 'disabled <span class="badge badge-danger"><i class="fas fa-ban"></i></span>',
+                // phpcs:ignore Generic.Files.LineLength.TooLong
+                'label' => new TranslatableMessage('disabled <span class="badge badge-danger"><i class="fas fa-ban"></i></span>'),
                 'label_html' => true,
                 'help' => 'Show disabled user',
                 'required' => false,
@@ -63,7 +65,7 @@ class UserSearchType extends AbstractType
                 'empty_data' => $default->getOrder(),
             ])
             ->add('filter', SubmitType::class, [
-                'label' => '<i class="fas fa-search"></i> Search',
+                'label' => new TranslatableMessage('<i class="fas fa-search"></i> Search'),
                 'label_html' => true,
             ])
         ;

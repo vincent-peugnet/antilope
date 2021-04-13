@@ -43,6 +43,7 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\TranslatableMessage;
 use Symfony\Component\Validator\Constraints\Image;
 
 class SharableType extends AbstractType
@@ -65,7 +66,7 @@ class SharableType extends AbstractType
         $builder
             ->add('name')
             ->add('coverFile', FileType::class, [
-                'label' => 'cover',
+                'label' => new TranslatableMessage('cover'),
                 'help' => 'Jpeg, Png or Gif of maximum 2Mo',
                 'mapped' => false,
                 'required' => false,
@@ -108,7 +109,7 @@ class SharableType extends AbstractType
                 'disabled' => $disableVisibleBy,
             ])
             ->add('interestedMethod', ChoiceType::class, [
-                'label' => 'How contact infos are exchanged',
+                'label' => new TranslatableMessage('How contact infos are exchanged'),
                 'choices' => Sharable::INTERESTED_OPTIONS,
                     // phpcs:ignore Generic.Files.LineLength.TooLong
                 'help' => '1 <i class="fas fa-lock-open fa-fw"></i> user don\'t need access any contact infos</br>2 <i class="fas fa-bolt fa-fw"></i> contact infos are automaticaly exchanged</br>3 <i class="fas fa-stamp fa-fw"></i> contact infos are manualy send to interested users</br>4 <i class="fas fa-lock fa-fw"></i> Only interested user contact infos are send',

@@ -1,8 +1,0 @@
-msgid ""
-msgstr ""
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Language: en\n"
-
-msgid "The CSRF token is invalid. Please try to resubmit the form."
-msgstr "The CSRF token is invalid. Did you really want to submit form?"
