@@ -1,33 +1,33 @@
 {% extends 'base.html.twig' %}
 {% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 
-{% block title %}New Invitation{% endblock %}
+{% block title %}{{ 'New invitation'|trans }}{% endblock %}
 
 {% block content %}
 
 {{ breadcrumbs.render([
-    {'text': 'Account'},
-    {'url': url('account_invitation'), 'text': 'Invitations'},
-    {'text': 'New'},
+    {'text': 'Account'|trans},
+    {'url': url('account_invitation'), 'text': 'Invitations'|trans},
+    {'text': 'New'|trans},
 ]) }}
 
 
-<h1>New invitation</h1>
+<h1>{{ 'New invitation'|trans }}n</h1>
 
 {% if openRegistration %}
-<div class="alert alert-light">Registrations are open, no more need for invitation.</div>
+<div class="alert alert-light">{{ 'Registrations are open, no more need for invitation.'|trans }}</div>
 {% elseif userLimitReached %}
-<div class="alert alert-danger">User limit reached, impossible to invite new users.</div>
+<div class="alert alert-danger">{{ 'User limit reached, impossible to invite new users.'|trans }}</div>
 {% elseif needToWait %}
-<div class="alert alert-warning">Last invitation send too recently, impossible to invite new users.</div>
+<div class="alert alert-warning">{{ 'Last invitation send too recently, impossible to invite new users.'|trans }}</div>
 {% endif %}
 
 
 
-<p>Invitations are valid for a {{ invitationDuration|date("%h") }} hours period.</p>
+<p>{{('Invitations are valid for a {hours} hours period.')|trans({hours: invitationDuration|date('%h') }) }}</p>
 
 {% if app.user.userClass.inviteFrequency %}
-<p>You can send an invitation every {{ app.user.userClass.inviteFrequency }} days</p>
+<p>{{ ('You can send an invitation every {days} days')|trans({days: app.user.userClass.inviteFrequency })}} </p>
 {% endif %}
 
 {{ form(form) }}

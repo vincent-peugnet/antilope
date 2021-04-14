@@ -38,6 +38,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Translation\TranslatableMessage;
 use Symfony\Component\Uid\Uuid;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
@@ -146,7 +147,9 @@ class AccountController extends AbstractController
         $oldEmail = $this->getUser()->getEmail();
         $form = $this->createFormBuilder($this->getUser())
             ->add('email', EmailType::class)
-            ->add('update', SubmitType::class)
+            ->add('update', SubmitType::class, [
+                'label' => new TranslatableMessage('Update'),
+            ])
             ->getForm();
 
         $form->handleRequest($request);

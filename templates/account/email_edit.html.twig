@@ -4,21 +4,25 @@
 
 
 
-{% block title %}Email{% endblock %}
+{% block title %}{{ 'Email'|trans }}{% endblock %}
 
 {% block content %}
 
 {{ breadcrumbs.render([
-    {'text': 'Account'},
-    {'url': url('account_settings'), 'text': 'Settings'},
-    {'text': 'Email'},
+    {'text': 'Account'|trans},
+    {'url': url('account_settings'), 'text': 'Settings'|trans},
+    {'text': 'Email'|trans},
 ]) }}
 
-<h1>Email</h1>
+<h1>{{ 'Email'|trans }}</h1>
 
 {% if app.user.isVerified %}
 
-<p>Beware ! as your actual Email is verified, you will loose your status by changing it. Be sure to verify the new one as soon as possible.</p>
+<p>
+    {% trans %}
+        Beware ! as your actual Email is verified, you will loose your status by changing it. Be sure to verify the new one as soon as possible.
+    {% endtrans %}
+</p>
 
 {% endif %}
 
