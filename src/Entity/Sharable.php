@@ -289,6 +289,16 @@ class Sharable
     }
 
     /**
+     * @return Collection|Manage[] Collection of Manage objects
+     */
+    public function getConfirmedOnymousManagers(): Collection
+    {
+        return $this->getManagedBy()->filter(function (Manage $manage) {
+            return ($manage->getConfirmed() && !$manage->isAnonymous());
+        });
+    }
+
+    /**
      * @return bool True if at least one confirmed not disabled manager
      */
     public function isAccessible(): bool

@@ -95,7 +95,7 @@ class QuestionController extends AbstractController
 
             $dispatcher->dispatch(new QuestionEvent($question), QuestionEvent::ANSWERED);
 
-            return $this->redirectToRoute('sharable_show', ['id' => $question->getSharable()->getId()]);
+            return $this->redirectToRoute('question_show', ['id' => $question->getId()]);
         }
 
         return $this->render('question/show.html.twig', [

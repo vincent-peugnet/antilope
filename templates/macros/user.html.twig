@@ -1,4 +1,4 @@
-{% macro render(user, size = 2) %}
+{% macro render(user, size = 2, sharable = null) %}
     <a href="{{ path('user_show', {id: user.id}) }}">
         {% if user.avatar and size >= 1 %}
         <img class="rounded" src="{{ asset(user.getAvatarPath)|imagine_filter('avatar_25') }}" alt="avatar of user {{ user.username }}">
@@ -13,5 +13,27 @@
         {% if user.isDisabled %}
         <span class="badge badge-danger" title="This user is disabled"><i class="fas fa-ban"></i></span>
         {% endif %}
+    {% endif %}
+    {% if not sharable == null %}
+        {% for manage in user.manages %}
+            {% if manage in sharable.getConfirmedOnymousManagers %}
+                <small class="text-primary" title="This user manage the sharable"><i class="fas fa-user-edit"></i></small>
+            {% endif %}
+        {% endfor %}
+        {% for validation in user.validations %}
+            {% if validation in sharable.validations %}
+                <small class="text-success" title="This user has validated the sharable" ><i class="fas fa-check-circle"></i></small>
+            {% endif %}
+        {% endfor %}
+        {% for interested in user.interesteds %}
+            {% if interested in sharable.interesteds %}
+                <small class="text-warning" title="This user is interested in the sharable" ><i class="fas fa-question-circle"></i></small>
+            {% endif %}
+        {% endfor %}
+        {% for bookmark in user.bookmarks %}
+            {% if bookmark in sharable.bookmarks %}
+                <small class="text-light" title="This user has bookmarked the sharable" ><i class="fas fa-bookmark"></i></small>
+            {% endif %}
+        {% endfor %}
     {% endif %}
 {% endmacro %}

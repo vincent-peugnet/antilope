@@ -14,7 +14,7 @@
     {'text': question.text|u.truncate(40, '...', false)},
 ]) }}
     <h5>
-        {{ userMacro.render(question.user, 2) }}
+        {{ userMacro.render(question.user, 2, question.sharable) }}
         >
         {{ sharableMacro.render(question.sharable) }}
         <small>
@@ -29,27 +29,6 @@
     </div>
 
         
-        
-    {% if question.answers|length > 0 %}
-        <h3>Answers</h3>
-        
-        {% for answer in question.answers %}
-        <div class="card mb-3">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5>
-                    {{ userMacro.render(answer.user, 2) }}
-                </h5>
-                <small>
-                    {{ agoMacro.render(answer.createdAt, true) }}
-                </small>
-            </div>
-            <div class="card-body">
-                <p>{{ answer.text }}</p>
-            </div>
-        </div>
-        {% endfor %}
-    {% endif %}
-
     <div class="btn-group mb-3">
         {% if is_granted('edit', question) %}
         <a class="btn btn-primary" href="{{ path('question_edit', {id: question.id}) }}">
@@ -63,6 +42,33 @@
         </a>
         {% endif %}
     </div>
+        
+    {% if question.answers|length > 0 %}
+        <h3>Answers</h3>
+        
+        {% for answer in question.answers %}
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5>
+                    {{ userMacro.render(answer.user, 2, question.sharable) }}
+                </h5>
+                <small>
+                    {{ agoMacro.render(answer.createdAt, true) }}
+                </small>
+            </div>
+            <div class="card-body">
+                <p>{{ answer.text }}</p>
+                {% if is_granted('delete', answer) %}
+                    <a href="{{ path('answer_delete', {id: answer.id}) }}" class="btn btn-danger">
+                        <i class="fas fa-times-circle"></i>
+                        delete answer
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
+
 
     <h3>Your Answer</h3>
 
