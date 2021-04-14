@@ -35,16 +35,18 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 class AnswerVoter extends Voter
 {
     public const DELETE = 'delete';
+    public const EDIT = 'edit';
 
     private AuthorizationCheckerInterface $authorization;
 
-    public function __construct(AuthorizationCheckerInterface $authorization) {
+    public function __construct(AuthorizationCheckerInterface $authorization)
+    {
         $this->authorization = $authorization;
     }
 
     protected function supports($attribute, $subject)
     {
-        return in_array($attribute, [self::DELETE])
+        return in_array($attribute, [self::DELETE, self::EDIT])
             && $subject instanceof \App\Entity\Answer;
     }
 
@@ -60,6 +62,8 @@ class AnswerVoter extends Voter
         switch ($attribute) {
             case self::DELETE:
                 return $this->canDelete($subject, $user);
+            case self::EDIT:
+                return $this->canEdit($subject, $user);
         }
 
         return false;
@@ -71,5 +75,10 @@ class AnswerVoter extends Voter
             $this->authorization->isGranted(SharableVoter::EDIT, $answer->getQuestion()->getSharable()) ||
             $answer->getUser() === $user && !$user->isDisabled()
         );
+    }
+
+    private function canEdit(Answer $answer, User $user)
+    {
+        return ($answer->getUser() === $user && !$user->isDisabled());
     }
 }

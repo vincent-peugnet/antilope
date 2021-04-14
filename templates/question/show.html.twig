@@ -52,18 +52,22 @@
                 <h5>
                     {{ userMacro.render(answer.user, 2, question.sharable) }}
                 </h5>
-                <small>
-                    {{ agoMacro.render(answer.createdAt, true) }}
-                </small>
+                {% if is_granted('edit', answer) %}
+                    <a href="{{ path('answer_edit', {id: answer.id}) }}" class="btn btn-primary">
+                        <i class="fas fa-pen"></i>
+                    </a>
+                {% elseif is_granted('delete', answer) %}
+                    <a href="{{ path('answer_delete', {id: answer.id}) }}" class="btn btn-danger">
+                        <i class="fas fa-times-circle"></i>
+                    </a>
+                {% endif %}
             </div>
             <div class="card-body">
                 <p>{{ answer.text }}</p>
-                {% if is_granted('delete', answer) %}
-                    <a href="{{ path('answer_delete', {id: answer.id}) }}" class="btn btn-danger">
-                        <i class="fas fa-times-circle"></i>
-                        delete answer
-                    </a>
-                {% endif %}
+
+                <small>
+                    {{ agoMacro.render(answer.createdAt, true) }}
+                </small>
             </div>
         </div>
         {% endfor %}

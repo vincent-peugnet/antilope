@@ -27,9 +27,11 @@
 namespace App\Controller;
 
 use App\Entity\Answer;
+use App\Form\AnswerType;
 use App\Security\Voter\AnswerVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -46,5 +48,31 @@ class AnswerController extends AbstractController
         $em->flush();
 
         return $this->redirectToRoute('question_show', ['id' => $answer->getQuestion()->getId()]);
+    }
+    /**
+     * @Route("/answer/{id}/edit", name="answer_edit", requirements={"id"="\d+"})
+     */
+    public function edit(Answer $answer, EntityManagerInterface $em, Request $request): Response
+    {
+        $this->denyAccessUnlessGranted(AnswerVoter::EDIT, $answer);
+
+        $form = $this->createForm(AnswerType::class, $answer);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $answer = $form->getData();
+            assert($answer instanceof Answer);
+            $answer->setUser($this->getUser());
+            $em->persist($answer);
+            $em->flush();
+
+            return $this->redirectToRoute('question_show', ['id' => $answer->getQuestion()->getId()]);
+        }
+
+        return $this->render('answer/edit.html.twig', [
+            'form' => $form->createView(),
+            'question' => $answer->getQuestion(),
+            'answer' => $answer,
+        ]);
     }
 }
