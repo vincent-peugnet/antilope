@@ -373,7 +373,7 @@
             <div class="card mb-3">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="card-title">
-                        {{ userMacro.render(question.user, 2, sharable) }}
+                        {{ userMacro.render(question.user, 1, sharable) }}
                     </h5>
                     <small class="text-muted">
                         {{ question.createdAt|ago }}
@@ -426,7 +426,7 @@
                 
         {% for validation in sharable.validations|reverse %}
 
-            {% if validation.message %}
+            {% if validation.message or validation.picture %}
             
             <div class="card mb-3">
                 <div class="card-header d-flex justify-content-between align-items-center">
@@ -440,8 +440,14 @@
                     </small>
                 </div>
                 <div class="card-body bg-success">
+
+                    <p>
+                        {% if validation.picture %}
+                            <img class="rounded float-left m-2" src="{{ asset(validation.getPicturePath)|imagine_filter('validation_250') }}" alt="">
+                        {% endif %}
                     
-                    <p>{{ validation.message }}</p>
+                        {{ validation.message }}
+                    </p>
                     
                     
                     

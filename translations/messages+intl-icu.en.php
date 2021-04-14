@@ -34,6 +34,7 @@ return array(
     'Next user class' => 'Next user class',
     'Paranoïa level' => 'Paranoïa level',
     'Password' => 'Password',
+    'Picture' => 'Picture',
     'Question' => 'Question',
     'Registrations are open, no more need for invitation.' => 'Registrations are open, no more need for invitation.',
     'Repeat Password' => 'Repeat Password',

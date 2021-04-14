@@ -28,16 +28,37 @@ namespace App\Form;
 
 use App\Entity\Validation;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\TranslatableMessage;
+use Symfony\Component\Validator\Constraints\Image;
 
 class ValidationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('message')
+            ->add('message', TextareaType::class, [
+                'required' => false,
+            ])
+            ->add('pictureFile', FileType::class, [
+                'label' => new TranslatableMessage('Picture'),
+                'help' => 'Jpeg, Png or Gif of maximum 2Mo',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => new Image([
+                    'maxSize' => '2M',
+                    'mimeTypes' => [
+                        'image/jpeg',
+                        'image/png',
+                        'image/gif',
+                    ],
+                    'mimeTypesMessage' => 'Please upload a JPEG, PNG or GIF image file',
+                ])
+            ])
             ->add('send', SubmitType::class)
         ;
     }

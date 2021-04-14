@@ -270,7 +270,8 @@ class SharableController extends AbstractController
         Sharable $sharable,
         Request $request,
         InterestedRepository $interestedRepository,
-        EventDispatcherInterface $dispatcher
+        EventDispatcherInterface $dispatcher,
+        FileUploader $fileUploader
     ): Response {
         $this->denyAccessUnlessGranted('validate', $sharable);
 
@@ -281,6 +282,13 @@ class SharableController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $validation = $form->getData();
+            assert($validation instanceof Validation);
+
+            $pictureFile = $form->get('pictureFile')->getData();
+            if ($pictureFile) {
+                $picture = $fileUploader->upload($pictureFile, FileUploader::VALIDATION);
+                $validation->setPicture($picture);
+            }
 
             $validation->setUser($user);
             $validation->setSharable($sharable);

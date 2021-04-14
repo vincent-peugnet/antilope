@@ -27,6 +27,7 @@
 namespace App\Entity;
 
 use App\Repository\ValidationRepository;
+use App\Service\FileUploader;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -64,10 +65,24 @@ class Validation
      */
     private $message;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $picture;
+
     public function __construct()
     {
         $this->sendAt = new DateTime();
     }
+
+    // ______________ getter and setters __________________
+
+    public function getPicturePath(): string
+    {
+        return FileUploader::VALIDATION . '/' . $this->picture;
+    }
+
+    // ______________ getter and setters __________________
 
     public function getId(): ?int
     {
@@ -118,6 +133,18 @@ class Validation
     public function setMessage(?string $message): self
     {
         $this->message = $message;
+
+        return $this;
+    }
+
+    public function getPicture(): ?string
+    {
+        return $this->picture;
+    }
+
+    public function setPicture(?string $picture): self
+    {
+        $this->picture = $picture;
 
         return $this;
     }

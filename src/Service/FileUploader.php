@@ -39,7 +39,8 @@ class FileUploader
 
     public const AVATAR = '/uploads/avatar';
     public const COVER = '/uploads/cover';
-    public const TYPES = [self::AVATAR, self::COVER];
+    public const VALIDATION = '/uploads/validation';
+    public const TYPES = [self::AVATAR, self::COVER, self::VALIDATION];
 
     public function __construct(SluggerInterface $slugger, ParameterBagInterface $parameters)
     {
