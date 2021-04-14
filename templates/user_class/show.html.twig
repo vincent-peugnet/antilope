@@ -138,6 +138,13 @@
                             The user email adress need to be verified
                         </li>
                     {% endif %}
+                    {% if userClass.avatarReq %}
+                        {% set avatar = app.user.avatar %}
+                        <li class="list-group-item{{ avatar ? ' list-group-item-success' : ' text-danger' }}">
+                            {{ avatar ? '<i class="far fa-check-square"></i>' : '<i class="far fa-square"></i>' }}
+                            An avatar picture is set
+                        </li>
+                    {% endif %}
                 </ul>
 
                     </div>

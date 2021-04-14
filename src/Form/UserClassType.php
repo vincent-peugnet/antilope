@@ -112,6 +112,9 @@ class UserClassType extends AbstractType
             ->add('verifiedReq', null, [
                 'label' => new TranslatableMessage('Email verification Requirement'),
             ])
+            ->add('avatarReq', null, [
+                'label' => new TranslatableMessage('Avatar picture requirement'),
+            ])
         ;
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {

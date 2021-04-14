@@ -162,6 +162,11 @@ class UserClass
      */
     private $manageReq;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $avatarReq;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -174,6 +179,7 @@ class UserClass
         $this->validatedReq = 0;
         $this->manageReq = 0;
         $this->verifiedReq = false;
+        $this->avatarReq = false;
         $this->createdAt = new DateTime();
         $this->lastEditedAt = $this->createdAt;
     }
@@ -489,5 +495,17 @@ class UserClass
         return $this->users->filter(function (User $user) {
             return !$user->isDisabled();
         });
+    }
+
+    public function getAvatarReq(): ?bool
+    {
+        return $this->avatarReq;
+    }
+
+    public function setAvatarReq(bool $avatarReq): self
+    {
+        $this->avatarReq = $avatarReq;
+
+        return $this;
     }
 }

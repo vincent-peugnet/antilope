@@ -5,6 +5,7 @@ return array(
     'Account' => 'Account',
     'Account Age Requirement' => 'Account Age Requirement',
     'Avatar' => 'Avatar',
+    'Avatar picture requirement' => 'Avatar picture requirement',
     'Beware ! as your actual Email is verified, you will loose your status by changing it. Be sure to verify the new one as soon as possible.' => 'Beware ! as your actual Email is verified, you will loose your status by changing it. Be sure to verify the new one as soon as possible.',
     'Bookmarked by' => 'Bookmarked by',
     'can access sharables' => 'can access {s}s',

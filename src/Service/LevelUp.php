@@ -82,7 +82,8 @@ class LevelUp
                 $this->accountAge($user, $userClass) &&
                 $this->validated($user, $userClass) &&
                 $this->manage($user, $userClass) &&
-                $this->verified($user, $userClass)
+                $this->verified($user, $userClass) &&
+                $this->avatar($user, $userClass)
             ) {
                 $user->setUserClass($userClass);
                 $this->checkUp($user);
@@ -105,7 +106,8 @@ class LevelUp
             !$this->accountAge($user, $userClass) ||
             !$this->validated($user, $userClass) ||
             !$this->manage($user, $userClass) ||
-            !$this->verified($user, $userClass)
+            !$this->verified($user, $userClass) ||
+            !$this->avatar($user, $userClass)
         ) {
             $userClass = $user->getUserClass()->getPrev();
             if ($userClass) {
@@ -141,5 +143,10 @@ class LevelUp
     private function verified(User $user, UserClass $userClass): bool
     {
         return ($userClass->getVerifiedReq() && $user->isVerified() || !$userClass->getVerifiedReq());
+    }
+
+    private function avatar(User $user, UserClass $userClass): bool
+    {
+        return ($userClass->getAvatarReq() && !is_null($user->getAvatar()) || !$userClass->getAvatarReq());
     }
 }

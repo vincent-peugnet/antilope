@@ -60,6 +60,7 @@ class LevelSubscriber implements EventSubscriberInterface
             SharableEvent::DISABLE => 'onSharableEnable',
             ManageEvent::NEW => 'onManageNew',
             ManageEvent::CONFIRM => 'onManageNew',
+            UserEvent::AVATAR => 'onUserAvatar',
         ];
     }
 
@@ -90,6 +91,12 @@ class LevelSubscriber implements EventSubscriberInterface
     public function onManageNew(ManageEvent $manageEvent): void
     {
         $user = $manageEvent->getManage()->getUser();
+        $this->check($user);
+    }
+
+    public function onUserAvatar(UserEvent $userEvent): void
+    {
+        $user = $userEvent->getUser();
         $this->check($user);
     }
 

@@ -33,6 +33,7 @@ class UserEvent extends Event
 {
     public const USERCLASS_UPDATE = "user.userclass.update";
     public const DISABLED = "user.disabled";
+    public const AVATAR = "user.avatar";
     private User $user;
 
     public function __construct(User $user)
