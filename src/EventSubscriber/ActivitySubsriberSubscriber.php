@@ -74,7 +74,7 @@ class ActivitySubsriberSubscriber implements EventSubscriberInterface
     {
         if ($event->isMasterRequest()) {
             $user = $this->security->getUser();
-            $delay = $this->parameterBag->get('app.lastActivityDelay');
+            $delay = $this->parameterBag->get('app.last_activity_delay');
             if (($user instanceof User) && $user->getLastActivity() < new DateTime("$delay minute ago")) {
                 $user->setLastActivity(new DateTime());
                 $this->em->persist($user);

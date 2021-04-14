@@ -47,8 +47,8 @@ class UserContactVoter extends Voter
 
     public function __construct(ParameterBagInterface $parameters)
     {
-        $this->contactForgetDelay = (int) $parameters->get('app.contactForgetDelay');
-        $this->contactEditDelay = (int) $parameters->get('app.contactEditDelay');
+        $this->contactForgetDelay = (int) $parameters->get('app.contact_forget_delay');
+        $this->contactEditDelay = (int) $parameters->get('app.contact_edit_delay');
     }
 
     protected function supports($attribute, $subject)

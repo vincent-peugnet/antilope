@@ -43,7 +43,7 @@ class ContactType extends AbstractType
 
     public function __construct(ParameterBagInterface $parameters)
     {
-        $this->contactEditDelay = (int) $parameters->get('app.contactEditDelay');
+        $this->contactEditDelay = (int) $parameters->get('app.contact_edit_delay');
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void

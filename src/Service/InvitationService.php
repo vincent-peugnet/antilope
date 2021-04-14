@@ -46,9 +46,9 @@ class InvitationService
         UserRepository $userRepository,
         InvitationRepository $invitationRepository
     ) {
-        $this->userLimit = (int) $params->get('app.userLimit');
-        $this->openRegistration = (bool) $params->get('app.openRegistration');
-        $this->invitationDuration = (int) $params->get('app.invitationDuration');
+        $this->userLimit = (int) $params->get('app.user_limit');
+        $this->openRegistration = (bool) $params->get('app.open_registration');
+        $this->invitationDuration = (int) $params->get('app.invitation_duration');
         $this->userRepository = $userRepository;
         $this->invitationRepository = $invitationRepository;
     }

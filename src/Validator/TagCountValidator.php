@@ -40,8 +40,8 @@ class TagCountValidator extends ConstraintValidator
 
     public function __construct(ParameterBagInterface $params)
     {
-        $this->min = (int) $params->get('app.minTag') ?? null;
-        $this->max = (int) $params->get('app.maxTag') ?? null;
+        $this->min = (int) $params->get('app.min_tag') ?? null;
+        $this->max = (int) $params->get('app.max_tag') ?? null;
     }
 
     public function validate($value, Constraint $constraint)

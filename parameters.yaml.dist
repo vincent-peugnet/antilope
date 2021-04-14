@@ -1,19 +1,19 @@
 parameters:
-    app.openRegistration: true
-    app.userLimit: 1000
-    app.invitationDuration: 24
-    app.siteName: 'Antilope'
-    app.sharableNames:
+    app.open_registration: true
+    app.user_limit: 1000
+    app.invitation_duration: 24
+    app.site_name: 'Antilope'
+    app.sharabe_names:
         en:
             name: sharable
             gender: neuter
-    app.emailAddress: 'noreply@antilope.net'
-    app.siteDescription: 'A sharable Network'
-    app.siteAlert: 'beware of not sharing too much COVID-19, share carefully !'
-    app.showHomeStats: false
-    app.lastActivityDelay: 1
-    app.contactForgetDelay: 7
-    app.contactEditDelay: 15
-    app.minTag: 0
-    app.maxTag: 0
-    app.resultPerPage: 25
+    app.email_address: 'noreply@antilope.net'
+    app.site_description: 'A sharable Network'
+    app.site_alert: 'beware of not sharing too much COVID-19, share carefully !'
+    app.show_home_stats: false
+    app.last_activity_delay: 1
+    app.contact_forget_delay: 7
+    app.contact_edit_delay: 15
+    app.min_tag: 0
+    app.max_tag: 0
+    app.result_per_page: 25

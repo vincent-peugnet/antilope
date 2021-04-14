@@ -62,7 +62,7 @@ class SignUpController extends AbstractController
     ): Response {
 
         // Check user limit
-        $userLimit = (int) $this->getParameter('app.userLimit');
+        $userLimit = (int) $this->getParameter('app.user_limit');
         if (!empty($userLimit)) {
             $userCount = $userRepository->count([]);
             if ($userCount >= $userLimit) {
@@ -73,7 +73,7 @@ class SignUpController extends AbstractController
 
         $user = new User();
 
-        $needCode = !$this->getParameter('app.openRegistration');
+        $needCode = !$this->getParameter('app.open_registration');
         $form = $this->createForm(
             SignUpType::class,
             $user,

@@ -98,7 +98,7 @@ class SharableController extends AbstractController
         $sharablesPagination = $paginator->paginate(
             $sharableRepository->getFilteredSharablesQuery($search, $user),
             $request->query->getInt('page', 1),
-            $this->getParameter('app.resultPerPage')
+            $this->getParameter('app.result_per_page')
         );
         $sharablesPagination->setCustomParameters(['align' => 'center']);
 

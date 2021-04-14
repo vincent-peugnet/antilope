@@ -190,14 +190,14 @@ bin/console app:mail <your-email-adress>
 
 Default global parameters are generated interactively during `composer install` command.
 
-- `app.openRegistration (bool)` Allow free sign up, disable the invite code system
-- `app.userLimit (int)` Max user limit. If this number is reached, registrations are closed
-- `app.invitationDuration (int)` Duration of invite code before it expired (in hours)
-- `app.lastActivityDelay (int)` Time of user lastActivity refresh (in minutes)
-- `app.contactForgetDelay (int)` Time before a contact is not visible anymore (in hours)
-- `app.contactEditDelay (int)` Time before a contact is not editable anymore (in minutes)
-- `app.minTag (int)` Minimum number of tag per sharable (0 is none)
-- `app.maxTag (int)` Maximum number of tag per sharable (0 is none)
+- `app.open_registration (bool)` Allow free sign up, disable the invite code system
+- `app.user_limit (int)` Max user limit. If this number is reached, registrations are closed
+- `app.invitation_duration (int)` Duration of invite code before it expired (in hours)
+- `app.last_activity_delay (int)` Time of user lastActivity refresh (in minutes)
+- `app.contact_forget_delay (int)` Time before a contact is not visible anymore (in hours)
+- `app.contact_edit_delay (int)` Time before a contact is not editable anymore (in minutes)
+- `app.min_tag (int)` Minimum number of tag per sharable (0 is none)
+- `app.max_tag (int)` Maximum number of tag per sharable (0 is none)
 
 ### Administration
 

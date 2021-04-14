@@ -57,8 +57,8 @@ class ResetPasswordController extends AbstractController
     public function __construct(ResetPasswordHelperInterface $resetPasswordHelper, ParameterBagInterface $parameters)
     {
         $this->resetPasswordHelper = $resetPasswordHelper;
-        $this->emailAddress = $parameters->get('app.emailAddress');
-        $this->siteName = $parameters->get('app.siteName');
+        $this->emailAddress = $parameters->get('app.email_address');
+        $this->siteName = $parameters->get('app.site_name');
     }
 
     /**

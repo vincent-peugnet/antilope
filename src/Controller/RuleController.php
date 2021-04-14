@@ -50,7 +50,7 @@ class RuleController extends AbstractController
         $rulesPagination = $paginator->paginate(
             $ruleRepository->findAllQuery(),
             $request->query->getInt('page', 1),
-            $this->getParameter('app.resultPerPage')
+            $this->getParameter('app.result_per_page')
         );
 
         $rulesPagination->setCustomParameters(['align' => 'center']);

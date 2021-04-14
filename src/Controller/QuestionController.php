@@ -60,7 +60,7 @@ class QuestionController extends AbstractController
         $questionsPagination = $paginator->paginate(
             $questionRepository->filterQuery($this->getUser(), $search),
             $request->query->getInt('page', 1),
-            $this->getParameter('app.resultPerPage')
+            $this->getParameter('app.result_per_page')
         );
         $questionsPagination->setCustomParameters(['align' => 'center']);
 

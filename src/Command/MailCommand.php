@@ -49,8 +49,8 @@ class MailCommand extends Command
     public function __construct(MailerInterface $mailer, ParameterBagInterface $parameters)
     {
         $this->mailer = $mailer;
-        $this->emailAddress = $parameters->get('app.emailAddress');
-        $this->siteName = $parameters->get('app.siteName');
+        $this->emailAddress = $parameters->get('app.email_address');
+        $this->siteName = $parameters->get('app.site_name');
 
         parent::__construct();
     }

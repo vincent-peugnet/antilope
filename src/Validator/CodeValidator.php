@@ -42,7 +42,7 @@ class CodeValidator extends ConstraintValidator
     public function __construct(InvitationRepository $invitationRepository, ParameterBagInterface $params)
     {
         $this->invitationRepository = $invitationRepository;
-        $this->invitationDuration = (int) $params->get('app.invitationDuration');
+        $this->invitationDuration = (int) $params->get('app.invitation_duration');
     }
 
 

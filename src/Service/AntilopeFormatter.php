@@ -55,7 +55,7 @@ class AntilopeFormatter extends MessageFormatter
 
     public function formatIntl(string $message, string $locale, array $parameters = []): string
     {
-        $names = $this->params->get('app.sharableNames');
+        $names = $this->params->get('app.sharabe_names');
         $name = self::DEFAULT;
         if (self::localeExists($names, $locale)) {
             $name = $names[$locale];

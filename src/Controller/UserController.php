@@ -69,7 +69,7 @@ class UserController extends AbstractController
         $usersPagination = $paginator->paginate(
             $userRepository->filterQuery($search),
             $request->query->getInt('page', 1),
-            $this->getParameter('app.resultPerPage')
+            $this->getParameter('app.result_per_page')
         );
         $usersPagination->setCustomParameters(['align' => 'center']);
 
@@ -147,8 +147,8 @@ class UserController extends AbstractController
         return $this->render('user/contact.html.twig', [
             'user' => $user,
             'userContacts' => $userContacts,
-            'contactEditDelay' => (int) $parameters->get('app.contactEditDelay'),
-            'contactForgetDelay' => (int) $parameters->get('app.contactForgetDelay'),
+            'contactEditDelay' => (int) $parameters->get('app.contact_edit_delay'),
+            'contactForgetDelay' => (int) $parameters->get('app.contact_forget_delay'),
         ]);
     }
 
