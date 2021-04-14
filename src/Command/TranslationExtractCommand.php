@@ -72,11 +72,15 @@ class TranslationExtractCommand extends Command
                 array_push($failures, $locale);
             } else {
                 $file = sprintf(
-                    'translations/%s*.%s.%s',
+                    'translations/%s%s.%s.%s',
                     self::DOMAIN,
+                    MessageCatalogueInterface::INTL_DOMAIN_SUFFIX,
                     $locale,
                     self::FORMAT
                 );
+                $content = include $file;
+                ksort($content, SORT_NATURAL | SORT_FLAG_CASE);
+                file_put_contents($file, "<?php\n\nreturn " . var_export($content, true) . ";\n");
                 exec("vendor/bin/phpcbf $file");
             }
         }
