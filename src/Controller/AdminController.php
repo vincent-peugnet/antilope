@@ -28,11 +28,25 @@ namespace App\Controller;
 
 use JakubOnderka\PhpParallelLint\RunTimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class AdminController extends AbstractController
 {
+    /**
+     * @Route("/admin", name="admin")
+     */
+    public function index(ParameterBagInterface $parameters): Response
+    {
+        $appParameters = array_filter($parameters->all(), function (string $key) {
+            return (substr($key, 0, 4) === "app.");
+        }, ARRAY_FILTER_USE_KEY);
+
+        return $this->render('admin/index.html.twig', [
+            'appParameters' => $appParameters,
+        ]);
+    }
     /**
      * @Route("/admin/opcache_reset", name="opcache_reset")
      */

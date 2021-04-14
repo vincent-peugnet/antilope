@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
+
+{% block title %}Admin{% endblock %}
+
+{% block content %}
+
+{{ breadcrumbs.render([
+    {'text': 'Admin'},
+]) }}
+
+<h1>Admin</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>parameter</th>
+            <th>value</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for key, parameter in appParameters %}
+            {% if not parameter is iterable %}
+                <tr>
+                    <td>
+                        {{ key|slice(4)|title }}
+                    </td>
+                    <td>
+                        {{ parameter }}
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
