@@ -55,10 +55,11 @@
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarToolsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            tools
+                            extra
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarToolsDropdown">
                                 <a class="dropdown-item{{ route_name == 'tag_index' ? ' active' }}" href="{{ path('tag_index') }}">tags</a>
+                                <a class="dropdown-item{{ route_name == 'admin' ? ' active' }}" href="{{ path('admin') }}">admin</a>
                             </div>
                         </li>
 

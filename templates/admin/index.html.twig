@@ -5,11 +5,11 @@
 
 {% block content %}
 
-{{ breadcrumbs.render([
-    {'text': 'Admin'},
-]) }}
-
 <h1>Admin</h1>
+
+<p>
+    Those are the parameters that rule this instance of <i>Antilope</i>. This can be changed by administration. You can check an <a href="https://github.com/vincent-peugnet/antilope#global-parameters" target="_blank">axplanation of each ot those parameters on github</a>.
+</p>
 
 <table class="table">
     <thead>
@@ -24,7 +24,7 @@
             {% if not parameter is iterable %}
                 <tr>
                     <td>
-                        {{ key|slice(4)|title }}
+                        {{ key|slice(4)|humanize }}
                     </td>
                     <td>
                         {{ parameter }}
