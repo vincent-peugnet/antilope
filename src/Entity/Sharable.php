@@ -292,7 +292,7 @@ class Sharable
     }
 
     /**
-     * @return Collection|User[] Collection of user objects
+     * @return Collection Collection of User objects
      */
     public function getAnonymousManagerUsers(): Collection
     {
