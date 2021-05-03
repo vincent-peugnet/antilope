@@ -84,17 +84,11 @@ class SharableRepository extends ServiceEntityRepository
 
         $qb = $this->createQueryBuilder('s')
             ->leftJoin('s.managedBy', 'm')
-            ->addSelect('m')
             ->leftJoin('s.visibleBy', 'uc')
-            ->addSelect('uc')
             ->leftJoin('s.validations', 'v')
-            ->addSelect('v')
             ->leftJoin('s.bookmarks', 'b')
-            ->addSelect('b')
             ->leftJoin('s.interesteds', 'i')
-            ->addSelect('i')
             ->leftJoin('s.tags', 't')
-            ->addSelect('t')
         ;
 
         // Filter sharable that have coordinates
