@@ -34,10 +34,13 @@ use Doctrine\Common\Collections\Collection;
 class SharableSearch
 {
     public const SORT_BY = [
-        'id' => 'id',
-        'createdAt' => 'createdAt',
-        'lastEditedAt' => 'lastEditedAt',
-        'name' => 'name',
+        'id' => 's.id',
+        'createdAt' => 's.createdAt',
+        'lastEditedAt' => 's.lastEditedAt',
+        'name' => 's.name',
+        'number of validations' => 'validation_count',
+        'number of interesteds' => 'interested_count',
+        'number of bookmarks' => 'bookmarked_count',
     ];
     public const ORDER = [
         'ascending' => 'ASC',
@@ -85,7 +88,7 @@ class SharableSearch
      * @var string|null
      * @Assert\Choice(callback="useSortBy")
      */
-    private $sortBy = 'id';
+    private $sortBy = 's.id';
 
     /**
      * @var string|null

@@ -95,8 +95,10 @@ class SharableController extends AbstractController
             $this->denyAccessUnlessGranted(UserVoter::VIEW_INTERESTEDS, $search->getInterestedBy());
         }
 
+        $sharables = $sharableRepository->getFilteredSharablesQuery($search, $user);
+
         $sharablesPagination = $paginator->paginate(
-            $sharableRepository->getFilteredSharablesQuery($search, $user),
+            $sharables,
             $request->query->getInt('page', 1),
             $this->getParameter('app.result_per_page')
         );

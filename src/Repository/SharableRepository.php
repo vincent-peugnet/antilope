@@ -89,7 +89,12 @@ class SharableRepository extends ServiceEntityRepository
             ->leftJoin('s.bookmarks', 'b')
             ->leftJoin('s.interesteds', 'i')
             ->leftJoin('s.tags', 't')
+            ->addSelect('COUNT(DISTINCT v.id) AS HIDDEN validation_count')
+            ->addSelect('COUNT(DISTINCT i.id) AS HIDDEN interested_count')
+            ->addSelect('COUNT(DISTINCT b.id) AS HIDDEN bookmarked_count')
         ;
+
+        $qb->groupBy('s.id');
 
         // Filter sharable that have coordinates
         if ($geo) {
@@ -180,7 +185,7 @@ class SharableRepository extends ServiceEntityRepository
         }
 
         if ($search->getSortBy() && $search->getOrder()) {
-            $qb->orderBy('s.' . $search->getSortBy(), $search->getOrder());
+            $qb->orderBy($search->getSortBy(), $search->getOrder());
         }
 
         return $qb->getQuery();
