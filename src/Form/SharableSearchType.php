@@ -30,6 +30,7 @@ use App\Entity\SharableSearch;
 use App\Entity\Tag;
 use App\Entity\User;
 use App\Entity\UserClass;
+use App\Repository\UserClassRepository;
 use App\Repository\UserRepository;
 use App\Security\Voter\UserVoter;
 use EasyCorp\Bundle\EasyAdminBundle\Form\Filter\Type\BooleanFilterType;
@@ -47,10 +48,12 @@ use Symfony\Component\Translation\TranslatableMessage;
 class SharableSearchType extends AbstractType
 {
     private UserRepository $userRepository;
+    private UserClassRepository $userClassRepository;
 
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserRepository $userRepository, UserClassRepository $userClassRepository)
     {
         $this->userRepository = $userRepository;
+        $this->userClassRepository = $userClassRepository;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -111,6 +114,7 @@ class SharableSearchType extends AbstractType
             ])
             ->add('visibleBy', EntityType::class, [
                 'class' => UserClass::class,
+                'choices' => $this->userClassRepository->findBy(['visibleBy' => true]),
                 'required' => false,
                 'label' => new TranslatableMessage('Visible By'),
                 'placeholder' => 'Visible by...'
