@@ -115,6 +115,10 @@ class UserClassType extends AbstractType
             ->add('avatarReq', null, [
                 'label' => new TranslatableMessage('Avatar picture requirement'),
             ])
+            ->add('visibleBy', null, [
+                'label' => 'Visible by',
+                'help' => 'can be selected as visibleBy in a sharable',
+            ])
         ;
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {

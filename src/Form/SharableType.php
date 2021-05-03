@@ -101,7 +101,7 @@ class SharableType extends AbstractType
             ])
             ->add('visibleBy', EntityType::class, [
                 'class' => UserClass::class,
-                'choices' => $this->userClassRepository->findAll(),
+                'choices' => $this->userClassRepository->findBy(['visibleBy' => true]),
                 'placeholder' => '',
                 'required' => false,
                 // phpcs:ignore Generic.Files.LineLength.TooLong

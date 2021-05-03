@@ -45,6 +45,7 @@ class UserClassFixture extends Fixture
             ->setAccountAgeReq(42)
             ->setValidatedReq(3)
             ->setManageReq(5)
+            ->setVisibleBy(true)
             ->setName('elite');
         $manager->persist($elite);
 
@@ -59,6 +60,7 @@ class UserClassFixture extends Fixture
             ->setShareScoreReq(1000)
             ->setAccountAgeReq(21)
             ->setValidatedReq(1)
+            ->setVisibleBy(true)
             ->setManageReq(3)
             ->setName('power_user');
         $manager->persist($powerUser);
@@ -76,6 +78,7 @@ class UserClassFixture extends Fixture
             ->setAccountAgeReq(7)
             ->setValidatedReq(0)
             ->setManageReq(1)
+            ->setVisibleBy(true)
             ->setName('member');
         $manager->persist($member);
 

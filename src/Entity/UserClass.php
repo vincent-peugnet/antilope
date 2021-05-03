@@ -167,6 +167,11 @@ class UserClass
      */
     private $avatarReq;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $visibleBy;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -180,6 +185,7 @@ class UserClass
         $this->manageReq = 0;
         $this->verifiedReq = false;
         $this->avatarReq = false;
+        $this->visibleBy = false;
         $this->createdAt = new DateTime();
         $this->lastEditedAt = $this->createdAt;
     }
@@ -505,6 +511,18 @@ class UserClass
     public function setAvatarReq(bool $avatarReq): self
     {
         $this->avatarReq = $avatarReq;
+
+        return $this;
+    }
+
+    public function getVisibleBy(): ?bool
+    {
+        return $this->visibleBy;
+    }
+
+    public function setVisibleBy(bool $visibleBy): self
+    {
+        $this->visibleBy = $visibleBy;
 
         return $this;
     }

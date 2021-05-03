@@ -81,16 +81,16 @@ class UserClassController extends AbstractController
                 foreach ($userClass->getSharables() as $sharable) {
                     $sharable->setVisibleBy($sharableTarget);
                     $em->persist($sharable);
-                    $em->flush();
                 }
+                $em->flush();
             }
             if (!$userClass->getUsers()->isEmpty()) {
                 $userTarget = is_null($userClass->getPrev()) ? $userClass->getNext() : $userClass->getPrev();
                 foreach ($userClass->getUsers() as $user) {
                     $user->setUserClass($userTarget);
                     $em->persist($user);
-                    $em->flush();
                 }
+                $em->flush();
             }
 
             $prev = $userClass->getPrev();
@@ -124,7 +124,7 @@ class UserClassController extends AbstractController
     /**
      * @Route("/userclass/{id}/edit", name="userclass_edit", requirements={"id"="\d+"})
      */
-    public function edit(UserClass $userClass, Request $request): Response
+    public function edit(UserClass $userClass, Request $request, EntityManagerInterface $em): Response
     {
         $this->denyAccessUnlessGranted(UserClassVoter::EDIT, $userClass);
 
@@ -134,10 +134,17 @@ class UserClassController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $userClass = $form->getData();
             assert($userClass instanceof UserClass);
+            if (!$form->get('visibleBy')->getData() && !$userClass->getSharables()->isEmpty()) {
+                foreach ($userClass->getSharables() as $sharable) {
+                    $sharable->setVisibleBy(null);
+                    $em->persist($sharable);
+                }
+                $em->flush();
+                $count = $userClass->getSharables()->count();
+                $this->addFlash('warning', "$count sharable(s) had their parameter visibleBy settings being removed");
+            }
 
             $userClass->setLastEditedAt(new DateTime());
-
-            $em = $this->getDoctrine()->getManager();
             $em->persist($userClass);
             $em->flush();
 
