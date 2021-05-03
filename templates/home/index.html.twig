@@ -1,5 +1,6 @@
 {% extends 'base.html.twig' %}
 {% import "macros/user.html.twig" as userMacro %}
+{% import "macros/ago.html.twig" as agoMacro %}
 {% import 'macros/sharable.html.twig' as sharableMacro %}
 
 {% block title %}Home{% endblock %}
@@ -72,57 +73,18 @@
     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
     <div class="col-md-8">
 
-
-        <div class="card mb-3">
-            <div class="card-header">
-                <h3 class="card-title">Currently active users</h3>
-            </div>
-            <div class="card-body">
-                <ul class="list-group list-group-flush">
-                    {% for user in activeUsers %}
-                    <li class="list-group-item">
-                        {{ userMacro.render(user) }}
-                        <small class="text-muted">last seen {{ user.lastActivity|ago }}</small>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-
-        {% if is_granted('view', sharable) %}
-        
-        <div class="card mb-3">
-            <div class="card-header">
-                <h3 class="card-title">
-                    Last validations</h3>
+        {% for announcement in announcements %}    
+            
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5 class="card-title">{{ announcement.id }} <small>{{ agoMacro.render(announcement.publishedAt, true) }}</small></h5>
                 </div>
                 <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                        {% for validation in lastValidations %}
-                        {% if is_granted('view', validation.sharable) %}
-                        <li class="list-group-item">
-
-                            {{ userMacro.render(validation.user, 1) }}
-                            <i class="fas fa-check-circle"></i>
-                            {{ sharableMacro.render(validation.sharable) }}
-
-                            {% if validation.message %}
-                                <div class="p-2 mt-2 bg-success rounded text-truncate">
-                                    {{ validation.message }}
-                                </div>
-                            {% endif %}
-
-                            <small class="text-muted">
-                                {{ validation.sendAt|ago }}
-                            </small>
-                        </li>
-                        {% endif %}
-                        {% endfor %}
-                    </ul>
+                    {{ announcement.article|markdown_to_html }}
                 </div>
             </div>
             
-        {% endif %}
+        {% endfor %}
         
     </div>
     {% endif %}
@@ -135,9 +97,27 @@
 
         <div class="card mb-3">
             <div class="card-header">
+                <h5 class="card-title">Currently active users</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    {% for user in activeUsers %}
+                    <li class="list-group-item">
+                        {{ userMacro.render(user) }}
+                        </br>
+                        <small class="text-muted">last seen {{ user.lastActivity|ago }}</small>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+
+        <div class="card mb-3">
+            <div class="card-header">
 
                 <div class="card-title">
-                <h3>Stats</h3>
+                <h5>Stats</h5>
                 </div>
             </div>
             <div class="card-body">

@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+{% import "macros/ago.html.twig" as agoMacro %}
+
+{% block title %}Announcements{% endblock %}
+
+{% block content %}
+
+<h1>Announcements</h1>
+
+<a href="{{ path('announcement_new') }}" class="btn btn-success"><i class="fas fa-plus-circle"></i> New announcement</a>
+
+{% for announcement in announcements|reverse %}
+    <div class="card mt-3">
+        <div class="card-header">
+            <h5 class="card-title">#{{ announcement.id }} <small>{{ agoMacro.render(announcement.publishedAt, true) }}</small></h5>
+        </div>
+        <div class="card-body">
+            {{ announcement.article|markdown_to_html }}
+        </div>
+    </div>
+{% endfor %}
+
+{% endblock %}

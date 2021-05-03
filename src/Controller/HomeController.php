@@ -27,6 +27,7 @@
 namespace App\Controller;
 
 use App\Entity\Sharable;
+use App\Repository\AnnouncementRepository;
 use App\Repository\InterestedRepository;
 use App\Repository\QuestionRepository;
 use App\Repository\SharableRepository;
@@ -45,7 +46,8 @@ class HomeController extends AbstractController
         SharableRepository $sharableRepository,
         UserRepository $userRepository,
         ValidationRepository $validationRepository,
-        QuestionRepository $questionRepository
+        QuestionRepository $questionRepository,
+        AnnouncementRepository $announcementRepository
     ): Response {
         return $this->render('home/index.html.twig', [
             'userCount' => $userRepository->count([]),
@@ -58,6 +60,7 @@ class HomeController extends AbstractController
             'activeUsers' => $userRepository->findRecentlyActive(60),
             'lastValidations' => $validationRepository->findBy([], ['sendAt' => 'DESC'], 5),
             'sharable' => new Sharable(),
+            'announcements' => $announcementRepository->findBy([], ['publishedAt' => 'DESC'], 5),
         ]);
     }
 }
