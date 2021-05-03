@@ -1,22 +1,28 @@
 {% macro render(user, size = 2, sharable = null) %}
-    <a href="{{ path('user_show', {id: user.id}) }}">
-        {% if user.avatar and size >= 1 %}
-        <img class="rounded" src="{{ asset(user.getAvatarPath)|imagine_filter('avatar_25') }}" alt="avatar of user {{ user.username }}">
-        {% endif %}
-        {{ user.username }}
-    </a>
-    {% if size >= 2 %}
-        <a class="badge badge-primary" href="{{ path('userclass_show', {id: user.userClass.id}) }}">
-            {{ user.userClass.name }}
+
+    {% if sharable == null or user not in sharable.getAnonymousManagerUsers %}
+        <a href="{{ path('user_show', {id: user.id}) }}">
+            {% if user.avatar and size >= 1 %}
+            <img class="rounded" src="{{ asset(user.getAvatarPath)|imagine_filter('avatar_25') }}" alt="avatar of user {{ user.username }}">
+            {% endif %}
+            {{ user.username }}
         </a>
-        <span class="badge badge-light">{{ user.shareScore }}</span>
-        {% if user.isDisabled %}
-        <span class="badge badge-danger" title="This user is disabled"><i class="fas fa-ban"></i></span>
+        {% if size >= 2 %}
+            <a class="badge badge-primary" href="{{ path('userclass_show', {id: user.userClass.id}) }}">
+                {{ user.userClass.name }}
+            </a>
+            <span class="badge badge-light">{{ user.shareScore }}</span>
+            {% if user.isDisabled %}
+            <span class="badge badge-danger" title="This user is disabled"><i class="fas fa-ban"></i></span>
+            {% endif %}
         {% endif %}
+    {% else %}
+        <em class="text-muted">anonymous</em>
     {% endif %}
+
     {% if not sharable == null %}
         {% for manage in user.manages %}
-            {% if manage in sharable.getConfirmedOnymousManagers %}
+            {% if manage in sharable.getConfirmedManagers %}
                 <small class="text-primary" title="This user manage the sharable"><i class="fas fa-user-edit"></i></small>
             {% endif %}
         {% endfor %}
@@ -36,4 +42,5 @@
             {% endif %}
         {% endfor %}
     {% endif %}
+
 {% endmacro %}

@@ -465,18 +465,6 @@ class User implements UserInterface
         return $this;
     }
 
-    public function removeManage(Manage $manage): self
-    {
-        if ($this->manages->removeElement($manage)) {
-            // set the owning side to null (unless already changed)
-            if ($manage->getUser() === $this) {
-                $manage->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
     /**
      * @return Collection|UserContact[]
      */
