@@ -51,7 +51,6 @@ When you create a sharable you can setup a lot of meta infos :
 - begin date (optional)
 - end date (optional)
 - place* (optional)
-- responsibility (if managers are responsible for what is shared)
 - consumability* (if the sharable is something that can only be shared a certain amount of times)
 - visibility (optional : above which user class does users can access the sharable)
 - contact method (see [Managing and contact method](#managing-and-contact-method))

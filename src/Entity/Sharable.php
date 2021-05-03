@@ -140,12 +140,6 @@ class Sharable
      * @ORM\Column(type="text")
      */
     private $details;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $responsibility;
-
     /**
      * @ORM\Column(type="datetime")
      */
@@ -225,7 +219,6 @@ class Sharable
         $this->createdAt = new DateTime();
         $this->lastEditedAt = new DateTime();
         $this->disabled = false;
-        $this->responsibility = true;
         $this->interestedMethod = 2;
         $this->interesteds = new ArrayCollection();
         $this->sharableContacts = new ArrayCollection();
@@ -488,18 +481,6 @@ class Sharable
     public function setDetails(string $details): self
     {
         $this->details = $details;
-
-        return $this;
-    }
-
-    public function getResponsibility(): ?bool
-    {
-        return $this->responsibility;
-    }
-
-    public function setResponsibility(bool $responsibility): self
-    {
-        $this->responsibility = $responsibility;
 
         return $this;
     }

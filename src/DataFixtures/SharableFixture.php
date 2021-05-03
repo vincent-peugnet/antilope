@@ -67,7 +67,6 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
             ->setCreatedAt(new DateTime('2020-01-02'))
             ->setLastEditedAt(new DateTime('2020-03-02'))
             ->setVisibleBy($basicUser)
-            ->setResponsibility(true)
             ->addTag($help)
             ->setDescription('Je peux vous aider à trouver ou réparer des Thinkpads')
             ->setDetails('Les thinkpads sont des appareils souvent utilisés par les entreprises,
@@ -80,7 +79,6 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
             ->setDisabled(false)
             ->setCreatedAt(new DateTime('2019-11-11'))
             ->setLastEditedAt(new DateTime('2019-11-11'))
-            ->setResponsibility(true)
             ->setInterestedMethod(3)
             ->addTag($help)
             ->addTag($tool)
@@ -94,7 +92,6 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
             ->setDisabled(false)
             ->setCreatedAt(new DateTime('2019-12-11'))
             ->setLastEditedAt(new DateTime('2019-12-12'))
-            ->setResponsibility(true)
             ->setInterestedMethod(4)
             ->addTag($place)
             ->setDescription('Cachette secrète sous la maison familiale.')
@@ -108,7 +105,6 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
             ->setDisabled(true)
             ->setCreatedAt(new DateTime('2020-08-08'))
             ->setLastEditedAt(new DateTime('2020-09-09'))
-            ->setResponsibility(true)
             ->addTag($place)
             ->setDescription('La bonne vielle maison familiale')
             ->setDetails('- Nombreux couchages
@@ -122,7 +118,6 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
             ->setDisabled(false)
             ->setCreatedAt(new DateTime('2020-07-07'))
             ->setLastEditedAt(new DateTime('2020-07-08'))
-            ->setResponsibility(true)
             ->setVisibleBy($elite)
             ->addTag($show)
             ->setDescription('Un concert très privé !')
@@ -135,7 +130,6 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
             ->setDisabled(false)
             ->setInterestedMethod(1)
             ->setLastEditedAt(new DateTime('2020-07-08'))
-            ->setResponsibility(false)
             ->addTag($place)
             ->setDescription('Dans la forêt de Bernouille')
             ->setDetails('Ils sont miam miam');
@@ -149,7 +143,6 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
             ->setInterestedMethod(2)
             ->setLastEditedAt(new DateTime('2020-03-02'))
             ->setBeginAt(new DateTime("yesterday"))
-            ->setResponsibility(true)
             ->addTag($game)
             ->setDescription('like in the movie "Rebel without a Cause" ')
             ->setDetails('We are going to drive at high speed and then jump out at the last time.
@@ -164,7 +157,6 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
             ->setInterestedMethod(2)
             ->setBeginAt(new DateTime("tomorrow"))
             ->setLastEditedAt(new DateTime('2020-03-02'))
-            ->setResponsibility(true)
             ->addTag($show)
             ->setDescription('A classic good old Rave illegal Rave Party')
             ->setDetails('You can grab some friends with you');
