@@ -27,6 +27,7 @@
 namespace App\Controller;
 
 use App\Entity\UserClass;
+use App\Event\UserClassEvent;
 use App\Form\UserClassDeleteType;
 use App\Form\UserClassType;
 use App\Repository\UserClassRepository;
@@ -35,6 +36,7 @@ use DateTime;
 use Doctrine\DBAL\ConnectionException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -124,8 +126,12 @@ class UserClassController extends AbstractController
     /**
      * @Route("/userclass/{id}/edit", name="userclass_edit", requirements={"id"="\d+"})
      */
-    public function edit(UserClass $userClass, Request $request, EntityManagerInterface $em): Response
-    {
+    public function edit(
+        UserClass $userClass,
+        Request $request,
+        EntityManagerInterface $em,
+        EventDispatcherInterface $dispatcher
+    ): Response {
         $this->denyAccessUnlessGranted(UserClassVoter::EDIT, $userClass);
 
         $form = $this->createForm(UserClassType::class, $userClass);
@@ -147,6 +153,8 @@ class UserClassController extends AbstractController
             $userClass->setLastEditedAt(new DateTime());
             $em->persist($userClass);
             $em->flush();
+
+            $dispatcher->dispatch(new UserClassEvent($userClass), UserClassEvent::EDIT);
 
             return $this->redirectToRoute('userclass_show', ['id' => $userClass->getId()]);
         }

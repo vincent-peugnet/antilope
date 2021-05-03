@@ -32,6 +32,7 @@ use App\Event\ManageEvent;
 use App\Event\SharableEvent;
 use App\Event\UserEvent;
 use App\Event\ShareScoreEvent;
+use App\Event\UserClassEvent;
 use App\Event\ValidationEvent;
 use App\Service\LevelUp;
 use Doctrine\ORM\EntityManagerInterface;
@@ -61,6 +62,7 @@ class LevelSubscriber implements EventSubscriberInterface
             ManageEvent::NEW => 'onManageNew',
             ManageEvent::CONFIRM => 'onManageNew',
             UserEvent::AVATAR => 'onUserAvatar',
+            UserClassEvent::EDIT => 'onUserClassEdit',
         ];
     }
 
@@ -98,6 +100,21 @@ class LevelSubscriber implements EventSubscriberInterface
     {
         $user = $userEvent->getUser();
         $this->check($user);
+    }
+
+    public function onUserClassEdit(UserClassEvent $userClassEvent): void
+    {
+        $userClass = $userClassEvent->getUserClass();
+        foreach ($userClass->getUsers() as $user) {
+            assert($user instanceof User);
+            $this->check($user);
+        }
+        if (!is_null($userClass->getPrev())) {
+            foreach ($userClass->getPrev()->getUsers() as $user) {
+                assert($user instanceof User);
+                $this->check($user);
+            }
+        }
     }
 
     private function check(User $user): bool
