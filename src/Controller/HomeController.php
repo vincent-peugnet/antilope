@@ -26,13 +26,17 @@
 
 namespace App\Controller;
 
+use App\Entity\Announcement;
 use App\Entity\Sharable;
+use App\Repository\AnnouncementRepository;
 use App\Repository\InterestedRepository;
 use App\Repository\QuestionRepository;
 use App\Repository\SharableRepository;
 use App\Repository\UserRepository;
 use App\Repository\ValidationRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -45,8 +49,19 @@ class HomeController extends AbstractController
         SharableRepository $sharableRepository,
         UserRepository $userRepository,
         ValidationRepository $validationRepository,
-        QuestionRepository $questionRepository
+        QuestionRepository $questionRepository,
+        AnnouncementRepository $announcementRepository,
+        PaginatorInterface $paginator,
+        Request $request
     ): Response {
+        $announcementsPagination = $paginator->paginate(
+            $announcementRepository->findPublished(),
+            $request->query->getInt('page', 1),
+            5
+        );
+        $announcementsPagination->setCustomParameters(['align' => 'center']);
+
+
         return $this->render('home/index.html.twig', [
             'userCount' => $userRepository->count([]),
             'sharableCount' => $sharableRepository->count([]),
@@ -58,6 +73,7 @@ class HomeController extends AbstractController
             'activeUsers' => $userRepository->findRecentlyActive(60),
             'lastValidations' => $validationRepository->findBy([], ['sendAt' => 'DESC'], 5),
             'sharable' => new Sharable(),
+            'announcementsPagination' => $announcementsPagination,
         ]);
     }
 }

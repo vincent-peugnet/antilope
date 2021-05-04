@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
+
+{% block title %}Edit announcement{% endblock %}
+
+{% block content %}
+
+{{ breadcrumbs.render([
+    {'url': url('admin'), 'text': 'Admin'},
+    {'url': url('announcement'), 'text': 'Announcements'},
+    {'text': announcement.title},
+    {'text': 'Edit'},
+]) }}
+
+<h1>Edit announcement</h1>
+
+{{ form( form ) }}
+
+{% endblock %}

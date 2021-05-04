@@ -53,16 +53,9 @@
                         <li class="nav-item">
                             <a class="nav-link{% if route_name == 'rule_index' %} active{% endif %}" href="{{ path('rule_index') }}">rules</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarToolsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            extra
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarToolsDropdown">
-                                <a class="dropdown-item{{ route_name == 'tag_index' ? ' active' }}" href="{{ path('tag_index') }}">tags</a>
-                                <a class="dropdown-item{{ route_name == 'admin' ? ' active' }}" href="{{ path('admin') }}">admin</a>
-                            </div>
+                        <li>
+                            <a class="nav-link{{ route_name == 'admin' ? ' active' }}" href="{{ path('admin') }}">admin</a>
                         </li>
-
                     </ul>
                     {% endif %}
 

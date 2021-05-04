@@ -26,6 +26,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Announcement;
+use App\Security\Voter\AnnouncementVoter;
 use JakubOnderka\PhpParallelLint\RunTimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -45,6 +47,7 @@ class AdminController extends AbstractController
 
         return $this->render('admin/index.html.twig', [
             'appParameters' => $appParameters,
+            'newAnnouncement' => new Announcement(),
         ]);
     }
     /**

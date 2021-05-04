@@ -1,5 +1,6 @@
 {% extends 'base.html.twig' %}
 {% import "macros/user.html.twig" as userMacro %}
+{% import "macros/ago.html.twig" as agoMacro %}
 {% import 'macros/sharable.html.twig' as sharableMacro %}
 
 {% block title %}Home{% endblock %}
@@ -70,59 +71,48 @@
 <div class="row">
     
     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+    <style>
+        .article img { max-width: 100%; }               
+    </style>
     <div class="col-md-8">
 
+        {% for announcement in announcementsPagination %}    
 
-        <div class="card mb-3">
-            <div class="card-header">
-                <h3 class="card-title">Currently active users</h3>
-            </div>
-            <div class="card-body">
-                <ul class="list-group list-group-flush">
-                    {% for user in activeUsers %}
-                    <li class="list-group-item">
-                        {{ userMacro.render(user) }}
-                        <small class="text-muted">last seen {{ user.lastActivity|ago }}</small>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5 class="card-title d-flex justify-content-between align-items-center">
+                        <span>
+                            {{ announcement.title }}
+                            <small>{{ agoMacro.render(announcement.publishedAt) }}</small>
+                        </span>
 
-        {% if is_granted('view', sharable) %}
-        
-        <div class="card mb-3">
-            <div class="card-header">
-                <h3 class="card-title">
-                    Last validations</h3>
-                </div>
-                <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                        {% for validation in lastValidations %}
-                        {% if is_granted('view', validation.sharable) %}
-                        <li class="list-group-item">
-
-                            {{ userMacro.render(validation.user, 1) }}
-                            <i class="fas fa-check-circle"></i>
-                            {{ sharableMacro.render(validation.sharable) }}
-
-                            {% if validation.message %}
-                                <div class="p-2 mt-2 bg-success rounded text-truncate">
-                                    {{ validation.message }}
+                        <div class="btn-group">
+                            {% if is_granted('edit', announcement) %}
+                                <a href="{{ path('announcement_edit', {id: announcement.id}) }}" class="btn btn-primary"><i class="fas fa-pen"></i></a>
+                            {% endif %}
+                            {% if is_granted('delete', announcement) %}
+                                <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a href="{{ path('announcement_delete', {id: announcement.id}) }}" class="dropdown-item bg-danger">
+                                        <i class="fas fa-times-circle"></i> delete announcement
+                                    </a>
                                 </div>
                             {% endif %}
-
-                            <small class="text-muted">
-                                {{ validation.sendAt|ago }}
-                            </small>
-                        </li>
-                        {% endif %}
-                        {% endfor %}
-                    </ul>
+                        </div>
+                    </h5>
+                </div>
+                <div class="card-body article">
+                    {{ announcement.article|markdown_to_html }}
                 </div>
             </div>
             
-        {% endif %}
+        {% endfor %}
+
+        <div class="navigation">
+            {{ knp_pagination_render(announcementsPagination) }}
+        </div>
         
     </div>
     {% endif %}
@@ -135,9 +125,27 @@
 
         <div class="card mb-3">
             <div class="card-header">
+                <h5 class="card-title">Currently active users</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    {% for user in activeUsers %}
+                    <li class="list-group-item">
+                        {{ userMacro.render(user) }}
+                        </br>
+                        <small class="text-muted">last seen {{ user.lastActivity|ago }}</small>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+
+        <div class="card mb-3">
+            <div class="card-header">
 
                 <div class="card-title">
-                <h3>Stats</h3>
+                <h5>Stats</h5>
                 </div>
             </div>
             <div class="card-body">
