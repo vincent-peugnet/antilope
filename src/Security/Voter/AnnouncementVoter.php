@@ -36,12 +36,13 @@ class AnnouncementVoter extends Voter
 {
     public const EDIT   = 'edit';
     public const DELETE = 'delete';
+    public const CREATE = 'create';
 
     protected function supports($attribute, $subject)
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, [self::EDIT, self::DELETE])
+        return in_array($attribute, [self::EDIT, self::DELETE, self::CREATE])
             && $subject instanceof \App\Entity\Announcement;
     }
 
@@ -61,6 +62,8 @@ class AnnouncementVoter extends Voter
                 return $this->canEdit($user, $announcement);
             case self::DELETE:
                 return $this->canDelete($user, $announcement);
+            case self::CREATE:
+                return $this->canCreate($user);
         }
 
         return false;
@@ -72,6 +75,11 @@ class AnnouncementVoter extends Voter
     }
 
     private function canDelete(User $user, Announcement $announcement): bool
+    {
+        return $user->isAdmin();
+    }
+
+    private function canCreate(User $user): bool
     {
         return $user->isAdmin();
     }

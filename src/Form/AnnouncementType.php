@@ -41,6 +41,7 @@ class AnnouncementType extends AbstractType
             ->add('publishedAt', DateTimeType::class, [
                 'widget' => 'single_text',
                 'required'   => true,
+                'help' => 'You can set a date in the future to publish it later',
             ])
             ->add('title')
             ->add('article')

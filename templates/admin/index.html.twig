@@ -5,34 +5,54 @@
 
 {% block content %}
 
-<h1>Admin</h1>
-
-<p>
-    Those are the parameters that rule this instance of <i>Antilope</i>. This can be changed by administration. You can check an <a href="https://github.com/vincent-peugnet/antilope#global-parameters" target="_blank">axplanation of each ot those parameters on github</a>.
-</p>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>parameter</th>
-            <th>value</th>
-        </tr>
-    </thead>
-    <tbody>
-
-        {% for key, parameter in appParameters %}
-            {% if not parameter is iterable %}
-                <tr>
-                    <td>
-                        {{ key|slice(4)|humanize }}
-                    </td>
-                    <td>
-                        {{ parameter }}
-                    </td>
-                </tr>
+<div class="row">
+    <div class="col-md-3">
+        <h1>Admin</h1>
+        
+        <div class="list-group">
+            {% if is_granted('create', newAnnouncement) %}
+            <a href="{{ path('announcement') }}" class="list-group-item list-group-item-action">Manage announcements</a>
             {% endif %}
-        {% endfor %}
-    </tbody>
-</table>
+            
+            <a href="{{ path('tag_index') }}" class="list-group-item list-group-item-action">Tags</a>
+        </div>
+
+    </div>
+    <div class="col-md-9">
+
+        <h2>Instance parameters</h2>
+
+        <p>
+            Those are the parameters that rule this instance of <i>Antilope</i>. This can be changed by administration. You can check an <a href="https://github.com/vincent-peugnet/antilope#global-parameters" target="_blank">axplanation of each ot those parameters on github</a>.
+        </p>
+        
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>parameter</th>
+                    <th>value</th>
+                </tr>
+            </thead>
+            <tbody>
+        
+                {% for key, parameter in appParameters %}
+                    {% if not parameter is iterable %}
+                        <tr>
+                            <td>
+                                {{ key|slice(4)|humanize }}
+                            </td>
+                            <td>
+                                {{ parameter }}
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+        
+    </div>
+
+</div>
+
 
 {% endblock %}

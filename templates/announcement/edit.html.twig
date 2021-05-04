@@ -6,6 +6,7 @@
 {% block content %}
 
 {{ breadcrumbs.render([
+    {'url': url('admin'), 'text': 'Admin'},
     {'url': url('announcement'), 'text': 'Announcements'},
     {'text': announcement.title},
     {'text': 'Edit'},

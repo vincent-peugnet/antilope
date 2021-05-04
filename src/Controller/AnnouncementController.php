@@ -30,32 +30,40 @@ use App\Entity\Announcement;
 use App\Form\AnnouncementType;
 use App\Repository\AnnouncementRepository;
 use App\Security\Voter\AnnouncementVoter;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/admin/announcement")
+ */
 class AnnouncementController extends AbstractController
 {
     /**
-     * @Route("/announcement", name="announcement")
+     * @Route("/", name="announcement")
      */
     public function index(AnnouncementRepository $announcementRepository): Response
     {
-        $announcements = $announcementRepository->findAll();
+        $this->denyAccessUnlessGranted(AnnouncementVoter::CREATE, new Announcement());
+        $announcements = $announcementRepository->findNotPublished();
 
         return $this->render('announcement/index.html.twig', [
             'announcements' => $announcements,
+            'announcement' => new Announcement(),
         ]);
     }
 
     /**
-     * @Route("/announcement/new", name="announcement_new")
+     * @Route("/new", name="announcement_new")
      */
     public function new(Request $request, EntityManagerInterface $em): Response
     {
         $announcement = new Announcement();
+        $this->denyAccessUnlessGranted(AnnouncementVoter::CREATE, $announcement);
+
         $form = $this->createForm(AnnouncementType::class, $announcement);
 
         $form->handleRequest($request);
@@ -66,7 +74,11 @@ class AnnouncementController extends AbstractController
             $em->persist($announcement);
             $em->flush();
 
-            return $this->redirectToRoute('announcement');
+            if ($announcement->getPublishedAt() > new DateTime()) {
+                return $this->redirectToRoute('announcement');
+            } else {
+                return $this->redirectToRoute('app_homepage');
+            }
         }
 
 
@@ -76,10 +88,11 @@ class AnnouncementController extends AbstractController
     }
 
     /**
-     * @Route("/announcement/{id}/edit", name="announcement_edit", requirements={"id"="\d+"})
+     * @Route("{id}/edit", name="announcement_edit", requirements={"id"="\d+"})
      */
     public function edit(Announcement $announcement, Request $request, EntityManagerInterface $em): Response
     {
+        $this->denyAccessUnlessGranted(AnnouncementVoter::EDIT, $announcement);
         $form = $this->createForm(AnnouncementType::class, $announcement);
 
         $form->handleRequest($request);
@@ -90,7 +103,11 @@ class AnnouncementController extends AbstractController
             $em->persist($announcement);
             $em->flush();
 
-            return $this->redirectToRoute('announcement');
+            if ($announcement->getPublishedAt() > new DateTime()) {
+                return $this->redirectToRoute('announcement');
+            } else {
+                return $this->redirectToRoute('app_homepage');
+            }
         }
 
 
@@ -101,7 +118,7 @@ class AnnouncementController extends AbstractController
     }
 
     /**
-     * @Route("/announcement/{id}/delete", name="announcement_delete", requirements={"id"="\d+"})
+     * @Route("/{id}/delete", name="announcement_delete", requirements={"id"="\d+"})
      */
     public function delete(Announcement $announcement, EntityManagerInterface $em): Response
     {

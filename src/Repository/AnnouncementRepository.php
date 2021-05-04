@@ -27,7 +27,9 @@
 namespace App\Repository;
 
 use App\Entity\Announcement;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -43,22 +45,32 @@ class AnnouncementRepository extends ServiceEntityRepository
         parent::__construct($registry, Announcement::class);
     }
 
-    // /**
-    //  * @return Announcement[] Returns an array of Announcement objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Query
+     */
+    public function findPublished(): Query
     {
         return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
+            ->andWhere('a.publishedAt <= :now')
+            ->setParameter('now', new DateTime())
+            ->orderBy('a.publishedAt', 'DESC')
+            ->getQuery()
+        ;
+    }
+
+    /**
+     * @return array|Announcement[]
+     */
+    public function findNotPublished(): array
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.publishedAt >= :now')
+            ->setParameter('now', new DateTime())
+            ->orderBy('a.publishedAt', 'DESC')
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?Announcement

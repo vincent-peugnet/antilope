@@ -71,15 +71,20 @@
 <div class="row">
     
     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+    <style>
+        .article img { max-width: 100%; }               
+    </style>
     <div class="col-md-8">
 
-        {% for announcement in announcements %}    
-            
+        {% for announcement in announcementsPagination %}    
+
             <div class="card mb-3">
                 <div class="card-header">
-                    <h5 class="card-title">
-                        {{ announcement.id }}
-                        <small>{{ agoMacro.render(announcement.publishedAt, true) }}</small>
+                    <h5 class="card-title d-flex justify-content-between align-items-center">
+                        <span>
+                            {{ announcement.title }}
+                            <small>{{ agoMacro.render(announcement.publishedAt) }}</small>
+                        </span>
 
                         <div class="btn-group">
                             {% if is_granted('edit', announcement) %}
@@ -98,12 +103,16 @@
                         </div>
                     </h5>
                 </div>
-                <div class="card-body">
+                <div class="card-body article">
                     {{ announcement.article|markdown_to_html }}
                 </div>
             </div>
             
         {% endfor %}
+
+        <div class="navigation">
+            {{ knp_pagination_render(announcementsPagination) }}
+        </div>
         
     </div>
     {% endif %}
