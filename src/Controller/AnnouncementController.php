@@ -29,6 +29,7 @@ namespace App\Controller;
 use App\Entity\Announcement;
 use App\Form\AnnouncementType;
 use App\Repository\AnnouncementRepository;
+use App\Security\Voter\AnnouncementVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -72,5 +73,42 @@ class AnnouncementController extends AbstractController
         return $this->render('announcement/new.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/announcement/{id}/edit", name="announcement_edit", requirements={"id"="\d+"})
+     */
+    public function edit(Announcement $announcement, Request $request, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(AnnouncementType::class, $announcement);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $announcement = $form->getData();
+            assert($announcement instanceof Announcement);
+            $em->persist($announcement);
+            $em->flush();
+
+            return $this->redirectToRoute('announcement');
+        }
+
+
+        return $this->render('announcement/edit.html.twig', [
+            'form' => $form->createView(),
+            'announcement' => $announcement,
+        ]);
+    }
+
+    /**
+     * @Route("/announcement/{id}/delete", name="announcement_delete", requirements={"id"="\d+"})
+     */
+    public function delete(Announcement $announcement, EntityManagerInterface $em): Response
+    {
+        $this->denyAccessUnlessGranted(AnnouncementVoter::DELETE, $announcement);
+        $em->remove($announcement);
+        $em->flush();
+
+        return $this->redirectToRoute('announcement');
     }
 }

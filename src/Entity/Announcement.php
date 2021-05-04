@@ -52,6 +52,11 @@ class Announcement
      */
     private $article;
 
+    /**
+     * @ORM\Column(type="string", length=128)
+     */
+    private $title;
+
     public function __construct()
     {
         $this->publishedAt = new DateTime();
@@ -82,6 +87,18 @@ class Announcement
     public function setArticle(string $article): self
     {
         $this->article = $article;
+
+        return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
 
         return $this;
     }

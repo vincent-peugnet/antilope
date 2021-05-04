@@ -12,7 +12,25 @@
 {% for announcement in announcements|reverse %}
     <div class="card mt-3">
         <div class="card-header">
-            <h5 class="card-title">#{{ announcement.id }} <small>{{ agoMacro.render(announcement.publishedAt, true) }}</small></h5>
+            <h5 class="card-title">
+                {{ announcement.title }}
+                <small>{{ agoMacro.render(announcement.publishedAt, true) }}</small>
+                <div class="btn-group">
+                    {% if is_granted('edit', announcement) %}
+                        <a href="{{ path('announcement_edit', {id: announcement.id}) }}" class="btn btn-primary"><i class="fas fa-pen"></i></a>
+                    {% endif %}
+                    {% if is_granted('delete', announcement) %}
+                        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="{{ path('announcement_delete', {id: announcement.id}) }}" class="dropdown-item bg-danger">
+                                <i class="fas fa-times-circle"></i> delete announcement
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </h5>
         </div>
         <div class="card-body">
             {{ announcement.article|markdown_to_html }}

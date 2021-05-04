@@ -28,6 +28,7 @@ namespace App\Form;
 
 use App\Entity\Announcement;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -37,9 +38,13 @@ class AnnouncementType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('publishedAt')
+            ->add('publishedAt', DateTimeType::class, [
+                'widget' => 'single_text',
+                'required'   => true,
+            ])
+            ->add('title')
             ->add('article')
-            ->add('publish', SubmitType::class)
+            ->add('edit', SubmitType::class)
         ;
     }
 

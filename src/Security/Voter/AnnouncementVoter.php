@@ -26,17 +26,22 @@
 
 namespace App\Security\Voter;
 
+use App\Entity\Announcement;
+use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class AnnouncementVoter extends Voter
 {
+    public const EDIT   = 'edit';
+    public const DELETE = 'delete';
+
     protected function supports($attribute, $subject)
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, ['POST_EDIT', 'POST_VIEW'])
+        return in_array($attribute, [self::EDIT, self::DELETE])
             && $subject instanceof \App\Entity\Announcement;
     }
 
@@ -44,22 +49,30 @@ class AnnouncementVoter extends Voter
     {
         $user = $token->getUser();
         // if the user is anonymous, do not grant access
-        if (!$user instanceof UserInterface) {
+        if (!$user instanceof User) {
             return false;
         }
+        $announcement = $subject;
+        assert($announcement instanceof Announcement);
 
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
-            case 'POST_EDIT':
-                // logic to determine if the user can EDIT
-                // return true or false
-                break;
-            case 'POST_VIEW':
-                // logic to determine if the user can VIEW
-                // return true or false
-                break;
+            case self::EDIT:
+                return $this->canEdit($user, $announcement);
+            case self::DELETE:
+                return $this->canDelete($user, $announcement);
         }
 
         return false;
+    }
+
+    private function canEdit(User $user, Announcement $announcement): bool
+    {
+        return $user->isAdmin();
+    }
+
+    private function canDelete(User $user, Announcement $announcement): bool
+    {
+        return $user->isAdmin();
     }
 }
