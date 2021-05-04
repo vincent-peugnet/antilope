@@ -197,6 +197,7 @@ Default global parameters are generated interactively during `composer install` 
 - `app.contact_edit_delay (int)` Time before a contact is not editable anymore (in minutes)
 - `app.min_tag (int)` Minimum number of tag per sharable (0 is none)
 - `app.max_tag (int)` Maximum number of tag per sharable (0 is none)
+- `app.bootswatch_theme (string)` Name of the [Bootswatch theme](https://bootswatch.com/) to load (in lowercase)
 
 ### Administration
 

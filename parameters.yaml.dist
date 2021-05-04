@@ -3,6 +3,7 @@ parameters:
     app.user_limit: 1000
     app.invitation_duration: 24
     app.site_name: 'Antilope'
+    app.bootswatch_theme: darkly
     app.sharabe_names:
         en:
             name: sharable

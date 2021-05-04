@@ -5,6 +5,7 @@ twig:
         siteName: '%app.site_name%'
         siteDescription: '%app.site_description%'
         siteAlert: '%app.site_alert%'
+        bootswatchTheme: '%app.bootswatch_theme%'
 
     # fix to look for translations in forms.
     # TODO: Remove when symfony is upgraded to 5.3
