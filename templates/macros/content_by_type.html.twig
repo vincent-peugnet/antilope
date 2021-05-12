@@ -17,7 +17,12 @@
         <i class="fas fa-map-marker-alt"></i>
         {{type}}: {{ content }}
     {% elseif type == 'matrix' %}
-        <a href="matrix:u/{{ content|trim('@') }}">{{ content }}</a>
+        Matrix:
+        <a target="_blank" href="matrix:u/{{ content|trim('@') }}">{{ content }}</a>
+    {% elseif type == 'facebook' %}
+        <i class="fab fa-facebook-square"></i>
+        Facebook:
+        <a target="_blank" href="{{ content|trim('@') }}">{{ content }}</a>
     {% else %}
         {{type}}: {{ content }}
     {% endif %}

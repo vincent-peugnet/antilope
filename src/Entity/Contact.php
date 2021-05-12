@@ -41,6 +41,7 @@ abstract class Contact
     public const URL = 'url';
     public const MATRIX = 'matrix';
     public const ADRESS = 'address';
+    public const FACEBOOK = 'facebook';
     public const OTHER = 'other';
 
     public static function allowedTypes(): array
@@ -51,6 +52,7 @@ abstract class Contact
             'Matrix ID' => self::MATRIX,
             'URL adress' => self::URL,
             'Address' => self::ADRESS,
+            'Facebook' => self::FACEBOOK,
             'Other' => self::OTHER,
         ];
     }
@@ -221,6 +223,13 @@ abstract class Contact
             case self::MATRIX:
                 if (!preg_match('#^\@[a-zA-Z0-9-_]+\:([a-zA-Z0-9-_.]+\.[a-zA-Z0-9-_.]+)+$#', $this->content)) {
                     $message = 'Matrix ID should use the form @username:server.net';
+                }
+                break;
+        
+
+            case self::FACEBOOK:
+                if (!preg_match('#^https?:\/\/(www.)?facebook.com\/\S+#', $this->content)) {
+                    $message = 'Facebook link must start with https://facebook.com';
                 }
                 break;
         }
