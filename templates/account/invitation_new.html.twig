@@ -1,18 +1,18 @@
 {% extends 'base.html.twig' %}
 {% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 
-{% block title %}{{ 'New invitation'|trans }}{% endblock %}
+{% block title %}{{ 'new invitation'|trans|capitalize }}{% endblock %}
 
 {% block content %}
 
 {{ breadcrumbs.render([
-    {'text': 'Account'|trans},
-    {'url': url('account_invitation'), 'text': 'Invitations'|trans},
-    {'text': 'New'|trans},
+    {'text': 'account'|trans|capitalize},
+    {'url': url('account_invitation'), 'text': 'invitations'|trans|capitalize},
+    {'text': 'new'|trans|capitalize},
 ]) }}
 
 
-<h1>{{ 'New invitation'|trans }}n</h1>
+<h1>{{ 'new invitation'|trans|capitalize }}</h1>
 
 {% if openRegistration %}
 <div class="alert alert-light">{{ 'Registrations are open, no more need for invitation.'|trans }}</div>

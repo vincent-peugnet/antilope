@@ -5,21 +5,21 @@
 
 
 
-{% block title %}Invitations{% endblock %}
+{% block title %}{% endblock %}
 
 {% block content %}
 
 {{ breadcrumbs.render([
-    {'text': 'Account'},
-    {'text': 'Invitations'},
+    {'text': 'account'|trans|capitalize},
+    {'text': 'invitations'|trans|capitalize},
 ]) }}
 
-<h1>Invitations</h1>
+<h1>{{ 'invitations'|trans|capitalize }}</h1>
 
 
 {% if app.user.userClass.canInvite %}
 
-<h2>Used Invitations</h2>
+<h2>{{ 'Used Invitations'|trans }}</h2>
 
 <ul class="list-group list-group-flush">
     {% for invitation in usedInvitations %}
@@ -30,21 +30,21 @@
     {% endfor %}
 </ul>
 
-<h2>Actives Invitations</h2>
+<h2>{{ 'actives invitations'|trans|capitalize }}</h2>
 
 <ul class="list-group list-group-flush">
     {% for invitation in activeInvitations %}
     <li class="list-group-item">
-        code : <code>{{ invitation.code }}</code>
-        <i>expire in {{ invitation.createdAt|date_modify(invitationDuration|date("+ %h hours")).diff(date("now"))|date("%d days %Hh %Imin %Ss") }}</i>
+        {{ 'code'|trans }} : <code>{{ invitation.code }}</code>
+        <i>{{ 'expire in'|trans }} {{ invitation.createdAt|date_modify(invitationDuration|date("+ %h hours")).diff(date("now"))|date("%d days %Hh %Imin %Ss") }}</i>
         <small>{{ invitation.createdAt|ago }}</small>
     </li>
     {% endfor %}
 </ul>
 
-<a class="btn btn-success" href="{{ path('account_invitation_new') }}">new invitation</a>
+<a class="btn btn-success" href="{{ path('account_invitation_new') }}">{{ 'new invitation'|trans }}</a>
 {% else %}
-<div class="alert alert-warning">You cannot invite people yet. Checkout <a href="{{ path('userclass') }}">User Classes permissions</a></div>
+<div class="alert alert-warning">{{ 'You cannot invite people yet. Checkout'|trans }} <a href="{{ path('userclass') }}">{{ 'User Classes permissions'|trans }}</a></div>
 {% endif %}
 
 

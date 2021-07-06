@@ -54,7 +54,7 @@ class ChangePasswordFormType extends AbstractType
                             'max' => 4096,
                         ]),
                     ],
-                    'label' => new TranslatableMessage('New password'),
+                    'label' => new TranslatableMessage('new password'),
                 ],
                 'second_options' => [
                     'label' => new TranslatableMessage('Repeat Password'),

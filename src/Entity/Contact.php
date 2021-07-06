@@ -225,7 +225,7 @@ abstract class Contact
                     $message = 'Matrix ID should use the form @username:server.net';
                 }
                 break;
-        
+
 
             case self::FACEBOOK:
                 if (!preg_match('#^https?:\/\/(www.)?facebook.com\/\S+#', $this->content)) {

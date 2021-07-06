@@ -253,6 +253,17 @@ Development
 
     bin/console doctrine:migrations:diff --db-configuration sqlite
 
+### Translation
+
+Translation checking tools CLI.
+
+```bash
+bin/console translation:missing       # check missing strings for fallback locale (en)
+bin/console translation:missing --all # check missing strings for all locales
+bin/console translation:extract       # extract missing string for fallback locale (en)
+bin/console translation:extract --all # extract missing string for all locales
+```
+
 <!-- long url references -->
 [build-badge]:https://img.shields.io/github/workflow/status/vincent-peugnet/antilope/build/main
 [build-url]:https://github.com/vincent-peugnet/antilope/actions?query=branch%3Amain++workflow%3Abuild
