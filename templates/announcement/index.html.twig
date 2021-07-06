@@ -2,19 +2,19 @@
 {% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 {% import "macros/ago.html.twig" as agoMacro %}
 
-{% block title %}Announcements{% endblock %}
+{% block title %}{{ 'announcements'|trans|capitalize }}{% endblock %}
 
 {% block content %}
 
 {{ breadcrumbs.render([
-    {'url': url('admin'), 'text': 'Admin'},
-    {'text': 'Announcements'}
+    {'url': url('admin'), 'text': 'admin'|trans|capitalize},
+    {'text': 'announcements'|trans|capitalize}
 ]) }}
 
-<h1>Announcements</h1>
+<h1>{{ 'announcements'|trans|capitalize }}</h1>
 
 {% if is_granted('create', announcement) %}
-    <a href="{{ path('announcement_new') }}" class="btn btn-success"><i class="fas fa-plus-circle"></i> New announcement</a>
+    <a href="{{ path('announcement_new') }}" class="btn btn-success"><i class="fas fa-plus-circle"></i> {{ 'new announcement'|trans|capitalize }}</a>
 {% endif %}
 
 {% for announcement in announcements|reverse %}
@@ -38,7 +38,7 @@
                         </button>
                         <div class="dropdown-menu">
                             <a href="{{ path('announcement_delete', {id: announcement.id}) }}" class="dropdown-item bg-danger">
-                                <i class="fas fa-times-circle"></i> delete announcement
+                                <i class="fas fa-times-circle"></i> {{ 'delete announcement'|trans|capitalize }}
                             </a>
                         </div>
                     {% endif %}

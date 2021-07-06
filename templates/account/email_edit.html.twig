@@ -4,17 +4,17 @@
 
 
 
-{% block title %}{{ 'Email'|trans }}{% endblock %}
+{% block title %}{{ 'email'|trans|capitalize }}{% endblock %}
 
 {% block content %}
 
 {{ breadcrumbs.render([
-    {'text': 'Account'|trans},
-    {'url': url('account_settings'), 'text': 'Settings'|trans},
-    {'text': 'Email'|trans},
+    {'text': 'account'|trans|capitalize},
+    {'url': url('account_settings'), 'text': 'settings'|trans|capitalize},
+    {'text': 'email'|trans|capitalize},
 ]) }}
 
-<h1>{{ 'Email'|trans }}</h1>
+<h1>{{ 'email'|trans|capitalize }}</h1>
 
 {% if app.user.isVerified %}
 

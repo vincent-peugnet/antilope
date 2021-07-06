@@ -9,11 +9,11 @@
 {% block content %}
 
 {{ breadcrumbs.render([
-    {'text': 'Account'},
-    {'text': 'Setings'},
+    {'text': 'account'|trans|capitalize},
+    {'text': 'settings'|trans|capitalize},
 ]) }}
 
-<h1>Settings</h1>
+<h1>{{'settings'|trans|capitalize}}</h1>
 
 
 <div class="card mb-3">
@@ -21,27 +21,27 @@
     <div class="card-header">
 
         <h3 class="card-title">
-            Email
-            <span class="badge"><small>{{ app.user.isVerified ? 'verified' : 'not verified' }}</small></span>
+            {{ 'email'|trans|capitalize }}
+            <span class="badge"><small>{{ app.user.isVerified ? 'verified'|trans : 'not verified'|trans }}</small></span>
         </h3>
 
     </div>
 
     <div class="card-body">
 
-        <p>Actual email adress: <code>{{ app.user.email }}</code></p>
+        <p>{{ 'actual email adress:'|trans|capitalize }} <code>{{ app.user.email }}</code></p>
 
         <div class="text-info mb-3">
-            This email address is never visible, it's only for notification purposes or lost password.
+            {{ 'This email address is never visible, it\'s only for notification purposes or lost password.'|trans }}
         </div>
 
         {% if not app.user.isVerified %}
 
-        <a class="btn btn-primary" href="{{ path('email_send') }}">Send email verification</a>
+        <a class="btn btn-primary" href="{{ path('email_send') }}">{{ 'send email verification'|trans|capitalize }}</a>
 
         {% endif %}
 
-        <a class="btn btn-primary" href="{{ path('email_edit') }}">Change Email adress</a>
+        <a class="btn btn-primary" href="{{ path('email_edit') }}">{{ 'change email adress'|trans|capitalize }}</a>
 
 
     </div>
@@ -52,14 +52,14 @@
     <div class="card-header">
 
         <h3 class="card-title">
-            Security
+            {{ 'security'|trans|capitalize }}
         </h3>
 
     </div>
 
     <div class="card-body">
 
-        <a class="btn btn-primary" href="">Reset password</a>
+        <a class="btn btn-primary" href="">{{ 'reset password'|trans|capitalize }}</a>
 
     </div>
 </div>

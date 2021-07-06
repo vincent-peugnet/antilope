@@ -7,30 +7,30 @@
 
 <div class="row">
     <div class="col-md-3">
-        <h1>Admin</h1>
+        <h1>{{ 'admin'|trans|capitalize }}</h1>
         
         <div class="list-group">
             {% if is_granted('create', newAnnouncement) %}
-            <a href="{{ path('announcement') }}" class="list-group-item list-group-item-action">Manage announcements</a>
+            <a href="{{ path('announcement') }}" class="list-group-item list-group-item-action">{{ 'manage announcement'|trans|capitalize }}</a>
             {% endif %}
             
-            <a href="{{ path('tag_index') }}" class="list-group-item list-group-item-action">Tags</a>
+            <a href="{{ path('tag_index') }}" class="list-group-item list-group-item-action">{{ 'tags'|trans|capitalize }}</a>
         </div>
 
     </div>
     <div class="col-md-9">
 
-        <h2>Instance parameters</h2>
+        <h2>{{ 'instance parameters'|trans|capitalize }}</h2>
 
         <p>
-            Those are the parameters that rule this instance of <i>Antilope</i>. This can be changed by administration. You can check an <a href="https://github.com/vincent-peugnet/antilope#global-parameters" target="_blank">axplanation of each ot those parameters on github</a>.
+            {{ 'Those are the parameters that rule this instance of <i>Antilope</i>. This can be changed by administration. You can check an'|trans }} <a href="https://github.com/vincent-peugnet/antilope#global-parameters" target="_blank">{{ 'explanation of each ot those parameters on github'|trans }}</a>.
         </p>
         
         <table class="table">
             <thead>
                 <tr>
-                    <th>parameter</th>
-                    <th>value</th>
+                    <th>{{ 'parameter'|trans }}</th>
+                    <th>{{ 'value'|trans }}</th>
                 </tr>
             </thead>
             <tbody>
