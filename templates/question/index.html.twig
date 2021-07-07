@@ -4,7 +4,7 @@
 {% import "macros/sharable.html.twig" as sharableMacro %}
 {% import "macros/ago.html.twig" as agoMacro %}
 
-{% block title %}Questions{% endblock %}
+{% block title %}{{ 'question'|trans|capitalize }}{% endblock %}
 
 {% block content %}
 
@@ -17,12 +17,12 @@
 
             
         <div class="alert alert-info">
-            {{ questionsPagination.getTotalItemCount }} questions found
+            {{ questionsPagination.getTotalItemCount }} {{ 'questions found'|trans }}
             {% if search.user %}
-            asked by {{ userMacro.render(search.user, 1) }}
+            {{ 'asked by'|trans }} {{ userMacro.render(search.user, 1) }}
             {% endif %}
             {% if search.sharable %}
-            on {{ sharableMacro.render(search.sharable, 1) }}
+            {{ 'on'|trans }} {{ sharableMacro.render(search.sharable, 1) }}
             {% endif %}
         </div>
 
@@ -46,14 +46,14 @@
 
                         {% if is_granted('answer', question) %}
                         <a href="{{ path('question_show', {id: question.id}) }}" class="btn btn-primary">
-                            answer !
+                            {{ 'answer it'|trans }} !
                             <span class="badge badge-secondary">
                                 {{ question.answers|length }}
                             </span>
                         </a>
                         {% else %}
                             <a href="{{ path('question_show', {id: question.id}) }}" class="btn btn-light">
-                            answers
+                                {{ 'answers'|trans }}
                             <span class="badge badge-secondary">
                                 {{ question.answers|length }}
                             </span>
@@ -66,7 +66,8 @@
                         </button>
                         <div class="dropdown-menu">
                             <a href="{{ path('question_edit', {id: question.id}) }}" class="dropdown-item">
-                                <i class="fas fa-pen"></i> edit
+                                <i class="fas fa-pen"></i>
+                                {{ 'edit'|trans }}
                             </a>
                         </div>
                         {% endif %}

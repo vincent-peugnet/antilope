@@ -1,11 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Password Reset Email Sent{% endblock %}
+{% block title %}{{ 'password reset email sent'|trans|capitalize }}{% endblock %}
 
 {% block content %}
+
+    <h1>{{ 'password reset email sent'|trans|capitalize }}</h1>
     <p>
-        An email has been sent that contains a link that you can click to reset your password.
-        This link will expire in {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
+        {{ 'An email has been sent that contains a link that you can click to reset your password.'|trans }}
+        {{ 'This link will expire in'|trans }} {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
     </p>
-    <p>If you don't receive an email please check your spam folder or <a href="{{ path('app_forgot_password_request') }}">try again</a>.</p>
+    <p>
+        {{ 'If you don\'t receive an email please check your spam folder or'|trans }}
+        <a href="{{ path('app_forgot_password_request') }}">
+            {{ 'try again'|trans }}
+        </a>
+        .
+    </p>
 {% endblock %}

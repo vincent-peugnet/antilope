@@ -3,18 +3,18 @@
 {% import "macros/user.html.twig" as userMacro %}
 {% import "macros/sharable.html.twig" as sharableMacro %}
 
-{% block title %}Ask a question{% endblock %}
+{% block title %}{{ 'ask a question'|trans|capitalize }}{% endblock %}
 
 {% block content %}
 
 
 {{ breadcrumbs.render([
-    {'url': url('sharable'), 'text': 'Sharables'},
+    {'url': url('sharable'), 'text': 'sharables'|trans|capitalize },
     {'url': url('sharable_show', {id: sharable.id}), 'text': sharable.name},
-    {'text': 'ask a question'},
+    {'text': 'ask a question'|trans|capitalize },
 ]) }}
 
-    <h1>Ask a question</h1>
+    <h1>{{ 'ask a question'|trans|capitalize }}</h1>
 
     <h5>on {{ sharableMacro.render(sharable) }}</h5>
 

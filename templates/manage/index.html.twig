@@ -10,9 +10,9 @@
 
 
 {{ breadcrumbs.render([
-    {'url': url('sharable'), 'text': 'Sharables'},
+    {'url': url('sharable'), 'text': 'sharables'|trans|capitalize },
     {'url': url('sharable_show', {id: sharable.id}), 'text': sharable.name},
-    {'text': 'edit managers'},
+    {'text': 'edit managers'|trans|capitalize},
 ]) }}
 
 <div class="btn-group">
@@ -20,24 +20,29 @@
     {% if is_granted('remove', userManage) %}
     <a class="btn btn-danger" href="{{ path('manage_remove', {id: userManage.id }) }}">
         <i class="fas fa-times-circle"></i>
-        quit management
+        {{ 'quit management'|trans }}
     </a>
     {% else %}
     <a class="btn btn-danger disabled">
         <i class="fas fa-times-circle"></i>
-        quit management
+        {{ 'quit management'|trans }}
     </a>
     {% endif %}
     
     {% if is_granted('anonymous', userManage) %}
-        <a class="btn btn-primary" href="{{ path('manage_anonymous', {id: userManage.id}) }}"><i class="fas fa-mask"></i> become anonymous</a>
+        <a class="btn btn-primary" href="{{ path('manage_anonymous', {id: userManage.id}) }}">
+            <i class="fas fa-mask"></i>
+            {{ 'become anonymous'|trans }}
+        </a>
     {% elseif is_granted('onymous', userManage) %}
-        <a class="btn btn-primary" href="{{ path('manage_onymous', {id: userManage.id}) }}"><i class="fas fa-mask"></i> become onymous</a>
+        <a class="btn btn-primary" href="{{ path('manage_onymous', {id: userManage.id}) }}"><i class="fas fa-mask"></i>
+            {{ 'become onymous'|trans }}
+        </a>
     {% endif %}
     
 </div>
 
-<h1>Managers</h1>
+<h1>{{ 'managers'|trans|capitalize }}</h1>
 
 <ul class="list-group">
 {% for manage in sharable.managedBy %}
@@ -45,15 +50,15 @@
 
         {{ userMacro.render(manage.user) }}
         {% if not manage.confirmed %}
-            <span class="badge badge-warning">invited</span>
+            <span class="badge badge-warning">{{ 'invited'|trans }}</span>
         {% endif %}
         {% if manage.anonymous %}
             <span class="badge badge-dark border">
                 <i class="fas fa-mask"></i>
-                anonymous
+                {{ 'anonymous'|trans }}
             </span>
         {% endif %}
-        <span class="ml-auto"><small>added {{ manage.createdAt|ago }}</small></span>
+        <span class="ml-auto"><small>{{ 'added'|trans }} {{ manage.createdAt|ago }}</small></span>
 
     </li>
 {% endfor %}
@@ -65,13 +70,13 @@
     <div class="card-header">
 
         <div class="card-title">
-            <h5>Invite manager</h5>
+            <h5>{{ 'invite new managers'|trans|capitalize }}</h5>
         </div>
     </div>
 
     <div class="card-body">
 
-        <div class="alert alert-warning">Beware, once you've invited managers, you can't remove them.</div>
+        <div class="alert alert-warning">{{ 'Beware, once you\'ve invited managers, you can\'t remove them'|trans }}.</div>
 
         {{ form(form) }}
 

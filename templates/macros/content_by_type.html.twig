@@ -3,25 +3,25 @@
 
     {% if type == 'email' %}
         <i class="fas fa-envelope"></i>
-        Email:
+        {{ 'email'|trans|capitalize }} :
         <a href="mailto:{{ content }}">{{ content }}</a>
     {% elseif type == 'url' %}
         <i class="fas fa-link"></i>
-        Url: 
+        {{ 'url'|trans|capitalize }} : 
         <a target="_blank" href="{{ content }}">{{ content }}</a>
     {% elseif type == 'phone' %}
         <i class="fas fa-phone-alt"></i>
-        Phone:
+        {{ 'phone'|trans|capitalize }} :
         <a href="tel:{{ content }}">{{ content }}</a>
     {% elseif type == 'address' %}
         <i class="fas fa-map-marker-alt"></i>
         {{type}}: {{ content }}
     {% elseif type == 'matrix' %}
-        Matrix:
+        {{ 'matrix'|trans|capitalize }} :
         <a target="_blank" href="matrix:u/{{ content|trim('@') }}">{{ content }}</a>
     {% elseif type == 'facebook' %}
         <i class="fab fa-facebook-square"></i>
-        Facebook:
+        {{ 'facebook'|trans|capitalize }} :
         <a target="_blank" href="{{ content|trim('@') }}">{{ content }}</a>
     {% else %}
         {{type}}: {{ content }}
