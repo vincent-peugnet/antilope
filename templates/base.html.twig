@@ -36,25 +36,25 @@
 
 
                         <li class="nav-item">
-                            <a class="nav-link{{ route_name == 'sharable' ? ' active' }}" href="{{ path('sharable') }}">sharables</a>
+                            <a class="nav-link{{ route_name == 'sharable' ? ' active' }}" href="{{ path('sharable') }}">{{ 'sharables'|trans }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link{{ route_name == 'sharable_map' ? ' active' }}" href="{{ path('sharable_map') }}">map</a>
+                            <a class="nav-link{{ route_name == 'sharable_map' ? ' active' }}" href="{{ path('sharable_map') }}">{{ 'map'|trans }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link{{ route_name == 'question' ? ' active' }}" href="{{ path('question') }}">questions</a>
+                            <a class="nav-link{{ route_name == 'question' ? ' active' }}" href="{{ path('question') }}">{{ 'questions'|trans }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link{{ route_name == 'user' ? ' active' }}" href="{{ path('user') }}">users</a>
+                            <a class="nav-link{{ route_name == 'user' ? ' active' }}" href="{{ path('user') }}">{{ 'users'|trans }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link{{ route_name == 'userclass' ? ' active' }}" href="{{ path('userclass') }}">user classes</a>
+                            <a class="nav-link{{ route_name == 'userclass' ? ' active' }}" href="{{ path('userclass') }}">{{ 'user classes'|trans }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link{% if route_name == 'rule_index' %} active{% endif %}" href="{{ path('rule_index') }}">rules</a>
+                            <a class="nav-link{% if route_name == 'rule_index' %} active{% endif %}" href="{{ path('rule_index') }}">{{ 'rules'|trans }}</a>
                         </li>
                         <li>
-                            <a class="nav-link{{ route_name == 'admin' ? ' active' }}" href="{{ path('admin') }}">admin</a>
+                            <a class="nav-link{{ route_name == 'admin' ? ' active' }}" href="{{ path('admin') }}">{{ 'admin'|trans }}</a>
                         </li>
                     </ul>
                     {% endif %}
@@ -73,51 +73,56 @@
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item{{ route_name == 'user_show' and route_param == app.user.id ? ' active' }}" href="{{ path('user_show', {id: app.user.id} ) }}">
                                     <i class="fas fa-user fa-fw"></i>
-                                    your profile
+                                    {{ 'your profile'|trans }}
                                 </a>
                                 <a class="dropdown-item {{ route_name == 'sharable' and app.request.get('bookmarkedBy') == app.user.id ? ' active' }}" href="{{ path('sharable', {bookmarkedBy: app.user.id, disabled: 1}) }}">
-                                    <i class="fas fa-bookmark fa-fw"></i> bookmarks
+                                    <i class="fas fa-bookmark fa-fw"></i>
+                                    {{ 'bookmarks'|trans }}
                                     <span class="badge badge-secondary">
                                         {{ app.user.bookmarks|length }}
                                     </span>
                                 </a>
                                 <a class="dropdown-item {{ route_name == 'sharable' and app.request.get('interestedBy') == app.user.id ? ' active' }}" href="{{ path('sharable', {interestedBy: app.user.id, disabled: 1}) }}">
                                     <i class="fas fa-question-circle"></i>
-                                    interests
+                                    {{ 'interests'|trans }}
                                     <span class="badge badge-secondary">
                                         {{ app.user.interesteds|length }}
                                     </span>
                                 </a>
                                 <a class="dropdown-item {{ route_name == 'sharable' and app.request.get('validatedBy') == app.user.id ? ' active' }}" href="{{ path('sharable', {validatedBy: app.user.id, disabled: 1}) }}">
                                     <i class="fas fa-check-circle"></i>
-                                    validated
+                                    {{ 'validated'|trans }}
                                     <span class="badge badge-secondary">
                                         {{ app.user.validations|length }}
                                     </span>
                                 </a>
                                 <a class="dropdown-item {{ route_name == 'sharable' and app.request.get('managedBy') == app.user.id ? ' active' }}" href="{{ path('sharable', {managedBy: app.user.id, disabled: 1}) }}">
-                                    <i class="fas fa-edit fa-fw"></i> managed
+                                    <i class="fas fa-edit fa-fw"></i>
+                                    {{ 'managed'|trans }}
                                     <span class="badge badge-secondary">
                                         {{ app.user.getConfirmedManages|length }}
                                     </span>
                                 </a>
                                 <a class="dropdown-item {{ route_name == 'question' and app.request.get('user') == app.user.id ? ' active' }}" href="{{ path('question', {user: app.user.id}) }}">
-                                    <i class="fas fa-comment fa-fw"></i> questions
+                                    <i class="fas fa-comment fa-fw"></i>
+                                    {{ 'questions'|trans }}
                                     <span class="badge badge-secondary">
                                         {{ app.user.questions|length }}
                                     </span>
                                 </a>
                                 <a class="dropdown-item{{ route_name == 'account_invitation' ? ' active' }}" href="{{ path('account_invitation') }}">
-                                    <i class="fas fa-envelope-open fa-fw"></i> invitation
+                                    <i class="fas fa-envelope-open fa-fw"></i>
+                                    {{ 'invitation'|trans }}
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item{{ route_name == 'account_settings' ? ' active' }}" href="{{ path('account_settings') }}">
                                     <i class="fas fa-cog fa-fw"></i>
-                                    settings
+                                    {{ 'settings'|trans }}
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item " href="{{ path('app_logout') }}">
-                                    <i class="fas fa-sign-out-alt fa-fw"></i> logout
+                                    <i class="fas fa-sign-out-alt fa-fw"></i>
+                                    {{ 'logout'|trans }}
                                 </a>
 
                             </div>
@@ -127,10 +132,16 @@
 
 
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_login') }}"><i class="fas fa-sign-in-alt"></i> login</a>
+                            <a class="nav-link" href="{{ path('app_login') }}">
+                                <i class="fas fa-sign-in-alt"></i>
+                                {{ 'login'|trans }}
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('sign_up') }}"><i class="fas fa-user-plus"></i> sign up</a>
+                            <a class="nav-link" href="{{ path('sign_up') }}">
+                                <i class="fas fa-user-plus"></i>
+                                {{ 'sign up'|trans }}
+                            </a>
                         </li>
 
                         {% endif %}
@@ -145,20 +156,22 @@
 
                 {% if app.user and not app.user.disabled and app.user.userContacts is empty %}
                     <div class="alert alert-warning" >
-                    <i class="fas fa-address-book"></i> You haven't set any <a href="{{ path('user_contact', {id: app.user.id}) }}">Contact Infos</a> yet, you won't be able to create or contact sharables.
+                    <i class="fas fa-address-book"></i>
+                    {{ 'You haven\'t set any'|trans }} <a href="{{ path('user_contact', {id: app.user.id}) }}">{{ 'contact infos'|trans }}</a> {{ 'yet, you won\'t be able to create or contact sharable'|trans }}s.
                     </div>
                 {% endif %}
 
                 {% if app.user and not app.user.isVerified %}
                     <div class="alert alert-warning" >
-                    <i class="fas fa-envelope"></i> You haven't verified your email adress. Checkout your <a href="{{ path('account_settings') }}">Account Settings</a> to send a new verification mail.
+                    <i class="fas fa-envelope"></i>
+                    {{ 'You haven\'t verified your email adress. Checkout your'|trans }} <a href="{{ path('account_settings') }}">{{ 'account setting'|trans }}s</a> {{ 'to send a new verification mail'|trans }}.
                     </div>
                 {% endif %}
 
                 {% if app.user and app.user.disabled %}
                     <div class="alert alert-danger" >
                     <i class="fas fa-ban"></i>
-                    Your account is disabled.
+                    {{ 'Your account is disabled'|trans }}.
                     </div>
                 {% endif %}
 

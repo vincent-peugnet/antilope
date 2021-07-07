@@ -3,7 +3,7 @@
 {% import "macros/ago.html.twig" as agoMacro %}
 {% import 'macros/sharable.html.twig' as sharableMacro %}
 
-{% block title %}Home{% endblock %}
+{% block title %}{{ 'home'|trans|capitalize }}{% endblock %}
 
 {% block content %}
 
@@ -15,31 +15,31 @@
 
         {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
         <h5>
-            Hi {{ app.user.username }} !
+            {{ 'hello'|trans|capitalize }} {{ app.user.username }} !
         </h5>
         <p>
-            You are currently visiting the home page of {{ siteName }}.
-            This network allow you to share what are called <em>Sharables</em> with the other users.
+            {{ 'You are currently visiting the home page of'|trans }} {{ siteName }}.
+            {{ 'This network allow you to share what are called sharables with the other users'|trans }}.
 
-            First thing to do is to <a href="{{ path('rule_index') }}">read the rules</a>.
-            Next, you should check the <a href="{{ path('userclass') }}">user classes system</a>.
+            {{ 'First thing to do is to'|trans }} <a href="{{ path('rule_index') }}">{{ 'read the rules'|trans }}</a>.
+            {{ 'Next, you should check the'|trans }} <a href="{{ path('userclass') }}">{{ 'user classes system'|trans }}</a>.
 
             <ul>
 
                 <li>
 
                     {% if app.user.userClass.share %}
-                    You can create sharables !
+                    {{ 'You can create sharables!'|trans }}
                     {% else %}
-                    Your user class does not allow you to create sharables.
+                    {{ 'Your user class does not allow you to create sharables'|trans }}.
                     {% endif %}
                 </li>
                 <li>
                     {% if app.user.userClass.access %}
 
-                    You can explore sharables using the <a href="{{ path('sharable') }}">list view</a> or trought the <a href="{{ path('sharable_map') }}">map</a>.
+                    {{ 'You can explore sharables using the'|trans }} <a href="{{ path('sharable') }}">{{ 'list view'|trans }}</a> {{ 'or trought the'|trans }} <a href="{{ path('sharable_map') }}">{{ 'the map'|trans }}</a>.
                     {% else %}
-                    Your user class does not allow you to access sharables, but maybe some users have allowed some sharables to be accessibles by your user class.
+                    {{ 'Your user class does not allow you to access sharables, but maybe some users have allowed some sharables to be accessibles by your user class'|trans }}.
                     {% endif %}
                 </li>
             </ul>
@@ -54,10 +54,10 @@
             <a class="btn btn-primary mr-1" href="{{ path('sharable_show', {id: manage.sharable.id}) }}">
                 <i class="fas fa-user-plus"></i>
             </a>
-            You've been invited to manage {{ sharableMacro.render(manage.sharable) }}.
+            {{ 'You\'ve been invited to manage'|trans }} {{ sharableMacro.render(manage.sharable) }}.
             <div class="btn-group">
-                <a class="btn btn-secondary" href="{{ path('manage_confirm', {id: manage.id}) }}"><i class="fas fa-check"></i> confirm</a>
-                <a class="btn btn-secondary" href="{{ path('manage_remove', {id: manage.id}) }}"><i class="fas fa-times"></i> refuse</a>
+                <a class="btn btn-secondary" href="{{ path('manage_confirm', {id: manage.id}) }}"><i class="fas fa-check"></i> {{ 'confirm'|trans }}</a>
+                <a class="btn btn-secondary" href="{{ path('manage_remove', {id: manage.id}) }}"><i class="fas fa-times"></i> { 'refuse'|trans }}</a>
             </div>
             <small class="text-muted">{{ manage.createdAt|ago }}</small>
         </div>
@@ -96,7 +96,7 @@
                                 </button>
                                 <div class="dropdown-menu">
                                     <a href="{{ path('announcement_delete', {id: announcement.id}) }}" class="dropdown-item bg-danger">
-                                        <i class="fas fa-times-circle"></i> delete announcement
+                                        <i class="fas fa-times-circle"></i> {{ 'delete announcement'|trans }}
                                     </a>
                                 </div>
                             {% endif %}
@@ -125,7 +125,7 @@
 
         <div class="card mb-3">
             <div class="card-header">
-                <h5 class="card-title">Currently active users</h5>
+                <h5 class="card-title">{{ 'currently active users'|trans|capitalize }}</h5>
             </div>
             <div class="card-body">
                 <ul class="list-group list-group-flush">
@@ -133,7 +133,7 @@
                     <li class="list-group-item">
                         {{ userMacro.render(user) }}
                         </br>
-                        <small class="text-muted">last seen {{ user.lastActivity|ago }}</small>
+                        <small class="text-muted">{{ 'last seen'|trans }} {{ user.lastActivity|ago }}</small>
                     </li>
                     {% endfor %}
                 </ul>
@@ -145,28 +145,28 @@
             <div class="card-header">
 
                 <div class="card-title">
-                <h5>Stats</h5>
+                <h5>{{ 'stats'|trans|capitalize }}</h5>
                 </div>
             </div>
             <div class="card-body">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
-                        Sharables : {{ sharableCount }}
+                        {{ 'sharables'|trans|capitalize }} : {{ sharableCount }}
                     </li>
                     <li class="list-group-item">
-                        Users : {{ userCount }}
+                        {{ 'users'|trans|capitalize }} : {{ userCount }}
                     </li>
                     <li class="list-group-item">
-                        Validations : {{ validationCount }}
+                        {{ 'validations'|trans|capitalize }} : {{ validationCount }}
                     </li>
                     <li class="list-group-item">
-                        Questions : {{ questionCount }}
+                        {{ 'questions'|trans|capitalize }} : {{ questionCount }}
                     </li>
                     <li class="list-group-item">
-                        Users limit : {{ userLimit }}
+                        {{ 'user limit'|trans|capitalize }} : {{ userLimit }}
                     </li>
                     <li class="list-group-item">
-                        Registrations : {{ openRegistration ? 'open' : 'invite only' }}
+                        {{ 'registration'|trans|capitalize }} : {{ openRegistration ? 'open'|trans : 'invite only'|trans }}
                     </li>
                 </ul>
             </div>
