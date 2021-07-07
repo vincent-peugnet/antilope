@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 
-{% block title %}{{ sharable.name }} : New contact{% endblock %}
+{% block title %}{{ sharable.name }} : {{ 'new contact'|trans|capitalize }}{% endblock %}
 
 {% block content %}
 
@@ -10,8 +10,8 @@
 {{ breadcrumbs.render([
     {'url': url('sharable'), 'text': 'sharables'|trans|capitalize },
     {'url': url('sharable_show', {id: sharable.id}), 'text': sharable.name},
-    {'url': url('sharable_contact', {id: sharable.id}), 'text': 'Contact'},
-    {'text': 'Add'},
+    {'url': url('sharable_contact', {id: sharable.id}), 'text': 'contact'|trans|capitalize },
+    {'text': 'new'|trans|capitalize },
 ]) }}
 
 {{ form(form) }}

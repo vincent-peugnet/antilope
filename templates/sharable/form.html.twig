@@ -3,7 +3,7 @@
 
 
 <fieldset class="p-3 border border-secondary rounded mb-3">
-    <h4>Infos</h4>
+    <h4>{{ 'infos'|trans|capitalize }}</h4>
 
     {{ form_row(form.name) }}
     {{ form_row(form.coverFile, {
@@ -21,15 +21,15 @@
 
     <h4 class="d-inline-block">Visibility</h4>
     <p>
-        By default, sharables are visible by those user classes:
+        {{ 'By default, sharables are visible by those user classes:'|trans }}
         {% for userClass in canAccessUserClass %}
         <span class="badge badge-primary">{{ userClass.name }}</span>
         {% endfor %}
     </p>
     {% if not app.user.userClass.canSetVisibleBy %}
         <div class="alert alert-secondary">
-            Beccause of your user class <span class="badge badge-primary">{{ app.user.userClass.name }}</span>,
-            you cannot change this setting.
+            {{ 'Beccause of your user class'|trans }} <span class="badge badge-primary">{{ app.user.userClass.name }}</span>,
+            {{ 'you cannot change this setting'|trans }}.
         </div>
     {% endif %}
 
@@ -37,15 +37,17 @@
 </fieldset>
 
 <fieldset class="p-3 border border-secondary rounded mb-3">
-    <h4>Contact method</h4>
+    <h4>{{ 'contact method'|trans|capitalize }}</h4>
 
     {{ form_row(form.interestedMethod) }}
 
 </fieldset>
 
 <fieldset class="p-3 border border-secondary rounded mb-3">
-    <h4>Location</h4>
-    <p>You can specify a location for this sharable. This will place your sharable on the map.</p>
+    <h4>{{ 'location'|trans|capitalize }}</h4>
+    <p>
+        {{ 'You can specify a location for this sharable. This will place your sharable on the map.'|trans }}
+    </p>
     <div class="row">
         <div class="col-sm-4">
             {{ form_row(form.latitude) }}
@@ -60,7 +62,7 @@
 </fieldset>
 
 <fieldset class="p-3 border border-secondary rounded mb-3">
-    <h4>Date and time</h4>
+    <h4>{{ 'date and time'|trans|capitalize }}</h4>
 
     <div class="row">
         <div class="col-sm-6">

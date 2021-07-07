@@ -88,14 +88,14 @@ class SharableSearchType extends AbstractType
                 'class' => User::class,
                 'choices' => $this->userRepository->filterByView(UserVoter::VIEW_SHARABLES, $user),
                 'required' => false,
-                'label' => new TranslatableMessage('Managed by'),
+                'label' => new TranslatableMessage('managed by'),
                 'placeholder' => 'managed by...',
             ])
             ->add('validatedBy', EntityType::class, [
                 'class' => User::class,
                 'choices' => $this->userRepository->filterByView(UserVoter::VIEW_VALIDATIONS, $user),
                 'required' => false,
-                'label' => new TranslatableMessage('Validated by'),
+                'label' => new TranslatableMessage('validated by'),
                 'placeholder' => 'validated by...'
             ])
             ->add('bookmarkedBy', EntityType::class, [
@@ -116,7 +116,7 @@ class SharableSearchType extends AbstractType
                 'class' => UserClass::class,
                 'choices' => $this->userClassRepository->findBy(['visibleBy' => true]),
                 'required' => false,
-                'label' => new TranslatableMessage('Visible By'),
+                'label' => new TranslatableMessage('visible by'),
                 'placeholder' => 'Visible by...'
             ])
             ->add('sortBy', ChoiceType::class, [

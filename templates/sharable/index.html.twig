@@ -2,7 +2,7 @@
 {% import "macros/contact_method.html.twig" as contact_method %}
 {% import "macros/user.html.twig" as userMacro %}
 
-{% block title %}Sharables{% endblock %}
+{% block title %}{{ 'sharables'|trans|capitalize }}{% endblock %}
 
 {% block content %}
 
@@ -11,7 +11,10 @@
     <div class="col-md-3">
 
         {% if is_granted('create', sharable) %}
-        <a class="btn btn-success btn-lg btn-block mb-3" href="{{ path('sharable_new') }}"><i class="fas fa-plus-circle"></i> create new sharable</a>
+        <a class="btn btn-success btn-lg btn-block mb-3" href="{{ path('sharable_new') }}">
+            <i class="fas fa-plus-circle"></i>
+            {{ 'create new sharable'|trans }}
+        </a>
         {% endif %}
 
         
@@ -46,35 +49,35 @@
 
 
         <div class="alert alert-info">
-            {{ sharablesPagination.getTotalItemCount }} sharables found
+            {{ sharablesPagination.getTotalItemCount }} {{ 'sharables found'|trans }}
             {% if search.managedBy %}
-            managed by {{ userMacro.render(search.managedBy, 1) }}
+            {{ 'managed by'|trans }} {{ userMacro.render(search.managedBy, 1) }}
             {% endif %}
             {% if search.validatedBy %}
-            validated by {{ userMacro.render(search.validatedBy, 1) }}
+            {{ 'validated by'|trans }} {{ userMacro.render(search.validatedBy, 1) }}
             {% endif %}
             {% if search.bookmarkedBy %}
-            bookmarked by {{ userMacro.render(search.bookmarkedBy, 1) }}
+            {{ 'bookmarked by'|trans }} {{ userMacro.render(search.bookmarkedBy, 1) }}
             {% endif %}
             {% if search.interestedBy %}
-            that interest {{ userMacro.render(search.interestedBy, 1) }}
+            {{ 'that interest'|trans }} {{ userMacro.render(search.interestedBy, 1) }}
             {% endif %}
             {% if search.visibleBy %}
-            visible by <a href="{{ path('userclass_show', {id: search.visibleBy.id}) }}" class="badge badge-primary">{{ search.visibleBy }}</a>
+            {{ 'visible by'|trans }} <a href="{{ path('userclass_show', {id: search.visibleBy.id}) }}" class="badge badge-primary">{{ search.visibleBy }}</a>
             {% endif %}
             {% if search.disabled %}
-                including <span class="badge badge-danger"><i class="fas fa-ban"></i> disabled</span>
+            {{ 'including'|trans }} <span class="badge badge-danger"><i class="fas fa-ban"></i> {{ 'disabled'|trans }}</span>
             {% endif %}
         </div>
 
         {% if not app.user.userclass.access %}
         <div class="alert alert-warning">
-            Your user class:
+            {{ 'Your user class:'|trans }}
             <a class="badge badge-primary" href="{{ path('userclass_show', {id: app.user.userClass.id}) }}">
                 {{ app.user.userClass.name }}
             </a>
-            cannot access sharable.
-            You can only see sharable that have specified access from lower or equal user class.
+            {{ 'cannot access sharable'|trans }}.
+            {{ 'You can only see sharable that have specified access from lower or equal user class'|trans }}.
         </div>
         {% endif %}
 
@@ -154,10 +157,10 @@
                             <small title="begin at {{ sharable.beginAt|format_datetime }}" class="text-muted">
                                 {% if sharable.beginAt > date() %}
                                 <i class="fas fa-clock"></i>
-                                begin in {{ sharable.beginAt|ago }}
+                                {{ 'begin in'|trans }} {{ sharable.beginAt|ago }}
                                 {% elseif not sharable.endAt %}
                                 <i class="fas fa-clock"></i>
-                                has begun {{ sharable.beginAt|ago }}
+                                {{ 'has begun'|trans }} {{ sharable.beginAt|ago }}
                                 {% endif %}
                             </small>
                         {% endif %}
@@ -167,11 +170,11 @@
                                 {% if sharable.endAt < date() %}
                                 <span class="text-danger">
                                     <i class="fas fa-flag-checkered"></i>
-                                    end date is passed
+                                    {{ 'end date is passed'|trans }}
                                 </span>
                                 {% else %}
                                 <i class="fas fa-hourglass"></i>
-                                end in {{ sharable.endAt|ago }}
+                                {{ 'end in'|trans }} {{ sharable.endAt|ago }}
                                 {% endif %}
                             </small>
                         {% endif %}
@@ -184,11 +187,20 @@
                     </a>
                   
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <a class="dropdown-item" href="{{ path('sharable_edit', {id: sharable.id}) }}"> <i class="fas fa-pen"></i> edit</a>
+                        <a class="dropdown-item" href="{{ path('sharable_edit', {id: sharable.id}) }}">
+                            <i class="fas fa-pen"></i>
+                            {{ 'edit'|trans }}
+                        </a>
                         {% if is_granted('interested', sharable) %}
-                        <a class="dropdown-item bg-warning" href="{{ path('sharable_interested', {id: sharable.id}) }}"><i class="fas fa-eye"></i> see interesteds</a>
+                        <a class="dropdown-item bg-warning" href="{{ path('sharable_interested', {id: sharable.id}) }}">
+                            <i class="fas fa-eye"></i>
+                            {{ 'see interesteds'|trans }}
+                        </a>
                         {% endif %}
-                        <a class="dropdown-item" href="{{ path('sharable_managers', {id: sharable.id}) }}"><i class="fas fa-user-edit"></i> edit managers</a>
+                        <a class="dropdown-item" href="{{ path('sharable_managers', {id: sharable.id}) }}">
+                            <i class="fas fa-user-edit"></i>
+                            {{ 'edit managers'|trans }}
+                        </a>
                     </div>
                 </div>
                 {% endif %}
@@ -207,16 +219,16 @@
                         <a class="badge badge-pill badge-secondary" href="{{ path('sharable', {'tags[]': tag.id}) }}">{{ tag.name }}</a>
                     {% endfor %}
                     </br>
-                        Managed by
+                    {{ 'managed by'|trans|capitalize }}
                         {% for manage in sharable.getConfirmedManagers %}
                             {% if manage.anonymous %}
-                                <em class="text-muted">anonymous</em>
+                                <em class="text-muted">{{ 'anonymous'|trans }}</em>
                             {% else %}
                                 {{ userMacro.render(manage.user, 1) }}
                             {% endif %}
                                 {% if not loop.index == loop.last %}
                                     {% if loop.index == (loop.length - 1) %}
-                                    and
+                                    {{ 'and'|trans }}
                                     {% else %}
                                     ,
                                     {% endif %}
@@ -225,7 +237,7 @@
                 </p>
 
                 <small title="{{ sharable.createdAt|format_datetime }}" class="text-muted">
-                    created {{ sharable.createdAt|ago }}
+                    {{ 'created'|trans }} {{ sharable.createdAt|ago }}
                 </small>
             </div>
 

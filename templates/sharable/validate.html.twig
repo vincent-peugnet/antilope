@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 
-{% block title %}{{ sharable.name }}{% endblock %}
+{% block title %}{{ sharable.name }} : {{ 'validation'|trans|capitalize }}{% endblock %}
 
 
 
@@ -14,24 +14,25 @@
     {'url': url('sharable_show', {id: sharable.id}), 'text': sharable.name},
     {'text': 'Validate'},
 ]) }}
-<h1>Validation</h1>
+
+<h1>{{ 'validation'|trans|capitalize }}</h1>
 
 <div class="alert alert-success">
     <i class="fas fa-exclamation-triangle"></i>
-    By validating, you ensure that you have really enjoyed the sharable. Don't do it if it is not true.
+    {{ 'By validating, you ensure that you have really enjoyed the sharable. Don\'t do it if it is not true.'|trans }}
 </div>
 
     <div class="card mb-3">
         <div class="card-header">
             <h4 class="card-title">
-                This space is dedicated to sharing what you felt with the sharable
+                {{ 'this space is dedicated to sharing what you felt with the sharable'|trans|capitalize }}
             </h4>
         </div>
 
         <div class="card-body">
 
         <p>
-            You can add a message, a picture, or both. Explain wath happened or just thanks someone...
+            {{ 'You can add a message, a picture, or both. Explain wath happened or just thanks someone...'|trans }}
         </p>
         
             {{ form(form) }}

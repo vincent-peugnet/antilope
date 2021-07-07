@@ -11,13 +11,13 @@ crossorigin=""/>
 {% import "macros/user.html.twig" as userMacro %}
 {% import "macros/sharable.html.twig" as sharableMacro %}
 
-{% block title %}Map of sharables{% endblock %}
+{% block title %}{{ 'map of sharables'|trans|capitalize }}{% endblock %}
 
 {% block content %}
 
 {{ breadcrumbs.render([
     {'url': url('sharable'), 'text': 'sharables'|trans|capitalize },
-    {'text': 'Map'},
+    {'text': 'map'|trans|capitalize },
 ]) }}
 
 <div id="map" style="height: 500px;"></div>

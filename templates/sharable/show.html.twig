@@ -29,26 +29,34 @@
 
     {% if manage and not manage.confirmed %}
         <div class="alert alert-primary"><i class="fas fa-wrench"></i>
-            You've been invited to manage this Sharable.
+            {{ 'You\'ve been invited to manage this Sharable'|trans }}.
 
             <div class="btn-group">
-                <a class="btn btn-secondary" href="{{ path('manage_confirm', {id: manage.id}) }}"><i class="fas fa-check"></i> confirm</a>
-                <a class="btn btn-secondary" href="{{ path('manage_remove', {id: manage.id}) }}"><i class="fas fa-times"></i> refuse</a>
+                <a class="btn btn-secondary" href="{{ path('manage_confirm', {id: manage.id}) }}">
+                    <i class="fas fa-check"></i>
+                    {{ 'confirm'|trans }}
+                </a>
+                <a class="btn btn-secondary" href="{{ path('manage_remove', {id: manage.id}) }}">
+                    <i class="fas fa-times"></i>
+                    {{ 'refuse'|trans }}
+                </a>
             </div>
         </div>
     {% endif %}
 
     {% if sharable.disabled %}
         <div class="alert alert-danger">
-            <i class="fas fa-ban"></i> This sharable is disabled.
+            <i class="fas fa-ban"></i>
+            {{ 'this sharable is disabled'|trans|capitalize }}
             {% if is_granted('edit', sharable) and sharable.disabled %}
-                <a href="{{ path('sharable_activation', {id: sharable.id}) }}">Activate it !</a>
+                <a href="{{ path('sharable_activation', {id: sharable.id}) }}">{{ 'activate it'|trans }} !</a>
             {% endif %}
         </div>
     {% endif %}
     {% if not sharable.isAccessible %}
         <div class="alert alert-danger">
-            <i class="fas fa-ban"></i> This sharable is not accessible beccause every managers are disabled.
+            <i class="fas fa-ban"></i>
+            {{ 'this sharable is not accessible beccause every managers are disabled'|trans|capitalize }}
         </div>
     {% endif %}
 
@@ -70,9 +78,11 @@
             </span>
             <a class="btn btn-light" href="{{ path('sharable_bookmark', {id:sharable.id}) }}">
                 {% if not bookmarked %}
-                <i class="far fa-bookmark"></i> bookmark
+                <i class="far fa-bookmark"></i>
+                {{ 'bookmark'|trans }}
                 {% else %}
-                <i class="fas fa-bookmark"></i> unbookmark
+                <i class="fas fa-bookmark"></i>
+                {{ 'unbookmark'|trans }}
                 {% endif %}
                 <span class="badge badge-secondary">
                     {{ sharable.bookmarks|length }}
@@ -92,13 +102,13 @@
                     {% if not is_granted('interest', sharable) %}
                         <span tabindex="0" data-toggle="tooltip" title="
                         {% if interested %}
-                            You are already interested
+                            {{ 'you are already interested'|trans|capitalize }}
                         {% elseif sharable.interestedMethod == 1 %}
-                            You don't need to be interested as this sharable does not need contact info
+                            {{ 'you don\'t need to be interested as this sharable does not need contact info'|trans|capitalize }}
                         {% elseif validated %}
-                            You have already validated the sharable
+                            {{ 'you have already validated the sharable'|trans|capitalize }}
                         {% elseif not app.user.isContactable %}
-                            You need to have at least one contact info
+                            {{ 'you need to have at least one contact info'|trans|capitalize }}
                         {% endif %}
                         ">
                     {% endif %}
@@ -109,7 +119,7 @@
                         {% endif %}
                     >
                         <i class="{{ interested ? 'fas' : 'far' }} fa-question-circle"></i>
-                            I'm interested    
+                        {{ 'I\'m interested'|trans|capitalize }}    
                         <span class="badge badge-secondary">
                             {{ sharable.interesteds|length }}
                         </span>
@@ -123,13 +133,13 @@
                             {% if is_granted('edit', interested) %}
                             <a class="dropdown-item" href="{{ path('interested_edit', {id: interested.id}) }}">
                                 <i class="fas fa-pen"></i>
-                                edit message
+                                {{ 'edit message'|trans }}
                             </a>
                             {% endif %}
                             {% if is_granted('delete', interested) %}
                             <a class="dropdown-item" href="{{ path('interested_delete', {id: interested.id}) }}">
                                 <i class="fas fa-times"></i>
-                                cancel
+                                {{ 'cancel'|trans }}
                             </a>
                             {% endif %}
                         </div>
@@ -138,9 +148,9 @@
                 {% if not is_granted('validate', sharable) %}
                     <span tabindex="0" data-toggle="tooltip" title="
                     {% if validated %}
-                        you have already validated
+                        {{ 'you have already validated'|trans|capitalize }}
                     {% elseif not interested %}
-                        You need to be interested and contact manager(s) in order to validate it.
+                        {{ 'you need to be interested and contact manager(s) in order to validate it.'|trans|capitalize }}
                     {% endif %}
                     ">
                 {% endif %}
@@ -151,7 +161,7 @@
                     {% endif %}            
                 >
                     <i class="{{ validated ? 'fas' : 'far' }} fa-check-circle"></i>
-                        validate
+                        {{ 'validate'|trans }}
                     <span class="badge badge-secondary">
                         {{ sharable.validations|length }}
                     </span>
@@ -173,7 +183,7 @@
 
             <div class="card-header d-flex justify-content-between align-items-center">
 
-                    <h4 class="card-title">Infos</h4>
+                    <h4 class="card-title">{{ 'infos'|trans|capitalize }}</h4>
 
                     {% if is_granted('edit', sharable) %}
                         <a class="btn btn-primary" href="{{ path('sharable_edit', {id: sharable.id}) }}">
@@ -186,17 +196,17 @@
                 {% if not is_granted('contact', sharable) %}
                     <span tabindex="0" data-toggle="tooltip" title="
                     {% if sharable.disabled or not sharable.isAccessible %}
-                        You cant interact with this sharable as it's disabled
+                        {{ 'you cant interact with this sharable as it\'s disabled'|trans|capitalize }}
                     {% elseif sharable.interestedMethod == 1 %}
-                        You don't need any contact infos to acces this sharable  
+                        {{ 'you don\'t need any contact infos to acces this sharable '|trans|capitalize }} 
                     {% elseif validated %}
-                        As you have already validated this sharable, you don't need contact infos anymore  
+                        {{ 'as you have already validated this sharable, you don\'t need contact infos anymore'|trans|capitalize }}
                     {% elseif sharable.interestedMethod == 4 %}
-                        This sharable will never gibe you contact infos
+                        {{ 'this sharable will never give you contact infos'|trans|capitalize }}
                     {% elseif not interested %}
-                        You need to be interested in this sharable to access contact infos
+                        {{ 'you need to be interested in this sharable to access contact infos'|trans|capitalize }}
                     {% elseif sharable.interestedMethod == 3 %}
-                        You need to wait for managers approval to access sharable contact infos
+                        {{ 'you need to wait for managers approval to access sharable contact infos'|trans|capitalize }}
                     {% endif %}
                     ">
                 {% endif %}
@@ -207,7 +217,8 @@
                     {% endif %}
                     
                     >
-                    <i class="fas fa-address-book"></i> contacts
+                    <i class="fas fa-address-book"></i>
+                    {{ 'contacts'|trans }}
                     {{ contact_method.render( sharable.interestedMethod ) }}
                 </a>
                 {% if not is_granted('contact', sharable) %}</span>{% endif %}
@@ -217,7 +228,7 @@
                     href="{{ path('sharable_interested', {id: sharable.id}) }}"
                 >
                     <i class="fas fa-eye"></i>
-                    view interested
+                    {{ 'view interested'|trans }}
                     <span class="badge badge-secondary">
                         {{ sharable.interesteds|length }}
                     </span>
@@ -228,7 +239,7 @@
                     {% if sharable.visibleBy %}
                     <li class="list-group-item">
                         <i class="fas fa-eye"></i>
-                        Visible by
+                        {{ 'visible by'|trans|capitalize }}
                         <a href="{{ path('userclass_show', {id: sharable.visibleBy.id}) }}" class="badge badge-primary">
                             {{ sharable.visibleBy.name }}
                         </a>
@@ -236,11 +247,11 @@
                     {% endif %}
                     <li class="list-group-item">
                         <i class="fas fa-plus-circle"></i>
-                        created {{ sharable.createdAt|ago }}
+                        {{ 'created'|trans }} {{ sharable.createdAt|ago }}
                     </li>
                     <li class="list-group-item">
                         <i class="fas fa-clock"></i>
-                        last edited {{ sharable.lastEditedAt|ago }}
+                        {{ 'last edited'|trans }} {{ sharable.lastEditedAt|ago }}
                     </li>
                     {% if sharable.isGeo %}
                         <li class="list-group-item">
@@ -250,7 +261,7 @@
                                 href="geo:{{ sharable.latitude|number_format(7, '.') }},{{ sharable.longitude|number_format(7, '.') }}"
                                 target="_blank"
                             >
-                                open a map
+                            {{ 'open a map'|trans }}
                             </a>
                             {% endif %}
                         </li>
@@ -258,30 +269,31 @@
                     {% if sharable.beginAt %}
                     <li class="list-group-item">
                         <i class="fas fa-play"></i>
-                        begin {{ sharable.beginAt|ago }}
+                        {{ 'begin'|trans }} {{ sharable.beginAt|ago }}
                     </li>
                     {% endif %}
                     {% if sharable.beginAt and sharable.endAt and date(sharable.beginAt) > date() %}
                     <li class="list-group-item">
                         <i class="fas fa-stopwatch"></i>
-                        last {{ sharable.endAt.diff(sharable.beginAt)|date() }}
+                        {{ 'last'|trans }} {{ sharable.endAt.diff(sharable.beginAt)|date() }}
                     </li>
                     {% elseif sharable.endAt %}
                     <li class="list-group-item">
                         <i class="fas fa-stop"></i>
-                        end {{ sharable.endAt|ago }}
+                        {{ 'end'|trans }} {{ sharable.endAt|ago }}
                     </li>
                     {% endif %}
                     {% if sharable.disabled %}
                     <li class="list-group-item list-group-item-danger">
                         <i class="fas fa-ban"></i>
-                        disabled
+                        {{ 'disabled'|trans }}
                     </li>
                     {% endif %}
 
                     {% if is_granted('edit', sharable) and not sharable.disabled %}
                     <a class="btn btn-block btn-danger" href="{{ path('sharable_activation', {id: sharable.id}) }}">
-                        <i class="fas fa-times-circle"></i> disable this sharable
+                        <i class="fas fa-times-circle"></i>
+                        {{ 'disable this sharable'|trans }}
                     </a>
                     {% endif %}
                 </ul>
@@ -296,7 +308,7 @@
 
             <div class="card-header d-flex justify-content-between align-items-center">
 
-                <h4 class="card-title">Managed by</h4>
+                <h4 class="card-title">{{ 'managed by'|trans|capitalize }}</h4>
 
                 {% if is_granted('edit', sharable) %}
                 <a class="btn btn-primary" href="{{ path('sharable_managers', {id: sharable.id}) }}">
@@ -312,7 +324,7 @@
 
                     <li class="list-group-item">
                         {% if manage.anonymous %}
-                            <em class="text-muted">anonymous</em>
+                            <em class="text-muted">{{ 'anonymous'|trans }}</em>
                         {% else %}
                             {{ userMacro.render(manage.user, 2) }}
                         {% endif %}
@@ -331,7 +343,7 @@
 
             <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="card-title">
-                    Details
+                        {{ 'details'|trans|capitalize }}
                     </h4>
 
                     {% if is_granted('edit', sharable) %}
@@ -348,7 +360,7 @@
                 </style>
 
                 <div id="description">
-                {{ sharable.details|markdown_to_html }}
+                    {{ sharable.details|markdown_to_html }}
                 </div>
             </div>
         </div>
@@ -359,13 +371,13 @@
 
 
         <h3>
-            Questions & Answers
+            {{ 'questions'|trans|capitalize }}
         </h3>
 
         {% if is_granted('question', sharable) %}
             <a href="{{ path('question_new', { id: sharable.id}) }}" class="btn btn-success mb-3">
                 <i class="fas fa-comment"></i>
-                ask a question
+                {{ 'ask a question'|trans }}
             </a>
         {% endif %}
 
@@ -397,12 +409,14 @@
                     <div class="btn-group">
                         {% if is_granted('answer', question) %}
                             <a href="{{ path('question_show', {id: question.id}) }}" class="btn btn-primary">
-                                <i class="fas fa-reply"></i> answers
+                                <i class="fas fa-reply"></i>
+                                {{ 'answers'|trans }}
                             </a>
                         {% endif %}
                         {% if is_granted('edit', question) %}
                         <a href="{{ path('question_edit', {id: question.id}) }}" class="btn btn-primary">
-                            <i class="fas fa-pen"></i> edit
+                            <i class="fas fa-pen"></i>
+                            {{ 'edit'|trans }}
                         </a>
                         {% endif %}
                         {% if is_granted('delete', question) %}
@@ -411,7 +425,8 @@
                             </button>
                             <div class="dropdown-menu">
                                 <a href="{{ path('question_delete', {id: question.id}) }}" class="dropdown-item bg-danger">
-                                    <i class="fas fa-times-circle"></i> delete question
+                                    <i class="fas fa-times-circle"></i>
+                                    {{ 'delete question'|trans }}
                                 </a>
                             </div>
                         {% endif %}
@@ -419,10 +434,12 @@
                 </div>
             </div>
         {% endfor %}
-        <a href="{{ path('question', {sharable: sharable.id}) }}" class="btn btn-sm btn-secondary mb-3">view all questions</a>
+        <a href="{{ path('question', {sharable: sharable.id}) }}" class="btn btn-sm btn-secondary mb-3">
+            {{ 'view all questions'|trans }}
+        </a>
 
 
-        <h3>Validation messages received</h3>
+        <h3>{{ 'validation messages received'|trans|capitalize }}</h3>
                 
         {% for validation in sharable.validations|reverse %}
 
@@ -432,7 +449,7 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     
                     <h5 class="card-title">
-                        By
+                        {{ 'by'|trans }}
                         {{ userMacro.render(validation.user) }}
                     </h5>
                     <small class="text-muted">
@@ -460,7 +477,7 @@
             
             {% endfor %}
         
-        <a href="{{ path('sharable_validation', {id: sharable.id}) }}" class="btn btn-sm btn-secondary">view all validations</a>
+        <a href="{{ path('sharable_validation', {id: sharable.id}) }}" class="btn btn-sm btn-secondary">{{ 'view all validations'|trans }}</a>
     </div>
 </div>
 

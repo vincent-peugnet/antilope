@@ -9,10 +9,10 @@
 {{ breadcrumbs.render([
     {'url': url('sharable'), 'text': 'sharables'|trans|capitalize },
     {'url': url('sharable_show', {id: sharable.id}), 'text': sharable.name},
-    {'text': 'Edit'},
+    {'text': 'edit'|trans|capitalize },
 ]) }}
 
-<h1>Sharable edit</h1>
+<h1>{{ 'sharable edit'|trans }}</h1>
 
 {% include "sharable/form.html.twig" %}
 

@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 
-{% block title %}new sharable{% endblock %}
+{% block title %}{{ 'new sharable'|trans|capitalize }}{% endblock %}
 
 {% block content %}
 
@@ -9,13 +9,13 @@
 
 {{ breadcrumbs.render([
     {'url': url('sharable'), 'text': 'sharables'|trans|capitalize },
-    {'text': 'Create new'},
+    {'text': 'new'|trans|capitalize },
 ]) }}
 
-<h1>Create new sharable</h1>
+<h1>{{ 'new sharable'|trans|capitalize }}</h1>
 
 <p>
-    Before creating a sharable, make sure you have read the <a target="_blank" href="{{ path('rule_index') }}">rules</a>.
+    {{ 'Before creating a sharable, make sure you have read the'|trans }} <a target="_blank" href="{{ path('rule_index') }}">{{ 'rules'|trans }}</a>.
 </p>
 
 {% include "sharable/form.html.twig" %}

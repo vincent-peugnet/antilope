@@ -4,7 +4,7 @@
 {% import 'macros/user.html.twig' as userMacro %}
 
 
-{% block title %}{{ sharable.name }} : Contact{% endblock %}
+{% block title %}{{ sharable.name }} : {{ 'contact'|trans|capitalize }}{% endblock %}
 
 {% block content %}
 
@@ -12,28 +12,33 @@
 {{ breadcrumbs.render([
     {'url': url('sharable'), 'text': 'sharables'|trans|capitalize },
     {'url': url('sharable_show', {id: sharable.id}), 'text': sharable.name},
-    {'text': 'Contact'},
+    {'text': 'contact'|trans|capitalize },
 ]) }}
 
-<h1>Contacts</h1>
+<h1>{{ 'contact'|trans|capitalize }}</h1>
 
 {% if is_granted('edit', sharable) %}
     <div class="help">
         <p>
-        The contacts are not directly visible by the other users.
-        When they are <strong>interested</strong>, users can have an access to this contact infos, depending on the <strong>contact method</strong> selected for this Sharable.
+            {{ 'Contacts are not directly visible by the other users.'|trans }}
+            
+            {{ 'When they are <strong>interested</strong>, users can have an access to this contact infos, depending on the <strong>contact method</strong> selected for this Sharable.'|trans|raw }}
         </p>
         <p>
-        There are two types of contacts infos : somes are related directly to the Sharable and some are related to users managing it.
-        Each manager can choose to be directly contactable or not, but there need to be at least one contact info accessible.
+            {{ 'There are two types of contacts infos : somes are related directly to the Sharable and some are related to users managing it.'|trans }}
+            {{ 'Each manager can choose to be directly contactable or not, but there need to be at least one contact info accessible.'|trans }}
+            
         </p>
     </div>
 {% endif %}
 
-<h3>Sharable contacts</h3>
+<h3>{{ 'sharable contacts'|trans|capitalize }}</h3>
 
 {% if is_granted('edit', sharable) %}
-<a class="btn btn-success mb-3" href="{{ path('sharable_contact_add', {id: sharable.id}) }}"><i class="fas fa-plus-circle"></i> add new contact</a>
+<a class="btn btn-success mb-3" href="{{ path('sharable_contact_add', {id: sharable.id}) }}">
+    <i class="fas fa-plus-circle"></i>
+    {{ 'add new contact'|trans }}
+</a>
 {% endif %}
 
 
@@ -58,7 +63,7 @@
 
             {% if sharableContact.info|length > 500 %}
                 <a class="btn btn-primary" data-toggle="collapse" href="#info_{{ sharableContact.id }}" role="button" aria-expanded="false" aria-controls="info_{{ sharableContact.id }}">
-                    View info
+                    {{ 'view info'|trans }}
                 </a>
                 <div class="collapse" id="info_{{ sharableContact.id }}">
                     <pre>{{ sharableContact.info }}</pre>
@@ -77,7 +82,7 @@
 {% endfor %}
 
 
-<h3>Managers contacts</h3>
+<h3>{{ 'managers contacts'|trans|capitalize }}</h3>
 
 {% for manage in sharable.managedBy %}
 
@@ -93,9 +98,15 @@
                 {% if is_granted('edit', sharable) %}
                     <span>
                     {% if manage.contactable and not manage.user.disabled %}
-                        <span class="badge badge-success" ><i class="fas fa-eye"></i> visible</span>
+                        <span class="badge badge-success" >
+                            <i class="fas fa-eye"></i>
+                            {{ 'visible'|trans }}
+                        </span>
                     {% else %}
-                        <span class="badge badge-danger" ><i class="fas fa-eye-slash"></i> hidden</span>
+                        <span class="badge badge-danger" >
+                            <i class="fas fa-eye-slash"></i>
+                            {{ 'hidden'|trans }}
+                        </span>
                     {% endif %}
                     </span>
                 {% endif %}
@@ -104,11 +115,13 @@
 
             {% if is_granted('hide_contact', manage) %}
                 <a class="btn btn-primary" href="{{ path('manage_uncontactable', {id: manage.id}) }}">
-                    <i class="fas fa-eye-slash"></i> hide contact infos
+                    <i class="fas fa-eye-slash"></i>
+                    {{ 'hide contact infos'|trans }}
                 </a>
             {% elseif is_granted('show_contact', manage) %}
                 <a class="btn btn-primary" href="{{ path('manage_contactable', {id: manage.id}) }}">
-                    <i class="fas fa-eye"></i> show contact infos
+                    <i class="fas fa-eye"></i>
+                    {{ 'show contact infos'|trans }}
                 </a>
             {% endif %}
         </div>
@@ -121,13 +134,16 @@
             <li>
                 {{ content_by_type.render(userContact.type, userContact.content) }}
                 {% if userContact.info %}
-                    <span class="badge badge-light">info</span>
+                    <span class="badge badge-light">{{ 'info'|trans }}</span>
                 {% endif %}
             </li>
         {% endfor %}
         </ul>        
 
-        <a class="btn btn-primary" href="{{ path('user_contact', {id: manage.user.id}) }}"><i class="fas fa-info-circle"></i> view detailed contact infos</a>
+        <a class="btn btn-primary" href="{{ path('user_contact', {id: manage.user.id}) }}">
+            <i class="fas fa-info-circle"></i>
+            {{ 'view detailed contact info'|trans }}
+        </a>
 
     
         </div>
