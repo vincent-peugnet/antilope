@@ -4,12 +4,12 @@
 
 <p>
     <a href="{{ url('user_show', {id: validation.user.id}) }}">{{ validation.user.username }}</a>
-    has validated your sharable:
+    {{ 'has validated your sharable:'|trans }}
     <a href="{{ url('sharable_show', {id: validation.sharable.id}) }}">{{ validation.sharable.name }}</a>.
 </p>
 
 {% if validation.message is not empty %}
-    <h3>Validation Message</h3>
+    <h3>{{ 'validation message'|trans|capitalize }}</h3>
     <p>
         {{ validation.message }}
     </p>

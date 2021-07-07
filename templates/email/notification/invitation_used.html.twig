@@ -3,8 +3,8 @@
 {% block content %}
 
 <p>
-    You invitation code <code>{{ invitation.code }}</code>
-    has been used by user:
+    {{ 'Your invitation code'|trans }}e <code>{{ invitation.code }}</code>
+    {{ 'has been used by user:'|trans }}
     <a href="{{ url('user_show', {id: invitation.child.id}) }}">
         {{ invitation.child.username }}
     </a>.

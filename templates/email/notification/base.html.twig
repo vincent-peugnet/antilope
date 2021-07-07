@@ -2,9 +2,9 @@
 
 {% block header %}
 <header>
-    <h1>Hello {{ user.username }}</h1>
+    <h1>{{ 'hello'|trans|capitalize }} {{ user.username }}</h1>
 
-    <h2>You have a notification !</h2>
+    <h2>{{ 'you have a notification!'|trans|capitalize }}</h2>
 </header>
 {% endblock %}
 

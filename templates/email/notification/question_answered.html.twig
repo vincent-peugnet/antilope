@@ -3,12 +3,12 @@
 {% block content %}
 
 <p>
-    Your question on sharable:
+    {{ 'Your question on sharable:'|trans }}
     <a href="{{ url('sharable_show', {id: question.sharable.id}) }}">{{ question.sharable.name }}</a>
-    has been answered.
+    {{ 'has been answered'|trans }}.
 </p>
 
-<h3>Question</h3>
+<h3>{{ 'question'|trans|capitalize }}</h3>
 <p>
     <em>
         {{ question.text }}

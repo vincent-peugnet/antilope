@@ -4,13 +4,13 @@
 
 <p>
     <a href="{{ url('user_show', {id: interested.user.id}) }}">{{ interested.user.username }}</a>
-    is interested in your sharable:
+    {{ 'is interested in your sharable:'|trans }}
     <a href="{{ url('sharable_show', {id: interested.sharable.id}) }}">{{ interested.sharable.name }}</a>.
 </p>
 
 {% if interested.message %}
 
-    <h4>And left a message</h4>
+    <h4>{{ 'and left a message'|trans|capitalize }}</h4>
 
     <blockquote>
         <p>
@@ -22,19 +22,17 @@
 
 <p>
     {% if interested.sharable.interestedMethod == 2 %}
-    As your sharable contact method is automatic (2),
+    {{ 'As your sharable contact method is automatic (2),'|trans }}
     <a href="{{ url('user_show', {id: interested.user.id}) }}">{{ interested.user.username }}</a>
-    can now access the sharable contact infos and you can see this user contacts.
+    {{ 'can now access the sharable contact infos and you can see this user contacts.'|trans }}
     {% elseif interested.sharable.interestedMethod == 3 %}
-    As your sharable contact method is manual (3),
-    You can now review
+    {{ 'As your sharable contact method is manual (3), You can now review'|trans }}
     <a href="{{ url('user_show', {id: interested.user.id}) }}">{{ interested.user.username }}</a>
-    interest to allow this user access sharable contact infos.
+    {{ 'interest to allow this user access sharable contact infos.'|trans }}
     {% elseif interested.sharable.interestedMethod == 4 %}
-    As your sharable contact method is never (4),
-    You can access
+    {{ 'As your sharable contact method is never (4), You can access'|trans }}
     <a href="{{ url('user_show', {id: interested.user.id}) }}">{{ interested.user.username }}</a>
-    contact infos and contact this user when you want.
+    {{ 'contact infos and contact this user when you want.'|trans }}
     {% endif %}
 </p>
 

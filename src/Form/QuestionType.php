@@ -40,7 +40,7 @@ class QuestionType extends AbstractType
     {
         $builder
             ->add('text', TextareaType::class, [
-                'label' => new TranslatableMessage('Question'),
+                'label' => new TranslatableMessage('question'),
             ])
             ->add('ask', SubmitType::class)
         ;

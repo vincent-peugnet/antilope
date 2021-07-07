@@ -2,8 +2,8 @@
 
 {% block content %}
 
-Your interest on sharable:
+{{ 'Your interest on sharable:'|trans }}
 <a href="{{ url('sharable_show', {id: sharable.id}) }}">{{ sharable.name }}</a>
-has been reviewed. You can now access the <a href="{{ url('sharable_contact', {id: sharable.id}) }}">contact infos</a>.
+{{ 'has been reviewed. You can now access the'|trans }} <a href="{{ url('sharable_contact', {id: sharable.id}) }}">{{ 'contact infos'|trans }}</a>.
 
 {% endblock %}
