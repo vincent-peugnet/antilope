@@ -1,34 +1,40 @@
 {% extends 'base.html.twig' %}
 {% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 
-{% block title %}Rule{% endblock %}
+{% block title %}{{ 'rule'|trans|capitalize }}{% endblock %}
 
 {% block content %}
 
 {{ breadcrumbs.render([
-    {'url': url('rule_index'), 'text': 'Rules'},
+    {'url': url('rule_index'), 'text': 'rules'|trans|capitalize },
     {'text': rule.name},
 ]) }}
 
-    <h1>Rule {{ rule.id }}</h1>
+    <h1>{{ 'rule'|trans|capitalize }} {{ rule.id }}</h1>
 
     <h3>{{ rule.name }}</h3>
 
     <p>{{ rule.text }}</p>
 
     <p class="text-muted">
-        Created {{ rule.createdAt|ago }}
+        {{ 'created'|trans|capitalize }} {{ rule.createdAt|ago }}
         {% if rule.createdAt != rule.lastEditedAt %}
         </br>
         <i class="fas fa-clock"></i>
-        last edited {{ rule.lastEditedAt|ago }}
+        {{ 'last edited'|trans|capitalize }} {{ rule.lastEditedAt|ago }}
         {% endif %}
     </p>
     
     {% if app.user.isAdmin %}
         <div class="btn-group">
-            <a href="{{ path('rule_edit', {'id': rule.id}) }}" class="btn btn-primary"><i class="fas fa-pen"></i> edit rule</a>
-            <a href="{{ path('rule_delete', {'id': rule.id}) }}" class="btn btn-danger"><i class="fas fa-times"></i> delete rule</a>
+            <a href="{{ path('rule_edit', {'id': rule.id}) }}" class="btn btn-primary">
+                <i class="fas fa-pen"></i>
+                {{ 'edit rule'|trans }}
+            </a>
+            <a href="{{ path('rule_delete', {'id': rule.id}) }}" class="btn btn-danger">
+                <i class="fas fa-times"></i>
+                {{ 'delete rule'|trans }}
+            </a>
         </div>
     {% endif %}
 

@@ -1,17 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Rule index{% endblock %}
+{% block title %}{{ 'rules'|trans|capitalize }}{% endblock %}
 
 {% block content %}
-    <h1>Rules</h1>
+    <h1>{{ 'rules'|trans|capitalize }}</h1>
     <div class="overflow-hidden">
         <table class="table">
             <thead>
                 <tr>
-                    <th>Id</th>
-                    <th>Rule</th>
+                    <th>{{ 'id'|trans }}</th>
+                    <th>{{ 'rule'|trans }}</th>
                     {% if app.user.isAdmin %}
-                    <th>Edit</th>
+                    <th>{{ 'edit'|trans }}</th>
                     {% endif %}
                 </tr>
             </thead>
@@ -42,7 +42,7 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="5">no records found</td>
+                    <td colspan="5">{{ 'no records found'|trans }}</td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -55,6 +55,9 @@
     </div>
 
     {% if app.user.isAdmin %}
-        <a href="{{ path('rule_new') }}" class="btn btn-success"><i class="fas fa-plus"></i> Create new</a>
+        <a href="{{ path('rule_new') }}" class="btn btn-success">
+            <i class="fas fa-plus"></i>
+            {{ 'create new rule'|trans }}
+        </a>
     {% endif %}
 {% endblock %}

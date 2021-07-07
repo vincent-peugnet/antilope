@@ -1,16 +1,16 @@
 {% extends 'base.html.twig' %}
 {% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 
-{% block title %}New Rule{% endblock %}
+{% block title %}{{ 'new rule'|trans|capitalize }}{% endblock %}
 
 {% block content %}
 
 {{ breadcrumbs.render([
-    {'url': url('rule_index'), 'text': 'Rules'},
-    {'text': 'New'},
+    {'url': url('rule_index'), 'text': 'rules'|trans|capitalize },
+    {'text': 'new'|trans|capitalize },
 ]) }}
 
-    <h1>Create new Rule</h1>
+    <h1>{{ 'new rule'|trans|capitalize }}</h1>
 
     {{ form(form) }}
 {% endblock %}

@@ -8,7 +8,7 @@
 {% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 
 {{ breadcrumbs.render([
-    {'url': url('sharable'), 'text': 'Sharables'},
+    {'url': url('sharable'), 'text': 'sharables'|trans|capitalize },
     {'url': url('sharable_show', {id: sharable.id}), 'text': sharable.name},
     {'url': url('sharable_contact', {id: sharable.id}), 'text': 'Contact'},
     {'text': 'Add'},

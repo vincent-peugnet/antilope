@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}{{ 'login'|trans|capitalize }}{% endblock %}
 
 {% block content %}
 <form method="post">
@@ -10,14 +10,14 @@
 
     {% if app.user %}
         <div class="mb-3">
-            You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+            {{ 'You are logged in as'|trans|capitalize }} {{ app.user.username }}, <a href="{{ path('app_logout') }}">{{ 'logout'|trans|capitalize }}</a>
         </div>
     {% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputUsername">Username</label>
+    <h1 class="h3 mb-3 font-weight-normal">{{ 'please sign in'|trans|capitalize }}</h1>
+    <label for="inputUsername">{{ 'username'|trans|capitalize }}</label>
     <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" required autofocus>
-    <label for="inputPassword">Password</label>
+    <label for="inputPassword">{{ 'password'|trans|capitalize }}</label>
     <input type="password" name="password" id="inputPassword" class="form-control" required>
 
     <input type="hidden" name="_csrf_token"
@@ -26,18 +26,18 @@
 
     <div class="checkbox mb-3 mt-3">
         <label>
-            <input type="checkbox" name="_remember_me"> Remember me
+            <input type="checkbox" name="_remember_me"> {{ 'remember me'|trans|capitalize }}
         </label>
     </div>
 
 
     <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
+        {{ 'sign in'|trans|capitalize }}
     </button>
 </form>
 
 <div class="mt-3">
-    <a href="{{ path('app_forgot_password_request') }}">forgoten password or username ?</a>
+    <a href="{{ path('app_forgot_password_request') }}">{{ 'forgoten password or username '|trans|capitalize }}?</a>
 </div>
 
 {% endblock %}
