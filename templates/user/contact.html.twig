@@ -2,50 +2,55 @@
 {% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 {% import 'macros/content_by_type.html.twig' as content_by_type %}
 
+
+{% block title %}{{ 'contacts'|trans|capitalize }}{% endblock %}
+
 {% block content %}
 
 
 
 {{ breadcrumbs.render([
-    {'url': url('user'), 'text': 'Users'},
+    {'url': url('user'), 'text': 'users'|trans|capitalize },
     {'url': url('user_show', {id: user.id}), 'text': user.username},
-    {'text': 'contacts'},
+    {'text': 'contacts'|trans|capitalize },
 ]) }}
 
 
-<h1>Contacts</h1>
+<h1>{{ 'contacts'|trans|capitalize }}</h1>
 
 {% if is_granted('edit', user) %}
 
 <p class="text-info">
-    Contacts are some infos that could help people to reach you.
-    <strong>They are not public</strong>,
-    but when you are interested in a sharable, your contact infos are send to the managers.
+    {{ 'Contacts are some infos that could help people to reach you.'|trans }}
+    {{ '<strong>They are not public</strong>, but when you are interested in a sharable, your contact infos are send to the managers.'|trans }}
 </p>
 
 {% if not app.user.isContactable %}
     <div class="alert alert-secondary">
-        You need at least one contact to interact with sharable that need a contact exchange.
+        {{ 'You need at least one contact to interact with sharable that need a contact exchange.'|trans }}
     </div>
 {% else %}
 
 
     {% if contactEditDelay > 0 %}
         <p>
-            You can edit and delete contact only during the {{ contactEditDelay }} minutes following it's creation.
+            {{ 'You can edit and delete contact only during the contactEditDelay minutes following it\'s creation.'|trans({'contactEditDelay': contactEditDelay }) }}
         </p>
 
     {% endif %}
 
     {% if contactForgetDelay > 0 %}
     <p>
-        {{ contactEditDelay > 0 ? 'After this delay, y' : 'Y' }}ou can start to forget a contact, but it will stay visible during a {{ contactForgetDelay }} hours period.
+        {{ 'You can\'t delete a contact instantly, it will stay visible during a contactForgetDelay hours period after you\'ve clicked the <strong>forget</strong> button'|trans({'contactForgetDelay': contactForgetDelay})|raw }}
     </p>
 
     {% endif %}
 {% endif %}
 
-<a  class="btn btn-success" href="{{ path('user_contact_add', {id: user.id}) }}"><i class="fas fa-plus-circle"></i> add new contact</a>
+<a  class="btn btn-success" href="{{ path('user_contact_add', {id: user.id}) }}">
+    <i class="fas fa-plus-circle"></i>
+    {{ 'add new contact'|trans|capitalize }}
+</a>
 
 {% endif %}
 
@@ -65,17 +70,17 @@
             <span class="btn-group">
                 {% if is_granted('delete', contact) %}
                     <a href="{{ path('user_contact_delete', {id: contact.id}) }}" class="btn btn-danger">
-                        delete
+                        {{ 'delete'|trans }}
                     </a>
                 {% elseif is_granted('forget', contact) %}
                     <a href="{{ path('user_contact_forget', {id: contact.id}) }}" class="btn btn-danger">
-                        forget
+                        {{ 'forget'|trans }}
                     </a>
                 {% endif %}
                 {% if is_granted('edit', contact) %}
                     <a href="{{ path('user_contact_edit', {id: contact.id}) }}" class="btn btn-primary">
                         <i class="fas fa-pen"></i>
-                        edit
+                        {{ 'edit'|trans }}
                     </a>
                 {% endif %}
             </span>
@@ -89,7 +94,7 @@
             
             {% if contact.info|length > 500 %}
             <a class="btn btn-light" data-toggle="collapse" href="#info_{{ contact.id }}" role="button" aria-expanded="false" aria-controls="info_{{ contact.id }}">
-                View info
+                {{ 'view info'|trans }}
             </a>
             <div class="collapse" id="info_{{ contact.id }}">
                 <pre>{{ contact.info }}</pre>
@@ -105,16 +110,16 @@
 </div>
 {% if contact.isForgotten %}
     <p class="text-danger">
-        Forgotten
+        {{ 'forgotten'|trans }}
         {{ contact.forgottenAt|ago }}
     </p>
 {% else %}
     <p class="text-muted">
-        Created
+        {{ 'created'|trans }}
         {{ contact.createdAt|ago }}
         |
         <i class="fas fa-clock"></i>
-        last edited
+        {{ 'last edited'|trans }}
         {{ contact.lastEditedAt|ago }}
     </p>
 {% endif %}

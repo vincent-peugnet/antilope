@@ -43,7 +43,7 @@ class InterestedType extends AbstractType
 
         if ($interested->getSharable()->getInterestedMethod() > 1) {
             $builder->add('message', TextType::class, [
-                'label' => new TranslatableMessage('Message'),
+                'label' => new TranslatableMessage('message'),
                 'required' => false,
                 'help' => 'You can add a message if you want',
             ]);

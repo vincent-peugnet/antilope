@@ -1,14 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Sign Up{% endblock %}
+{% block title %}{{ 'sign up'|trans|capitalize }}{% endblock %}
 
 
 {% block content %}
 
-<h1>Sign Up</h1>
+<h1>{{ 'sign up'|trans|capitalize }}</h1>
 
     {% if userLimitReached %}
-        <div class="alert alert-warning">User limit reached, impossible to sign up.</div>
+        <div class="alert alert-warning">{{ 'user limit reached, impossible to sign up'|trans|capitalize }}</div>
     {% endif %}
 
     {{ form(form) }}

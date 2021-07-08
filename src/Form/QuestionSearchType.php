@@ -36,6 +36,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\TranslatableMessage;
 
 class QuestionSearchType extends AbstractType
 {
@@ -56,6 +57,7 @@ class QuestionSearchType extends AbstractType
             ->add('sharable', EntityType::class, [
                 'class' => Sharable::class,
                 'placeholder' => 'sharable...',
+                'label' => 'sharable',
                 'required' => false,
             ])
             ->add('sortBy', ChoiceType::class, [

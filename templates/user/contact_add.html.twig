@@ -1,20 +1,22 @@
 {% extends 'base.html.twig' %}
 
 
+{% block title %}{{ 'new contact'|trans|capitalize }}{% endblock %}
+
 {% block content %}
 
 
 {% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 
 {{ breadcrumbs.render([
-    {'url': url('user'), 'text': 'Users'},
+    {'url': url('user'), 'text': 'users'|trans|capitalize },
     {'url': url('user_show', {id: user.id}), 'text': user.username},
-    {'url': url('user_contact', {id: user.id}), 'text': 'contacts'},
-    {'text': 'new'},
+    {'url': url('user_contact', {id: user.id}), 'text': 'contacts'|trans|capitalize },
+    {'text': 'new'|trans|capitalize },
 ]) }}
 
 
-<h1>New contact</h1>
+<h1>{{ 'new contact'|trans|capitalize }}</h1>
 
 {{ form(form) }}
 

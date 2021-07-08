@@ -1,17 +1,17 @@
 {% extends 'base.html.twig' %}
 {% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 
-{% block title %}Edit Tag{% endblock %}
+{% block title %}{{ 'edit tag'|trans|capitalize }}{% endblock %}
 
 {% block content %}
 
 {{ breadcrumbs.render([
-    {'url': url('tag_index'), 'text': 'Tags'},
+    {'url': url('tag_index'), 'text': 'tags'|trans|capitalize },
     {'text': tag.name},
-    {'text': 'edit'},
+    {'text': 'edit'|trans|capitalize },
 ]) }}
 
-<h1>Edit tag</h1>
+<h1>{{ 'edit tag'|trans|capitalize }}</h1>
 
 {{ form(form) }}
 

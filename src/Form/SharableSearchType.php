@@ -102,7 +102,7 @@ class SharableSearchType extends AbstractType
                 'class' => User::class,
                 'choices' => $this->userRepository->filterByView(UserVoter::VIEW_BOOKMARKS, $user),
                 'required' => false,
-                'label' => new TranslatableMessage('Bookmarked by'),
+                'label' => new TranslatableMessage('bookmarked by'),
                 'placeholder' => 'Bookmarked by...'
             ])
             ->add('interestedBy', EntityType::class, [

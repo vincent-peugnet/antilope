@@ -12,15 +12,15 @@
     <div class="col-md-9">
 
         <div class="alert alert-info">
-            {{ usersPagination.getTotalItemCount }} users found
+            {{ 'userAmount users found'|trans({'userAmount': usersPagination.getTotalItemCount}) }}
             {% if search.userClass %}
-                that are
+                {{ 'that are'|trans }}
                 <a href="{{ path('userclass_show', {id: search.userClass.id}) }}" class="badge badge-primary">
                     {{ search.userClass.name }}
                 </a>
             {% endif %}
             {% if search.disabled %}
-                including <span class="badge badge-danger"><i class="fas fa-ban"></i> disabled</span>
+            {{ 'including'|trans }} <span class="badge badge-danger"><i class="fas fa-ban"></i> {{ 'disabled'|trans }}</span>
             {% endif %}
         </div>
         <div class="d-flex flex-wrap">
@@ -48,7 +48,7 @@
                             <span class="badge badge-light">{{ user.shareScore }}</span>
                             </br>
                             <small class="text-muted">
-                                joined {{ user.createdAt|ago }}
+                                {{ 'joined'|trans }} {{ user.createdAt|ago }}
                             </small>
                         </div>                    
                     </div>

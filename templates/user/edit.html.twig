@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}{{ 'profile edit'|trans|capitalize }}{% endblock %}
+
 
 {% block content %}
 
@@ -8,13 +10,13 @@
 {% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 
 {{ breadcrumbs.render([
-    {'url': url('user'), 'text': 'Users'},
+    {'url': url('user'), 'text': 'users'|trans|capitalize },
     {'url': url('user_show', {id: user.id}), 'text': user.username},
-    {'text': 'Edit'},
+    {'text': 'edit'|trans|capitalize },
 ]) }}
 
 
-<h1>Profile edit</h1>
+<h1>{{ 'profile edit'|trans|capitalize }}</h1>
 
 
 {{ form_start(form) }}
@@ -23,7 +25,7 @@
     {{ form_row(form.description) }}
 
     <div class="alert alert-secondary">
-        Maximum paranoïa level is defined by your current user class:
+        {{ 'Maximum paranoïa level is defined by your current user class:'|trans }}
         <span class="badge badge-primary">{{ app.user.userClass.name }}</span>
     </div>
 

@@ -2,10 +2,19 @@
 
 return array(
     '<i class="fas fa-search"></i> Search' => '<i class="fas fa-search"></i> Rechercher',
+    '<strong>They are not public</strong>, but when you are interested in a sharable, your contact infos are send to the managers.' => '{s_gender, select,
+        feminine  {<strong>Elles ne sont pas public</strong>, mais quand vous êtes intéressé par une {s}, vos informations de contact sont envoyées aux gérants.}
+        masculine {<strong>Elles ne sont pas public</strong>, mais quand vous êtes intéressé par un {s}, vos informations de contact sont envoyées aux gérants.}
+        other     {<strong>Elles ne sont pas public</strong>, mais quand vous êtes intéressé par un {s}, vos informations de contact sont envoyées aux gérants.}
+    }',
     'account' => 'compte',
     'Account Age Requirement' => 'Age du compte',
     'account setting' => 'paramètres du compte',
-    'activate it' => 'activez le',
+    'activate it' => '{s_gender, select,
+        feminine  {activez la}
+        masculine {activez le}
+        other     {activez le}
+    }',
     'actives invitations' => 'invitations actives',
     'actual email adress:' => 'adresse email actuelle :',
     'added' => 'added',
@@ -46,7 +55,6 @@ return array(
     'Beware, once you\'ve invited managers, you can\'t remove them' => 'Attention, une fois que vous aurez invité un gérant supplémentaire, vous ne pourrez plus le retirer',
     'bookmark' => 'sauvegarder',
     'bookmarked by' => 'sauvegardé par',
-    'Bookmarked by' => 'Bookmarked by',
     'bookmarks' => 'signets',
     'by' => 'par',
     'By default, sharables are visible by those user classes:' => 'Par défaut, les {s} sont visibles par les classes utilisateur :',
@@ -81,6 +89,7 @@ return array(
     'contact method' => 'méthode de contact',
     'contacts' => 'contacts',
     'Contacts are not directly visible by the other users.' => 'Les contacts ne sont pas directement visibles par les autres utilisateurs.',
+    'Contacts are some infos that could help people to reach you.' => 'Les contacts sont des informations qui peuvent permettre aux personnes de vous joindre',
     'cover' => 'couverture',
     'created' => 'créé',
     'create new rule' => 'créer une nouvelle règle',
@@ -89,14 +98,17 @@ return array(
         masculine {crée un nouveau {s}}
         other     {crée un nouveau {s}}
     }',
+    'create new tag' => 'créer un nouveau tag',
+    'creation' => 'création',
     'currently active users' => 'utilisateurs actuellement actifs',
     'date and time' => 'date et heure',
+    'delete' => 'supprimer',
     'delete announcement' => 'supprimer l\'annonce',
     'delete answer' => 'supprimer cette réponse',
     'delete question' => 'supprimer la question',
     'delete rule' => 'supprimer la règle',
     'delete user class' => 'supprimer la classe d\'utilisateur',
-    'Description' => 'Description',
+    'description' => 'description',
     'details' => 'details',
     'disabled' => 'désactivé',
     'disabled <span class="badge badge-danger"><i class="fas fa-ban"></i></span>' => 'désactivé <span class="badge badge-danger"><i class="fas fa-ban"></i></span>',
@@ -109,10 +121,12 @@ return array(
     'edit' => 'editer',
     'edit announcement' => 'editer l\'annonce',
     'edit answer' => 'éditer cette réponse',
+    'edit contact' => 'éditer le contact',
     'edit managers' => 'edit managers',
     'edit message' => 'modifier le message',
     'edit question' => 'modifier la question',
     'edit rule' => 'modifier la règle',
+    'edit tag' => 'éditer le tag',
     'email' => 'email',
     'Email verification Requirement' => 'vérification de l\'adresse email nécessaire',
     'end' => 'se termine',
@@ -124,7 +138,9 @@ return array(
     'explanation of each ot those parameters on github' => 'l\'eplication de tout ces paramètres sur Github',
     'facebook' => 'facebook',
     'First thing to do is to' => 'La première chose à faire est de',
+    'forget' => 'oublier',
     'forgoten password or username' => 'mot de passe ou nom d\'utilisateur oublié',
+    'forgotten' => 'oublié',
     'has been answered' => 'a eu une réponse',
     'has been reviewed. You can now access the' => 'a été éxaminée',
     'has been used by user:' => 'a ete utilisé par l\'utilisateur:',
@@ -146,6 +162,7 @@ return array(
     'info' => 'info',
     'infos' => 'infos',
     'instance parameters' => 'paramètres des l\'instance',
+    'interested in' => 'intéréssé par',
     'interests' => 'intérêts',
     'interest to allow this user access sharable contact infos.' => 'l\'intérêt pour autoriser l\'accès aux information de contact du {s}.',
     'invitation' => 'invitation',
@@ -153,11 +170,14 @@ return array(
     'invitations' => 'invitations',
     'Invitations are valid for a {hours} hours period.' => 'Les invitations sont valides pour une période de {hours} heures.',
     'invited' => 'invited',
+    'invited by' => 'invité par',
     'invite new managers' => 'invite new managers',
     'invite only' => 'sur invitation',
     'Is interested' => 'Est intéressé',
     'is interested in your sharable:' => 'est intéressé par votre {s}:',
+    'joined' => 'à rejoins',
     'last' => 'dure',
+    'last active' => 'actif pour la dernière fois',
     'last edited' => 'éditer pour la dernière fois',
     'Last invitation send too recently, impossible to invite new users.' => 'Dernière invitation envoyée trop récemment, impossible d\'en envoyer une maintenant.',
     'last seen' => 'vu pour la dernière fois',
@@ -165,16 +185,23 @@ return array(
     'location' => 'localisation',
     'login' => 'se connecter',
     'logout' => 'se deconnecter',
+    'manage' => 'gère',
     'manage announcement' => 'manager les annonces',
     'managed' => 'gérés',
     'managed by' => 'géré par',
+    'managed sharables' => '{s_gender, select,
+        feminine  {{s} gérées}    
+        masculine {{s} gérés}    
+        other     {{s} gérés}    
+    }',
     'Managed sharables Requirement' => 'Nombre minimal de {s}s gérés',
     'managers' => 'managers',
     'managers contacts' => 'contacts des gérants',
     'map' => 'carte',
     'map of sharables' => 'cartes des {s}',
     'matrix' => 'matrix',
-    'Message' => 'Message',
+    'Maximum paranoïa level is defined by your current user class:' => 'le niveau de paranoïa maximum est défini par votre classe utilisateur actuelle',
+    'message' => 'message',
     'new' => 'créer',
     'new announcement' => 'nouvelle annonce',
     'new contact' => 'nouveau contact',
@@ -186,6 +213,7 @@ return array(
         masculine {nouveau {s}}
         other     {nouveau {s}}
     }',
+    'new tag' => 'nouveau tag',
     'Next, you should check the' => 'Ensuite, il vous faut vérifier les',
     'Next user class' => 'Prochaine classe utilisateur',
     'no records found' => 'aucune entrée trouvée',
@@ -200,7 +228,7 @@ return array(
     'open a map' => 'ouvrire une carte',
     'or trought the' => 'ou à travers',
     'parameter' => 'paramètres',
-    'Paranoïa level' => 'Niveau de Paranoïa',
+    'paranoïa level' => 'niveau de paranoïa',
     'password' => 'mot de passe',
     'Password' => 'Password',
     'password reset email sent' => 'email de réinitialisation de mot de passe envoyé',
@@ -208,8 +236,10 @@ return array(
     'Picture' => 'Image',
     'Please confirm your email address by clicking the following link:' => 'Veuillez confirmer votre adresse email en cliquant sur le lien suivant:',
     'please sign in' => 'veuillez vous inscrire',
+    'profile edit' => 'éditer mon profil',
     'question' => 'question',
     'questions' => 'questions',
+    'questions asked' => 'questions posés',
     'questions found' => 'questions trouvés',
     'quit management' => 'quit management',
     'read the rules' => 'lire les règles',
@@ -229,6 +259,7 @@ return array(
     'send email verification' => 'envoyer un email de vérification',
     'send password reset email' => 'envoyer le mail de réinitialisation de mot de passe',
     'settings' => 'réglages',
+    'sharable' => '{s}',
     'sharable contacts' => '{s_gender, select,
         feminine  {contacts de la {s}}
         masculine {contact du {s}}
@@ -251,8 +282,10 @@ return array(
     'sign in' => 's\'inscrire',
     'sign up' => 'inscription',
     'stats' => 'stats',
+    'tag' => 'tag',
     'tags' => 'tags',
     'Target user class for sharables' => 'classe d\'utilisateurs cible pour les {s}s',
+    'that are' => 'qui sont',
     'that interest' => 'qui intéressent',
     'the map' => 'la carte',
     'There are two types of contacts infos : somes are related directly to the Sharable and some are related to users managing it.' => '{s_gender, select,
@@ -291,11 +324,18 @@ return array(
     'Update' => 'Mise à jour',
     'url' => 'url',
     'Used Invitations' => 'Invitations utilisés',
+    'userAmount users found' => '{userAmount, plural,
+        =0    {aucun utilisateur trouvé}
+        =1    {# utilisateur trouvé}
+        other {# utilisateurs trouvés}
+    }',
+    'user class' => 'classe utilisateur',
     'user classes' => 'classes utilisateurs',
     'User Classes permissions' => 'Les permissions de classes d\'utilisateurs',
     'user classes system' => 'système de classes utilisateur',
     'user limit' => 'limite d\'utilisateurs',
     'User limit reached, impossible to invite new users.' => 'Limite du nombre d\'utilisateurs atteinte, impossible d\'en inviter de nouveaux.',
+    'user limit reached, impossible to sign up' => 'Limite du nombre d\'utilisateurs atteinte, impossible de s\'inscrire',
     'username' => 'nom d\'utilisateur',
     'users' => 'utilisateurs',
     'validate' => 'valider',
@@ -306,6 +346,7 @@ return array(
     'validation message' => 'message de la validation',
     'validation messages received' => 'messages de validation reçus',
     'validations' => 'validations',
+    'validations given' => 'validations données',
     'value' => 'valeur',
     'verified' => 'vérifiée',
     'view all questions' => 'voir toutes les questions',
@@ -330,8 +371,16 @@ return array(
     'you are already interested' => 'vous êtes déjà intéressé',
     'You are currently visiting the home page of' => 'Vous visitez actuellement la page d\'accueil de',
     'You are logged in as' => 'Vous êtes connecté en tant que',
+    'You can\'t delete a contact instantly, it will stay visible during a contactForgetDelay hours period after you\'ve clicked the <strong>forget</strong> button' => '{contactForgetDelay, plural,
+        =1    {Vous ne pouvez pas supprimer un contact de façon instantané, il restera visible pendant une période d\'une heure après que vous ayez sélectionné <strong>oublier</strong>}
+        other {Vous ne pouvez pas supprimer un contact de façon instantané, il restera visible pendant une période de # heures après que vous ayez sélectionné <strong>oublier</strong>}
+    }',
     'You can add a message, a picture, or both. Explain wath happened or just thanks someone...' => 'Vous pouvez ajouter un message, une image, ou les deux. Expliquant ce qu\\il c\'est passé ou juste pour remercier...',
     'You can create sharables!' => 'Vous pouvez créer des {s}s',
+    'You can edit and delete contact only during the contactEditDelay minutes following it\'s creation.' => '{contactEditDelay, plural,
+        =1    {Vous pouvez supprimer et modifier un contact durant la minute qui suit sa création}
+        other {Vous pouvez supprimer et modifier un contact durant les # minutes qui suivent sa création}
+    }',
     'You can explore sharables using the' => 'Vous pouvez explorer des {s} en utilisant',
     'you cannot change this setting' => 'Vous ne pouvez pas toucher à ce réglage',
     'You cannot invite people yet. Checkout' => 'Vous ne pouvez pas encore inviter de nouveaux membres. Vérifiez',
@@ -371,6 +420,11 @@ return array(
     }',
     'You haven\'t set any' => 'Vous n\'avez pas encore défini d\'',
     'You haven\'t verified your email adress. Checkout your' => 'Vous n\'avez pas encore confirmé votre adresse email. Veuillez vérifier votre',
+    'You need at least one contact to interact with sharable that need a contact exchange.' => '{s_gender, select,
+        feminine  {il vous faut au moins un contact pour intérargir avec une {s} qui nécessite un échange de contact}
+        masculine {il vous faut au moins un contact pour intérargir avec un {s} qui nécessite un échange de contact}
+        other     {il vous faut au moins un contact pour intérargir avec un {s} qui nécessite un échange de contact}
+    }',
     'you need to be interested and contact manager(s) in order to validate it.' => 'Il faut que vous soyez intéressé et ayez contacté les gérants pour valider.',
     'you need to be interested in this sharable to access contact infos' => '{s_gender, select,
         feminine  {il faut que vous vous soyez intéressé à cette {s} pour accèder aux informations de contact}

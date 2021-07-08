@@ -9,7 +9,7 @@
 
 
 {{ breadcrumbs.render([
-    {'url': url('user'), 'text': 'Users'},
+    {'url': url('user'), 'text': 'users'|trans|capitalize },
     {'text': user.username},
 ]) }}
 
@@ -28,8 +28,8 @@
         <div class="btn-group mb-3">
             
             {% if is_granted('contact', user) %}
-            <a class="btn btn-primary" href="{{ path('user_contact', {id: user.id}) }}"><i class="fas fa-address-book"></i> contacts</a>
-            {% endif %}       
+            <a class="btn btn-primary" href="{{ path('user_contact', {id: user.id}) }}"><i class="fas fa-address-book"></i> {{ 'contacts'|trans }}</a>
+            {% endif %}
         </div>
 
     </div>
@@ -47,18 +47,19 @@
 
             <div class="card-header d-flex justify-content-between align-items-center">
 
-                <h3 class="card-title">Stats</h3>
+                <h3 class="card-title">{{ 'stats'|trans|capitalize }}</h3>
             
                 {% if is_granted('edit', user) %}
                 <a class="btn btn-primary" href="{{ path('user_edit', {id: user.id}) }}"><i class="fas fa-pen"></i></a>
-                {% endif %} 
+                {% endif %}
             </div>
 
             <div class="card-body">
 
                 {% if is_granted('view_bookmarks', user) %}
                 <a class="btn btn-block btn-light d-flex justify-content-between align-items-center" href="{{ path('sharable', {bookmarkedBy: user.id}) }}">
-                    <i class="fas fa-bookmark"></i> bookmarks
+                    <i class="fas fa-bookmark"></i>
+                    {{ 'bookmarks'|trans }}
                     <span class="badge badge-secondary">
                         {{ user.bookmarks|length }}
                     </span>
@@ -66,7 +67,7 @@
                 {% endif %}
                 <a class="btn btn-secondary d-flex justify-content-between align-items-center" href="{{ path('question', {user: user.id}) }}">
                     <i class="fas fa-comments"></i>
-                    Questions asked
+                    {{ 'questions asked'|trans }}
                     <span class="badge badge-secondary">
                         {{ user.questions|length }}
                     </span>
@@ -75,50 +76,50 @@
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                         <i class="fas fa-birthday-cake"></i>
-                        Joined {{ user.getCreatedAt|ago }}
+                        {{ 'joined'|trans }} {{ user.getCreatedAt|ago }}
                     </li>
                     <li class="list-group-item">
                         <i class="fas fa-clock"></i>
-                        Last active {{ user.getLastActivity|ago }}
+                        {{ 'last active'|trans }} {{ user.getLastActivity|ago }}
                     </li>
                     <li class="list-group-item">
                         <i class="fas fa-shield-alt"></i>
-                        User class:
+                        {{ 'user class'|trans }}
                         <a href="{{ path('userclass_show', {id: user.userClass.id}) }}">
                             <span class="badge badge-primary">{{ user.userClass.name }}</span>
                         </a>
                     </li>
                     <li class="list-group-item">
                         <i class="fas fa-hands-helping"></i>
-                        Share Score:
+                        {{ 'share score'|trans }}
                         <span class="badge badge-light">{{ user.shareScore }}</span>
                     </li>
                     <li class="list-group-item">
                         <i class="fas fa-mask"></i>
-                        Paranoïa level: {{ user.paranoia }}
+                        {{ 'paranoïa level'|trans }} {{ user.paranoia }}
                     </li>
                     {% if user.getInvitation %}
                     <li class="list-group-item">
                         <i class="fas fa-envelope-open"></i>
-                        Invited by: <a href="{{ path('user_show', {id: user.getInvitation.getParent.id}) }}">{{ user.getInvitation.getParent.username }}</a>
+                        {{ 'invited by'|trans }} <a href="{{ path('user_show', {id: user.getInvitation.getParent.id}) }}">{{ user.getInvitation.getParent.username }}</a>
                     </li>
                     {% endif %}
                     <li class="list-group-item">
                         <i class="fas fa-edit"></i>
-                        Managed sharables: {{ user.manages|length }}
+                        {{ 'managed sharables'|trans }} {{ user.manages|length }}
                     </li>
                     <li class="list-group-item list-group-item-success">
                         <i class="fas fa-check-circle"></i>
-                        Validations given: {{ user.validations|length }}
+                        {{ 'validations given'|trans }} {{ user.validations|length }}
                     </li>
                     <li class="list-group-item list-group-item-warning">
                         <i class="fas fa-question-circle"></i>
-                        Interested in: {{ user.interesteds|length }}
+                        {{ 'interested in'|trans }} {{ user.interesteds|length }}
                     </li>
                     {% if user.disabled %}
                         <li class="list-group-item list-group-item-danger">
                             <i class="fas fa-ban"></i>
-                            Disabled
+                            {{ 'disabled'|trans }}
                         </li>
                     {% endif %}
                 </ul>
@@ -137,7 +138,7 @@
                 <h4 class="card-title d-flex justify-content-between align-items-center">
                     <span>
                         <i class="fas fa-edit"></i>
-                        Manage 
+                        {{ 'manage'|trans }}
                     </span>
                     <small>
                     <a href="{{ path('sharable', {managedBy: user.id, disabled: 1}) }}" class="btn btn-primary">
@@ -170,7 +171,12 @@
                 {% endfor %}
                 </ul>
 
-                {% if is_granted('edit', user) and is_granted('create', sharable) %}<a class="btn btn-success btn-block mb-3" href="{{ path('sharable_new') }}"><i class="fas fa-plus-circle"></i> create new sharable</a> {% endif %}
+                {% if is_granted('edit', user) and is_granted('create', sharable) %}
+                    <a class="btn btn-success btn-block mb-3" href="{{ path('sharable_new') }}">
+                        <i class="fas fa-plus-circle"></i>
+                        {{ 'create new sharable'|trans }}
+                    </a>
+                {% endif %}
 
             </div>
         </div>
@@ -188,7 +194,7 @@
                 <h4 class="card-title d-flex justify-content-between align-items-center">
                     <span>
                         <i class="fas fa-check-circle"></i>
-                        Validations given
+                        {{ 'validations given'|trans }}
                     </span>
                 <small>
                     <a href="{{ path('sharable', {validatedBy: user.id, disabled: 1}) }}" class="btn btn-success">
@@ -231,7 +237,7 @@
                 <h4 class="card-title d-flex justify-content-between align-items-center">
                     <span>
                         <i class="fas fa-question-circle"></i>
-                        Interested in
+                        {{ 'interested in'|trans }}
                     </span>
                 <small><span class="badge badge-light">{{ user.interesteds|length }}</span></small>
                 </h4>
@@ -271,14 +277,15 @@
         <div class="card mb-3">
 
             <div class="card-header d-flex justify-content-between align-items-center">
-                    <h3 class="card-title">Description</h3>
+                    <h3 class="card-title">
+                        {{ 'description'|trans }}
+                    </h3>
                 {% if is_granted('edit', user) %}
-                <a class="btn btn-primary" href="{{ path('user_edit', {id: user.id}) }}"><i class="fas fa-pen"></i></a>
+                    <a class="btn btn-primary" href="{{ path('user_edit', {id: user.id}) }}"><i class="fas fa-pen"></i></a>
                 {% endif %}
             </div>
 
             <div class="card-body">
-
                 {% if user.description %}
                 <div>{{ user.description|markdown_to_html }}</div>
                 {% endif %}

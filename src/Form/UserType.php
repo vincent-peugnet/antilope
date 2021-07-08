@@ -62,7 +62,7 @@ class UserType extends AbstractType
                 ])
             ])
             ->add('description', null, [
-                'label' => new TranslatableMessage('Description'),
+                'label' => new TranslatableMessage('description'),
                 'help' => 'You can use Markdown to describe yourself.',
                 'attr' => [
                     'data-provide' => 'markdown',
@@ -72,7 +72,7 @@ class UserType extends AbstractType
                 ],
             ])
             ->add('paranoia', ChoiceType::class, [
-                'label' => new TranslatableMessage('Paranoïa level'),
+                'label' => new TranslatableMessage('paranoïa level'),
                 'choice_loader' => new CallbackChoiceLoader(
                     function () use ($user) {
                         return array_slice(
