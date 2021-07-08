@@ -4,32 +4,34 @@
 
 {% block content %}
 
-<h1>User Classes</h1>
+<h1>{{ 'user classes'|trans|capitalize }}</h1>
 
-Currently you're a <a class="badge badge-primary" href="{{ path('userclass_show', {id: app.user.userClass.id}) }}">{{ app.user.userClass.name }}</a>,
-{% if app.user.userClass.next %}
-    but you can progress if you fill the requirements of the <a href="{{ path('userclass_show', {id: app.user.userClass.next.id}) }}">next user class</a>.
-{% endif %}
+<p>
+    {{ 'Currently you\'re a'|trans }} <a class="badge badge-primary" href="{{ path('userclass_show', {id: app.user.userClass.id}) }}">{{ app.user.userClass.name }}</a>,
+    {% if app.user.userClass.next %}
+        {{ 'but you can progress if you fill the requirements of the'|trans }} <a href="{{ path('userclass_show', {id: app.user.userClass.next.id}) }}">{{ 'next user class'|trans }}</a>.
+    {% endif %}
+</p>
 
 <p>
     <div class="alert alert-secondary">
-        Select an user class for requirements and complete description.
+        {{ 'Select an user class to see the requirements and full privilege list.'|trans }}
     </div>
     
 </p>
 
-<h3>User Classes</h3>
+<h3>{{ 'user classes'|trans|capitalize }}</h3>
     
     <table class="table">
     <thead>
-        <th>name</th>
-        <th>create sharable</th>
-        <th>access sharables</th>
-        <th>invite users</th>
-        <th>actual users</th>
+        <th>{{ 'name'|trans }}</th>
+        <th>{{ 'create sharable'|trans }}</th>
+        <th>{{ 'access sharables'|trans }}</th>
+        <th>{{ 'invite users'|trans }}</th>
+        <th>{{ 'actual users'|trans }}</th>
         {% if is_granted('edit', userClass) %}
             <th>
-                edit
+                {{ 'edit'|trans }}
             </th>
         {% endif %}
     </thead>
@@ -63,32 +65,30 @@ Currently you're a <a class="badge badge-primary" href="{{ path('userclass_show'
 
 
 {% if is_granted('create', userClass) %}
-<a class="btn btn-success mb-3" href="{{ path('userclass_new', {id: userClass.id}) }}"><i class="fas fa-plus"></i> create new user class</a>
+<a class="btn btn-success mb-3" href="{{ path('userclass_new', {id: userClass.id}) }}">
+    <i class="fas fa-plus"></i>
+    {{ 'create new user class'|trans }}
+</a>
 {% endif %}
 
-<h3>How to get an higher user class ?</h3>
+<h3>{{ 'how to get an higher user class?'|trans|capitalize }}</h3>
 
 <p>
-    By filling the next user class requirements.
-    It may be based on
-    <strong>share score</strong>,
-    <strong>account age</strong>,
-    <strong>validations given</strong>,
-    <strong>managed sharables</strong>,
-    or <strong>email verification</strong>.
+    {{ 'By filling the next user class requirements.'|trans }}
+    {{ 'It may be based on <strong>share score</strong>, <strong>account age</strong>, <strong>validations given</strong>, <strong>managed sharables</strong>, or <strong>email verification</strong>.'|trans|raw }}
 </p>
 
-<h3>How is the <em>share score</em> calculated ?</h3>
+<h3>{{ 'how is the <em>share score</em> calculated?'|trans }}</h3>
 
 <p>
-    You win share points each time a sharable you're managing is validated by some user.
-    The amount of points earned this way may vary depending on:
+    {{ 'You win share points each time a sharable you\'re managing is validated by some user.'|trans }}
+    {{ 'The amount of points earned this way may vary depending on:'|trans }}
 </p>
 
 <ul>
-    <li>validating user class (higher user rank give more points)</li>
-    <li>the amount of validation already given for this sharable (first validations give more points)</li>
-    <li>divided by the number of managers</li>
+    <li>{{ 'validating user class (higher user rank give more points)'|trans }}</li>
+    <li>{{ 'the amount of validation already given for this sharable (first validations give more points)'|trans }}</li>
+    <li>{{ 'divided by the number of managers'|trans }}</li>
 </ul>
 
 

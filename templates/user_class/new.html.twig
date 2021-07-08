@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ userClass.name }}{% endblock %}
+{% block title %}{{ 'new user class'|trans|capitalize}}{% endblock %}
 
 {% block content %}
 
@@ -8,12 +8,12 @@
 {% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 
 {{ breadcrumbs.render([
-    {'url': url('userclass'), 'text': 'User Classes'},
-    {'text': 'New'},
+    {'url': url('userclass'), 'text': 'user classes'|trans|capitalize },
+    {'text': 'new'|trans|capitalize },
 ]) }}
 
 
-<h1>New</h1>
+<h1>{{ 'new'|trans|capitalize }}</h1>
 
 
 {{ form(form) }}

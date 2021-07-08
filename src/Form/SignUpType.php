@@ -83,8 +83,8 @@ class SignUpType extends AbstractType
                 'invalid_message' => 'The password fields must match.',
                 'options' => ['attr' => ['class' => 'password-field']],
                 'required' => true,
-                'first_options'  => ['label' => new TranslatableMessage('Password')],
-                'second_options' => ['label' => new TranslatableMessage('Repeat Password')],
+                'first_options'  => ['label' => new TranslatableMessage('password')],
+                'second_options' => ['label' => new TranslatableMessage('repeat password')],
                 'mapped' => false,
                 'constraints' => [
                     new NotBlank([

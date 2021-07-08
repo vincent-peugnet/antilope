@@ -8,9 +8,9 @@
 {% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 
 {{ breadcrumbs.render([
-    {'url': url('userclass'), 'text': 'User Classes'},
+    {'url': url('userclass'), 'text': 'user classes'|trans|capitalize },
     {'url': url('userclass_show', {id: userClass.id}), 'text': userClass.name},
-    {'text': 'Delete'},
+    {'text': 'delete'|trans|capitalize },
 ]) }}
 
 
@@ -23,7 +23,7 @@
     <div class="card-header">
 
         <div class="card-title">
-            <h3>delete</h3>
+            <h3>{{ 'delete'|trans|capitalize }}</h3>
         </div>
     </div>
 
@@ -32,15 +32,17 @@
         {% if userClass.users|length %}
             <div class="alert border border-danger">
                 {% if userClass.prev %}
-                {{ userClass.users|length }} users will be downgraded to closest previous user class : <strong>{{ userClass.prev.name }}</strong>.
+                    {{ 'userAmount users will be downgraded to closest previous user class:'|trans({userAmount: userClass.users|length}) }} <strong>{{ userClass.prev.name }}</strong>.
                 {% else %}
-                {{ userClass.users|length }} users will be upgraded to closest next user class : <strong>{{ userClass.next.name }}</strong>
+                    {{ userClass.users|length }} {{ 'userAmount users will be upgraded to closest next user class:'|trans({userAmount: userClass.users|length}) }} <strong>{{ userClass.next.name }}</strong>
                 {% endif %}        
             </div>
         {% endif %}
 
         {% if userClass.sharables|length %}
-            <div class="alert border border-danger">{{ userClass.sharables|length }} sharable(s) are set as visible by this user class. It's recommend to move them to upper class, but you can select what you prefer.</div>
+            <div class="alert border border-danger">
+                {{ userClass.sharables|length }} {{ 'sharableAmount sharables are set as visible by this user class. It\'s recommend to move them to upper class, but you can select what you prefer.'|trans({sharableAmount: userClass.sharables|length}) }}
+            </div>
         {% endif %}
 
         <p>

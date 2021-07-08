@@ -9,7 +9,7 @@
 
 
 {{ breadcrumbs.render([
-    {'url': url('userclass'), 'text': 'User Classes'},
+    {'url': url('userclass'), 'text': 'user classes'|trans|capitalize },
     {'text': userClass.name},
 ]) }}
 
@@ -17,17 +17,29 @@
 
 
     {% if userClass.prev %}
-    <a class="btn btn-primary" href="{{ path('userclass_show', {id: userClass.prev.id}) }}"><i class="fas fa-angle-left"></i> previous</a>
+        <a class="btn btn-primary" href="{{ path('userclass_show', {id: userClass.prev.id}) }}">
+            <i class="fas fa-angle-left"></i>
+            {{ 'previous'|trans }}
+        </a>
     {% else %}
-    <a class="btn btn-primary disabled"><i class="fas fa-angle-left"></i> previous</a>
+        <a class="btn btn-primary disabled">
+            <i class="fas fa-angle-left"></i>
+            {{ 'previous'|trans }}
+        </a>
     {% endif %}
 
     <h1 {{ userClass == app.user.userClass ? 'class="text-info"' : '' }}>{{ userClass.name }}</h1>
 
     {% if userClass.next %}
-    <a class="btn btn-primary" href="{{ path('userclass_show', {id: userClass.next.id}) }}">next <i class="fas fa-angle-right"></i></a>
+        <a class="btn btn-primary" href="{{ path('userclass_show', {id: userClass.next.id}) }}">
+            {{ 'next'|trans }}
+            <i class="fas fa-angle-right"></i>
+        </a>
     {% else %}
-    <a class="btn btn-primary disabled">next <i class="fas fa-angle-right"></i></a>
+        <a class="btn btn-primary disabled">
+            {{ 'next'|trans }}
+            <i class="fas fa-angle-right"></i>
+        </a>
     {% endif %}
 </div>
 
@@ -41,7 +53,7 @@
 
             <div class="card-header">
                 <h3 class="card-title">
-                    Privileges
+                    {{ 'privileges'|trans }}
                 </h3>
             </div>
 
@@ -50,41 +62,41 @@
                 <ul class="list-group list-group-flush">
                     {% if userClass.share %}
                     <li class="list-group-item">
-                        can create sharables
+                        {{ 'can create sharables'|trans }}
                     </li>
                     {% endif %}
                     {% if userClass.access %}
                     <li class="list-group-item">
-                        can access sharables
+                        {{ 'can access sharables'|trans }}
                     </li>
                     {% endif %}
                     {% if userClass.canQuestion %}
                         <li class="list-group-item">
-                            can ask questions on sharables
+                            {{ 'can ask questions on sharables'|trans }}
                         </li>
                     {% endif %}
                     {% if userClass.canSetVisibleBy %}
                         <li class="list-group-item">
-                            can set <em>visible by</em> parameter on sharables
+                            {{ 'can set <em>visible by</em> parameter on sharables'|trans|raw }}
                         </li>
                     {% endif %}
                     {% if userClass.canInvite %}
                         {% if userClass.inviteFrequency == 0 %}
                         <li class="list-group-item">
-                            can invite people without limitation
+                            {{ 'can invite people without limitation'|trans }}
                         </li>
                         {% else %}
                         <li class="list-group-item">
-                            can invite one user every {{ userClass.inviteFrequency }} days
+                            {{ 'can invite one user every inviteFrequency days'|trans({inviteFrequency: userClass.inviteFrequency}) }}
                         </li>
                         {% endif %}
                     {% endif %}
                     <li class="list-group-item">
-                        maximum paranoïa level : {{ userClass.maxParanoia }}
+                        {{ 'maximum paranoïa level:'|trans }} {{ userClass.maxParanoia }}
                     </li>
                     {% if userClass.maxInactivity %}
                         <li class="list-group-item">
-                            Account is disabled after {{ userClass.maxInactivity }} days of inactivity.
+                            {{ 'Account is disabled after maxInactivity days of inactivity.'|trans({maxInactivity: userClass.maxInactivity}) }}
                         </li>
                     {% endif %}
                 </ul>
@@ -97,7 +109,7 @@
         <div class="card mb-3">
 
             <div class="card-header">
-                <h3 class="card-title">Requirements</h3>
+                <h3 class="card-title">{{ 'requirements'|trans }}</h3>
             </div>
 
             <div class="card-body">
@@ -107,50 +119,50 @@
                         {% set shareScore = app.user.shareScore >= userClass.shareScoreReq %}
                         <li class="list-group-item{{ shareScore ? ' list-group-item-success' : ' text-danger' }}">
                             {{ shareScore ? '<i class="far fa-check-square"></i>' : '<i class="far fa-square"></i>' }}
-                            Share Score : <span class="badge badge-light">{{ userClass.shareScoreReq }}</span>
+                            {{ 'share score'|trans }} : <span class="badge badge-light">{{ userClass.shareScoreReq }}</span>
                         </li>
                     {% endif %}
                     {% if userClass.accountAgeReq %}
                         {% set accountAge = app.user.createdAt <= date('-' ~ userClass.accountAgeReq ~ 'days') %}
                         <li class="list-group-item {{ accountAge ? ' list-group-item-success' : ' text-danger' }}">
                             {{ accountAge ? '<i class="far fa-check-square"></i>' : '<i class="far fa-square"></i>' }}
-                            Account Age : {{ userClass.accountAgeReq }} days
+                            {{ 'account age'|trans }} : {{ 'accountAgeReq days'|trans({accountAgeReq: userClass.accountAgeReq}) }}
                         </li>
                     {% endif %}
                     {% if userClass.validatedReq %}
                         {% set validated = app.user.validations|length >= userClass.validatedReq %}
                         <li class="list-group-item{{ validated ? ' list-group-item-success' : ' text-danger' }}">
                             {{ validated ? '<i class="far fa-check-square"></i>' : '<i class="far fa-square"></i>' }}
-                            Validations given : {{ userClass.validatedReq }}
+                            {{ 'validations given'|trans }} : {{ userClass.validatedReq }}
                         </li>
                     {% endif %}
                     {% if userClass.manageReq %}
                         {% set managed = app.user.getConfirmedEnabledManages|length >= userClass.manageReq %}
                         <li class="list-group-item{{ managed ? ' list-group-item-success' : ' text-danger' }}">
                             {{ managed ? '<i class="far fa-check-square"></i>' : '<i class="far fa-square"></i>' }}
-                            Managed sharables : {{ userClass.manageReq }}
+                            {{ 'managed sharables'|trans }} : {{ userClass.manageReq }}
                         </li>
                     {% endif %}
                     {% if userClass.verifiedReq %}
                         {% set verified = app.user.verified %}
                         <li class="list-group-item{{ verified ? ' list-group-item-success' : ' text-danger' }}">
                             {{ verified ? '<i class="far fa-check-square"></i>' : '<i class="far fa-square"></i>' }}
-                            The user email adress need to be verified
+                            {{ 'the user email adress need to be verified'|trans }}
                         </li>
                     {% endif %}
                     {% if userClass.avatarReq %}
                         {% set avatar = app.user.avatar %}
                         <li class="list-group-item{{ avatar ? ' list-group-item-success' : ' text-danger' }}">
                             {{ avatar ? '<i class="far fa-check-square"></i>' : '<i class="far fa-square"></i>' }}
-                            An avatar picture is set
+                            {{ 'an avatar picture is set'|trans }}
                         </li>
                     {% endif %}
                 </ul>
 
-                    </div>
-
-                </div>
             </div>
+
+        </div>
+    </div>
 
 
     <div class="col-lg-6">
@@ -164,27 +176,27 @@
 
     <div class="col">
 
-        <h4>Stats</h4>
+        <h4>{{ 'stats'|trans|capitalize }}</h4>
     
         <a href="{{ path('user', {userClass: userClass.id}) }}">
-            {{ userClass.getNotDisabledUsers|length }} users
+            {{ 'userAmount users'|trans({userAmount: userClass.getNotDisabledUsers|length}) }}
         </a>
     {% if app.user.userclass == userClass %}
     <span class="badge badge-info">
-        including you
+        {{ 'including you'|trans }}
     </span>
     {% endif %}
     {% if userClass.visibleBy %}
         </br>
         <a href="{{ path('sharable', {visibleBy: userClass.id}) }}">
-            {{ userClass.sharables|length }} sharables
+            {{ 'sharableAmount sharables'|trans({sharableAmount: userClass.sharables|length}) }}
         </a>
     {% endif %}
 
         <div class="text-muted">
-            Created {{ userClass.createdAt|ago }}
+            {{ 'created'|trans }} {{ userClass.createdAt|ago }}
             </br>
-            Last edited {{ userClass.lastEditedAt|ago }}
+            {{ 'last edited'|trans }} {{ userClass.lastEditedAt|ago }}
         </div>
     </div>
     <div class="col">
@@ -193,11 +205,17 @@
         <div class="btn-group mb-3">
         
             {% if is_granted('edit', userClass) %}
-            <a class="btn btn-primary" href="{{ path('userclass_edit', {id: userClass.id}) }}"><i class="fas fa-pen"></i> edit</a>
+                <a class="btn btn-primary" href="{{ path('userclass_edit', {id: userClass.id}) }}">
+                    <i class="fas fa-pen"></i>
+                    {{ 'edit'|trans }}
+                </a>
             {% endif %}
         
             {% if is_granted('delete', userClass) %}
-            <a class="btn btn-danger" href="{{ path('userclass_delete', {id: userClass.id}) }}"><i class="fas fa-times"></i> delete</a>
+                <a class="btn btn-danger" href="{{ path('userclass_delete', {id: userClass.id}) }}">
+                    <i class="fas fa-times"></i>
+                    {{ 'delete'|trans }}
+                </a>
             {% endif %}
         
         </div>

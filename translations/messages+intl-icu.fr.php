@@ -7,8 +7,18 @@ return array(
         masculine {<strong>Elles ne sont pas public</strong>, mais quand vous êtes intéressé par un {s}, vos informations de contact sont envoyées aux gérants.}
         other     {<strong>Elles ne sont pas public</strong>, mais quand vous êtes intéressé par un {s}, vos informations de contact sont envoyées aux gérants.}
     }',
+    'access sharables' => 'accèder aux {s}',
     'account' => 'compte',
+    'account age' => 'age du compte',
+    'accountAgeReq days' => '{accountAgeReq, plural,
+        =1     {# jour}
+        other {# jours}
+    }',
     'Account Age Requirement' => 'Age du compte',
+    'Account is disabled after maxInactivity days of inactivity.' => '{maxInactivity, plural,
+        =1     {Le compte est désactivé après un jour n\'inactivité}
+        other {Le compte est désactivé après # jours n\'inactivité}
+    }',
     'account setting' => 'paramètres du compte',
     'activate it' => '{s_gender, select,
         feminine  {activez la}
@@ -17,9 +27,11 @@ return array(
     }',
     'actives invitations' => 'invitations actives',
     'actual email adress:' => 'adresse email actuelle :',
+    'actual users' => 'utilisateurs',
     'added' => 'added',
     'add new contact' => 'ajouter un nouveau contact',
     'admin' => 'admin',
+    'an avatar picture is set' => 'une image d\'avatar est définie',
     'and' => 'et',
     'and left a message' => 'et à laissé un message',
     'An email has been sent that contains a link that you can click to reset your password.' => 'Un email a été envoyé contenant un lien que vous pouvez suivre pour réinitialiser votre mot de passe.',
@@ -56,8 +68,10 @@ return array(
     'bookmark' => 'sauvegarder',
     'bookmarked by' => 'sauvegardé par',
     'bookmarks' => 'signets',
+    'but you can progress if you fill the requirements of the' => 'mais vous pouvez progresser si vous remplisser les conditions de la',
     'by' => 'par',
     'By default, sharables are visible by those user classes:' => 'Par défaut, les {s} sont visibles par les classes utilisateur :',
+    'By filling the next user class requirements.' => 'En remplissant les conditions de le prochaine classe utilisateur',
     'By validating, you ensure that you have really enjoyed the sharable. Don\'t do it if it is not true.' => '{s_gender, select,
         feminine  {En validant, vous garantissez avoir bénéficié de la {s}. Ne le faite pas si ce n\'est pas le cas}
         masculine {En validant, vous garantissez avoir bénéficié du {s}. Ne le faite pas si ce n\'est pas le cas}
@@ -69,8 +83,18 @@ return array(
         other     {peut accèder au {s}}
     }',
     'can ask questions' => 'Peut poser des questions',
+    'can ask questions on sharables' => '{s_gender, select,
+        feminine  {peut poser des question sur une {s}}
+        masculine {peut poser des question sur un {s}}
+        other     {peut poser des question sur un {s}}
+    }',
     'cancel' => 'annuler',
     'can create sharables' => 'Peut créer des {s}s',
+    'can invite one user every inviteFrequency days' => '{inviteFrequency, plural,
+        =1     {peut inviter un utilisateur par jour}
+        other {peut inviter un utilisateur tout les # jours}
+    }',
+    'can invite people without limitation' => 'peut inviter des gens sans limitations',
     'can invite users' => 'Peut inviter des utilisateurs',
     'cannot access sharable' => '{s_gender, select,
         feminine  {ne peut pas accèder à la {s}}
@@ -78,6 +102,7 @@ return array(
         other     {ne peut pas accèder au {s}}
     }',
     'can now access the sharable contact infos and you can see this user contacts.' => 'peut maintenant accèder aux informations de contact du {s} et vous pouvez voir ses informations de contact',
+    'can set <em>visible by</em> parameter on sharables' => 'peut rêgler la <em>visibilitée</em> sur les {s}',
     'can set visibleBy parameter' => 'Peut définir la visibilitée d\'un {s}s',
     'change email adress' => 'changer d\'adresse email',
     'code' => 'code',
@@ -94,13 +119,20 @@ return array(
     'created' => 'créé',
     'create new rule' => 'créer une nouvelle règle',
     'create new sharable' => '{s_gender, select,
-        feminine  {crée une nouvelle {s}}
-        masculine {crée un nouveau {s}}
-        other     {crée un nouveau {s}}
+        feminine  {créer une nouvelle {s}}
+        masculine {créer un nouveau {s}}
+        other     {créer un nouveau {s}}
     }',
     'create new tag' => 'créer un nouveau tag',
+    'create new user class' => 'créer une nouvelle classe utilisateur',
+    'create sharable' => '{s_gender, select,
+        feminine  {créer une {s}}    
+        masculine {créer un {s}}    
+        other     {créer un {s}}    
+    }',
     'creation' => 'création',
     'currently active users' => 'utilisateurs actuellement actifs',
+    'Currently you\'re a' => 'Actuellement, vous êtes un',
     'date and time' => 'date et heure',
     'delete' => 'supprimer',
     'delete announcement' => 'supprimer l\'annonce',
@@ -117,6 +149,7 @@ return array(
         masculine {désactiver ce {s}}    
         other     {désactiver ce {s}}    
     }',
+    'divided by the number of managers' => 'divisé par le nombre de gérants',
     'Each manager can choose to be directly contactable or not, but there need to be at least one contact info accessible.' => 'Chaque gérant peut choisir d\'être directement contactable ou pas, mais il faut qu\'il y ai au moins une information de contact accessible.',
     'edit' => 'editer',
     'edit announcement' => 'editer l\'annonce',
@@ -154,11 +187,14 @@ return array(
     'home' => 'accueil',
     'hour(s)' => 'heure(s)',
     'How contact infos are exchanged' => 'Comment les informations de contact sont échangés',
+    'how is the <em>share score</em> calculated?' => 'comment le <em>share score</em> est il calculé ?',
+    'how to get an higher user class?' => 'comment accèder aux classes utilisateur supérieures ?',
     'I\'m interested' => 'Je suis intéressé',
     'id' => 'id',
     'If you don\'t receive an email please check your spam folder or' => 'Si vous n\'avez pas reçu de lien, vérifiez votre dossier de spam ou',
     'If your email adress has been verified, you can use this method to recover your account.' => 'Si votre adresse email est vérifiée, vous pouvez utiliser cette méthode pour réccupérer votre compte.',
     'including' => 'en incluant',
+    'including you' => 'vous en faites parti',
     'info' => 'info',
     'infos' => 'infos',
     'instance parameters' => 'paramètres des l\'instance',
@@ -173,8 +209,10 @@ return array(
     'invited by' => 'invité par',
     'invite new managers' => 'invite new managers',
     'invite only' => 'sur invitation',
+    'invite users' => 'inviter des utilisateurs',
     'Is interested' => 'Est intéressé',
     'is interested in your sharable:' => 'est intéressé par votre {s}:',
+    'It may be based on <strong>share score</strong>, <strong>account age</strong>, <strong>validations given</strong>, <strong>managed sharables</strong>, or <strong>email verification</strong>.' => 'Cela peut être basé sur le <strong>share score</strong>, l\'<strong>age du compte</strong>, les <strong>validations données</strong>, les <strong>{s} gérés</strong>, ou la <strong>vérification de l\'adresse email</strong>.',
     'joined' => 'à rejoins',
     'last' => 'dure',
     'last active' => 'actif pour la dernière fois',
@@ -200,8 +238,10 @@ return array(
     'map' => 'carte',
     'map of sharables' => 'cartes des {s}',
     'matrix' => 'matrix',
+    'maximum paranoïa level:' => 'niveau de paranoïa maximum',
     'Maximum paranoïa level is defined by your current user class:' => 'le niveau de paranoïa maximum est défini par votre classe utilisateur actuelle',
     'message' => 'message',
+    'name' => 'nom',
     'new' => 'créer',
     'new announcement' => 'nouvelle annonce',
     'new contact' => 'nouveau contact',
@@ -214,8 +254,10 @@ return array(
         other     {nouveau {s}}
     }',
     'new tag' => 'nouveau tag',
+    'new user class' => 'nouvelle classe utilisateur',
+    'next' => 'suivante',
     'Next, you should check the' => 'Ensuite, il vous faut vérifier les',
-    'Next user class' => 'Prochaine classe utilisateur',
+    'next user class' => 'prochaine classe utilisateur',
     'no records found' => 'aucune entrée trouvée',
     'not verified' => 'non-vérifiée',
     'on' => 'sur',
@@ -230,12 +272,13 @@ return array(
     'parameter' => 'paramètres',
     'paranoïa level' => 'niveau de paranoïa',
     'password' => 'mot de passe',
-    'Password' => 'Password',
     'password reset email sent' => 'email de réinitialisation de mot de passe envoyé',
     'phone' => 'téléphone',
     'Picture' => 'Image',
     'Please confirm your email address by clicking the following link:' => 'Veuillez confirmer votre adresse email en cliquant sur le lien suivant:',
     'please sign in' => 'veuillez vous inscrire',
+    'previous' => 'précedente',
+    'privileges' => 'privilèges',
     'profile edit' => 'éditer mon profil',
     'question' => 'question',
     'questions' => 'questions',
@@ -247,8 +290,9 @@ return array(
     'registration' => 'inscriptions',
     'Registrations are open, no more need for invitation.' => 'Inscriptions ouvertes, pas besoin d\'invitations.',
     'remember me' => 'se souvenir de moi',
-    'Repeat Password' => 'Répéter le mot de passe',
+    'repeat password' => 'répéter le mot de passe',
     'report' => 'signaler',
+    'requirements' => 'conditions',
     'reset password' => 'réinitialiser le mot de passe',
     'reset your password' => 'réinitialiser mon mot de passe',
     'rule' => 'règle',
@@ -256,10 +300,19 @@ return array(
     'security' => 'sécurité',
     'see interesteds' => 'voir les intéressés',
     'See you soon on' => 'à bientôt sur',
+    'Select an user class to see the requirements and full privilege list.' => 'Sélectionnez une classe utilisateur pour vous les conditions et la liste complète des privilèges',
     'send email verification' => 'envoyer un email de vérification',
     'send password reset email' => 'envoyer le mail de réinitialisation de mot de passe',
     'settings' => 'réglages',
     'sharable' => '{s}',
+    'sharableAmount sharables' => '{sharableAmount, plural,
+        =1     {# {s}s}
+        other {# {s}}
+    }',
+    'sharableAmount sharables are set as visible by this user class. It\'s recommend to move them to upper class, but you can select what you prefer.' => '{sharableAmount, plural,
+        =1     {{s} est visible par cette classe utilisateur. Il est recommander de les déplacer vers la classe supérieure, mais vous pouvez choisir ce qui vous semble le mieux.}
+        other {{s} est visible par cette classe utilisateur. Il est recommander de les déplacer vers la classe supérieure, mais vous pouvez choisir ce qui vous semble le mieux.}
+    }',
     'sharable contacts' => '{s_gender, select,
         feminine  {contacts de la {s}}
         masculine {contact du {s}}
@@ -287,12 +340,19 @@ return array(
     'Target user class for sharables' => 'classe d\'utilisateurs cible pour les {s}s',
     'that are' => 'qui sont',
     'that interest' => 'qui intéressent',
+    'The amount of points earned this way may vary depending on:' => 'Le nombre de points gagnés de cette façon peut dépendre de :',
+    'the amount of validation already given for this sharable (first validations give more points)' => '{s_gender, select,
+        feminine  {la quantitée de validations déjà données pour cette {s} (les premières validations donnent plus de points)}
+        masculine {la quantitée de validations déjà données pour ce {s} (les premières validations donnent plus de points)}
+        other     {la quantitée de validations déjà données pour ce {s} (les premières validations donnent plus de points)}
+    }',
     'the map' => 'la carte',
     'There are two types of contacts infos : somes are related directly to the Sharable and some are related to users managing it.' => '{s_gender, select,
         feminine  {il y a deux types d\'informations de contact : certaines sont reliées directement à la {s} et d\'autres aux utilisateur la gérant}
         masculine {il y a deux types d\'informations de contact : certaines sont reliées directement au {s} et d\'autres aux utilisateur le gérant}
         other     {il y a deux types d\'informations de contact : certaines sont reliées directement au {s} et d\'autres aux utilisateur le gérant}
     }',
+    'the user email adress need to be verified' => 'l\'adresse email de l\'utilisateur doit être vérifiée',
     'This email address is never visible, it\'s only for notification purposes or lost password.' => 'Cette adresse email n\'est jamais visible, elle est uniquement utilisée pour les notifications ou la réinitialisation du mot de passe.',
     'This link will expire in' => 'Ce lien va expirer dans',
     'This network allow you to share what are called sharables with the other users' => 'Ce réseau vous permet de partager des {s}s avec les autres utilisateurs',
@@ -324,10 +384,25 @@ return array(
     'Update' => 'Mise à jour',
     'url' => 'url',
     'Used Invitations' => 'Invitations utilisés',
+    'userAmount users' => '{userAmount, plural,
+        =0     {aucun utilisateur}
+        =1     {# utilisateur}
+        other {# utilisateurs}
+    }',
     'userAmount users found' => '{userAmount, plural,
         =0    {aucun utilisateur trouvé}
         =1    {# utilisateur trouvé}
         other {# utilisateurs trouvés}
+    }',
+    'userAmount users will be downgraded to closest previous user class:' => '{userAmount, plural,
+        =0     {aucun utilisateur ne sera rétrogradé dans la classe précédente :}
+        =1     {un utilisateur sera rétrogradé dans la classe précédente :}
+        other {# utilisateur seront rétrogradés dans la classe précédente :}
+    }',
+    'userAmount users will be upgraded to closest next user class:' => '{userAmount, plural,
+        =0     {aucun utilisateur ne sera promu dans la classe suivante :}
+        =1     {un utilisateur sera promu dans la classe suivante :}
+        other {# utilisateur seront promus dans la classe suivante :}
     }',
     'user class' => 'classe utilisateur',
     'user classes' => 'classes utilisateurs',
@@ -341,6 +416,7 @@ return array(
     'validate' => 'valider',
     'validated' => 'validés',
     'validated by' => 'validé par',
+    'validating user class (higher user rank give more points)' => 'classe de l\'utilisateur validant  (un rang d\'utilisateur plus élevé donne plus de points)',
     'validation' => 'validation',
     'Validation given Requirement' => 'Nombre minimal de validations envoyés',
     'validation message' => 'message de la validation',
@@ -453,4 +529,9 @@ return array(
     'Your user class does not allow you to access sharables, but maybe some users have allowed some sharables to be accessibles by your user class' => 'Votre classe d\'utilisateur ne vous permet pas d\'acceder aux {s}s sauf si ils ont été spécifiquement authorisés',
     'Your user class does not allow you to create sharables' => 'Votre classe d\'utilisateur ne vous permet pas de créer des {s}s',
     'Your user class have changed, you are now part of' => 'Votre classe d\'utilisateur a changée, vous faites maintenant partie des',
+    'You win share points each time a sharable you\'re managing is validated by some user.' => '{s_gender, select,
+        feminine  {Vous gagnez des share points à chaque fois qu\'une {s} que vous gérez est validée par un utilisateur}
+        masculine {Vous gagnez des share points à chaque fois qu\'un {s} que vous gérez est validé par un utilisateur}
+        other     {Vous gagnez des share points à chaque fois qu\'un {s} que vous gérez est validé par un utilisateur}
+    }',
 );

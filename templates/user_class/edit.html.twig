@@ -8,13 +8,13 @@
 {% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 
 {{ breadcrumbs.render([
-    {'url': url('userclass'), 'text': 'User Classes'},
+    {'url': url('userclass'), 'text': 'user classes'|trans|capitalize },
     {'url': url('userclass_show', {id: userClass.id}), 'text': userClass.name},
-    {'text': 'Edit'},
+    {'text': 'edit'|trans|capitalize },
 ]) }}
 
 
-<h1>Edit</h1>
+<h1>{{ 'edit'|trans|capitalize }}</h1>
 
 
 {{ form(form) }}

@@ -60,7 +60,7 @@ class UserClassType extends AbstractType
         if (is_null($userClass->getId())) {
             $builder->add('next', EntityType::class, [
                 'class' => UserClass::class,
-                'label' => new TranslatableMessage('Next user class'),
+                'label' => new TranslatableMessage('next user class'),
                 'choices' => $this->userClassRepository->findAll(),
                 'placeholder' => 'none',
                 'help' => 'Your user class will be placed before the selected one.',
