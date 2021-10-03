@@ -212,6 +212,11 @@ class Sharable
      */
     private $radius;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ReportSharable::class, mappedBy="sharable")
+     */
+    private $report;
+
     public function __construct()
     {
         $this->managedBy = new ArrayCollection();
@@ -226,6 +231,7 @@ class Sharable
         $this->bookmarks = new ArrayCollection();
         $this->questions = new ArrayCollection();
         $this->radius = 0;
+        $this->report = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -731,6 +737,36 @@ class Sharable
     public function setRadius(int $radius): self
     {
         $this->radius = $radius;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ReportSharable[]
+     */
+    public function getReport(): Collection
+    {
+        return $this->report;
+    }
+
+    public function addReport(ReportSharable $report): self
+    {
+        if (!$this->report->contains($report)) {
+            $this->report[] = $report;
+            $report->setSharable($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReport(ReportSharable $report): self
+    {
+        if ($this->report->removeElement($report)) {
+            // set the owning side to null (unless already changed)
+            if ($report->getSharable() === $this) {
+                $report->setSharable(null);
+            }
+        }
 
         return $this;
     }

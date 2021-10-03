@@ -178,6 +178,11 @@ class User implements UserInterface
      */
     private $answers;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ReportSharable::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $reportSharables;
+
     public function __construct()
     {
         $this->disabled = false;
@@ -193,6 +198,7 @@ class User implements UserInterface
         $this->bookmarks = new ArrayCollection();
         $this->questions = new ArrayCollection();
         $this->answers = new ArrayCollection();
+        $this->reportSharables = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -746,5 +752,35 @@ class User implements UserInterface
     public function isContactable(): bool
     {
         return !$this->getNotForgottenUserContacts()->isEmpty();
+    }
+
+    /**
+     * @return Collection|ReportSharable[]
+     */
+    public function getReportSharables(): Collection
+    {
+        return $this->reportSharables;
+    }
+
+    public function addReportSharable(ReportSharable $reportSharable): self
+    {
+        if (!$this->reportSharables->contains($reportSharable)) {
+            $this->reportSharables[] = $reportSharable;
+            $reportSharable->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReportSharable(ReportSharable $reportSharable): self
+    {
+        if ($this->reportSharables->removeElement($reportSharable)) {
+            // set the owning side to null (unless already changed)
+            if ($reportSharable->getUser() === $this) {
+                $reportSharable->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

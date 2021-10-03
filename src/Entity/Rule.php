@@ -28,6 +28,8 @@ namespace App\Entity;
 
 use App\Repository\RuleRepository;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -62,10 +64,16 @@ class Rule
      */
     private $lastEditedAt;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=ReportSharable::class, mappedBy="rules")
+     */
+    private $reportSharables;
+
     public function __construct()
     {
         $this->createdAt = new DateTime();
         $this->lastEditedAt = new DateTime();
+        $this->reportSharables = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -117,6 +125,33 @@ class Rule
     public function setLastEditedAt(\DateTimeInterface $lastEditedAt): self
     {
         $this->lastEditedAt = $lastEditedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ReportSharable[]
+     */
+    public function getReportSharables(): Collection
+    {
+        return $this->reportSharables;
+    }
+
+    public function addReportSharable(ReportSharable $reportSharable): self
+    {
+        if (!$this->reportSharables->contains($reportSharable)) {
+            $this->reportSharables[] = $reportSharable;
+            $reportSharable->addRule($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReportSharable(ReportSharable $reportSharable): self
+    {
+        if ($this->reportSharables->removeElement($reportSharable)) {
+            $reportSharable->removeRule($this);
+        }
 
         return $this;
     }
