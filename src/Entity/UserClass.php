@@ -172,6 +172,11 @@ class UserClass
      */
     private $visibleBy;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $canReport = true;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -523,6 +528,18 @@ class UserClass
     public function setVisibleBy(bool $visibleBy): self
     {
         $this->visibleBy = $visibleBy;
+
+        return $this;
+    }
+
+    public function getCanReport(): ?bool
+    {
+        return $this->canReport;
+    }
+
+    public function setCanReport(bool $canReport): self
+    {
+        $this->canReport = $canReport;
 
         return $this;
     }

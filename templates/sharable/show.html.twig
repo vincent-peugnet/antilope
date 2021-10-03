@@ -155,7 +155,7 @@
                     ">
                 {% endif %}
                 <a
-                class="btn btn-success {{ not is_granted('validate', sharable) ? 'disabled' : '' }}"
+                    class="btn btn-success {{ not is_granted('validate', sharable) ? 'disabled' : '' }}"
                     {% if is_granted('validate', sharable) %}
                         href="{{ path('sharable_validate', {id: sharable.id}) }}"
                     {% endif %}            
@@ -167,6 +167,13 @@
                     </span>
                 </a>
                 {{ is_granted('validate', sharable) ? '' : '</span>' }}
+
+                {% if is_granted('report', sharable) %}
+                    <a class="btn btn-danger" href="{{ path('sharable_report_new', {id: sharable.id}) }}">
+                        <i class="far fa-flag"></i>
+                        report
+                    </a>
+                {% endif %}
             </div>
         {% endif %}
 

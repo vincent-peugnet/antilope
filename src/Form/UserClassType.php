@@ -79,6 +79,9 @@ class UserClassType extends AbstractType
             ->add('canQuestion', null, [
                 'label' => new TranslatableMessage('can ask questions'),
             ])
+            ->add('canReport', null, [
+                'label' => new TranslatableMessage('can report things'),
+            ])
             ->add('canSetVisibleBy', null, [
                 'label' => new TranslatableMessage('can set visibleBy parameter'),
             ])

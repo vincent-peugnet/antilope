@@ -53,6 +53,7 @@ class SharableVoter extends Voter
     public const CONTACT    = 'contact';
     public const QUESTION   = 'question';
     public const GEO        = 'geo';
+    public const REPORT     = 'report';
 
     private UserClassRepository $userClassRepository;
     private InterestedRepository $interestedRepository;
@@ -85,6 +86,7 @@ class SharableVoter extends Voter
             self::CONTACT,
             self::QUESTION,
             self::GEO,
+            self::REPORT,
         ])
             && $subject instanceof \App\Entity\Sharable;
     }
@@ -121,6 +123,8 @@ class SharableVoter extends Voter
                 return $this->canQuestion($sharable, $user);
             case self::GEO:
                 return $this->canViewGeo($sharable, $user);
+            case self::REPORT:
+                return $this->canReport($sharable, $user);
         }
 
         return false;
@@ -283,6 +287,15 @@ class SharableVoter extends Voter
             $user->getUserClass()->getCanQuestion() &&
             !$this->canEdit($sharable, $user) &&
             !$this->alreadyValidated($sharable, $user)
+        );
+    }
+
+    private function canReport(Sharable $sharable, User $user): bool
+    {
+        return (
+            $this->canView($sharable, $user) &&
+            $user->getUserClass()->getCanReport() &&
+            !$this->canEdit($sharable, $user)
         );
     }
 
