@@ -16,9 +16,18 @@
 
     <h1>{{ 'report'|trans|capitalize }}</h1>
 
-    <h5>on {{ sharableMacro.render(sharable) }}</h5>
+    <div class="alert alert-info">
+        {{ 'Reports are important, they are used to moderate user. They can only be seen by moderators that have no direct relation with it. Be sure of what you are writing as you cannot edit it once you\'ve send it'|trans }}
+    </div>
 
-    {{ form(form) }}
+    <div class="card mb-3">
+        <div class="card-header">
+            <h5 class="card-title">on {{ sharableMacro.render(sharable) }}</h5>
+        </div>
+        <div class="card-body">
 
+            {{ form(form) }}
+        </div>
+    </div>
 
 {% endblock %}

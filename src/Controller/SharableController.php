@@ -47,6 +47,7 @@ use App\Form\ValidationType;
 use App\Repository\BookmarkRepository;
 use App\Repository\InterestedRepository;
 use App\Repository\ManageRepository;
+use App\Repository\ReportSharableRepository;
 use App\Repository\SharableRepository;
 use App\Repository\UserClassRepository;
 use App\Repository\ValidationRepository;
@@ -137,7 +138,8 @@ class SharableController extends AbstractController
         InterestedRepository $interestedRepository,
         ValidationRepository $validationRepository,
         ManageRepository $manageRepository,
-        BookmarkRepository $bookmarkRepository
+        BookmarkRepository $bookmarkRepository,
+        ReportSharableRepository $reportSharableRepository
     ): Response {
         $this->denyAccessUnlessGranted(SharableVoter::VIEW, $sharable);
 
@@ -164,12 +166,18 @@ class SharableController extends AbstractController
             'sharable' => $sharable->getId()
         ]);
 
+        $reported = $reportSharableRepository->findOneBy([
+            'user' => $user->getId(),
+            'sharable' => $sharable->getId()
+        ]);
+
         return $this->render('sharable/show.html.twig', [
-            'sharable' => $sharable,
+            'sharable'   => $sharable,
             'interested' => $interested,
-            'validated' => $validated,
-            'manage' => $manage,
+            'validated'  => $validated,
+            'manage'     => $manage,
             'bookmarked' => $bookmarked,
+            'reported'   => $reported,
         ]);
     }
 

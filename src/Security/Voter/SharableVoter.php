@@ -34,6 +34,7 @@ use App\Entity\UserClass;
 use App\Entity\Validation;
 use App\Repository\InterestedRepository;
 use App\Repository\ManageRepository;
+use App\Repository\ReportSharableRepository;
 use App\Repository\UserClassRepository;
 use App\Repository\ValidationRepository;
 use DateTime;
@@ -59,17 +60,20 @@ class SharableVoter extends Voter
     private InterestedRepository $interestedRepository;
     private ValidationRepository $validationRepository;
     private ManageRepository $manageRepository;
+    private ReportSharableRepository $reportSharableRepository;
 
     public function __construct(
         UserClassRepository $userClassRepository,
         InterestedRepository $interestedRepository,
         ValidationRepository $validationRepository,
-        ManageRepository $manageRepository
+        ManageRepository $manageRepository,
+        ReportSharableRepository $reportSharableRepository
     ) {
         $this->userClassRepository = $userClassRepository;
         $this->interestedRepository = $interestedRepository;
         $this->validationRepository = $validationRepository;
         $this->manageRepository = $manageRepository;
+        $this->reportSharableRepository = $reportSharableRepository;
     }
 
     protected function supports($attribute, $subject)
@@ -295,7 +299,8 @@ class SharableVoter extends Voter
         return (
             $this->canView($sharable, $user) &&
             $user->getUserClass()->getCanReport() &&
-            !$this->canEdit($sharable, $user)
+            !$this->canEdit($sharable, $user) &&
+            !$this->alreadyReported($sharable, $user)
         );
     }
 
@@ -347,6 +352,14 @@ class SharableVoter extends Voter
         return $this->manageRepository->findOneBy([
             'user' => $user->getId(),
             'sharable' => $sharable->getId()
+        ]);
+    }
+
+    private function alreadyReported(Sharable $sharable, User $user): bool
+    {
+        return (bool) $this->reportSharableRepository->findOneBy([
+            'user' => $user->getId(),
+            'sharable' => $sharable->getId(),
         ]);
     }
 }

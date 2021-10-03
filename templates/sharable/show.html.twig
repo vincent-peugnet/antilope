@@ -11,6 +11,7 @@
 {% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 {% import "macros/user.html.twig" as userMacro %}
 {% import "macros/contact_method.html.twig" as contact_method %}
+{% import "macros/ago.html.twig" as agoMacro %}
 
 
 {% block title %}{{ sharable.name }}{% endblock %}
@@ -41,6 +42,16 @@
                     {{ 'refuse'|trans }}
                 </a>
             </div>
+        </div>
+    {% endif %}
+
+    {% if reported %}
+        <div class="alert alert-danger">
+            <a href="{{ path('sharable_report_show', {id: reported.id}) }}">
+                <i class="fas fa-flag"></i>
+                {{ 'you have reported this sharable'|trans|capitalize }}
+                <small>{{ agoMacro.render(reported.CreatedAt) }}</small>
+            </a>
         </div>
     {% endif %}
 
@@ -171,7 +182,7 @@
                 {% if is_granted('report', sharable) %}
                     <a class="btn btn-danger" href="{{ path('sharable_report_new', {id: sharable.id}) }}">
                         <i class="far fa-flag"></i>
-                        report
+                        {{ 'report'|trans }}
                     </a>
                 {% endif %}
             </div>

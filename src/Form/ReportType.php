@@ -30,9 +30,11 @@ use App\Entity\Rule;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\TranslatableMessage;
 
 abstract class ReportType extends AbstractType
 {
@@ -43,11 +45,22 @@ abstract class ReportType extends AbstractType
                 'class' => Rule::class,
                 'multiple' => true,
                 'expanded' => true,
+                'label' => new TranslatableMessage('broken rules'),
             ])
-            ->add('message', TextType::class, [
+            ->add('message', TextareaType::class, [
                 'required' => true,
+                'help' => 'describe your issue, you can use Markdown <i class="fab fa-markdown"></i>',
+                'help_html' => true,
+                'attr' => [
+                    'data-provide' => 'markdown',
+                    'data-iconlibrary' => 'fa',
+                    'data-resize' => 'vertical',
+                    'data-fullscreen' => '{enable: false}',
+                ],
             ])
-            ->add('report', SubmitType::class)
+            ->add('report', SubmitType::class, [
+                'label' => new TranslatableMessage('report'),
+            ])
         ;
     }
 }
