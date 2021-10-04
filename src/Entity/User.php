@@ -708,6 +708,12 @@ class User implements UserInterface
         });
     }
 
+
+    /**
+     * Get list of confirmed managed sharable that are not deactivated
+     *
+     * @return Collection|Manage[]
+     */
     public function getConfirmedEnabledManages(): Collection
     {
         return $this->manages->filter(function (Manage $manage) {

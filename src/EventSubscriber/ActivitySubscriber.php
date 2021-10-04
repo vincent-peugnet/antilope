@@ -40,7 +40,7 @@ use Symfony\Component\Security\Core\AuthenticationEvents;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\SecurityEvents;
 
-class ActivitySubsriberSubscriber implements EventSubscriberInterface
+class ActivitySubscriber implements EventSubscriberInterface
 {
     private Security $security;
     private EntityManagerInterface $em;
