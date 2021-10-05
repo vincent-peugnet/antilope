@@ -78,7 +78,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
             ->setUserClass($member)
             ->setCreatedAt(new DateTime('2020-06-02'))
             ->setParanoia(0)
-            ->setRoles([User::ROLE_ADMIN])
+            ->setRole(User::ROLE_ADMIN)
             ->setIsVerified(true)
             ->setShareScore(1182);
         $manager->persist($userVincent);

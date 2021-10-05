@@ -34,6 +34,7 @@ use Doctrine\Common\Collections\Collection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+use InvalidArgumentException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -43,10 +44,20 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface
 {
+    public const ROLE_USER      =   0;
+    public const ROLE_MODERATOR =  50;
+    public const ROLE_ADMIN     = 100;
 
-    public const ROLE_USER = 'ROLE_USER';
-    public const ROLE_ADMIN = 'ROLE_ADMIN';
-    public const ROLE_MODERATOR = 'ROLE_MODERATOR';
+    public const ROLE = [
+        'user'      => self::ROLE_USER,
+        'moderator' => self::ROLE_MODERATOR,
+        'admin'     => self::ROLE_ADMIN,
+    ];
+
+    public static function roleOptionsValues()
+    {
+        return array_values(self::ROLE);
+    }
 
     /**
      * @ORM\Id
@@ -71,9 +82,10 @@ class User implements UserInterface
     private $username;
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="smallint", options={"default" : 0})
+     * @Assert\Choice(callback="roleOptionsValues")
      */
-    private $roles = [];
+    private $role = 0;
 
     /**
      * @var string The hashed password
@@ -228,23 +240,27 @@ class User implements UserInterface
         return $this;
     }
 
+    public function getRole(): int
+    {
+        return $this->role;
+    }
+
+    public function setRole(int $role): self
+    {
+        if (!in_array($role, self::ROLE)) {
+            throw new InvalidArgumentException("Not existing role");
+        }
+        $this->role = $role;
+
+        return $this;
+    }
+
     /**
-     * @see UserInterface
+     * Only here for compatibility with UserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = self::ROLE_USER;
-
-        return array_unique($roles);
-    }
-
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
-
-        return $this;
+        return [];
     }
 
     /**
@@ -572,21 +588,15 @@ class User implements UserInterface
      */
     public function isAdmin(): bool
     {
-        return (in_array(self::ROLE_ADMIN, $this->roles));
+        return $this->role === self::ROLE_ADMIN;
     }
 
-    public function setAdmin(bool $admin): self
+    /**
+     * @return bool if user is moderator
+     */
+    public function isModerator(): bool
     {
-        if ($admin) {
-            $this->roles[] = self::ROLE_ADMIN;
-            $this->roles = array_unique($this->roles);
-        } else {
-            $this->roles = array_filter($this->roles, function (string $role) {
-                return $role !== self::ROLE_ADMIN;
-            });
-        }
-
-        return $this;
+        return $this->role === self::ROLE_MODERATOR;
     }
 
     public function getAvatarPath(): string

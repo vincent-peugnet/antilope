@@ -85,7 +85,7 @@ class AdminCommand extends Command
         $user = $userRepository->findOneBy(['id' => $userId]);
         if (!is_null($user)) {
             $username = $user->getUsername();
-            $user->setAdmin(!$user->isAdmin());
+            $user->setRole(User::ROLE_ADMIN);
             $this->entityManager->persist($user);
             $this->entityManager->flush();
             $isadmin = $user->isAdmin() ? 'obtained' : 'lost';
