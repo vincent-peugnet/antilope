@@ -185,6 +185,13 @@
                         {{ 'report'|trans }}
                     </a>
                 {% endif %}
+
+                {% if is_granted('view_reports', sharable) %}
+                    <a class="btn btn-primary" href="{{ path('sharable_report_index', {id: sharable.id}) }}">
+                        reports
+                        <span class="badge badge-secondary">{{ sharable.getReport|length }}</span>
+                    </a>
+                {% endif %}
             </div>
         {% endif %}
 

@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
+{% import "macros/user.html.twig" as userMacro %}
+{% import "macros/sharable.html.twig" as sharableMacro %}
+{% import "macros/ago.html.twig" as agoMacro %}
+
+{% block title %}{{ 'reports'|trans|capitalize }}{% endblock %}
+
+{% block content %}
+
+
+{{ breadcrumbs.render([
+    {'url': url('sharable'), 'text': 'sharables'|trans|capitalize },
+    {'url': url('sharable_show', {id: sharable.id}), 'text': sharable.name},
+    {'text': 'reports'|trans|capitalize },
+]) }}
+
+    <h1>
+        {{ 'reports'|trans|capitalize }}
+    </h1>
+
+    {% for reportSharable in reports|reverse %}
+        
+
+        <div class="card mb-3">
+            <div class="card-header">
+                <h5 class="card-title">
+                    {{ 'by'|trans }}  {{ userMacro.render(reportSharable.user) }}
+                    <small>
+                        {{ agoMacro.render(reportSharable.createdAt) }}
+                        {% if reportSharable.createdAt != reportSharable.lastEditedAt %}
+                        {{ 'last edited'|trans|capitalize }} {{ agoMacro.render(reportSharable.lastEditedAt, true) }}
+                        {% endif %}
+                    </small>
+                </h5>
+            </div>
+            <div class="card-body">
+                <h4>{{ 'explanation message'|trans|capitalize }}</h4>
+
+                <div class="alert alert-info">
+                    {{ reportSharable.message|markdown_to_html }}
+                </div>
+
+                {% if reportSharable.rules is not empty %}
+
+                    <h4>{{ 'broken rules'|trans|capitalize }}</h4>
+                    
+                    <ul class="list-group">
+                        {% for rule in reportSharable.rules %}
+                        <li class="list-group-item">
+                            <a href="{{ path('rule_show', {id: rule.id}) }}">
+                                {{ rule.id }}
+                                {{ rule.name }}
+                            </a>
+                            <p>
+                                {{ rule.text }}
+                            </p>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                
+                {% endif %}
+            </div>
+        </div>
+
+
+    {% endfor %}
+
+{% endblock %}

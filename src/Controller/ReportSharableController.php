@@ -42,7 +42,7 @@ class ReportSharableController extends AbstractController
 {
 
     /**
-     * @Route("/sharable/{id}/report", name="sharable_report_new", requirements={"id"="\d+"})
+     * @Route("/sharable/{id}/report/new", name="sharable_report_new", requirements={"id"="\d+"})
      */
     public function new(
         Sharable $sharable,
@@ -67,7 +67,7 @@ class ReportSharableController extends AbstractController
             return $this->redirectToRoute('sharable_show', ['id' => $sharable->getId()]);
         }
 
-        return $this->render('report_sharable/new.html.twig', [
+        return $this->render('sharable/report/new.html.twig', [
             'form' => $form->createView(),
             'sharable' => $sharable,
         ]);
@@ -81,8 +81,21 @@ class ReportSharableController extends AbstractController
     ): Response {
         $this->denyAccessUnlessGranted(ReportSharableVoter::VIEW, $reportSharable->getSharable());
 
-        return $this->render('report_sharable/show.html.twig', [
+        return $this->render('sharable/report/show.html.twig', [
             'reportSharable' => $reportSharable,
+        ]);
+    }
+
+    /**
+     * @Route("/sharable/{id}/report", name="sharable_report_index", requirements={"id"="\d+"})
+     */
+    public function index(Sharable $sharable): Response
+    {
+        $this->denyAccessUnlessGranted(SharableVoter::VIEW_REPORTS, $sharable);
+
+        return $this->render('sharable/report/index.html.twig', [
+            'sharable' => $sharable,
+            'reports' => $sharable->getReport(),
         ]);
     }
 }

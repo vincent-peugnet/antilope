@@ -45,16 +45,17 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class SharableVoter extends Voter
 {
-    public const VIEW       = 'view';
-    public const EDIT       = 'edit';
-    public const VALIDATE   = 'validate';
-    public const CREATE     = 'create';
-    public const INTEREST   = 'interest';
-    public const INTERESTED = 'interested';
-    public const CONTACT    = 'contact';
-    public const QUESTION   = 'question';
-    public const GEO        = 'geo';
-    public const REPORT     = 'report';
+    public const VIEW         = 'view';
+    public const EDIT         = 'edit';
+    public const VALIDATE     = 'validate';
+    public const CREATE       = 'create';
+    public const INTEREST     = 'interest';
+    public const INTERESTED   = 'interested';
+    public const CONTACT      = 'contact';
+    public const QUESTION     = 'question';
+    public const GEO          = 'geo';
+    public const REPORT       = 'report';
+    public const VIEW_REPORTS = 'view_reports';
 
     private UserClassRepository $userClassRepository;
     private InterestedRepository $interestedRepository;
@@ -91,6 +92,7 @@ class SharableVoter extends Voter
             self::QUESTION,
             self::GEO,
             self::REPORT,
+            self::VIEW_REPORTS
         ])
             && $subject instanceof \App\Entity\Sharable;
     }
@@ -129,6 +131,8 @@ class SharableVoter extends Voter
                 return $this->canViewGeo($sharable, $user);
             case self::REPORT:
                 return $this->canReport($sharable, $user);
+            case self::VIEW_REPORTS:
+                return $this->canViewReports($sharable, $user);
         }
 
         return false;
@@ -301,6 +305,15 @@ class SharableVoter extends Voter
             $user->getUserClass()->getCanReport() &&
             !$this->canEdit($sharable, $user) &&
             !$this->alreadyReported($sharable, $user)
+        );
+    }
+
+    private function canViewReports(Sharable $sharable, User $user)
+    {
+        return (
+            $this->canView($sharable, $user) &&
+            $user->getRole() >= User::ROLE_MODERATOR &&
+            !$sharable->getReport()->isEmpty()
         );
     }
 

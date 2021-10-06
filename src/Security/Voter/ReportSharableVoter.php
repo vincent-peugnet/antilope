@@ -70,7 +70,7 @@ class ReportSharableVoter extends Voter
             $reportSharable->getUser() === $user &&
             !$user->isDisabled()
             ||
-            $user->isAdmin()
+            $user->getRole() >= User::ROLE_MODERATOR
         );
     }
 }
