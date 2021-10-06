@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'role edit'|trans|capitalize }}{% endblock %}
+
+
+{% block content %}
+
+
+
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
+
+{{ breadcrumbs.render([
+    {'url': url('user'), 'text': 'users'|trans|capitalize },
+    {'url': url('user_show', {id: user.id}), 'text': user.username},
+    {'text': 'role'|trans|capitalize },
+]) }}
+
+
+<h1>{{ 'role edit'|trans|capitalize }}</h1>
+
+{{ form(form) }}
+
+{% endblock %}

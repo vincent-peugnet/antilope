@@ -30,6 +30,13 @@
             {% if is_granted('contact', user) %}
             <a class="btn btn-primary" href="{{ path('user_contact', {id: user.id}) }}"><i class="fas fa-address-book"></i> {{ 'contacts'|trans }}</a>
             {% endif %}
+
+            {% if is_granted('role', user) %}
+                {{ user.getRoleLabel|capitalize }}
+                <a class="btn btn-primary" href="{{ path('user_role', {id: user.id}) }}">
+                    {{ 'edit role'|trans|capitalize }}
+                </a>
+            {% endif %}
         </div>
 
     </div>

@@ -245,6 +245,11 @@ class User implements UserInterface
         return $this->role;
     }
 
+    public function getRoleLabel(): string
+    {
+        return array_search($this->role, User::ROLE);
+    }
+
     public function setRole(int $role): self
     {
         if (!in_array($role, self::ROLE)) {

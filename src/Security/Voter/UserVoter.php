@@ -31,6 +31,7 @@ use App\Entity\Sharable;
 use App\Entity\User;
 use App\Repository\SharableRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use PhpParser\Node\Stmt\Return_;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -60,6 +61,7 @@ class UserVoter extends Voter
     public const VIEW             = 'view';
     public const EDIT             = 'edit';
     public const CONTACT          = 'contact';
+    public const ROLE             = 'role';
 
     /** @var EntityManagerInterface $em */
     private $em;
@@ -92,6 +94,7 @@ class UserVoter extends Voter
             self::VIEW_SHARABLES,
             self::VIEW_STATS,
             self::CONTACT,
+            self::ROLE,
         ]) && $subject instanceof \App\Entity\User;
     }
 
@@ -125,6 +128,8 @@ class UserVoter extends Voter
                 return $this->canViewSpecific($user, $userProfile, self::VIEW_STATS);
             case self::CONTACT:
                 return $this->canContact($user, $userProfile);
+            case self::ROLE:
+                return $this->canRole($user, $userProfile);
         }
 
         return false;
@@ -203,5 +208,10 @@ class UserVoter extends Voter
             return !$filteredSharables->isEmpty();
         }
         return false;
+    }
+
+    private function canRole(User $user, User $userProfile): bool
+    {
+        return ($user->isAdmin() && !$userProfile->isDisabled());
     }
 }

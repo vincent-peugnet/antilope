@@ -30,6 +30,7 @@ use App\Entity\Sharable;
 use App\Entity\User;
 use App\Entity\UserContact;
 use App\Entity\UserSearch;
+use App\Form\RoleType;
 use App\Form\UserContactType;
 use App\Form\UserSearchType;
 use App\Form\UserType;
@@ -242,5 +243,28 @@ class UserController extends AbstractController
         } else {
             $this->createAccessDeniedException();
         }
+    }
+
+    /**
+     * @Route("/user/{id}/role", name="user_role", requirements={"id"="\d+"})
+     */
+    public function role(User $user, EntityManagerInterface $em, Request $request): Response
+    {
+        $this->denyAccessUnlessGranted(UserVoter::ROLE, $user);
+        $form = $this->createForm(RoleType::class, $user);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $form->getData();
+            assert($user instanceof User);
+
+            $em->persist($user);
+            $em->flush();
+        }
+
+        return $this->render('user/role.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+        ]);
     }
 }
