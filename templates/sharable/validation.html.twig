@@ -40,15 +40,23 @@
 
         <h5 class="card-title">{{ 'by'|trans }}
             {{ userMacro.render(validation.user) }}
-        <small>
-            {{ validation.sendAt|ago }}
-        </small>
+            <small>
+                {{ validation.sendAt|ago }}
+            </small>
         </h5>
 
-
-
-        {% if is_granted('edit', sharable) %}
-            <a class="btn btn-danger disabled" href="">{{ 'report'|trans }}</a>
+        {% set reports = app.user.reports|filter((report) => report in validation.reports) %}
+        {% if is_granted('report', validation) %}
+            <a class="btn btn-danger" href="{{ path('validation_report_new', {id: validation.id}) }}">{{ 'report'|trans }}</a>
+        {% elseif reports | length > 0 %}
+            {% for report in reports %}
+                <a
+                    class="btn btn-danger"
+                    href="{{ path('validation_report_show', {validation_id: validation.id, report_id: report.id}) }}"
+                >
+                    alredy reported
+                </a>
+            {% endfor %}
         {% endif %}
     </div>
 </div>

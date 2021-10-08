@@ -48,8 +48,7 @@ class ReportSharableController extends AbstractController
     public function new(
         Sharable $sharable,
         Request $request,
-        EntityManagerInterface $em,
-        EventDispatcherInterface $dispatcher
+        EntityManagerInterface $em
     ): Response {
         $this->denyAccessUnlessGranted(SharableVoter::REPORT, $sharable);
         $form = $this->createForm(ReportSharableType::class);

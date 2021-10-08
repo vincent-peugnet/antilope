@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
+{% import "macros/user.html.twig" as userMacro %}
+{% import "macros/sharable.html.twig" as sharableMacro %}
+
+{% block title %}{{ 'report'|trans|capitalize }}{% endblock %}
+
+{% block content %}
+
+
+{{ breadcrumbs.render([
+    {'text': 'validations'|trans|capitalize },
+    {'text': validation.message|u.truncate(40, '...', false)},
+    {'text': 'report'|trans|capitalize },
+]) }}
+
+    <h1>{{ 'report'|trans|capitalize }}</h1>
+
+    <div class="alert alert-info">
+        {{ 'Reports are important, they are used to moderate user. They can only be seen by moderators that have no direct relation with it. Be sure of what you are writing as you cannot edit it once you\'ve send it'|trans }}
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <h5 class="card-title">Validation on {{ sharableMacro.render(validation.sharable) }} by {{ userMacro.render(validation.user) }}</h5>
+        </div>
+        <div class="card-body">
+
+            {{ form(form) }}
+        </div>
+    </div>
+
+{% endblock %}

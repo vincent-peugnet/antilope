@@ -29,6 +29,8 @@ namespace App\Entity;
 use App\Repository\ValidationRepository;
 use App\Service\FileUploader;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -70,9 +72,15 @@ class Validation
      */
     private $picture;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ReportValidation::class, mappedBy="validation")
+     */
+    private $reports;
+
     public function __construct()
     {
         $this->sendAt = new DateTime();
+        $this->reports = new ArrayCollection();
     }
 
     // ______________ getter and setters __________________
@@ -145,6 +153,36 @@ class Validation
     public function setPicture(?string $picture): self
     {
         $this->picture = $picture;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ReportValidation[]
+     */
+    public function getReports(): Collection
+    {
+        return $this->reports;
+    }
+
+    public function addReport(ReportValidation $report): self
+    {
+        if (!$this->reports->contains($report)) {
+            $this->reports[] = $report;
+            $report->setValidation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReport(ReportValidation $report): self
+    {
+        if ($this->reports->removeElement($report)) {
+            // set the owning side to null (unless already changed)
+            if ($report->getValidation() === $this) {
+                $report->setValidation(null);
+            }
+        }
 
         return $this;
     }

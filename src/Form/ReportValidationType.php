@@ -24,36 +24,19 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.txt AGPL-3.0-or-later
  */
 
-namespace App\Entity;
+namespace App\Form;
 
-use App\Repository\ReportSharableRepository;
-use Doctrine\ORM\Mapping as ORM;
+use App\Entity\ReportValidation;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * @ORM\Entity(repositoryClass=ReportSharableRepository::class)
- */
-class ReportSharable extends Report
+class ReportValidationType extends ReportType
 {
-    /**
-     * @ORM\ManyToOne(targetEntity=Sharable::class, inversedBy="reports")
-     * @ORM\JoinColumn(nullable=true)
-     */
-    private $sharable;
-
-    public function __construct()
+    public function configureOptions(OptionsResolver $resolver)
     {
-        parent::__construct();
-    }
-
-    public function getSharable(): ?Sharable
-    {
-        return $this->sharable;
-    }
-
-    public function setSharable(?Sharable $sharable): self
-    {
-        $this->sharable = $sharable;
-
-        return $this;
+        $resolver->setDefaults([
+            'data_class' => ReportValidation::class,
+        ]);
     }
 }

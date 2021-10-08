@@ -26,33 +26,34 @@
 
 namespace App\Entity;
 
-use App\Repository\ReportSharableRepository;
+use App\Repository\ReportValidationRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=ReportSharableRepository::class)
+ * @ORM\Entity(repositoryClass=ReportValidationRepository::class)
  */
-class ReportSharable extends Report
+class ReportValidation extends Report
 {
+
     /**
-     * @ORM\ManyToOne(targetEntity=Sharable::class, inversedBy="reports")
+     * @ORM\ManyToOne(targetEntity=Validation::class, inversedBy="reports")
      * @ORM\JoinColumn(nullable=true)
      */
-    private $sharable;
+    private $validation;
 
     public function __construct()
     {
         parent::__construct();
     }
 
-    public function getSharable(): ?Sharable
+    public function getValidation(): ?Validation
     {
-        return $this->sharable;
+        return $this->validation;
     }
 
-    public function setSharable(?Sharable $sharable): self
+    public function setValidation(?Validation $validation): self
     {
-        $this->sharable = $sharable;
+        $this->validation = $validation;
 
         return $this;
     }
