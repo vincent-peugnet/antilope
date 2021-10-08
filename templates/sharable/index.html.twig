@@ -128,13 +128,13 @@
                         {{ contact_method.render(sharable.interestedMethod) }}
 
                         {% if sharable.interesteds|length > 0 %}
-                        <span title="{{ sharable.interesteds|length }} users are insterested in this sharable" class="badge badge-warning">
+                        <span title="{{ sharable.interesteds|length }} user(s) are insterested in this sharable" class="badge badge-warning">
                             {{ sharable.interesteds|length }}
                             <i class="fas fa-question-circle"></i>
                         </span>
                         {% endif %}
                         {% if sharable.validations|length > 0 %}
-                        <span title="{{ sharable.validations|length }} users have validated this sharable" class="badge badge-success">
+                        <span title="{{ sharable.validations|length }} user(s) have validated this sharable" class="badge badge-success">
                             {{ sharable.validations|length }}
                             <i class="fas fa-check-circle"></i></span>
                         {% endif %}
@@ -151,6 +151,15 @@
                         {% endif %}
                         {% if sharable.disabled or not sharable.isAccessible %}
                         <span class="badge badge-danger" title="This sharable is disabled"><i class="fas fa-ban"></i></span>
+                        {% endif %}
+                        {% if sharable.reports|length > 0 and is_granted('view_reports', sharable) %}
+                        <span
+                            class="badge"
+                            title="{{ sharable.reports|length ~ ' ' ~ 'user(s) have reported this sharable'|trans }}"
+                        >
+                            {{ sharable.reports|length }}
+                            <i class="fas fa-flag"></i>
+                        </span>
                         {% endif %}
 
                         {% if sharable.beginAt %}

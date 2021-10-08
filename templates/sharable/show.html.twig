@@ -47,7 +47,7 @@
 
     {% if reported %}
         <div class="alert alert-danger">
-            <a href="{{ path('sharable_report_show', {id: reported.id}) }}">
+            <a href="{{ path('sharable_report_show', {sharable_id: sharable.id, report_id: reported.id}) }}">
                 <i class="fas fa-flag"></i>
                 {{ 'you have reported this sharable'|trans|capitalize }}
                 <small>{{ agoMacro.render(reported.CreatedAt) }}</small>
@@ -189,7 +189,7 @@
                 {% if is_granted('view_reports', sharable) %}
                     <a class="btn btn-primary" href="{{ path('sharable_report_index', {id: sharable.id}) }}">
                         reports
-                        <span class="badge badge-secondary">{{ sharable.getReport|length }}</span>
+                        <span class="badge badge-secondary">{{ sharable.reports|length }}</span>
                     </a>
                 {% endif %}
             </div>

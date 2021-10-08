@@ -142,7 +142,7 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
             ->setDisabled(false)
             ->setInterestedMethod(2)
             ->setLastEditedAt(new DateTime('2020-03-02'))
-            ->setBeginAt(new DateTime("yesterday"))
+            ->setBeginAt(new DateTime('2020-01-02'))
             ->addTag($game)
             ->setDescription('like in the movie "Rebel without a Cause" ')
             ->setDetails('We are going to drive at high speed and then jump out at the last time.

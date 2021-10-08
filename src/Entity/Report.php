@@ -32,7 +32,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-abstract class Report
+/**
+ * @ORM\Entity(repositoryClass=ReportRepository::class)
+ * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name="discr", type="string")
+ */
+class Report
 {
     /**
      * @ORM\Id
@@ -42,12 +47,12 @@ abstract class Report
     protected $id;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Rule::class)
+     * @ORM\ManyToMany(targetEntity=Rule::class, inversedBy="reports")
      */
     protected $rules;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class)
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="reports")
      * @ORM\JoinColumn(nullable=false)
      */
     protected $user;

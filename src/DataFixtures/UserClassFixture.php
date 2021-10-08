@@ -107,7 +107,9 @@ class UserClassFixture extends Fixture
             ->setInviteFrequency(0)
             ->setMaxInactivity(30)
             ->setMaxParanoia(1)
-            ->setName('basic_user');
+            ->setName('basic_user')
+            ->setCanReport(false);
+
         $manager->persist($basicUser);
 
 

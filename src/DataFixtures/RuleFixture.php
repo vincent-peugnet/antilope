@@ -56,6 +56,19 @@ class RuleFixture extends Fixture
             ->setCreatedAt(new DateTime('2018-01-01'));
         $manager->persist($rule3);
 
+        $rule4 = new Rule();
+        $rule4->setName('Dangerousness')
+            ->setText('Nothing should endanger users under any circumstances.')
+            ->setCreatedAt(new DateTime('2018-03-05'));
+        $manager->persist($rule4);
+
+        $rule5 = new Rule();
+        $rule5->setName('Reports')
+            // phpcs:ignore Generic.Files.LineLength.TooLong
+            ->setText('Do do reports for nothing, or bad/fake reports, this add too much effort for moderators for nothing.')
+            ->setCreatedAt(new DateTime('2018-03-05'));
+        $manager->persist($rule5);
+
         $manager->flush();
     }
 }

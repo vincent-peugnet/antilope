@@ -191,9 +191,9 @@ class User implements UserInterface
     private $answers;
 
     /**
-     * @ORM\OneToMany(targetEntity=ReportSharable::class, mappedBy="user", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Report::class, mappedBy="user", orphanRemoval=true)
      */
-    private $reportSharables;
+    private $reports;
 
     public function __construct()
     {
@@ -210,7 +210,7 @@ class User implements UserInterface
         $this->bookmarks = new ArrayCollection();
         $this->questions = new ArrayCollection();
         $this->answers = new ArrayCollection();
-        $this->reportSharables = new ArrayCollection();
+        $this->reports = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -250,6 +250,9 @@ class User implements UserInterface
         return array_search($this->role, User::ROLE);
     }
 
+    /**
+     * @param int $role to choose among the constants named ROLE_ in the class
+     */
     public function setRole(int $role): self
     {
         if (!in_array($role, self::ROLE)) {
@@ -776,29 +779,29 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|ReportSharable[]
+     * @return Collection|Report[]
      */
-    public function getReportSharables(): Collection
+    public function getReports(): Collection
     {
-        return $this->reportSharables;
+        return $this->reports;
     }
 
-    public function addReportSharable(ReportSharable $reportSharable): self
+    public function addReport(Report $report): self
     {
-        if (!$this->reportSharables->contains($reportSharable)) {
-            $this->reportSharables[] = $reportSharable;
-            $reportSharable->setUser($this);
+        if (!$this->reports->contains($report)) {
+            $this->reports[] = $report;
+            $report->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeReportSharable(ReportSharable $reportSharable): self
+    public function removeReport(Report $report): self
     {
-        if ($this->reportSharables->removeElement($reportSharable)) {
+        if ($this->reports->removeElement($report)) {
             // set the owning side to null (unless already changed)
-            if ($reportSharable->getUser() === $this) {
-                $reportSharable->setUser(null);
+            if ($report->getUser() === $this) {
+                $report->setUser(null);
             }
         }
 

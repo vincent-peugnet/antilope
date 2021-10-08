@@ -124,6 +124,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
             ->setUsername('audrey')
             ->setEmail('deluc.audrey@ensapc.fr')
             ->setPassword($this->passwordEncoder->encodePassword($userAudrey, 'missmogwai'))
+            ->setRole(User::ROLE_MODERATOR)
             ->setUserClass($powerUser)
             ->setCreatedAt(new DateTime('2018-03-03'))
             ->setParanoia(0)

@@ -49,6 +49,7 @@ class ManageFixture extends Fixture implements DependentFixtureInterface
         $audrey = $userRepo->findOneBy(['username' => 'audrey']);
         $guillaume = $userRepo->findOneBy(['username' => 'guillaume']);
         $nicolas = $userRepo->findOneBy(['username' => 'nicolas']);
+        $vincent = $userRepo->findOneBy(['username' => 'vincent']);
         $leatine = $userRepo->findOneBy(['username' => 'leatine']);
         $relou = $userRepo->findOneBy(['username' => 'relou']);
 
@@ -145,6 +146,14 @@ class ManageFixture extends Fixture implements DependentFixtureInterface
         $manage = new Manage();
         $manage->setSharable($raveParty);
         $manage->setUser($nicolas);
+        $manage->setContactable(true);
+
+        $manager->persist($manage);
+        $manager->flush();
+
+        $manage = new Manage();
+        $manage->setSharable($raveParty);
+        $manage->setUser($vincent);
         $manage->setContactable(true);
 
         $manager->persist($manage);

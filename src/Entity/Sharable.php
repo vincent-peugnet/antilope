@@ -215,7 +215,7 @@ class Sharable
     /**
      * @ORM\OneToMany(targetEntity=ReportSharable::class, mappedBy="sharable")
      */
-    private $report;
+    private $reports;
 
     public function __construct()
     {
@@ -231,7 +231,7 @@ class Sharable
         $this->bookmarks = new ArrayCollection();
         $this->questions = new ArrayCollection();
         $this->radius = 0;
-        $this->report = new ArrayCollection();
+        $this->reports = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -744,15 +744,15 @@ class Sharable
     /**
      * @return Collection|ReportSharable[]
      */
-    public function getReport(): Collection
+    public function getReports(): Collection
     {
-        return $this->report;
+        return $this->reports;
     }
 
     public function addReport(ReportSharable $report): self
     {
-        if (!$this->report->contains($report)) {
-            $this->report[] = $report;
+        if (!$this->reports->contains($report)) {
+            $this->reports[] = $report;
             $report->setSharable($this);
         }
 
@@ -761,7 +761,7 @@ class Sharable
 
     public function removeReport(ReportSharable $report): self
     {
-        if ($this->report->removeElement($report)) {
+        if ($this->reports->removeElement($report)) {
             // set the owning side to null (unless already changed)
             if ($report->getSharable() === $this) {
                 $report->setSharable(null);

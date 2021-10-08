@@ -24,36 +24,22 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.txt AGPL-3.0-or-later
  */
 
-namespace App\Entity;
+namespace App\Repository;
 
-use App\Repository\ReportSharableRepository;
-use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Report;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @ORM\Entity(repositoryClass=ReportSharableRepository::class)
+ * @method Report|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Report|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Report[]    findAll()
+ * @method Report[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ReportSharable extends Report
+class ReportRepository extends ServiceEntityRepository
 {
-    /**
-     * @ORM\ManyToOne(targetEntity=Sharable::class, inversedBy="reports")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $sharable;
-
-    public function __construct()
+    public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct();
-    }
-
-    public function getSharable(): ?Sharable
-    {
-        return $this->sharable;
-    }
-
-    public function setSharable(?Sharable $sharable): self
-    {
-        $this->sharable = $sharable;
-
-        return $this;
+        parent::__construct($registry, Report::class);
     }
 }

@@ -37,6 +37,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 class ReportSharableController extends AbstractController
 {
@@ -74,11 +75,21 @@ class ReportSharableController extends AbstractController
     }
 
     /**
-     * @Route("/sharable/report/{id}", name="sharable_report_show", requirements={"id"="\d+"})
+     * @Route(
+     *      "/sharable/{sharable_id}/report/{report_id}",
+     *      name="sharable_report_show",
+     *      requirements={"report_id"="\d+", "sharable_id"="\d+"}
+     * )
+     * @paramConverter("sharable", options={"mapping": {"sharable_id": "id"}})
+     * @paramConverter("reportSharable", options={"mapping": {"report_id": "id"}})
      */
     public function show(
+        Sharable $sharable,
         ReportSharable $reportSharable
     ): Response {
+        if ($reportSharable->getSharable() !== $sharable) {
+            throw $this->createNotFoundException('Report doest not match sharable');
+        }
         $this->denyAccessUnlessGranted(ReportSharableVoter::VIEW, $reportSharable->getSharable());
 
         return $this->render('sharable/report/show.html.twig', [
@@ -95,7 +106,7 @@ class ReportSharableController extends AbstractController
 
         return $this->render('sharable/report/index.html.twig', [
             'sharable' => $sharable,
-            'reports' => $sharable->getReport(),
+            'reports' => $sharable->getReports(),
         ]);
     }
 }

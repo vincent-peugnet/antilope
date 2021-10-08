@@ -300,6 +300,7 @@ return array(
     'Update' => 'Update',
     'url' => 'url',
     'Used Invitations' => 'Used Invitations',
+    'user(s) have reported this sharable' => 'user(s) have reported this sharable',
     'userAmount users' => '{userAmount, plural,
         =1     {# user}
         other {# users}

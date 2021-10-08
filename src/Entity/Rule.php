@@ -65,15 +65,15 @@ class Rule
     private $lastEditedAt;
 
     /**
-     * @ORM\ManyToMany(targetEntity=ReportSharable::class, mappedBy="rules")
+     * @ORM\ManyToMany(targetEntity=Report::class, mappedBy="rules")
      */
-    private $reportSharables;
+    private $reports;
 
     public function __construct()
     {
         $this->createdAt = new DateTime();
         $this->lastEditedAt = new DateTime();
-        $this->reportSharables = new ArrayCollection();
+        $this->reports = new ArrayCollection();
     }
     public function __toString(): string
     {
@@ -134,27 +134,27 @@ class Rule
     }
 
     /**
-     * @return Collection|ReportSharable[]
+     * @return Collection|Report[]
      */
-    public function getReportSharables(): Collection
+    public function getReports(): Collection
     {
-        return $this->reportSharables;
+        return $this->reports;
     }
 
-    public function addReportSharable(ReportSharable $reportSharable): self
+    public function addReport(Report $report): self
     {
-        if (!$this->reportSharables->contains($reportSharable)) {
-            $this->reportSharables[] = $reportSharable;
-            $reportSharable->addRule($this);
+        if (!$this->reports->contains($report)) {
+            $this->reports[] = $report;
+            $report->addRule($this);
         }
 
         return $this;
     }
 
-    public function removeReportSharable(ReportSharable $reportSharable): self
+    public function removeReport(Report $report): self
     {
-        if ($this->reportSharables->removeElement($reportSharable)) {
-            $reportSharable->removeRule($this);
+        if ($this->reports->removeElement($report)) {
+            $report->removeRule($this);
         }
 
         return $this;

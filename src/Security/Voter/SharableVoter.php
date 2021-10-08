@@ -313,7 +313,7 @@ class SharableVoter extends Voter
         return (
             $this->canView($sharable, $user) &&
             $user->getRole() >= User::ROLE_MODERATOR &&
-            !$sharable->getReport()->isEmpty()
+            !$sharable->getReports()->isEmpty()
         );
     }
 
