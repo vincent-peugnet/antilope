@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
+{% import "macros/user.html.twig" as userMacro %}
+{% import "macros/sharable.html.twig" as sharableMacro %}
+{% import "macros/ago.html.twig" as agoMacro %}
+
+{% block title %}{{ 'reports'|trans|capitalize }}{% endblock %}
+
+{% block content %}
+
+
+{{ breadcrumbs.render([
+    {'text': 'validations'|trans|capitalize },
+    {'text': validation.message|u.truncate(40, '...', false)},
+    {'text': 'reports'|trans|capitalize },
+]) }}
+
+    <h1>
+        {{ 'reports'|trans|capitalize }}
+    </h1>
+
+    {% for reportValidation in validation.reports|reverse %}
+        
+
+        <div class="card mb-3">
+            <div class="card-header">
+                <h5 class="card-title">
+                    <a href="{{
+                        path('validation_report_show',
+                        {validation_id : reportValidation.validation.id, report_id: reportValidation.id})
+                    }}"
+                    >
+                        {{ '#' ~ reportValidation.id }}
+                    </a>
+                    {{ 'by'|trans }} {{ userMacro.render(reportValidation.user) }}
+                    <small>
+                        {{ agoMacro.render(reportValidation.createdAt) }}
+                        {% if reportValidation.createdAt != reportValidation.lastEditedAt %}
+                        {{ 'last edited'|trans|capitalize }} {{ agoMacro.render(reportValidation.lastEditedAt, true) }}
+                        {% endif %}
+                    </small>
+                </h5>
+            </div>
+            <div class="card-body">
+                <h4>{{ 'explanation message'|trans|capitalize }}</h4>
+
+                <div class="alert alert-info">
+                    {{ reportValidation.message|markdown_to_html }}
+                </div>
+
+                {% if reportValidation.rules is not empty %}
+
+                    <h4>{{ 'broken rules'|trans|capitalize }}</h4>
+                    
+                    <ul class="list-group">
+                        {% for rule in reportValidation.rules %}
+                        <li class="list-group-item">
+                            <a
+                                href="{{ path('rule_show', {id: rule.id}) }}"
+                                title="{{ rule.text }}"
+                            >
+                                {{ rule.id }}
+                                {{ rule.name }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <a
+                        class="btn btn-primary"
+                        href="{{
+                            path('validation_report_show',
+                            {validation_id : reportValidation.validation.id, report_id: reportValidation.id})
+                        }}"
+                    >
+                        view
+                    </a>
+                
+                {% endif %}
+            </div>
+        </div>
+
+
+    {% endfor %}
+
+{% endblock %}

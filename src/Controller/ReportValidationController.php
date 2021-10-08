@@ -41,6 +41,17 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 class ReportValidationController extends AbstractController
 {
+    /**
+     * @Route("/validation/{id}/report", name="validation_report", requirements={"id"="\d+"})
+     */
+    public function index(Validation $validation)
+    {
+        $this->denyAccessUnlessGranted(ValidationVoter::VIEW_REPORTS, $validation);
+
+        return $this->render('validation/report/index.html.twig', [
+            'validation' => $validation,
+        ]);
+    }
 
     /**
      * @Route("/validation/{id}/report/new", name="validation_report_new", requirements={"id"="\d+"})

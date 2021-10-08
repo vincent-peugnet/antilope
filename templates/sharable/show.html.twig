@@ -500,13 +500,14 @@
                         {{ 'by'|trans }}
                         {{ userMacro.render(validation.user) }}
                         {% if validation.reports|length > 0 and is_granted('view_reports', validation) %}
-                            <span
+                            <a
                                 class="badge"
+                                href="{{ path('validation_report', {id: validation.id}) }}"
                                 title="{{ validation.reports|length ~ ' ' ~ 'user(s) have reported this validation'|trans }}"
                             >
                                 {{ validation.reports|length }}
                                 <i class="fas fa-flag"></i>
-                            </span>
+                            </a>
                         {% endif %}
                     </h5>
                     <small class="text-muted">

@@ -77,7 +77,7 @@ class ValidationVoter extends Voter
     private function canReport(Validation $validation, User $user): bool
     {
         return (
-            $this->authorization->isGranted(SharableVoter::EDIT, $validation->getSharable()) &&
+            $this->authorization->isGranted(SharableVoter::VIEW, $validation->getSharable()) &&
             !$this->alreadyReported($validation, $user)
         );
     }
