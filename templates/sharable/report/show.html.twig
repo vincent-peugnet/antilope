@@ -12,11 +12,11 @@
 {{ breadcrumbs.render([
     {'url': url('sharable'), 'text': 'sharables'|trans|capitalize },
     {'url': url('sharable_show', {id: reportSharable.sharable.id}), 'text': reportSharable.sharable.name},
-    {'text': 'report'|trans|capitalize },
+    {'text': 'report'|trans|capitalize ~ ' #' ~ reportSharable.id },
 ]) }}
 
     <h1>
-        {{ 'reported'|trans|capitalize }}
+        {{ 'report'|trans|capitalize ~ ' #' ~ reportSharable.id }}
     </h1>
 
 

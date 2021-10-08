@@ -25,7 +25,14 @@
         <div class="card mb-3">
             <div class="card-header">
                 <h5 class="card-title">
-                    {{ 'by'|trans }}  {{ userMacro.render(reportSharable.user) }}
+                    <a href="{{
+                        path('sharable_report_show',
+                        {sharable_id : reportSharable.sharable.id, report_id: reportSharable.id})
+                    }}"
+                    >
+                        {{ '#' ~ reportSharable.id }}
+                    </a>
+                    {{ 'by'|trans }} {{ userMacro.render(reportSharable.user) }}
                     <small>
                         {{ agoMacro.render(reportSharable.createdAt) }}
                         {% if reportSharable.createdAt != reportSharable.lastEditedAt %}
@@ -48,16 +55,25 @@
                     <ul class="list-group">
                         {% for rule in reportSharable.rules %}
                         <li class="list-group-item">
-                            <a href="{{ path('rule_show', {id: rule.id}) }}">
+                            <a
+                                href="{{ path('rule_show', {id: rule.id}) }}"
+                                title="{{ rule.text }}"
+                            >
                                 {{ rule.id }}
                                 {{ rule.name }}
                             </a>
-                            <p>
-                                {{ rule.text }}
-                            </p>
                         </li>
                         {% endfor %}
                     </ul>
+                    <a
+                        class="btn btn-primary"
+                        href="{{
+                            path('sharable_report_show',
+                            {sharable_id : reportSharable.sharable.id, report_id: reportSharable.id})
+                        }}"
+                    >
+                        view
+                    </a>
                 
                 {% endif %}
             </div>
