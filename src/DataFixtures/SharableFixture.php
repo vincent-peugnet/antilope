@@ -64,8 +64,8 @@ class SharableFixture extends Fixture implements DependentFixtureInterface
         $sharable = new Sharable();
         $sharable->setName('Aide sur les Thinkpads')
             ->setDisabled(false)
-            ->setCreatedAt(new DateTime('2020-01-02'))
-            ->setLastEditedAt(new DateTime('2020-03-02'))
+            ->setCreatedAt(new DateTime('2019-01-02'))
+            ->setLastEditedAt(new DateTime('2019-03-02'))
             ->setVisibleBy($basicUser)
             ->addTag($help)
             ->setDescription('Je peux vous aider à trouver ou réparer des Thinkpads')

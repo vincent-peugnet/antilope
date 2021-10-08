@@ -20,21 +20,21 @@
  *
  * @package Antilope
  * @author Vincent Peugnet <vincent-peugnet@riseup.net>
- * @copyright 2020-2021 Vincent Peugnet
+ * @copyright 2021-2021 Vincent Peugnet
  * @license https://www.gnu.org/licenses/agpl-3.0.txt AGPL-3.0-or-later
  */
 
 namespace App\DataFixtures;
 
+use App\Entity\Question;
 use App\Entity\Sharable;
 use App\Entity\User;
-use App\Entity\Validation;
 use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class ValidationFixture extends Fixture implements DependentFixtureInterface
+class QuestionFixture extends Fixture implements DependentFixtureInterface
 {
     public function getDependencies()
     {
@@ -50,10 +50,11 @@ class ValidationFixture extends Fixture implements DependentFixtureInterface
         $vincent = $userRepo->findOneBy(['username' => 'vincent']);
         $audrey = $userRepo->findOneBy(['username' => 'audrey']);
         $guillaume = $userRepo->findOneBy(['username' => 'guillaume']);
+        $guilhem = $userRepo->findOneBy(['username' => 'guilhem']);
         $nicolas = $userRepo->findOneBy(['username' => 'nicolas']);
         $leatine = $userRepo->findOneBy(['username' => 'leatine']);
         $relou = $userRepo->findOneBy(['username' => 'relou']);
-        $guilhem = $userRepo->findOneBy(['username' => 'guilhem']);
+        $bolos = $userRepo->findOneBy(['username' => 'bolos']);
 
         $sharableRepo = $manager->getRepository(Sharable::class);
         $thinkpad = $sharableRepo->findOneBy(['name' => 'Aide sur les Thinkpads']);
@@ -62,31 +63,27 @@ class ValidationFixture extends Fixture implements DependentFixtureInterface
         $mers = $sharableRepo->findOneBy(['name' => 'Maison de mers']);
         $concert = $sharableRepo->findOneBy(['name' => 'Concert de Tendre Ael']);
         $champignon = $sharableRepo->findOneBy(['name' => 'Un coin à champignon']);
+        $cliffAndCars = $sharableRepo->findOneBy(['name' => "Cliff n' Cars"]);
 
-        $guilhemValidatedChampignon = new Validation();
-        $guilhemValidatedChampignon->setSharable($champignon)
-            ->setUser($guilhem)
-            ->setMessage('Very good spot ! Thanks');
-        $manager->persist($guilhemValidatedChampignon);
+        $question1 = new Question();
+        $question1->setUser($audrey)
+            ->setSharable($microscope)
+            ->setText('Can we use it for spiruline ?');
+        $manager->persist($question1);
 
-        $guilhemValidatedThinkpad = new Validation();
-        $guilhemValidatedThinkpad->setSharable($thinkpad)
-            ->setUser($guilhem)
-            ->setSendAt(new DateTime('2021-01-01'))
-            ->setMessage('Thanks for helping me with my X250');
-        $manager->persist($guilhemValidatedThinkpad);
+        $question2 = new Question();
+        $question2->setUser($guilhem)
+            ->setSharable($thinkpad)
+            ->setCreatedAt(new DateTime('2020-04-08'))
+            ->setText('Do you think you can help on repairing ?');
+        $manager->persist($question2);
 
-        $guilhemValidatedMers = new Validation();
-        $guilhemValidatedMers->setSharable($mers)
-            ->setUser($guilhem)
-            ->setMessage('Even if I am not a big fan of water, the little town ambiance is charming');
-        $manager->persist($guilhemValidatedMers);
-
-        $audreyValidatedChampignon = new Validation();
-        $audreyValidatedChampignon->setSharable($champignon)
-            ->setUser($audrey)
-            ->setMessage('They are really delicious !');
-        $manager->persist($audreyValidatedChampignon);
+        $question3 = new Question();
+        $question3->setUser($bolos)
+            ->setSharable($thinkpad)
+            ->setText('Do you sell thinkpads ?')
+            ->setCreatedAt(new DateTime('2021-02-02'));
+        $manager->persist($question3);
 
         $manager->flush();
     }

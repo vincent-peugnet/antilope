@@ -46,6 +46,7 @@ class UserClassFixture extends Fixture
             ->setValidatedReq(3)
             ->setManageReq(5)
             ->setVisibleBy(true)
+            ->setCanQuestion(true)
             ->setName('elite');
         $manager->persist($elite);
 
@@ -61,6 +62,7 @@ class UserClassFixture extends Fixture
             ->setAccountAgeReq(21)
             ->setValidatedReq(1)
             ->setVisibleBy(true)
+            ->setCanQuestion(true)
             ->setManageReq(3)
             ->setName('power_user');
         $manager->persist($powerUser);
@@ -79,6 +81,7 @@ class UserClassFixture extends Fixture
             ->setValidatedReq(0)
             ->setManageReq(1)
             ->setVisibleBy(true)
+            ->setCanQuestion(true)
             ->setName('member');
         $manager->persist($member);
 
@@ -94,6 +97,7 @@ class UserClassFixture extends Fixture
             ->setShareScoreReq(0)
             ->setAccountAgeReq(0)
             ->setValidatedReq(0)
+            ->setCanQuestion(true)
             ->setManageReq(1)
             ->setName('baby_member');
         $manager->persist($babyMember);
