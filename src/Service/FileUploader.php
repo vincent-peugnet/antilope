@@ -26,6 +26,8 @@
 
 namespace App\Service;
 
+use App\Entity\Sharable;
+use InvalidArgumentException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -40,7 +42,8 @@ class FileUploader
     public const AVATAR = '/uploads/avatar';
     public const COVER = '/uploads/cover';
     public const VALIDATION = '/uploads/validation';
-    public const TYPES = [self::AVATAR, self::COVER, self::VALIDATION];
+    public const GALLERY = '/uploads/gallery';
+    public const TYPES = [self::AVATAR, self::COVER, self::VALIDATION, self::GALLERY];
 
     public function __construct(SluggerInterface $slugger, ParameterBagInterface $parameters)
     {
@@ -49,13 +52,22 @@ class FileUploader
     }
 
     /**
+     * @param UploadedFile $file
      * @param string $type should be listed in fileUploader constants
      * @return string new name of uploaded file
      */
-    public function upload(UploadedFile $file, string $type): string
+    public function upload(UploadedFile $file, string $type, $option = null): string
     {
         if (!in_array($type, self::TYPES)) {
             throw new UnexpectedValueException('type should be a value in ' . implode(' | ', self::TYPES));
+        }
+
+        if ($type === self::GALLERY) {
+            if ($option instanceof Sharable) {
+                $type = self::GALLERY . '/' . $option->getFormatedId();
+            } else {
+                throw new InvalidArgumentException("When file type is gallery, option should be a Sharable object");
+            }
         }
 
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
@@ -80,5 +92,10 @@ class FileUploader
         if ($fileSystem->exists($filePath)) {
             $fileSystem->remove($filePath);
         }
+    }
+
+    public function gallery(Sharable $sharable): string
+    {
+        return $this->targetDirectory . self::GALLERY . '/' . $sharable->getFormatedId();
     }
 }

@@ -331,6 +331,11 @@ class Sharable
         return FileUploader::COVER . '/' . $this->cover;
     }
 
+    public function getGalleryPath(): string
+    {
+        return FileUploader::GALLERY . '/' . $this->getFormatedId() . '/';
+    }
+
     public function isGeo(): bool
     {
         return (!is_null($this->latitude) && !is_null($this->longitude));
@@ -363,6 +368,11 @@ class Sharable
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getFormatedId(): string
+    {
+        return sprintf('%09d', $this->id);
     }
 
     public function getName(): ?string

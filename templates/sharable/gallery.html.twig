@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
+{% import 'macros/content_by_type.html.twig' as content_by_type %}
+{% import 'macros/user.html.twig' as userMacro %}
+
+
+{% block title %}{{ sharable.name }} : {{ 'gallery'|trans|capitalize }}{% endblock %}
+
+{% block content %}
+
+
+{{ breadcrumbs.render([
+    {'url': url('sharable'), 'text': 'sharables'|trans|capitalize },
+    {'url': url('sharable_show', {id: sharable.id}), 'text': sharable.name},
+    {'text': 'gallery'|trans|capitalize },
+]) }}
+
+<h1>{{ 'gallery'|trans|capitalize }}</h1>
+
+{% for image in images %}
+    <a href="{{ asset(galleryPath ~ image.getFilename)|imagine_filter('gallery_1440') }}" target="_blank">
+        <img src="{{ asset(galleryPath ~ image.getFilename)|imagine_filter('gallery_200') }}" alt="">
+    </a>
+{% endfor %}
+
+{% if is_granted('edit', sharable) %}
+
+{{ form(form) }}
+    
+{% endif %}
+
+
+
+{% endblock %}
