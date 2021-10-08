@@ -29,18 +29,14 @@ namespace App\Controller;
 use App\Entity\Bookmark;
 use App\Entity\Interested;
 use App\Entity\Manage;
-use App\Entity\Question;
 use App\Entity\SharableSearch;
 use App\Entity\Sharable;
 use App\Entity\SharableContact;
 use App\Entity\User;
 use App\Entity\Validation;
 use App\Event\ManageEvent;
-use App\Event\QuestionEvent;
 use App\Event\SharableEvent;
 use App\Event\ValidationEvent;
-use App\Form\GalleryType;
-use App\Form\QuestionType;
 use App\Form\SharableContactType;
 use App\Form\SharableSearchType;
 use App\Form\SharableType;
@@ -60,8 +56,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -142,7 +138,8 @@ class SharableController extends AbstractController
         ValidationRepository $validationRepository,
         ManageRepository $manageRepository,
         BookmarkRepository $bookmarkRepository,
-        ReportSharableRepository $reportSharableRepository
+        ReportSharableRepository $reportSharableRepository,
+        FileUploader $fileUploader
     ): Response {
         $this->denyAccessUnlessGranted(SharableVoter::VIEW, $sharable);
 
@@ -174,13 +171,25 @@ class SharableController extends AbstractController
             'sharable' => $sharable->getId()
         ]);
 
+        $galleryAbsolutePath = $fileUploader->gallery($sharable);
+        $fileSystem = new Filesystem();
+
+        if ($fileSystem->exists($galleryAbsolutePath)) {
+            $galleryImages = new Finder();
+            $galleryImages->files()->in($galleryAbsolutePath);
+        } else {
+            $galleryImages = [];
+        }
+
         return $this->render('sharable/show.html.twig', [
-            'sharable'   => $sharable,
-            'interested' => $interested,
-            'validated'  => $validated,
-            'manage'     => $manage,
-            'bookmarked' => $bookmarked,
-            'reported'   => $reported,
+            'sharable'      => $sharable,
+            'interested'    => $interested,
+            'validated'     => $validated,
+            'manage'        => $manage,
+            'bookmarked'    => $bookmarked,
+            'reported'      => $reported,
+            'galleryImages' => $galleryImages,
+            'galleryPath'   => $sharable->getGalleryPath(),
         ]);
     }
 
@@ -452,37 +461,6 @@ class SharableController extends AbstractController
         return $this->render('sharable/new.html.twig', [
             'form' => $form->createView(),
             'canAccessUserClass' => $userClassRepository->findBy(['access' => true]),
-        ]);
-    }
-
-    /**
-     * @Route("/sharable/{id}/gallery", name="sharable_gallery", requirements={"id"="\d+"})
-     */
-    public function gallery(Sharable $sharable, Request $request, FileUploader $fileUploader): Response
-    {
-        $this->denyAccessUnlessGranted(SharableVoter::EDIT, $sharable);
-
-        $form = $this->createForm(GalleryType::class);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $images = $form->get('images')->getData();
-            foreach ($images as $image) {
-                $fileUploader->upload($image, FileUploader::GALLERY, $sharable);
-            }
-            $this->redirectToRoute('sharable_gallery', ['id' => $sharable->getId()]);
-        }
-
-        $images = new Finder();
-        $galleryPath = $fileUploader->gallery($sharable);
-        $images->files()->in($galleryPath);
-
-
-        return $this->render('sharable/gallery.html.twig', [
-            'sharable' => $sharable,
-            'form' => $form->createView(),
-            'images' => $images,
-            'galleryPath' => $sharable->getGalleryPath(),
         ]);
     }
 }

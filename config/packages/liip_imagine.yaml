@@ -51,12 +51,19 @@ liip_imagine:
                     size: [250, 400]
                     mode: 'inset'
                     allow_upscale: true
+        gallery_100:
+            quality: 60
+            format: jpg
+            filters:
+                fixed:
+                    width:  100 
+                    height: 100
         gallery_200:
             quality: 60
             format: jpg
             filters:
                 fixed:
-                    width:  200
+                    width:  200 
                     height: 200
         gallery_1440:
             quality: 70

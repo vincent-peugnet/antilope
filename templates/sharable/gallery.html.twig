@@ -18,16 +18,31 @@
 <h1>{{ 'gallery'|trans|capitalize }}</h1>
 
 {% for image in images %}
-    <a href="{{ asset(galleryPath ~ image.getFilename)|imagine_filter('gallery_1440') }}" target="_blank">
-        <img src="{{ asset(galleryPath ~ image.getFilename)|imagine_filter('gallery_200') }}" alt="">
-    </a>
+    <div>
+        <a href="{{ asset(galleryPath ~ image.getFilename)|imagine_filter('gallery_1440') }}" target="_blank">
+            <img src="{{ asset(galleryPath ~ image.getFilename)|imagine_filter('gallery_200') }}" alt="">
+        </a>
+        <a
+            class="btn btn-danger"
+            href="{{ path('sharable_gallery_delete', {sharable_id: sharable.id, image_id: image.getFilename}) }}"
+        >
+            <i class="fas fa-times-circle"></i>
+            {{ 'delete'|trans }}
+        </a>
+    </div>
 {% endfor %}
 
-{% if is_granted('edit', sharable) %}
-
-{{ form(form) }}
+<div class="card">
+    <div class="card-header">
+        <h3>
+            {{ 'upload'|trans|capitalize }}
+        </h3>
+    </div>
+    <div class="card-body">
+        {{ form(form) }}
+    </div>
     
-{% endif %}
+</div>
 
 
 
