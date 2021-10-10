@@ -23,12 +23,12 @@
     <p>
         {{ 'By default, sharables are visible by those user classes:'|trans }}
         {% for userClass in canAccessUserClass %}
-        <span class="badge badge-primary">{{ userClass.name }}</span>
+        <span class="badge bg-primary">{{ userClass.name }}</span>
         {% endfor %}
     </p>
     {% if not app.user.userClass.canSetVisibleBy %}
         <div class="alert alert-secondary">
-            {{ 'Beccause of your user class'|trans }} <span class="badge badge-primary">{{ app.user.userClass.name }}</span>,
+            {{ 'Beccause of your user class'|trans }} <span class="badge bg-primary">{{ app.user.userClass.name }}</span>,
             {{ 'you cannot change this setting'|trans }}.
         </div>
     {% endif %}

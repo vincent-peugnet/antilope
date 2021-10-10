@@ -15,17 +15,17 @@
             {{ 'userAmount users found'|trans({'userAmount': usersPagination.getTotalItemCount}) }}
             {% if search.userClass %}
                 {{ 'that are'|trans }}
-                <a href="{{ path('userclass_show', {id: search.userClass.id}) }}" class="badge badge-primary">
+                <a href="{{ path('userclass_show', {id: search.userClass.id}) }}" class="badge bg-primary">
                     {{ search.userClass.name }}
                 </a>
             {% endif %}
             {% if search.disabled %}
-            {{ 'including'|trans }} <span class="badge badge-danger"><i class="fas fa-ban"></i> {{ 'disabled'|trans }}</span>
+            {{ 'including'|trans }} <span class="badge bg-danger"><i class="fas fa-ban"></i> {{ 'disabled'|trans }}</span>
             {% endif %}
         </div>
         <div class="d-flex flex-wrap">
                 {% for user in usersPagination %}
-                <div class="card mb-3 mr-3" style="width: 320px;">
+                <div class="card mb-3 me-3" style="width: 320px;">
 
                     <div class="card-body d-flex">
                         {% if user.avatar %}
@@ -33,19 +33,19 @@
                                 <img class="rounded" src="{{ asset(user.getAvatarPath)|imagine_filter('avatar_100') }}" alt="avatar of user {{ user.username }}">
                             </a>
                         {% endif %}
-                        <div class="ml-3">
+                        <div class="ms-3">
                             <h5>
                                 <a href="{{ path('user_show', {id: user.id}) }}">
                                     {{ user.username }}
                                 </a>
                                 {% if user.isDisabled %}
-                                <span class="badge badge-danger" title="This user is disabled"><i class="fas fa-ban"></i></span>
+                                <span class="badge bg-danger" title="This user is disabled"><i class="fas fa-ban"></i></span>
                                 {% endif %}
                             </h5>
-                            <a class="badge badge-primary" href="{{ path('userclass_show', {id: user.userClass.id}) }}">
+                            <a class="badge bg-primary" href="{{ path('userclass_show', {id: user.userClass.id}) }}">
                                 {{ user.userClass.name }}
                             </a>
-                            <span class="badge badge-light">{{ user.shareScore }}</span>
+                            <span class="badge bg-light">{{ user.shareScore }}</span>
                             </br>
                             <small class="text-muted">
                                 {{ 'joined'|trans }} {{ user.createdAt|ago }}

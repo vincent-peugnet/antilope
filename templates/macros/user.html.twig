@@ -8,12 +8,12 @@
             {{ user.username }}
         </a>
         {% if size >= 2 %}
-            <a class="badge badge-primary" href="{{ path('userclass_show', {id: user.userClass.id}) }}">
+            <a class="badge bg-primary" href="{{ path('userclass_show', {id: user.userClass.id}) }}">
                 {{ user.userClass.name }}
             </a>
-            <span class="badge badge-light">{{ user.shareScore }}</span>
+            <span class="badge bg-light">{{ user.shareScore }}</span>
             {% if user.isDisabled %}
-            <span class="badge badge-danger" title="This user is disabled"><i class="fas fa-ban"></i></span>
+            <span class="badge bg-danger" title="This user is disabled"><i class="fas fa-ban"></i></span>
             {% endif %}
         {% endif %}
     {% else %}

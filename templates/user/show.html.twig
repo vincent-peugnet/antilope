@@ -67,7 +67,7 @@
                 <a class="btn btn-block btn-light d-flex justify-content-between align-items-center" href="{{ path('sharable', {bookmarkedBy: user.id}) }}">
                     <i class="fas fa-bookmark"></i>
                     {{ 'bookmarks'|trans }}
-                    <span class="badge badge-secondary">
+                    <span class="badge bg-secondary">
                         {{ user.bookmarks|length }}
                     </span>
                 </a>
@@ -75,7 +75,7 @@
                 <a class="btn btn-secondary d-flex justify-content-between align-items-center" href="{{ path('question', {user: user.id}) }}">
                     <i class="fas fa-comments"></i>
                     {{ 'questions asked'|trans }}
-                    <span class="badge badge-secondary">
+                    <span class="badge bg-secondary">
                         {{ user.questions|length }}
                     </span>
                 </a>
@@ -93,13 +93,13 @@
                         <i class="fas fa-shield-alt"></i>
                         {{ 'user class'|trans }}
                         <a href="{{ path('userclass_show', {id: user.userClass.id}) }}">
-                            <span class="badge badge-primary">{{ user.userClass.name }}</span>
+                            <span class="badge bg-primary">{{ user.userClass.name }}</span>
                         </a>
                     </li>
                     <li class="list-group-item">
                         <i class="fas fa-hands-helping"></i>
                         {{ 'share score'|trans }}
-                        <span class="badge badge-light">{{ user.shareScore }}</span>
+                        <span class="badge bg-light">{{ user.shareScore }}</span>
                     </li>
                     <li class="list-group-item">
                         <i class="fas fa-mask"></i>
@@ -246,7 +246,7 @@
                         <i class="fas fa-question-circle"></i>
                         {{ 'interested in'|trans }}
                     </span>
-                <small><span class="badge badge-light">{{ user.interesteds|length }}</span></small>
+                <small><span class="badge bg-light">{{ user.interesteds|length }}</span></small>
                 </h4>
 
             </div>

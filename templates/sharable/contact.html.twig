@@ -98,12 +98,12 @@
                 {% if is_granted('edit', sharable) %}
                     <span>
                     {% if manage.contactable and not manage.user.disabled %}
-                        <span class="badge badge-success" >
+                        <span class="badge bg-success" >
                             <i class="fas fa-eye"></i>
                             {{ 'visible'|trans }}
                         </span>
                     {% else %}
-                        <span class="badge badge-danger" >
+                        <span class="badge bg-danger" >
                             <i class="fas fa-eye-slash"></i>
                             {{ 'hidden'|trans }}
                         </span>
@@ -134,7 +134,7 @@
             <li>
                 {{ content_by_type.render(userContact.type, userContact.content) }}
                 {% if userContact.info %}
-                    <span class="badge badge-light">{{ 'info'|trans }}</span>
+                    <span class="badge bg-light">{{ 'info'|trans }}</span>
                 {% endif %}
             </li>
         {% endfor %}

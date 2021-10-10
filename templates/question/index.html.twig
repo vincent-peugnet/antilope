@@ -47,14 +47,14 @@
                         {% if is_granted('answer', question) %}
                         <a href="{{ path('question_show', {id: question.id}) }}" class="btn btn-primary">
                             {{ 'answer it'|trans }} !
-                            <span class="badge badge-secondary">
+                            <span class="badge bg-secondary">
                                 {{ question.answers|length }}
                             </span>
                         </a>
                         {% else %}
                             <a href="{{ path('question_show', {id: question.id}) }}" class="btn btn-light">
                                 {{ 'answers'|trans }}
-                            <span class="badge badge-secondary">
+                            <span class="badge bg-secondary">
                                 {{ question.answers|length }}
                             </span>
                         </a>

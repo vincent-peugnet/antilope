@@ -119,7 +119,7 @@
                         {% set shareScore = app.user.shareScore >= userClass.shareScoreReq %}
                         <li class="list-group-item{{ shareScore ? ' list-group-item-success' : ' text-danger' }}">
                             {{ shareScore ? '<i class="far fa-check-square"></i>' : '<i class="far fa-square"></i>' }}
-                            {{ 'share score'|trans }} : <span class="badge badge-light">{{ userClass.shareScoreReq }}</span>
+                            {{ 'share score'|trans }} : <span class="badge bg-light">{{ userClass.shareScoreReq }}</span>
                         </li>
                     {% endif %}
                     {% if userClass.accountAgeReq %}
@@ -182,7 +182,7 @@
             {{ 'userAmount users'|trans({userAmount: userClass.getNotDisabledUsers|length}) }}
         </a>
     {% if app.user.userclass == userClass %}
-    <span class="badge badge-info">
+    <span class="badge bg-info">
         {{ 'including you'|trans }}
     </span>
     {% endif %}

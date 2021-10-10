@@ -95,21 +95,21 @@
                 <i class="fas fa-bookmark"></i>
                 {{ 'unbookmark'|trans }}
                 {% endif %}
-                <span class="badge badge-secondary">
+                <span class="badge bg-secondary">
                     {{ sharable.bookmarks|length }}
                 </span>
             </a>
         </h1>
 
         {% for tag in sharable.tags %}
-            <a class="badge badge-pill badge-secondary" href="{{ path('sharable', {'tags[]': tag.id}) }}">{{ tag.name }}</a>
+            <a class="badge rounded-pill bg-secondary" href="{{ path('sharable', {'tags[]': tag.id}) }}">{{ tag.name }}</a>
         {% endfor %}
 
         <p class="text-break">{{ sharable.description }}</p>
 
         {% if not manage %}
             <div>
-                <div class="btn-group mr-3">
+                <div class="btn-group me-3">
                     {% if not is_granted('interest', sharable) %}
                         <span tabindex="0" data-toggle="tooltip" title="
                         {% if interested %}
@@ -131,7 +131,7 @@
                     >
                         <i class="{{ interested ? 'fas' : 'far' }} fa-question-circle"></i>
                         {{ 'I\'m interested'|trans|capitalize }}    
-                        <span class="badge badge-secondary">
+                        <span class="badge bg-secondary">
                             {{ sharable.interesteds|length }}
                         </span>
                     </a>
@@ -173,7 +173,7 @@
                 >
                     <i class="{{ validated ? 'fas' : 'far' }} fa-check-circle"></i>
                         {{ 'validate'|trans }}
-                    <span class="badge badge-secondary">
+                    <span class="badge bg-secondary">
                         {{ sharable.validations|length }}
                     </span>
                 </a>
@@ -189,7 +189,7 @@
                 {% if is_granted('view_reports', sharable) %}
                     <a class="btn btn-primary" href="{{ path('sharable_report_index', {id: sharable.id}) }}">
                         reports
-                        <span class="badge badge-secondary">{{ sharable.reports|length }}</span>
+                        <span class="badge bg-secondary">{{ sharable.reports|length }}</span>
                     </a>
                 {% endif %}
             </div>
@@ -254,7 +254,7 @@
                 >
                     <i class="fas fa-eye"></i>
                     {{ 'view interested'|trans }}
-                    <span class="badge badge-secondary">
+                    <span class="badge bg-secondary">
                         {{ sharable.interesteds|length }}
                     </span>
                 </a>
@@ -265,7 +265,7 @@
                     <li class="list-group-item">
                         <i class="fas fa-eye"></i>
                         {{ 'visible by'|trans|capitalize }}
-                        <a href="{{ path('userclass_show', {id: sharable.visibleBy.id}) }}" class="badge badge-primary">
+                        <a href="{{ path('userclass_show', {id: sharable.visibleBy.id}) }}" class="badge bg-primary">
                             {{ sharable.visibleBy.name }}
                         </a>
                     </li>
@@ -518,7 +518,7 @@
 
                     <p>
                         {% if validation.picture %}
-                            <img class="rounded float-left m-2" src="{{ asset(validation.getPicturePath)|imagine_filter('validation_250') }}" alt="">
+                            <img class="rounded float-start m-2" src="{{ asset(validation.getPicturePath)|imagine_filter('validation_250') }}" alt="">
                         {% endif %}
                     
                         {{ validation.message }}

@@ -26,7 +26,7 @@
             {% for tag in tags %}
                 <tr>
                     <td>
-                        <a class="badge badge-pill badge-secondary" href="{{ path('sharable', {'tags[]': tag.id}) }}">{{ tag.name }}</a>
+                        <a class="badge rounded-pill bg-secondary" href="{{ path('sharable', {'tags[]': tag.id}) }}">{{ tag.name }}</a>
                     </td>
                     <td class="text-muted">
                         {{ 'created'|trans }} {{ tag.createdAt|ago }}

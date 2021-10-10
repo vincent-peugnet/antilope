@@ -7,7 +7,7 @@
 <h1>{{ 'user classes'|trans|capitalize }}</h1>
 
 <p>
-    {{ 'Currently you\'re a'|trans }} <a class="badge badge-primary" href="{{ path('userclass_show', {id: app.user.userClass.id}) }}">{{ app.user.userClass.name }}</a>,
+    {{ 'Currently you\'re a'|trans }} <a class="badge bg-primary" href="{{ path('userclass_show', {id: app.user.userClass.id}) }}">{{ app.user.userClass.name }}</a>,
     {% if app.user.userClass.next %}
         {{ 'but you can progress if you fill the requirements of the'|trans }} <a href="{{ path('userclass_show', {id: app.user.userClass.next.id}) }}">{{ 'next user class'|trans }}</a>.
     {% endif %}

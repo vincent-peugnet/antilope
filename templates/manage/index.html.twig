@@ -50,15 +50,15 @@
 
         {{ userMacro.render(manage.user) }}
         {% if not manage.confirmed %}
-            <span class="badge badge-warning">{{ 'invited'|trans }}</span>
+            <span class="badge bg-warning">{{ 'invited'|trans }}</span>
         {% endif %}
         {% if manage.anonymous %}
-            <span class="badge badge-dark border">
+            <span class="badge bg-dark border">
                 <i class="fas fa-mask"></i>
                 {{ 'anonymous'|trans }}
             </span>
         {% endif %}
-        <span class="ml-auto"><small>{{ 'added'|trans }} {{ manage.createdAt|ago }}</small></span>
+        <span class="ms-auto"><small>{{ 'added'|trans }} {{ manage.createdAt|ago }}</small></span>
 
     </li>
 {% endfor %}

@@ -105,7 +105,7 @@ return array(
     'description' => 'description',
     'details' => 'details',
     'disabled' => 'disabled',
-    'disabled <span class="badge badge-danger"><i class="fas fa-ban"></i></span>' => 'disabled <span class="badge badge-danger"><i class="fas fa-ban"></i></span>',
+    'disabled <span class="badge bg-danger"><i class="fas fa-ban"></i></span>' => 'disabled <span class="badge bg-danger"><i class="fas fa-ban"></i></span>',
     'disable this sharable' => 'disable this {s}',
     'divided by the number of managers' => 'divided by the number of managers',
     'Each manager can choose to be directly contactable or not, but there need to be at least one contact info accessible.' => 'Each manager can choose to be directly contactable or not, but there need to be at least one contact info accessible.',

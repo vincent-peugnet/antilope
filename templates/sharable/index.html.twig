@@ -63,17 +63,17 @@
             {{ 'that interest'|trans }} {{ userMacro.render(search.interestedBy, 1) }}
             {% endif %}
             {% if search.visibleBy %}
-            {{ 'visible by'|trans }} <a href="{{ path('userclass_show', {id: search.visibleBy.id}) }}" class="badge badge-primary">{{ search.visibleBy }}</a>
+            {{ 'visible by'|trans }} <a href="{{ path('userclass_show', {id: search.visibleBy.id}) }}" class="badge bg-primary">{{ search.visibleBy }}</a>
             {% endif %}
             {% if search.disabled %}
-            {{ 'including'|trans }} <span class="badge badge-danger"><i class="fas fa-ban"></i> {{ 'disabled'|trans }}</span>
+            {{ 'including'|trans }} <span class="badge bg-danger"><i class="fas fa-ban"></i> {{ 'disabled'|trans }}</span>
             {% endif %}
         </div>
 
         {% if not app.user.userclass.access %}
         <div class="alert alert-warning">
             {{ 'Your user class:'|trans }}
-            <a class="badge badge-primary" href="{{ path('userclass_show', {id: app.user.userClass.id}) }}">
+            <a class="badge bg-primary" href="{{ path('userclass_show', {id: app.user.userClass.id}) }}">
                 {{ app.user.userClass.name }}
             </a>
             {{ 'cannot access sharable'|trans }}.
@@ -128,29 +128,29 @@
                         {{ contact_method.render(sharable.interestedMethod) }}
 
                         {% if sharable.interesteds|length > 0 %}
-                        <span title="{{ sharable.interesteds|length }} user(s) are insterested in this sharable" class="badge badge-warning">
+                        <span title="{{ sharable.interesteds|length }} user(s) are insterested in this sharable" class="badge bg-warning">
                             {{ sharable.interesteds|length }}
                             <i class="fas fa-question-circle"></i>
                         </span>
                         {% endif %}
                         {% if sharable.validations|length > 0 %}
-                        <span title="{{ sharable.validations|length }} user(s) have validated this sharable" class="badge badge-success">
+                        <span title="{{ sharable.validations|length }} user(s) have validated this sharable" class="badge bg-success">
                             {{ sharable.validations|length }}
                             <i class="fas fa-check-circle"></i></span>
                         {% endif %}
                         {% if sharable.questions|length > 0 %}
-                            <span class="badge badge-light">
+                            <span class="badge bg-light">
                                 {{ sharable.questions|length }}
                                 <i class="fas fa-comment"></i>
                             </span>
                         {% endif %}
                         {% if sharable.visibleBy %}
-                        <span title="accessible from {{ sharable.visibleBy.name }}" class="badge badge-primary">
+                        <span title="accessible from {{ sharable.visibleBy.name }}" class="badge bg-primary">
                             ≥ {{ sharable.visibleBy.name }}
                         </span>
                         {% endif %}
                         {% if sharable.disabled or not sharable.isAccessible %}
-                        <span class="badge badge-danger" title="This sharable is disabled"><i class="fas fa-ban"></i></span>
+                        <span class="badge bg-danger" title="This sharable is disabled"><i class="fas fa-ban"></i></span>
                         {% endif %}
                         {% if sharable.reports|length > 0 and is_granted('view_reports', sharable) %}
                         <span
@@ -225,7 +225,7 @@
                         {{ sharable.description }}
                     </span>
                     {% for tag in sharable.tags %}
-                        <a class="badge badge-pill badge-secondary" href="{{ path('sharable', {'tags[]': tag.id}) }}">{{ tag.name }}</a>
+                        <a class="badge rounded-pill bg-secondary" href="{{ path('sharable', {'tags[]': tag.id}) }}">{{ tag.name }}</a>
                     {% endfor %}
                     </br>
                     {{ 'managed by'|trans|capitalize }}

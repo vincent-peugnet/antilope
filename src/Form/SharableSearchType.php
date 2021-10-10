@@ -72,7 +72,7 @@ class SharableSearchType extends AbstractType
             ])
             ->add('disabled', CheckboxType::class, [
                 // phpcs:ignore Generic.Files.LineLength.TooLong
-                'label' => new TranslatableMessage('disabled <span class="badge badge-danger"><i class="fas fa-ban"></i></span>'),
+                'label' => new TranslatableMessage('disabled <span class="badge bg-danger"><i class="fas fa-ban"></i></span>'),
                 'label_html' => true,
                 'help' => 'Show disabled sharables',
                 'required' => false,

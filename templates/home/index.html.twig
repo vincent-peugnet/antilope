@@ -51,7 +51,7 @@
     <div class="col">
         {% for manage in app.user.getUnconfirmedManages|reverse %}
         <div class="alert border border-primary">
-            <a class="btn btn-primary mr-1" href="{{ path('sharable_show', {id: manage.sharable.id}) }}">
+            <a class="btn btn-primary me-1" href="{{ path('sharable_show', {id: manage.sharable.id}) }}">
                 <i class="fas fa-user-plus"></i>
             </a>
             {{ 'You\'ve been invited to manage'|trans }} {{ sharableMacro.render(manage.sharable) }}.

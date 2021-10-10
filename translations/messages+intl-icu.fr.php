@@ -143,7 +143,7 @@ return array(
     'description' => 'description',
     'details' => 'details',
     'disabled' => 'désactivé',
-    'disabled <span class="badge badge-danger"><i class="fas fa-ban"></i></span>' => 'désactivé <span class="badge badge-danger"><i class="fas fa-ban"></i></span>',
+    'disabled <span class="badge bg-danger"><i class="fas fa-ban"></i></span>' => 'désactivé <span class="badge bg-danger"><i class="fas fa-ban"></i></span>',
     'disable this sharable' => '{s_gender, select,
         feminine  {désactiver cette {s}}    
         masculine {désactiver ce {s}}    
