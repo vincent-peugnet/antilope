@@ -32,15 +32,15 @@ use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixture extends Fixture implements DependentFixtureInterface
 {
-    private $passwordEncoder;
+    private $passwordHasher;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(UserPasswordHasherInterface $passwordHasher)
     {
-        $this->passwordEncoder = $passwordEncoder;
+        $this->passwordHasher = $passwordHasher;
     }
 
 
@@ -63,7 +63,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
         $userBolos
             ->setUsername('bolos')
             ->setEmail('bolos@coucou.fr')
-            ->setPassword($this->passwordEncoder->encodePassword($userBolos, 'bolos'))
+            ->setPassword($this->passwordHasher->hashPassword($userBolos, 'bolos'))
             ->setUserClass($basicUser)
             ->setCreatedAt(new DateTime('2020-02-02'))
             ->setParanoia(0)
@@ -74,7 +74,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
         $userVincent
             ->setUsername('vincent')
             ->setEmail('vincent-peugnet@riseup.net')
-            ->setPassword($this->passwordEncoder->encodePassword($userVincent, 'vincent'))
+            ->setPassword($this->passwordHasher->hashPassword($userVincent, 'vincent'))
             ->setUserClass($member)
             ->setCreatedAt(new DateTime('2020-06-02'))
             ->setParanoia(0)
@@ -87,7 +87,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
         $userGuillaume
             ->setUsername('guillaume')
             ->setEmail('guillaume.peugnet@free.fr')
-            ->setPassword($this->passwordEncoder->encodePassword($userGuillaume, 'gp231299'))
+            ->setPassword($this->passwordHasher->hashPassword($userGuillaume, 'gp231299'))
             ->setUserClass($basicUser)
             ->setCreatedAt(new DateTime('2020-04-04'))
             ->setParanoia(0)
@@ -99,7 +99,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
         $userLea
             ->setUsername('leatine')
             ->setEmail('paintendre.lea@ensapc.fr')
-            ->setPassword($this->passwordEncoder->encodePassword($userLea, 'leatine'))
+            ->setPassword($this->passwordHasher->hashPassword($userLea, 'leatine'))
             ->setUserClass($member)
             ->setCreatedAt(new DateTime('2019-06-06'))
             ->setParanoia(0)
@@ -111,7 +111,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
         $userNicolas
             ->setUsername('nicolas')
             ->setEmail('n.peugnet@free.fr')
-            ->setPassword($this->passwordEncoder->encodePassword($userNicolas, 'espace'))
+            ->setPassword($this->passwordHasher->hashPassword($userNicolas, 'espace'))
             ->setUserClass($member)
             ->setCreatedAt(new DateTime('2018-01-01'))
             ->setParanoia(1)
@@ -123,7 +123,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
         $userAudrey
             ->setUsername('audrey')
             ->setEmail('deluc.audrey@ensapc.fr')
-            ->setPassword($this->passwordEncoder->encodePassword($userAudrey, 'missmogwai'))
+            ->setPassword($this->passwordHasher->hashPassword($userAudrey, 'missmogwai'))
             ->setRole(User::ROLE_MODERATOR)
             ->setUserClass($powerUser)
             ->setCreatedAt(new DateTime('2018-03-03'))
@@ -136,7 +136,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
         $userGuilhem
             ->setUsername('guilhem')
             ->setEmail('prevostleygonie.guilhem@ensapc.fr')
-            ->setPassword($this->passwordEncoder->encodePassword($userGuilhem, 'guilhem'))
+            ->setPassword($this->passwordHasher->hashPassword($userGuilhem, 'guilhem'))
             ->setUserClass($elite)
             ->setCreatedAt(new DateTime('2017-09-09'))
             ->setParanoia(2)
@@ -148,7 +148,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
         $userRelou
             ->setUsername('relou')
             ->setEmail('relou@gmail.com')
-            ->setPassword($this->passwordEncoder->encodePassword($userRelou, 'relou'))
+            ->setPassword($this->passwordHasher->hashPassword($userRelou, 'relou'))
             ->setUserClass($member)
             ->setCreatedAt(new DateTime('2019-09-09'))
             ->setParanoia(0)
@@ -161,7 +161,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
         $userEscargot
             ->setUsername('escargot')
             ->setEmail('escargot@gmail.com')
-            ->setPassword($this->passwordEncoder->encodePassword($userEscargot, 'escargot'))
+            ->setPassword($this->passwordHasher->hashPassword($userEscargot, 'escargot'))
             ->setUserClass($basicUser)
             ->setCreatedAt(new DateTime('2013-03-03'))
             ->setLastActivity(new DateTime('2013-04-04'))

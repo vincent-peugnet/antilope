@@ -28,37 +28,39 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Event\InvitationEvent;
+use App\Form\RegistrationFormType;
 use App\Form\SignUpType;
 use App\Repository\InvitationRepository;
 use App\Repository\UserClassRepository;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
-use App\Security\LoginFormAuthenticator;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface as EventDispatcherEventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
+use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class SignUpController extends AbstractController
 {
-    private $userLimitReached = false;
+    private bool $userLimitReached = false;
+    private bool $needCode = false;
+
 
     /**
      * @Route("/signup", name="sign_up")
      */
-    public function index(
+    public function register(
         Request $request,
-        UserClassRepository $userClassRepository,
+        EmailVerifier $emailVerifier,
+        UserPasswordHasherInterface $userPasswordHasherInterface,
         UserRepository $userRepository,
-        GuardAuthenticatorHandler $guardHandler,
-        LoginFormAuthenticator $authenticator,
-        UserPasswordEncoderInterface $passwordEncoder,
+        UserClassRepository $userClassRepository,
         InvitationRepository $invitationRepository,
-        EventDispatcherInterface $dispatcher,
-        EmailVerifier $emailVerifier
+        EventDispatcherEventDispatcherInterface $dispatcher
     ): Response {
 
         // Check user limit
@@ -69,24 +71,22 @@ class SignUpController extends AbstractController
                 $this->userLimitReached = true;
             }
         }
+        // Check if app is registrations are open
+        $this->needCode = !$this->getParameter('app.open_registration');
 
 
         $user = new User();
-
-        $needCode = !$this->getParameter('app.open_registration');
         $form = $this->createForm(
             SignUpType::class,
             $user,
-            ['needCode' => $needCode, 'userLimitReached' => $this->userLimitReached]
+            ['needCode' => $this->needCode, 'userLimitReached' => $this->userLimitReached]
         );
-
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            /** @var User $user */
-            $user = $form->getData();
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $form->getData();
             $user->setPassword(
-                $passwordEncoder->encodePassword(
+                $userPasswordHasherInterface->hashPassword(
                     $user,
                     $form->get('plainPassword')->getData()
                 )
@@ -103,7 +103,7 @@ class SignUpController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
 
-            if ($needCode) {
+            if ($this->needCode) {
                 $code = $form->get('code')->getData();
                 $invitation = $invitationRepository->findOneBy(['code' => $code]);
                 $invitation->setChild($user);
@@ -114,6 +114,7 @@ class SignUpController extends AbstractController
                 $entityManager->flush();
             }
 
+
             // Send validation email
             $emailVerifier->sendEmailConfirmation(
                 'email_verify',
@@ -122,14 +123,8 @@ class SignUpController extends AbstractController
             $email = $user->getEmail();
             $this->addFlash('primary', "An email have been send to $email for validation");
 
-            return $guardHandler->authenticateUserAndHandleSuccess(
-                $user,
-                $request,
-                $authenticator,
-                'main' // firewall name in security.yaml
-            );
+            return $this->redirectToRoute('app_login');
         }
-
 
         return $this->render('sign_up/index.html.twig', [
             'form' => $form->createView(),

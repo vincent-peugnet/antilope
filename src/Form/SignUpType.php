@@ -46,14 +46,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class SignUpType extends AbstractType
 {
-    /** @var UserpasswordEncoderInterface */
-    private $passwordEncoder;
-
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
-    {
-        $this->passwordEncoder = $passwordEncoder;
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var bool */

@@ -72,7 +72,7 @@ class ActivitySubscriber implements EventSubscriberInterface
 
     public function onKernelTerminate(TerminateEvent $event): void
     {
-        if ($event->isMasterRequest()) {
+        if ($event->isMainRequest()) {
             $user = $this->security->getUser();
             $delay = $this->parameterBag->get('app.last_activity_delay');
             if (($user instanceof User) && $user->getLastActivity() < new DateTime("$delay minute ago")) {
