@@ -62,7 +62,7 @@
             <div class="card-body">
 
             {% if sharableContact.info|length > 500 %}
-                <a class="btn btn-primary" data-toggle="collapse" href="#info_{{ sharableContact.id }}" role="button" aria-expanded="false" aria-controls="info_{{ sharableContact.id }}">
+                <a class="btn btn-primary" data-bs-toggle="collapse" href="#info_{{ sharableContact.id }}" role="button" aria-expanded="false" aria-controls="info_{{ sharableContact.id }}">
                     {{ 'view info'|trans }}
                 </a>
                 <div class="collapse" id="info_{{ sharableContact.id }}">

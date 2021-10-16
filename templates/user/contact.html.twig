@@ -93,7 +93,7 @@
 
             
             {% if contact.info|length > 500 %}
-            <a class="btn btn-light" data-toggle="collapse" href="#info_{{ contact.id }}" role="button" aria-expanded="false" aria-controls="info_{{ contact.id }}">
+            <a class="btn btn-light" data-bs-toggle="collapse" href="#info_{{ contact.id }}" role="button" aria-expanded="false" aria-controls="info_{{ contact.id }}">
                 {{ 'view info'|trans }}
             </a>
             <div class="collapse" id="info_{{ contact.id }}">

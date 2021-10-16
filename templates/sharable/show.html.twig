@@ -111,7 +111,7 @@
             <div>
                 <div class="btn-group me-3">
                     {% if not is_granted('interest', sharable) %}
-                        <span tabindex="0" data-toggle="tooltip" title="
+                        <span tabindex="0" data-bs-toggle="tooltip" title="
                         {% if interested %}
                             {{ 'you are already interested'|trans|capitalize }}
                         {% elseif sharable.interestedMethod == 1 %}
@@ -137,7 +137,7 @@
                     </a>
                     {{ is_granted('interest', sharable) ? '' : '</span>' }}
                     {% if interested and ( is_granted('edit', interested) or is_granted('delete', interested) ) %}
-                        <button type="button" class="btn btn-warning dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button type="button" class="btn btn-warning dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <div class="dropdown-menu">
@@ -157,7 +157,7 @@
                     {% endif %}
                 </div>
                 {% if not is_granted('validate', sharable) %}
-                    <span tabindex="0" data-toggle="tooltip" title="
+                    <span tabindex="0" data-bs-toggle="tooltip" title="
                     {% if validated %}
                         {{ 'you have already validated'|trans|capitalize }}
                     {% elseif not interested %}
@@ -219,7 +219,7 @@
 
             <div class="card-body">
                 {% if not is_granted('contact', sharable) %}
-                    <span tabindex="0" data-toggle="tooltip" title="
+                    <span tabindex="0" data-bs-toggle="tooltip" title="
                     {% if sharable.disabled or not sharable.isAccessible %}
                         {{ 'you cant interact with this sharable as it\'s disabled'|trans|capitalize }}
                     {% elseif sharable.interestedMethod == 1 %}
@@ -468,7 +468,7 @@
                         </a>
                         {% endif %}
                         {% if is_granted('delete', question) %}
-                            <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <div class="dropdown-menu">
